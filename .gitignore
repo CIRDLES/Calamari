@@ -1,0 +1,24 @@
+# Maven
+target
+
+# Netbeans
+nbactions.xml
+dependency-reduced-pom.xml
+nbproject/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Generated
+*.txt
+*.html
+*.xml
+*.csv
+test_*
+*.ser
+*.zip
+
+
+# MACOS
+.DS_Store
