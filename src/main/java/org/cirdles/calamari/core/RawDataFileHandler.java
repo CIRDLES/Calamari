@@ -41,12 +41,14 @@ public class RawDataFileHandler {
     public static List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation)
             throws MalformedURLException, JAXBException {
         PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
+        String nameOfMount = prawnFile.getMount();
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
             ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction);
             shrimpFraction.setSpotNumber(f + 1);
+            shrimpFraction.setNameOfMount(nameOfMount);
             shrimpFractions.add(shrimpFraction);
         }
 
