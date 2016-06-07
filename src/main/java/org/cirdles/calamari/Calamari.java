@@ -41,19 +41,23 @@ public class Calamari {
             java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        if (args.length > 0) {
-            System.out.println("Command line mode");
-            try {
-                RawDataFileHandler.writeReportsFromPrawnFile(args[0]);
-            } catch (IOException | JAXBException exception) {
-                System.out.println("Exception extracting data: " +  exception.getStackTrace()[0].toString());
-            }
-        } else {
-            /* Create and display the form */
-            java.awt.EventQueue.invokeLater(() -> {
-                new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
-            });
+        try {
+            RawDataFileHandler.writeReportsFromPrawnFile("/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml");
+        } catch (IOException | JAXBException exception) {
+            System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
         }
+//        if (args.length > 0) {
+//            System.out.println("Command line mode");
+//            try {
+//                RawDataFileHandler.writeReportsFromPrawnFile(args[0]);
+//            } catch (IOException | JAXBException exception) {
+//                System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
+//            }
+//        } else {
+//            /* Create and display the form */
+//            java.awt.EventQueue.invokeLater(() -> {
+//                new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
+//            });
+//        }
     }
 }
