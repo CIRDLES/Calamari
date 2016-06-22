@@ -113,7 +113,6 @@ public final class TukeyBiweightBD {
             } else {
                 median = new BigDecimal((myValues[pos1] + myValues[pos2]) / 2.0).setScale(1, RoundingMode.HALF_EVEN);
             }
-            int a = 2 % 3;
         }
         return median;
     }

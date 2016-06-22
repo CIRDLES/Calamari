@@ -19,7 +19,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -221,17 +220,18 @@ public class ReportsEngine {
             dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
             for (int i = 0; i < shrimpFraction.getTimeStampSec()[scanNum].length; i++) {
-//                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
-//                dataLine.append(", ").append(shrimpFraction.getTotalCounts()[scanNum][i]);
-//                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbs()[scanNum][i]);
-//                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBM()[scanNum][i]);
-//                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
-                
                 dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
-                dataLine.append(", ").append(shrimpFraction.getTotalCountsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
-                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
-                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBMBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+                dataLine.append(", ").append(shrimpFraction.getTotalCounts()[scanNum][i]);
+                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbs()[scanNum][i]);
+                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBM()[scanNum][i]);
                 dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
+               
+                // these lines produce the big decimal scale 20 numbers used to check floating point math
+//                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBMBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
             }
 
             Files.append(dataLine + "\n", totalCountsAtTimeStampAndTrimMass, Charsets.UTF_8);
