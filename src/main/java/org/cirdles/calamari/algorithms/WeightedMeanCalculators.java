@@ -26,9 +26,9 @@ import org.apache.commons.math3.distribution.FDistribution;
  */
 public final class WeightedMeanCalculators {
 
-    public static wtdLinCorrResults WtdLinCorr(boolean linReg, double[] y, double[][] sigRho, double[] x) {
+    public static WtdLinCorrResults WtdLinCorr(boolean linReg, double[] y, double[][] sigRho, double[] x) {
 
-        wtdLinCorrResults results = new wtdLinCorrResults();
+        WtdLinCorrResults results = new WtdLinCorrResults();
 
         int avg1LinRegr2 = linReg ? 2 : 1;
         int n = y.length;
@@ -36,11 +36,14 @@ public final class WeightedMeanCalculators {
 
         double mswdRatToler = (n > 7) ? 0.3 : mswdRatList[n - avg1LinRegr2];
         int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8);
+        boolean[] rej = new boolean[n];
 
         double minProb = 0.1;
         double wLrej = 0;
-        double pass = 0;
-        double minIndex = -1;
+        int pass = 0;
+        int minIndex = -1;
+        double minMSWD = 0.0;
+        double maxProb = 0.0;
 
         double[] y1 = y.clone();
         double[] y2 = y.clone();
@@ -60,22 +63,223 @@ public final class WeightedMeanCalculators {
             sigRho2[i][i] = sigRho1[i][i];
         }
 
+        boolean doContinue = true;
+        int nw = n;
+        DeletePointResults deletePointResults;
+        double[] probW = new double[n + 1];
+        double[] mswdW = new double[n + 1];
+        double[] sigmaInterW = new double[n + 1];
+        double[] interW = new double[n + 1];
+        double[] prob = new double[n + 1];
+        double[] slopeW = new double[n + 1];
+        double[] slopeSigmaW = new double[n + 1];
+        double[] covSlopeInterW = new double[n + 1];
+
+        do {
+            for (int i = 0; i < (n + 1); i++) {
+                if (i > 0) {
+                    deletePointResults = deletePoint(i, y1, sigRho1, x1);
+                    y2 = deletePointResults.getY2().clone();
+                    sigRho2 = deletePointResults.getSigRho2().clone();
+                    nw = n - 1;
+                }
+
+                if ((nw == 1) && !linReg) {
+                    probW[i] = 1.0;
+                    mswdW[i] = 0.0;
+                    sigmaInterW[i] = 1.0;
+                    interW[i] = 1.0;
+                } else if (linReg) {
+                    // do nothing for now per Simon
+                } else {
+                    WtdAvCorrResults wtdAvCorrResults = wtdAvCorr(y2, convertCorrelationsToCovariances(sigRho2));
+                    interW[i] = wtdAvCorrResults.getMswd();
+                    sigmaInterW[i] = wtdAvCorrResults.getMeanValSigma();
+                    mswdW[i] = wtdAvCorrResults.getMswd();
+                    probW[i] = wtdAvCorrResults.getProb();
+                }
+
+                if (i == 0) {
+                    if (probW[0] > 0.1) {
+                        minIndex = 0;
+                        minMSWD = mswdW[0];
+
+                        // exit for loop of i
+                        break;
+                    }
+
+                    maxProb = probW[0];
+                }
+            } // for loop of i
+
+            if (minIndex == 0) {
+                doContinue = false;
+            } else {
+                minIndex = 0;
+                minMSWD = mswdW[0];
+
+                for (int i = 1; i < (n + 1); i++) {
+                    double mswdRat = mswdW[i] / StrictMath.max(1e-32, mswdW[0]);
+                    if ((mswdRat < mswdRatToler) && (mswdW[i] < minMSWD) && (probW[i] > minProb)) {
+                        rej[i] = true;
+                        wLrej++;
+                        minIndex = i;
+                        maxProb = probW[i];
+                        minMSWD = mswdW[i];
+                    }
+                }
+
+                pass++;
+
+                if ((pass > 0) && ((minIndex == 0) || (pass == maxRej) || (maxProb > 0.1))) {
+                    doContinue = false;
+                } else {
+                    deletePointResults = deletePoint(minIndex - 1, y1, sigRho1, x1);
+                    y2 = deletePointResults.getY2().clone();
+                    sigRho2 = deletePointResults.getSigRho2().clone();
+                    n = n - 1;
+
+                    y1 = new double[n];
+                    x1 = new double[n];
+                    // HELP
+                    sigRho1 = new double[n][n];
+
+                    for (int i = 0; i < n; i++) {
+                        y1[i] = y2[i];
+                        if (linReg) {
+                            x1[i] = x2[i];
+                        }
+                        for (int j = 0; j < n; j++) {
+                            sigRho1[i][j] = sigRho2[i][j];
+                        }
+                    }
+                }
+            }
+        } while (doContinue);
+
+        double intercept = interW[minIndex];
+        double sigmaIntercept = sigmaInterW[minIndex];
+        double mswd = mswdW[minIndex];
+        double probfit = probW[minIndex];
+
+        double slope = 0.0;
+        double sigmaSlope = 0.0;
+        double covSlopeInter = 0.0;
+
+        if (linReg && (minIndex > 0)) {
+            slope = slopeW[minIndex];
+            sigmaSlope = slopeSigmaW[minIndex];
+            covSlopeInter = covSlopeInterW[minIndex];
+        }
+        
+        if (probfit < 0.05){
+            sigmaIntercept*= StrictMath.sqrt(mswd);
+            
+            if (linReg){
+                sigmaSlope*= StrictMath.sqrt(mswd);
+            }
+        }
+        
+        results.setBad(false);
+        results.setIntercept(intercept);
+        results.setSigmaIntercept(sigmaIntercept);
+        results.setMswd(mswd);
+        results.setProbFit(probfit);
+
         return results;
     }
 
-    public static class wtdLinCorrResults {
+    public static class WtdLinCorrResults {
 
         private boolean bad;
+        private double intercept;
+        private double sigmaIntercept;
+        private double mswd;
+        private double probFit;
 
-        public wtdLinCorrResults() {
-            bad = false;
+        public WtdLinCorrResults() {
+            bad = true;
+            intercept = 0.0;
+            sigmaIntercept = 0.0;
+            mswd = 0.0;
+            probFit = 0.0;
+        }
+
+        /**
+         * @return the bad
+         */
+        public boolean isBad() {
+            return bad;
+        }
+
+        /**
+         * @param bad the bad to set
+         */
+        public void setBad(boolean bad) {
+            this.bad = bad;
+        }
+
+        /**
+         * @return the intercept
+         */
+        public double getIntercept() {
+            return intercept;
+        }
+
+        /**
+         * @param intercept the intercept to set
+         */
+        public void setIntercept(double intercept) {
+            this.intercept = intercept;
+        }
+
+        /**
+         * @return the sigmaIntercept
+         */
+        public double getSigmaIntercept() {
+            return sigmaIntercept;
+        }
+
+        /**
+         * @param sigmaIntercept the sigmaIntercept to set
+         */
+        public void setSigmaIntercept(double sigmaIntercept) {
+            this.sigmaIntercept = sigmaIntercept;
+        }
+
+        /**
+         * @return the mswd
+         */
+        public double getMswd() {
+            return mswd;
+        }
+
+        /**
+         * @param mswd the mswd to set
+         */
+        public void setMswd(double mswd) {
+            this.mswd = mswd;
+        }
+
+        /**
+         * @return the probFit
+         */
+        public double getProbFit() {
+            return probFit;
+        }
+
+        /**
+         * @param probFit the probFit to set
+         */
+        public void setProbFit(double probFit) {
+            this.probFit = probFit;
         }
 
     }
 
-    public static deletePointResults deletePoint(int rejPoint, double[] y1, double[][] sigRho1, double[] x1) {
+    public static DeletePointResults deletePoint(int rejPoint, double[] y1, double[][] sigRho1, double[] x1) {
 
-        deletePointResults results = new deletePointResults();
+        DeletePointResults results = new DeletePointResults();
 
         int n = y1.length;
         double[] y2 = new double[n - 1];
@@ -124,13 +328,13 @@ public final class WeightedMeanCalculators {
         return results;
     }
 
-    public static class deletePointResults {
+    public static class DeletePointResults {
 
         private double[] y2;
         private double[][] sigRho2;
         private double[] x2;
 
-        public deletePointResults() {
+        public DeletePointResults() {
             y2 = new double[0];
             sigRho2 = new double[0][0];
             x2 = new double[0];
@@ -181,6 +385,7 @@ public final class WeightedMeanCalculators {
     }
 
     public static WtdAvCorrResults wtdAvCorr(double[] values, double[][] varCov) {
+        // assume varCov is variance-covariance matrix (i.e. SigRho = false)
 
         WtdAvCorrResults results = new WtdAvCorrResults();
 
