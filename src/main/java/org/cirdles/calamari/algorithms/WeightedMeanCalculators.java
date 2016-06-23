@@ -26,7 +26,17 @@ import org.apache.commons.math3.distribution.FDistribution;
  */
 public final class WeightedMeanCalculators {
 
-    public static WtdLinCorrResults WtdLinCorr(boolean linReg, double[] y, double[][] sigRho, double[] x) {
+    /**
+     * Adapted from Simon Bodorkos interpretation of Ludwig: https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-wtdLinCorr.
+     * Note the logic is simplified and output values are stored in object of type WtdLinCorrResults.
+     * Indexing in Java is 0-based, hence the use of i-1 and minIndex - 1 in the calls to deletePoint.
+     * @param linReg
+     * @param y
+     * @param sigRho
+     * @param x
+     * @return 
+     */
+    public static WtdLinCorrResults wtdLinCorr(boolean linReg, double[] y, double[][] sigRho, double[] x) {
 
         WtdLinCorrResults results = new WtdLinCorrResults();
 
@@ -35,11 +45,11 @@ public final class WeightedMeanCalculators {
         double[] mswdRatList = new double[]{0.0, 0.1, 0.15, 0.2, 0.2, 0.25};
 
         double mswdRatToler = (n > 7) ? 0.3 : mswdRatList[n - avg1LinRegr2 - 1];
-        int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8);
-        boolean[] rej = new boolean[n];
+        int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8.0);
+//        boolean[] rej = new boolean[n]; // not used
 
         double minProb = 0.1;
-        double wLrej = 0;
+//        double wLrej = 0;
         int pass = 0;
         int minIndex = -1;
         double minMSWD = 0.0;
@@ -70,7 +80,7 @@ public final class WeightedMeanCalculators {
         double[] mswdW = new double[n + 1];
         double[] sigmaInterW = new double[n + 1];
         double[] interW = new double[n + 1];
-        double[] prob = new double[n + 1];
+//        double[] prob = new double[n + 1];
         double[] slopeW = new double[n + 1];
         double[] slopeSigmaW = new double[n + 1];
         double[] covSlopeInterW = new double[n + 1];
@@ -79,8 +89,8 @@ public final class WeightedMeanCalculators {
             for (int i = 0; i < (n + 1); i++) {
                 if (i > 0) {
                     deletePointResults = deletePoint(i - 1, y1, sigRho1, x1);
-                    y2 = deletePointResults.getY2().clone();
-                    sigRho2 = deletePointResults.getSigRho2().clone();
+                    y2 = deletePointResults.getY2();
+                    sigRho2 = deletePointResults.getSigRho2();
                     nw = n - 1;
                 }
 
@@ -102,7 +112,7 @@ public final class WeightedMeanCalculators {
                 if (i == 0) {
                     if (probW[0] > 0.1) {
                         minIndex = 0;
-                        minMSWD = mswdW[0];
+//                        minMSWD = mswdW[0]; never used
 
                         // exit for loop of i
                         break;
@@ -121,8 +131,8 @@ public final class WeightedMeanCalculators {
                 for (int i = 1; i < (n + 1); i++) {
                     double mswdRat = mswdW[i] / StrictMath.max(1e-32, mswdW[0]);
                     if ((mswdRat < mswdRatToler) && (mswdW[i] < minMSWD) && (probW[i] > minProb)) {
-                        rej[i] = true;
-                        wLrej++;
+//                        rej[i] = true; not used
+//                        wLrej++; not used
                         minIndex = i;
                         maxProb = probW[i];
                         minMSWD = mswdW[i];
@@ -131,17 +141,18 @@ public final class WeightedMeanCalculators {
 
                 pass++;
 
-                if ((pass > 0) && ((minIndex == 0) || (pass == maxRej) || (maxProb > 0.1))) {
+                // note check for pass > 0 in original code is redundant
+                if ((minIndex == 0) || (pass == maxRej) || (maxProb > 0.1)) {
                     doContinue = false;
                 } else {
-                    deletePointResults = deletePoint(minIndex, y1, sigRho1, x1);
+                    deletePointResults = deletePoint(minIndex - 1, y1, sigRho1, x1);
                     y2 = deletePointResults.getY2().clone();
-                    sigRho2 = deletePointResults.getSigRho2().clone();
-                    n = n - 1;
+                    sigRho2 = deletePointResults.getSigRho2();
+                    n -= 1;
 
                     y1 = new double[n];
                     x1 = new double[n];
-                    // HELP
+                    // HELP Redefine as vectors of length N + 1 (addressed 0 to N): Prob, Xbar  
                     sigRho1 = new double[n][n];
 
                     for (int i = 0; i < n; i++) {
@@ -149,9 +160,7 @@ public final class WeightedMeanCalculators {
                         if (linReg) {
                             x1[i] = x2[i];
                         }
-                        for (int j = 0; j < n; j++) {
-                            sigRho1[i][j] = sigRho2[i][j];
-                        }
+                        System.arraycopy(sigRho2[i], 0, sigRho1[i], 0, n);
                     }
                 }
             }
@@ -205,6 +214,15 @@ public final class WeightedMeanCalculators {
             probFit = 0.0;
         }
 
+        public double calculateOneSigmaPctUnct(){
+            double retVal = 0.0;
+            if (intercept != 0.0){
+                retVal = sigmaIntercept / intercept * 100.0;
+            }
+            
+            return retVal;
+        }
+        
         /**
          * @return the bad
          */
@@ -344,42 +362,35 @@ public final class WeightedMeanCalculators {
          * @return the y2
          */
         public double[] getY2() {
-            return y2;
+            return y2.clone();
         }
 
         /**
          * @param y2 the y2 to set
          */
         public void setY2(double[] y2) {
-            this.y2 = y2;
+            this.y2 = y2.clone();
         }
 
         /**
          * @return the sigRho2
          */
         public double[][] getSigRho2() {
-            return sigRho2;
+            return sigRho2.clone();
         }
 
         /**
          * @param sigRho2 the sigRho2 to set
          */
         public void setSigRho2(double[][] sigRho2) {
-            this.sigRho2 = sigRho2;
-        }
-
-        /**
-         * @return the x2
-         */
-        public double[] getX2() {
-            return x2;
+            this.sigRho2 = sigRho2.clone();
         }
 
         /**
          * @param x2 the x2 to set
          */
         public void setX2(double[] x2) {
-            this.x2 = x2;
+            this.x2 = x2.clone();
         }
 
     }
@@ -543,13 +554,4 @@ public final class WeightedMeanCalculators {
 
         return covariances;
     }
-
-    public static void main(String[] args) {
-        double[] values = new double[]{33, 44, 55};
-        double[][] varCov = convertCorrelationsToCovariances(new double[][]{{1, .5, .5}, {.5, .5, 1}});
-
-        WtdAvCorrResults results = wtdAvCorr(values, varCov);
-
-    }
-
 }

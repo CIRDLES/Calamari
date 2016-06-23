@@ -27,13 +27,13 @@ import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
 import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.TukeyBiweightBD;
-import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorr;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ValueModel;
+import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 
 /**
  *
@@ -670,7 +670,7 @@ public class PrawnRunFractionParser {
             WtdLinCorrResults results = new WtdLinCorrResults();
 
             try {
-                results = WtdLinCorr(false, interpRatVal, isotopicRatio.getSigRho(), new double[0]);
+                results = wtdLinCorr(false, interpRatVal, isotopicRatio.getSigRho(), new double[0]);
             } catch (Exception e) {
             }
             

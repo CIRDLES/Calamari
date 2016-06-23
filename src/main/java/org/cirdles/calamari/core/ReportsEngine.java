@@ -38,14 +38,14 @@ public class ReportsEngine {
     private static File totalCountsAtTimeStampAndTrimMass;
     private static File totalCountsPerSecondPerSpeciesPerAnalysis;
     private static File withinSpotRatiosAtInterpolatedTimes;
-    private static File meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
+    private static File meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
 
     private static StringBuilder refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder refMatWithinSpotRatiosAtInterpolatedTimes;
     private static StringBuilder unknownWithinSpotRatiosAtInterpolatedTimes;
-    private static StringBuilder refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
-    private static StringBuilder unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
+    private static StringBuilder refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
+    private static StringBuilder unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
 
     /**
      * ReportsEngine to test results
@@ -324,18 +324,15 @@ public class ReportsEngine {
         dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            double intercept = entry.getValue().getWtdLinCorrResults().getIntercept();
-            double oneSigmaAbs = entry.getValue().getWtdLinCorrResults().getSigmaIntercept();
-            double oneSigmaPCT = oneSigmaAbs / intercept * 100.0;
-            dataLine.append(", ").append(String.valueOf(intercept));
-            dataLine.append(", ").append(String.valueOf(oneSigmaPCT));
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().getIntercept()));
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().calculateOneSigmaPctUnct()));
         }
 
         dataLine.append("\n");
         if (shrimpFraction.isReferenceMaterial()) {
-            refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis.append(dataLine);
+            refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.append(dataLine);
         } else {
-            unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis.append(dataLine);
+            unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.append(dataLine);
         }
     }
 
@@ -420,7 +417,7 @@ public class ReportsEngine {
         refMatWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
         unknownWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
 
-        meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new File("Calamari_MeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
+        meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new File("Calamari_MeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
         header = new StringBuilder();
         header.append("Title, Date, Type");
 
@@ -431,10 +428,10 @@ public class ReportsEngine {
 
         header.append("\n");
 
-        Files.write(header, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
+        Files.write(header, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
 
-        refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new StringBuilder();
-        unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new StringBuilder();
+        refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
+        unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
 
     }
 
@@ -447,8 +444,8 @@ public class ReportsEngine {
         Files.append(refMatWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
         Files.append(unknownWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
 
-        Files.append(refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
-        Files.append(unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
+        Files.append(refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
+        Files.append(unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
     }
 
     private static String getFormattedDate(long milliseconds) {
