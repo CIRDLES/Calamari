@@ -38,10 +38,14 @@ public class ReportsEngine {
     private static File totalCountsAtTimeStampAndTrimMass;
     private static File totalCountsPerSecondPerSpeciesPerAnalysis;
     private static File withinSpotRatiosAtInterpolatedTimes;
+    private static File meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
+
     private static StringBuilder refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder refMatWithinSpotRatiosAtInterpolatedTimes;
     private static StringBuilder unknownWithinSpotRatiosAtInterpolatedTimes;
+    private static StringBuilder refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
+    private static StringBuilder unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis;
 
     /**
      * ReportsEngine to test results
@@ -66,6 +70,7 @@ public class ReportsEngine {
                 reportTotalCountsAtTimeStampAndTrimMass(shrimpFraction);
                 reportTotalCountsPerSecondPerSpeciesPerAnalysis(shrimpFraction);
                 reportWithinSpotRatiosAtInterpolatedTimes(shrimpFraction);
+                reportSpotRatiosMeanAndSigma(shrimpFraction);
 
             } // end of fractions loop
 
@@ -225,7 +230,7 @@ public class ReportsEngine {
                 dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbs()[scanNum][i]);
                 dataLine.append(", ").append(shrimpFraction.getTotalCountsSBM()[scanNum][i]);
                 dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
-               
+
                 // these lines produce the big decimal scale 20 numbers used to check floating point math
 //                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
 //                dataLine.append(", ").append(shrimpFraction.getTotalCountsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
@@ -310,6 +315,27 @@ public class ReportsEngine {
         }
     }
 
+    private static void reportSpotRatiosMeanAndSigma(ShrimpFraction shrimpFraction) {
+
+        // need to sort by reference material vs unknown
+        StringBuilder dataLine = new StringBuilder();
+        dataLine.append(shrimpFraction.getFractionID()).append(", ");
+        dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
+        dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
+
+        for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().getIntercept()));
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().getSigmaIntercept() * 100.0));
+        }
+
+        dataLine.append("\n");
+        if (shrimpFraction.isReferenceMaterial()) {
+            refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis.append(dataLine);
+        } else {
+            unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis.append(dataLine);
+        }
+    }
+
     private static void prepSpeciesReportFiles(ShrimpFraction shrimpFraction) throws IOException {
         String nameOfMount = shrimpFraction.getNameOfMount();
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
@@ -390,6 +416,23 @@ public class ReportsEngine {
 
         refMatWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
         unknownWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
+
+        meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new File("Calamari_MeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
+        header = new StringBuilder();
+        header.append("Title, Date, Type");
+
+        for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+        }
+
+        header.append("\n");
+
+        Files.write(header, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
+
+        refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new StringBuilder();
+        unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis = new StringBuilder();
+
     }
 
     private static void finishSpeciesReportFiles() throws IOException {
@@ -400,6 +443,9 @@ public class ReportsEngine {
     private static void finishRatiosReportFiles() throws IOException {
         Files.append(refMatWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
         Files.append(unknownWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
+
+        Files.append(refMatMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
+        Files.append(unknownMeanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, meanRatioAndSigmaPctPerMeasuredSpeciesPerAnalysis, Charsets.UTF_8);
     }
 
     private static String getFormattedDate(long milliseconds) {

@@ -27,6 +27,8 @@ import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
 import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.TukeyBiweightBD;
+import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorr;
+import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
@@ -76,6 +78,7 @@ public class PrawnRunFractionParser {
         parseRunFractionData();
         calculateTotalPerSpeciesCPS();
         calculateIsotopicRatios(true);
+        calculateMeanRatioPerMeasuredSpeciesPerAnalysis();
 
         ShrimpFraction shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
         shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
@@ -429,7 +432,7 @@ public class PrawnRunFractionParser {
             double[] interpRatVal;
             double[] ratValFerr;
             double[] ratValSig;
-            double[][] sigRho;
+            double[][] sigRho = new double[0][0];
             boolean[] zerPkCt;
 
             List<Double> ratEqTime = new ArrayList<>();
@@ -646,9 +649,34 @@ public class PrawnRunFractionParser {
             isotopicRatio.setRatEqTime(ratEqTime);
             isotopicRatio.setRatEqVal(ratEqVal);
             isotopicRatio.setRatEqErr(ratEqErr);
+            isotopicRatio.setSigRho(sigRho);
 
         }); // end iteration through isotopicRatios
 
+    }
+    
+    private static void calculateMeanRatioPerMeasuredSpeciesPerAnalysis(){
+        // Step 4 of Development for SHRIMP 
+        // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-4)
+        // walk the ratios
+        // initially assume userLinFits = false
+        isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
+            List<Double> ratEqVal = isotopicRatio.getRatEqVal();
+            double[] interpRatVal = new double[ratEqVal.size()];
+            for (int i = 0; i < ratEqVal.size(); i ++){
+                interpRatVal[i] = ratEqVal.get(i);
+            }
+            
+            WtdLinCorrResults results = new WtdLinCorrResults();
+            try {
+                results = WtdLinCorr(false, interpRatVal, isotopicRatio.getSigRho(), new double[0]);
+            } catch (Exception e) {
+            }
+            
+            isotopicRatio.setWtdLinCorrResults(results);
+        });
+
+        
     }
 
     /**

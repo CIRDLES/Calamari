@@ -15,9 +15,9 @@
  */
 package org.cirdles.calamari.shrimp;
 
-import org.cirdles.calamari.shrimp.IsotopeNames;
 import java.util.ArrayList;
 import java.util.List;
+import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
 
 /**
  *
@@ -31,6 +31,8 @@ public class IsotopeRatioModelSHRIMP {
     private List<Double> ratEqTime;
     private List<Double> ratEqVal;
     private List<Double> ratEqErr;
+    private double[][] sigRho;
+    private WtdLinCorrResults wtdLinCorrResults;
 
     public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
         this.rawRatioName = rawRatioName;
@@ -39,6 +41,8 @@ public class IsotopeRatioModelSHRIMP {
         this.ratEqTime = new ArrayList<>();
         this.ratEqVal = new ArrayList<>();
         this.ratEqErr = new ArrayList<>();
+        this.sigRho = new double[0][0];
+        this.wtdLinCorrResults = new WtdLinCorrResults();
     }
 
     public boolean numeratorAtomicRatioLessThanDenominator() {
@@ -131,6 +135,34 @@ public class IsotopeRatioModelSHRIMP {
      */
     public void setRatEqErr(List<Double> ratEqErr) {
         this.ratEqErr = ratEqErr;
+    }
+
+    /**
+     * @return the sigRho
+     */
+    public double[][] getSigRho() {
+        return sigRho;
+    }
+
+    /**
+     * @param sigRho the sigRho to set
+     */
+    public void setSigRho(double[][] sigRho) {
+        this.sigRho = sigRho;
+    }
+
+    /**
+     * @return the wtdLinCorrResults
+     */
+    public WtdLinCorrResults getWtdLinCorrResults() {
+        return wtdLinCorrResults;
+    }
+
+    /**
+     * @param wtdLinCorrResults the wtdLinCorrResults to set
+     */
+    public void setWtdLinCorrResults(WtdLinCorrResults wtdLinCorrResults) {
+        this.wtdLinCorrResults = wtdLinCorrResults;
     }
 
 }

@@ -34,7 +34,7 @@ public final class WeightedMeanCalculators {
         int n = y.length;
         double[] mswdRatList = new double[]{0.0, 0.1, 0.15, 0.2, 0.2, 0.25};
 
-        double mswdRatToler = (n > 7) ? 0.3 : mswdRatList[n - avg1LinRegr2];
+        double mswdRatToler = (n > 7) ? 0.3 : mswdRatList[n - avg1LinRegr2 - 1];
         int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8);
         boolean[] rej = new boolean[n];
 
@@ -78,7 +78,7 @@ public final class WeightedMeanCalculators {
         do {
             for (int i = 0; i < (n + 1); i++) {
                 if (i > 0) {
-                    deletePointResults = deletePoint(i, y1, sigRho1, x1);
+                    deletePointResults = deletePoint(i - 1, y1, sigRho1, x1);
                     y2 = deletePointResults.getY2().clone();
                     sigRho2 = deletePointResults.getSigRho2().clone();
                     nw = n - 1;
@@ -93,7 +93,7 @@ public final class WeightedMeanCalculators {
                     // do nothing for now per Simon
                 } else {
                     WtdAvCorrResults wtdAvCorrResults = wtdAvCorr(y2, convertCorrelationsToCovariances(sigRho2));
-                    interW[i] = wtdAvCorrResults.getMswd();
+                    interW[i] = wtdAvCorrResults.getMeanVal();
                     sigmaInterW[i] = wtdAvCorrResults.getMeanValSigma();
                     mswdW[i] = wtdAvCorrResults.getMswd();
                     probW[i] = wtdAvCorrResults.getProb();
@@ -134,7 +134,7 @@ public final class WeightedMeanCalculators {
                 if ((pass > 0) && ((minIndex == 0) || (pass == maxRej) || (maxProb > 0.1))) {
                     doContinue = false;
                 } else {
-                    deletePointResults = deletePoint(minIndex - 1, y1, sigRho1, x1);
+                    deletePointResults = deletePoint(minIndex, y1, sigRho1, x1);
                     y2 = deletePointResults.getY2().clone();
                     sigRho2 = deletePointResults.getSigRho2().clone();
                     n = n - 1;
@@ -406,7 +406,7 @@ public final class WeightedMeanCalculators {
         // test denom
         if (denom > 0.0) {
             double meanVal = numer / denom / 2.0;
-            double meanValSigma = Math.sqrt(1.0 / denom);
+            double meanValSigma = StrictMath.sqrt(1.0 / denom);
 
             double[][] unwtdResidsArray = new double[n][1];
             for (int i = 0; i < n; i++) {
@@ -534,7 +534,7 @@ public final class WeightedMeanCalculators {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (i == j) {
-                    covariances[i][j] = correlations[i][j] * correlations[i][j];
+                    covariances[i][j] = correlations[i][i] * correlations[i][i];
                 } else {
                     covariances[i][j] = correlations[i][j] * correlations[i][i] * correlations[j][j];
                 }
