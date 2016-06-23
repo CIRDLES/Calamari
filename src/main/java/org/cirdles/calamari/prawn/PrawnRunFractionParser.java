@@ -668,6 +668,7 @@ public class PrawnRunFractionParser {
             }
             
             WtdLinCorrResults results = new WtdLinCorrResults();
+
             try {
                 results = WtdLinCorr(false, interpRatVal, isotopicRatio.getSigRho(), new double[0]);
             } catch (Exception e) {

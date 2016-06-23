@@ -324,8 +324,11 @@ public class ReportsEngine {
         dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().getIntercept()));
-            dataLine.append(", ").append(String.valueOf(entry.getValue().getWtdLinCorrResults().getSigmaIntercept() * 100.0));
+            double intercept = entry.getValue().getWtdLinCorrResults().getIntercept();
+            double oneSigmaAbs = entry.getValue().getWtdLinCorrResults().getSigmaIntercept();
+            double oneSigmaPCT = oneSigmaAbs / intercept * 100.0;
+            dataLine.append(", ").append(String.valueOf(intercept));
+            dataLine.append(", ").append(String.valueOf(oneSigmaPCT));
         }
 
         dataLine.append("\n");
