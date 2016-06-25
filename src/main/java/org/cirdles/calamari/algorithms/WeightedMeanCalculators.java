@@ -213,15 +213,6 @@ public final class WeightedMeanCalculators {
             mswd = 0.0;
             probFit = 0.0;
         }
-
-        public double calculateOneSigmaPctUnct(){
-            double retVal = 0.0;
-            if (intercept != 0.0){
-                retVal = sigmaIntercept / intercept * 100.0;
-            }
-            
-            return retVal;
-        }
         
         /**
          * @return the bad
@@ -384,6 +375,13 @@ public final class WeightedMeanCalculators {
          */
         public void setSigRho2(double[][] sigRho2) {
             this.sigRho2 = sigRho2.clone();
+        }
+
+        /**
+         * @return the x2
+         */
+        public double[] getX2() {
+            return x2.clone();
         }
 
         /**

@@ -28,12 +28,12 @@ import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
 import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.TukeyBiweightBD;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
+import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ValueModel;
-import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 
 /**
  *
@@ -42,6 +42,8 @@ import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr
 public class PrawnRunFractionParser {
 
     private static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
+    private static final double SQUID_TINY_VALUE = 1e-32;
+    private static final double ERROR_VALUE = 0.0;
 
     private static String fractionID;
     private static long dateTimeMilliseconds = 0l;
@@ -78,7 +80,6 @@ public class PrawnRunFractionParser {
         parseRunFractionData();
         calculateTotalPerSpeciesCPS();
         calculateIsotopicRatios(true);
-        calculateMeanRatioPerMeasuredSpeciesPerAnalysis();
 
         ShrimpFraction shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
         shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
@@ -212,7 +213,6 @@ public class PrawnRunFractionParser {
                 double median = TukeyBiweight.calculateMedian(peakMeasurements);
                 double totalCountsPeak;
                 double totalCountsSigma;
-                BigDecimal medianBD = TukeyBiweightBD.calculateMedian(peakMeasurements);
                 BigDecimal totalCountsPeakBD;
                 BigDecimal totalCountsSigmaBD;
 
@@ -327,7 +327,7 @@ public class PrawnRunFractionParser {
             BigDecimal precision = BigDecimal.ONE.movePointLeft(34);
             BigDecimal theError = BigDecimal.ONE;
             while (theError.compareTo(precision) > 0) {
-                BigDecimal nextGuess = null;
+                BigDecimal nextGuess = BigDecimal.ZERO;
                 try {
                     nextGuess = guess.add(S.divide(guess, MathContext.DECIMAL128)).divide(new BigDecimal(2.0), MathContext.DECIMAL128);
                 } catch (java.lang.ArithmeticException e) {
@@ -410,7 +410,6 @@ public class PrawnRunFractionParser {
         // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-3)
         // walk the ratios
         isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
-//        for (IsotopeRatioModelSHRIMP isotopicRatio : isotopicRatios) {
             int nDod = nScans - 1;
             int NUM = speciesToIndexBiMap.inverse().get(isotopicRatio.getNumerator());
             int DEN = speciesToIndexBiMap.inverse().get(isotopicRatio.getDenominator());
@@ -440,10 +439,9 @@ public class PrawnRunFractionParser {
             List<Double> ratEqErr = new ArrayList<>();
 
             if ((totCtsNUM < 32) || (totCtsDEN < 32) || (nDod == 0)) {
-                ratioVal = 0.0;
                 ratioFractErr = 1.0;
                 if (totCtsNUM == 0.0) {
-                    ratioVal = 1e-32;
+                    ratioVal = SQUID_TINY_VALUE;
                 } else if (totCtsDEN == 0.0) {
                     ratioVal = 1e16;
                 } else {
@@ -454,23 +452,19 @@ public class PrawnRunFractionParser {
                 ratioInterpTime = new double[]{//
                     0.5 * (StrictMath.min(timeStampSec[0][NUM], timeStampSec[0][DEN]) + StrictMath.max(timeStampSec[nScans - 1][NUM], timeStampSec[nScans - 1][DEN]))
                 };
-                interpRatVal = new double[]{ratioVal};
-                ratValFerr = new double[]{ratioFractErr};
 
+                isotopicRatio.setRatioVal(ratioVal);
+                isotopicRatio.setRatioFractErr(ratioFractErr);
+//                
+//                interpRatVal = new double[]{ratioVal};
+//                ratValFerr = new double[]{ratioFractErr};
+//
                 ratEqTime.add(ratioInterpTime[0]);
-                ratEqVal.add(interpRatVal[0]);
-                ratEqErr.add(StrictMath.abs(ratValFerr[0] * interpRatVal[0]));
-
-                // flush out
-                for (int i = 0; i < (nDod - 1); i++) {
-                    ratEqTime.add(0.0);
-                    ratEqVal.add(0.0);
-                    ratEqErr.add(0.0);
-                }
+                ratEqVal.add(ratioVal);
+                ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
 
             } else {
                 // main treatment using double interpolation following Dodson (1978): http://dx.doi.org/10.1088/0022-3735/11/4/004)
-                double errorValue = 0.0;
                 double[] pkF = new double[nDod];
                 double sumPkF = 0.0;
                 for (int j = 0; j < nDod; j++) {
@@ -481,7 +475,7 @@ public class PrawnRunFractionParser {
                 double avPkF = sumPkF / nDod;
                 double f1 = (1.0 - avPkF) / 2.0;
                 double f2 = (1.0 + avPkF) / 2.0;
-                double rhoIJ = (1.0 - avPkF * avPkF) / (1.0 + avPkF * avPkF) / 2.0;
+                double rhoIJ;// = (1.0 - avPkF * avPkF) / (1.0 + avPkF * avPkF) / 2.0;
 
                 ratioInterpTime = new double[nDod];
                 interpRatVal = new double[nDod];
@@ -502,7 +496,7 @@ public class PrawnRunFractionParser {
 
                     zerPkCt[sNum] = false;
                     zerPkCt[sn1] = false;
-                    boolean hasZerPk = false;
+//                    boolean hasZerPk = false;
 
                     double[] aPkCts = new double[2];
                     double[] bPkCts = new double[2];
@@ -512,8 +506,8 @@ public class PrawnRunFractionParser {
                             double aNetCPS = netPkCps[k][aOrd];
                             double bNetCPS = netPkCps[k][bOrd];
 
-                            if ((aNetCPS == errorValue) || (bNetCPS == errorValue)) {
-                                hasZerPk = true;
+                            if ((aNetCPS == ERROR_VALUE) || (bNetCPS == ERROR_VALUE)) {
+//                                hasZerPk = true;
                                 zerPkCt[k] = true;
                                 continueWithScanProcessing = false;
                             }
@@ -523,8 +517,8 @@ public class PrawnRunFractionParser {
                                 bPkCts[numDenom] = bNetCPS * countTimeSec[bOrd];
 
                                 if (useSBM) {
-                                    if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == errorValue)
-                                            || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == errorValue)) {
+                                    if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)
+                                            || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)) {
                                         zerPkCt[k] = true;
                                         continueWithScanProcessing = false;
                                     }
@@ -596,8 +590,8 @@ public class PrawnRunFractionParser {
 
                                 if ((aInterp == 0.0) || (bInterp == 0.0)) {
                                     ratValFerr[rct] = 1.0;
-                                    ratValSig[rct] = 1E-32;
-                                    sigRho[rct][rct] = 1E-32;
+                                    ratValSig[rct] = SQUID_TINY_VALUE;
+                                    sigRho[rct][rct] = SQUID_TINY_VALUE;
                                 } else {
                                     double term1 = ((f1 * a1PkSig) * (f1 * a1PkSig) + (f2 * a2PkSig) * (f2 * a2PkSig));
                                     double term2 = ((f2 * b1PkSig) * (f2 * b1PkSig) + (f1 * b2PkSig) * (f1 * b2PkSig));
@@ -623,17 +617,33 @@ public class PrawnRunFractionParser {
                 } // iteration through nDod using sNum (see "NextScanNum" in pseudocode)
                 switch (rct) {
                     case -1:
-                        ratioVal = errorValue;
-                        ratioFractErr = errorValue;
+                        ratioVal = ERROR_VALUE;
+                        ratioFractErr = ERROR_VALUE;
+
+                        ratEqTime.add(ratioInterpTime[0]);
+                        ratEqVal.add(ratioVal);
+                        ratEqErr.add(ratioFractErr);
+
+                        isotopicRatio.setRatioVal(ratioVal);
+                        isotopicRatio.setRatioFractErr(ratioFractErr);
+
                         break;
                     case 0:
                         ratioVal = interpRatVal[0];
                         if (ratioVal == 0.0) {
-                            ratioVal = 1E-32;
+                            ratioVal = SQUID_TINY_VALUE;
                             ratioFractErr = 1.0;
                         } else {
-                            ratioFractErr = ratValFerr[0];
+                            ratioFractErr = ratValFerr[0];// this is abs not percent
                         }
+
+                        ratEqTime.add(ratioInterpTime[0]);
+                        ratEqVal.add(ratioVal);
+                        ratEqErr.add(ratioFractErr);
+
+                        isotopicRatio.setRatioVal(ratioVal);
+                        isotopicRatio.setRatioFractErr(ratioFractErr);
+
                         break;
                     default:
                         for (int j = 0; j < (rct + 1); j++) {
@@ -641,43 +651,38 @@ public class PrawnRunFractionParser {
                             ratEqVal.add(interpRatVal[j]);
                             ratEqErr.add(StrictMath.abs(ratValFerr[j] * interpRatVal[j]));
                         }
+
+                        // step 4 userLinFits = false only for now
+                        WtdLinCorrResults results = new WtdLinCorrResults();
+                        try {
+                            results = wtdLinCorr(false, interpRatVal, sigRho, new double[0]);
+                        } catch (Exception e) {
+                        }
+                        
+                        if(results.isBad()){
+                            isotopicRatio.setRatioVal(ERROR_VALUE);
+                            isotopicRatio.setRatioFractErr(ERROR_VALUE);
+                        } else if (results.getIntercept() == 0.0){
+                            isotopicRatio.setRatioVal(SQUID_TINY_VALUE);
+                            isotopicRatio.setRatioFractErr(1.0);
+                        } else {
+                            isotopicRatio.setRatioVal(results.getIntercept());
+                            isotopicRatio.setRatioFractErr(StrictMath.max(SQUID_TINY_VALUE, results.getSigmaIntercept()) / StrictMath.abs(results.getIntercept()));
+                        }
+                                               
                         break;
                 }
 
             } // end decision on which ratio procedure to use
 
+            // store values for reports
             isotopicRatio.setRatEqTime(ratEqTime);
             isotopicRatio.setRatEqVal(ratEqVal);
             isotopicRatio.setRatEqErr(ratEqErr);
-            isotopicRatio.setSigRho(sigRho);
+
 
         }); // end iteration through isotopicRatios
 
-    }
-    
-    private static void calculateMeanRatioPerMeasuredSpeciesPerAnalysis(){
-        // Step 4 of Development for SHRIMP 
-        // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-4)
-        // walk the ratios
-        // initially assume userLinFits = false
-        isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
-            List<Double> ratEqVal = isotopicRatio.getRatEqVal();
-            double[] interpRatVal = new double[ratEqVal.size()];
-            for (int i = 0; i < ratEqVal.size(); i ++){
-                interpRatVal[i] = ratEqVal.get(i);
-            }
-            
-            WtdLinCorrResults results = new WtdLinCorrResults();
-
-            try {
-                results = wtdLinCorr(false, interpRatVal, isotopicRatio.getSigRho(), new double[0]);
-            } catch (Exception e) {
-            }
-            
-            isotopicRatio.setWtdLinCorrResults(results);
-        });
-
-        
     }
 
     /**

@@ -310,42 +310,42 @@ public class ShrimpFraction {
      * @return the totalCountsBD
      */
     public BigDecimal[][] getTotalCountsBD() {
-        return totalCountsBD;
+        return totalCountsBD.clone();
     }
 
     /**
      * @param totalCountsBD the totalCountsBD to set
      */
     public void setTotalCountsBD(BigDecimal[][] totalCountsBD) {
-        this.totalCountsBD = totalCountsBD;
+        this.totalCountsBD = totalCountsBD.clone();
     }
 
     /**
      * @return the totalCountsOneSigmaAbsBD
      */
     public BigDecimal[][] getTotalCountsOneSigmaAbsBD() {
-        return totalCountsOneSigmaAbsBD;
+        return totalCountsOneSigmaAbsBD.clone();
     }
 
     /**
      * @param totalCountsOneSigmaAbsBD the totalCountsOneSigmaAbsBD to set
      */
     public void setTotalCountsOneSigmaAbsBD(BigDecimal[][] totalCountsOneSigmaAbsBD) {
-        this.totalCountsOneSigmaAbsBD = totalCountsOneSigmaAbsBD;
+        this.totalCountsOneSigmaAbsBD = totalCountsOneSigmaAbsBD.clone();
     }
 
     /**
      * @return the totalCountsSBMBD
      */
     public BigDecimal[][] getTotalCountsSBMBD() {
-        return totalCountsSBMBD;
+        return totalCountsSBMBD.clone();
     }
 
     /**
      * @param totalCountsSBMBD the totalCountsSBMBD to set
      */
     public void setTotalCountsSBMBD(BigDecimal[][] totalCountsSBMBD) {
-        this.totalCountsSBMBD = totalCountsSBMBD;
+        this.totalCountsSBMBD = totalCountsSBMBD.clone();
     }
 
     /**

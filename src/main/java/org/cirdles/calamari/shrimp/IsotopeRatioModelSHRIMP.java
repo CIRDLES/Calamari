@@ -17,7 +17,6 @@ package org.cirdles.calamari.shrimp;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
 
 /**
  *
@@ -31,8 +30,8 @@ public class IsotopeRatioModelSHRIMP {
     private List<Double> ratEqTime;
     private List<Double> ratEqVal;
     private List<Double> ratEqErr;
-    private double[][] sigRho;
-    private WtdLinCorrResults wtdLinCorrResults;
+    private double ratioVal;
+    private double ratioFractErr;
 
     public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
         this.rawRatioName = rawRatioName;
@@ -41,8 +40,8 @@ public class IsotopeRatioModelSHRIMP {
         this.ratEqTime = new ArrayList<>();
         this.ratEqVal = new ArrayList<>();
         this.ratEqErr = new ArrayList<>();
-        this.sigRho = new double[0][0];
-        this.wtdLinCorrResults = new WtdLinCorrResults();
+        this.ratioVal = 0;
+        this.ratioFractErr = 0;
     }
 
     public boolean numeratorAtomicRatioLessThanDenominator() {
@@ -136,33 +135,33 @@ public class IsotopeRatioModelSHRIMP {
     public void setRatEqErr(List<Double> ratEqErr) {
         this.ratEqErr = ratEqErr;
     }
-
+    
     /**
-     * @return the sigRho
+     * @return the ratioVal
      */
-    public double[][] getSigRho() {
-        return sigRho;
+    public double getRatioVal() {
+        return ratioVal;
     }
 
     /**
-     * @param sigRho the sigRho to set
+     * @param ratioVal the ratioVal to set
      */
-    public void setSigRho(double[][] sigRho) {
-        this.sigRho = sigRho;
+    public void setRatioVal(double ratioVal) {
+        this.ratioVal = ratioVal;
     }
 
     /**
-     * @return the wtdLinCorrResults
+     * @return the ratioFractErr
      */
-    public WtdLinCorrResults getWtdLinCorrResults() {
-        return wtdLinCorrResults;
+    public double getRatioFractErr() {
+        return ratioFractErr;
     }
 
     /**
-     * @param wtdLinCorrResults the wtdLinCorrResults to set
+     * @param ratioFractErr the ratioFractErr to set
      */
-    public void setWtdLinCorrResults(WtdLinCorrResults wtdLinCorrResults) {
-        this.wtdLinCorrResults = wtdLinCorrResults;
+    public void setRatioFractErr(double ratioFractErr) {
+        this.ratioFractErr = ratioFractErr;
     }
 
 }
