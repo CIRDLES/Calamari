@@ -455,13 +455,17 @@ public class PrawnRunFractionParser {
 
                 isotopicRatio.setRatioVal(ratioVal);
                 isotopicRatio.setRatioFractErr(ratioFractErr);
-//                
-//                interpRatVal = new double[]{ratioVal};
-//                ratValFerr = new double[]{ratioFractErr};
-//
+
                 ratEqTime.add(ratioInterpTime[0]);
                 ratEqVal.add(ratioVal);
                 ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
+                
+                // flush out for reports to andle empty entries
+                for (int i = 0; i < (nDod - 1); i++) {
+                    ratEqTime.add(0.0);
+                    ratEqVal.add(0.0);
+                    ratEqErr.add(0.0);
+                }
 
             } else {
                 // main treatment using double interpolation following Dodson (1978): http://dx.doi.org/10.1088/0022-3735/11/4/004)

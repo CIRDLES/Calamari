@@ -70,7 +70,7 @@ public class ReportsEngine {
                 reportTotalCountsAtTimeStampAndTrimMass(shrimpFraction);
                 reportTotalCountsPerSecondPerSpeciesPerAnalysis(shrimpFraction);
                 reportWithinSpotRatiosAtInterpolatedTimes(shrimpFraction);
-                reportSpotRatiosMeanAndSigma(shrimpFraction);
+                reportIsotopeRatiosMeanAndSigma(shrimpFraction);
 
             } // end of fractions loop
 
@@ -315,7 +315,7 @@ public class ReportsEngine {
         }
     }
 
-    private static void reportSpotRatiosMeanAndSigma(ShrimpFraction shrimpFraction) {
+    private static void reportIsotopeRatiosMeanAndSigma(ShrimpFraction shrimpFraction) {
 
         // need to sort by reference material vs unknown
         StringBuilder dataLine = new StringBuilder();
