@@ -15,7 +15,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +39,13 @@ public class ShrimpFraction {
     private int[][] rawSBMData;
     private double[][] extractedRunData;
     private double[][] totalCounts;
-    private  double[][] totalCountsOneSigmaAbs;
-    private  double[][] totalCountsSBM;
+    private double[][] totalCountsOneSigmaAbs;
+    private double[][] totalCountsSBM;
+    private BigDecimal[][] totalCountsBD;
+    private BigDecimal[][] totalCountsOneSigmaAbsBD;
+    private BigDecimal[][] totalCountsSBMBD;
     private double[][] timeStampSec;
-    private  double [][] trimMass;
+    private double[][] trimMass;
     private double[] totalCps;
     private double[][] netPkCps;
     private double[][] pkFerr;
@@ -301,6 +304,48 @@ public class ShrimpFraction {
      */
     public void setTotalCountsSBM(double[][] totalCountsSBM) {
         this.totalCountsSBM = totalCountsSBM.clone();
+    }
+
+    /**
+     * @return the totalCountsBD
+     */
+    public BigDecimal[][] getTotalCountsBD() {
+        return totalCountsBD.clone();
+    }
+
+    /**
+     * @param totalCountsBD the totalCountsBD to set
+     */
+    public void setTotalCountsBD(BigDecimal[][] totalCountsBD) {
+        this.totalCountsBD = totalCountsBD.clone();
+    }
+
+    /**
+     * @return the totalCountsOneSigmaAbsBD
+     */
+    public BigDecimal[][] getTotalCountsOneSigmaAbsBD() {
+        return totalCountsOneSigmaAbsBD.clone();
+    }
+
+    /**
+     * @param totalCountsOneSigmaAbsBD the totalCountsOneSigmaAbsBD to set
+     */
+    public void setTotalCountsOneSigmaAbsBD(BigDecimal[][] totalCountsOneSigmaAbsBD) {
+        this.totalCountsOneSigmaAbsBD = totalCountsOneSigmaAbsBD.clone();
+    }
+
+    /**
+     * @return the totalCountsSBMBD
+     */
+    public BigDecimal[][] getTotalCountsSBMBD() {
+        return totalCountsSBMBD.clone();
+    }
+
+    /**
+     * @param totalCountsSBMBD the totalCountsSBMBD to set
+     */
+    public void setTotalCountsSBMBD(BigDecimal[][] totalCountsSBMBD) {
+        this.totalCountsSBMBD = totalCountsSBMBD.clone();
     }
 
     /**

@@ -13,7 +13,7 @@ nbproject/
 # Generated
 *.txt
 *.html
-*.xml
+
 *.csv
 test_*
 *.ser

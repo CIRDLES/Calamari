@@ -16,8 +16,7 @@
 package org.cirdles.calamari.algorithms;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
@@ -42,7 +41,7 @@ public final class TukeyBiweight {
         // initial sigma is median absolute deviation from mean = median (MAD)
         double deviations[] = new double[n];
         for (int i = 0; i < values.length; i++) {
-            deviations[i] = Math.abs(values[i] - mean);
+            deviations[i] = StrictMath.abs(values[i] - mean);
         }
         double sigma = calculateMedian(deviations);
 
@@ -65,22 +64,22 @@ public final class TukeyBiweight {
 
             for (int i = 0; i < n; i++) {
                 deltas[i] = values[i] - mean;
-                if (Math.abs(deltas[i]) < tee) {
+                if (StrictMath.abs(deltas[i]) < tee) {
                     deltas[i] = values[i] - mean;
                     u[i] = deltas[i] / tee;
                     double uSquared = u[i] * u[i];
-                    sa += Math.pow(deltas[i] * Math.pow((1.0 - uSquared), 2), 2);
+                    sa += StrictMath.pow(deltas[i] * StrictMath.pow((1.0 - uSquared), 2), 2);
                     sb += (1.0 - uSquared) * (1.0 - 5.0 * uSquared);
-                    sc += u[i] * Math.pow(1.0 - uSquared, 2);
+                    sc += u[i] * StrictMath.pow(1.0 - uSquared, 2);
                 }
             }
-            sigma = Math.sqrt(n * sa) / Math.abs(sb);
+            sigma = StrictMath.sqrt(n * sa) / StrictMath.abs(sb);
             mean = previousMean + tee * sc / sb;
 
         } // both tests against epsilon must pass OR iterations top out
         // april 2016 Simon B discovered we need 101 iterations possible, hence the "<=" below
-        while (((Math.abs(sigma - previousSigma) / sigma > epsilon)//
-                || (Math.abs(mean - previousMean) / mean > epsilon))//
+        while (((StrictMath.abs(sigma - previousSigma) / sigma > epsilon)//
+                || (StrictMath.abs(mean - previousMean) / mean > epsilon))//
                 && (iterationCounter <= iterationMax));
 
         return new ValueModel(name, new BigDecimal(mean), "ABS", new BigDecimal(sigma));
@@ -100,18 +99,15 @@ public final class TukeyBiweight {
         if (values.length == 0) {
             median = 0.0;
         } else {
-            double[] myValues = values.clone();
+            DescriptiveStatistics stats = new DescriptiveStatistics();
 
-            Arrays.sort(myValues);
-            int pos1 = (int) Math.floor((myValues.length - 1.0) / 2.0);
-            int pos2 = (int) Math.ceil((myValues.length - 1.0) / 2.0);
-            if (pos1 == pos2) {
-                median = myValues[pos1];
-            } else {
-                median = new BigDecimal((myValues[pos1] + myValues[pos2]) / 2.0).setScale(1, RoundingMode.HALF_EVEN).doubleValue();
+            // Add the data from the array
+            for (int i = 0; i < values.length; i++) {
+                stats.addValue(values[i]);
             }
-            int a = 2 % 3;
+            median = stats.getPercentile(50);
         }
+
         return median;
     }
 }

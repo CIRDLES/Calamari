@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.shrimp;
 
-import org.cirdles.calamari.shrimp.IsotopeNames;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,8 @@ public class IsotopeRatioModelSHRIMP {
     private List<Double> ratEqTime;
     private List<Double> ratEqVal;
     private List<Double> ratEqErr;
+    private double ratioVal;
+    private double ratioFractErr;
 
     public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
         this.rawRatioName = rawRatioName;
@@ -39,6 +40,8 @@ public class IsotopeRatioModelSHRIMP {
         this.ratEqTime = new ArrayList<>();
         this.ratEqVal = new ArrayList<>();
         this.ratEqErr = new ArrayList<>();
+        this.ratioVal = 0;
+        this.ratioFractErr = 0;
     }
 
     public boolean numeratorAtomicRatioLessThanDenominator() {
@@ -131,6 +134,34 @@ public class IsotopeRatioModelSHRIMP {
      */
     public void setRatEqErr(List<Double> ratEqErr) {
         this.ratEqErr = ratEqErr;
+    }
+    
+    /**
+     * @return the ratioVal
+     */
+    public double getRatioVal() {
+        return ratioVal;
+    }
+
+    /**
+     * @param ratioVal the ratioVal to set
+     */
+    public void setRatioVal(double ratioVal) {
+        this.ratioVal = ratioVal;
+    }
+
+    /**
+     * @return the ratioFractErr
+     */
+    public double getRatioFractErr() {
+        return ratioFractErr;
+    }
+
+    /**
+     * @param ratioFractErr the ratioFractErr to set
+     */
+    public void setRatioFractErr(double ratioFractErr) {
+        this.ratioFractErr = ratioFractErr;
     }
 
 }

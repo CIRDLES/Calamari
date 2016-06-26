@@ -38,10 +38,14 @@ public class ReportsEngine {
     private static File totalCountsAtTimeStampAndTrimMass;
     private static File totalCountsPerSecondPerSpeciesPerAnalysis;
     private static File withinSpotRatiosAtInterpolatedTimes;
+    private static File meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
+
     private static StringBuilder refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder refMatWithinSpotRatiosAtInterpolatedTimes;
     private static StringBuilder unknownWithinSpotRatiosAtInterpolatedTimes;
+    private static StringBuilder refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
+    private static StringBuilder unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
 
     /**
      * ReportsEngine to test results
@@ -66,6 +70,7 @@ public class ReportsEngine {
                 reportTotalCountsAtTimeStampAndTrimMass(shrimpFraction);
                 reportTotalCountsPerSecondPerSpeciesPerAnalysis(shrimpFraction);
                 reportWithinSpotRatiosAtInterpolatedTimes(shrimpFraction);
+                reportIsotopeRatiosMeanAndSigma(shrimpFraction);
 
             } // end of fractions loop
 
@@ -225,6 +230,13 @@ public class ReportsEngine {
                 dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbs()[scanNum][i]);
                 dataLine.append(", ").append(shrimpFraction.getTotalCountsSBM()[scanNum][i]);
                 dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
+
+                // these lines produce the big decimal scale 20 numbers used to check floating point math
+//                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBMBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
+//                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
             }
 
             Files.append(dataLine + "\n", totalCountsAtTimeStampAndTrimMass, Charsets.UTF_8);
@@ -300,6 +312,27 @@ public class ReportsEngine {
             } else {
                 unknownWithinSpotRatiosAtInterpolatedTimes.append(dataLine);
             }
+        }
+    }
+
+    private static void reportIsotopeRatiosMeanAndSigma(ShrimpFraction shrimpFraction) {
+
+        // need to sort by reference material vs unknown
+        StringBuilder dataLine = new StringBuilder();
+        dataLine.append(shrimpFraction.getFractionID()).append(", ");
+        dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
+        dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
+
+        for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioVal()));
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioFractErr() * 100.0));
+        }
+
+        dataLine.append("\n");
+        if (shrimpFraction.isReferenceMaterial()) {
+            refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.append(dataLine);
+        } else {
+            unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.append(dataLine);
         }
     }
 
@@ -383,6 +416,23 @@ public class ReportsEngine {
 
         refMatWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
         unknownWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
+
+        meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new File("Calamari_MeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
+        header = new StringBuilder();
+        header.append("Title, Date, Type");
+
+        for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+        }
+
+        header.append("\n");
+
+        Files.write(header, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
+
+        refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
+        unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
+
     }
 
     private static void finishSpeciesReportFiles() throws IOException {
@@ -393,6 +443,9 @@ public class ReportsEngine {
     private static void finishRatiosReportFiles() throws IOException {
         Files.append(refMatWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
         Files.append(unknownWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
+
+        Files.append(refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
+        Files.append(unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
     }
 
     private static String getFormattedDate(long milliseconds) {
