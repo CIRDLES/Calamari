@@ -37,7 +37,6 @@ public class ShrimpFraction {
     private Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios;
     private int[][] rawPeakData;
     private int[][] rawSBMData;
-    private double[][] extractedRunData;
     private double[][] totalCounts;
     private double[][] totalCountsOneSigmaAbs;
     private double[][] totalCountsSBM;
@@ -64,7 +63,6 @@ public class ShrimpFraction {
         isotopicRatios = new HashMap<>();
         rawPeakData = new int[0][0];
         rawSBMData = new int[0][0];
-        extractedRunData = new double[0][0];
         totalCounts = new double[0][0];
         totalCountsSBM = new double[0][0];
         timeStampSec = new double[0][0];
@@ -248,20 +246,6 @@ public class ShrimpFraction {
      */
     public void setRawSBMData(int[][] rawSBMData) {
         this.rawSBMData = rawSBMData.clone();
-    }
-
-    /**
-     * @return the extractedRunData
-     */
-    public double[][] getExtractedRunData() {
-        return extractedRunData.clone();
-    }
-
-    /**
-     * @param extractedRunData the extractedRunData to set
-     */
-    public void setExtractedRunData(double[][] extractedRunData) {
-        this.extractedRunData = extractedRunData.clone();
     }
 
     /**

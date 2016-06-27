@@ -61,7 +61,7 @@ public class RawDataFileHandler {
         ReportsEngine.produceReports(shrimpFractions);
     }
 
-    public static PrawnFile unmarshallRawDataXML(String resource)
+    private static PrawnFile unmarshallRawDataXML(String resource)
             throws MalformedURLException, JAXBException {
         PrawnFile myPrawnFile;
 
