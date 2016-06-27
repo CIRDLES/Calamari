@@ -47,7 +47,6 @@ public class PrawnRunFractionParser {
 
     private static String fractionID;
     private static long dateTimeMilliseconds = 0l;
-    private static double[][] extractedRunData;
     private static double[][] totalCounts;
     private static double[][] totalCountsOneSigmaAbs;
     private static double[][] totalCountsSBM;
@@ -88,7 +87,6 @@ public class PrawnRunFractionParser {
         shrimpFraction.setCountTimeSec(countTimeSec);
         shrimpFraction.setNamesOfSpecies(namesOfSpecies);
         shrimpFraction.setPeakMeasurementsCount(peakMeasurementsCount);
-        shrimpFraction.setExtractedRunData(extractedRunData);
         shrimpFraction.setTotalCounts(totalCounts);
         shrimpFraction.setTotalCountsOneSigmaAbs(totalCountsOneSigmaAbs);
         shrimpFraction.setTotalCountsSBM(totalCountsSBM);
@@ -179,8 +177,7 @@ public class PrawnRunFractionParser {
      * @return
      */
     private static void parseRunFractionData() {
-        // insert column 0 for scanNum number, then 3 columns per mass = total counts, 1 sig, total counts SBM
-        extractedRunData = new double[nScans][nSpecies * 3 + 1];
+
         totalCounts = new double[nScans][nSpecies];
         totalCountsOneSigmaAbs = new double[nScans][nSpecies];
         totalCountsSBM = new double[nScans][nSpecies];
@@ -191,7 +188,6 @@ public class PrawnRunFractionParser {
         rawSBMData = new int[nScans][nSpecies * peakMeasurementsCount];
 
         for (int scanNum = 0; scanNum < nScans; scanNum++) {
-            extractedRunData[scanNum][0] = scanNum + 1; // 1-based in xml
             // there is one measurement per mass per scanNum
             List<PrawnFile.Run.Set.Scan.Measurement> measurements = scans.get(scanNum).getMeasurement();
             for (int speciesMeasurementIndex = 0; speciesMeasurementIndex < nSpecies; speciesMeasurementIndex++) {
@@ -293,10 +289,8 @@ public class PrawnRunFractionParser {
                     totalCountsSigmaBD = BigDecimal.ONE.negate();
                 }
 
-                extractedRunData[scanNum][speciesMeasurementIndex * 3 + 1] = totalCountsPeak;
                 totalCounts[scanNum][speciesMeasurementIndex] = totalCountsPeak;
                 totalCountsBD[scanNum][speciesMeasurementIndex] = totalCountsPeakBD;
-                extractedRunData[scanNum][speciesMeasurementIndex * 3 + 2] = totalCountsSigma;
                 totalCountsOneSigmaAbs[scanNum][speciesMeasurementIndex] = totalCountsSigma;
                 totalCountsOneSigmaAbsBD[scanNum][speciesMeasurementIndex] = totalCountsSigmaBD;
 
@@ -311,7 +305,6 @@ public class PrawnRunFractionParser {
                 ValueModel sbmTukeyMean = TukeyBiweightBD.calculateTukeyBiweightMean("SBM", 6.0, sbm);
                 double totalCountsSpeciesSBM = sbmMeasurementsCount * sbmTukeyMean.getValue().doubleValue();
                 BigDecimal totalCountsSpeciesSBMBD = new BigDecimal(sbmMeasurementsCount).multiply(sbmTukeyMean.getValue());
-                extractedRunData[scanNum][speciesMeasurementIndex * 3 + 3] = totalCountsSpeciesSBM;
                 totalCountsSBM[scanNum][speciesMeasurementIndex] = totalCountsSpeciesSBM;
                 totalCountsSBMBD[scanNum][speciesMeasurementIndex] = totalCountsSpeciesSBMBD;
             }
@@ -352,9 +345,9 @@ public class PrawnRunFractionParser {
         for (int scanNum = 0; scanNum < nScans; scanNum++) {
             for (int speciesMeasurementIndex = 0; speciesMeasurementIndex < nSpecies; speciesMeasurementIndex++) {
                 // calculate PeakCps 
-                pkCps[scanNum][speciesMeasurementIndex] = extractedRunData[scanNum][speciesMeasurementIndex * 3 + 1] / countTimeSec[speciesMeasurementIndex];
+                pkCps[scanNum][speciesMeasurementIndex] = totalCounts[scanNum][speciesMeasurementIndex] / countTimeSec[speciesMeasurementIndex];
                 // calculate corrected (by sbmZeroCps) SBMCps 
-                sbmCps[scanNum][speciesMeasurementIndex] = (extractedRunData[scanNum][speciesMeasurementIndex * 3 + 3] / countTimeSec[speciesMeasurementIndex]) - sbmZeroCps;
+                sbmCps[scanNum][speciesMeasurementIndex] = (totalCountsSBM[scanNum][speciesMeasurementIndex] / countTimeSec[speciesMeasurementIndex]) - sbmZeroCps;
 
                 if (speciesMeasurementIndex == HARD_WIRED_INDEX_OF_BACKGROUND) {
                     backgroundCpsArray[scanNum] = pkCps[scanNum][speciesMeasurementIndex];
@@ -386,7 +379,7 @@ public class PrawnRunFractionParser {
                     double absNetPeakCps = netPkCps[scanNum][speciesMeasurementIndex];
                     if (absNetPeakCps > 1.0e-6) {
                         double calcVariance
-                                = extractedRunData[scanNum][speciesMeasurementIndex * 3 + 1]//
+                                = totalCounts[scanNum][speciesMeasurementIndex]//
                                 + (StrictMath.abs(backgroundCps) * StrictMath.pow(countTimeSec[speciesMeasurementIndex] / countTimeSec[HARD_WIRED_INDEX_OF_BACKGROUND], 2));
                         pkFerr[scanNum][speciesMeasurementIndex]
                                 = StrictMath.sqrt(calcVariance) / absNetPeakCps / countTimeSec[speciesMeasurementIndex];
@@ -687,12 +680,5 @@ public class PrawnRunFractionParser {
 
         }); // end iteration through isotopicRatios
 
-    }
-
-    /**
-     * @return the extractedRunData
-     */
-    public static double[][] getExtractedRunData() {
-        return extractedRunData.clone();
     }
 }
