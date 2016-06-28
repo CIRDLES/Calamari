@@ -27,18 +27,23 @@ import org.apache.commons.math3.distribution.FDistribution;
 public final class WeightedMeanCalculators {
 
     /**
-     * Adapted from Simon Bodorkos interpretation of Ludwig: https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-wtdLinCorr.
-     * Note the logic is simplified and output values are stored in object of type WtdLinCorrResults.
-     * Indexing in Java is 0-based, hence the use of i-1 and minIndex - 1 in the calls to deletePoint.
+     * Adapted from Simon Bodorkos interpretation of Ludwig:
+     * https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-wtdLinCorr. Note the
+     * logic is simplified and output values are stored in object of type
+     * WtdLinCorrResults. Indexing in Java is 0-based, hence the use of i-1 and
+     * minIndex - 1 in the calls to deletePoint.
+     *
      * @param linReg
      * @param y
      * @param sigRho
      * @param x
-     * @return 
+     * @return
      */
-    public static WtdLinCorrResults wtdLinCorr(boolean linReg, double[] y, double[][] sigRho, double[] x) {
+    public static WtdLinCorrResults wtdLinCorr(double[] y, double[][] sigRho, double[] x) {
 
         WtdLinCorrResults results = new WtdLinCorrResults();
+
+        boolean linReg = (y.length == x.length);
 
         int avg1LinRegr2 = linReg ? 2 : 1;
         int n = y.length;
@@ -80,17 +85,18 @@ public final class WeightedMeanCalculators {
         double[] mswdW = new double[n + 1];
         double[] sigmaInterW = new double[n + 1];
         double[] interW = new double[n + 1];
-//        double[] prob = new double[n + 1];
         double[] slopeW = new double[n + 1];
-        double[] slopeSigmaW = new double[n + 1];
+        double[] sigmaSlopeW = new double[n + 1];
         double[] covSlopeInterW = new double[n + 1];
 
         do {
             for (int i = 0; i < (n + 1); i++) {
                 if (i > 0) {
                     deletePointResults = deletePoint(i - 1, y1, sigRho1, x1);
+
                     y2 = deletePointResults.getY2();
                     sigRho2 = deletePointResults.getSigRho2();
+                    x2 = deletePointResults.getX2();
                     nw = n - 1;
                 }
 
@@ -100,11 +106,22 @@ public final class WeightedMeanCalculators {
                     sigmaInterW[i] = 1.0;
                     interW[i] = 1.0;
                 } else if (linReg) {
-                    // do nothing for now per Simon
+                    WeightedLinearCorrResults weightedLinearCorrResults = weightedLinearCorr(y2, x2, sigRho2);
+
+                    slopeW[i] = weightedLinearCorrResults.getSlope();
+                    interW[i] = weightedLinearCorrResults.getIntercept();
+                    mswdW[i] = weightedLinearCorrResults.getMswd();
+                    probW[i] = weightedLinearCorrResults.getProb();
+                    sigmaSlopeW[i] = weightedLinearCorrResults.getSlopeSig();
+                    sigmaInterW[i] = weightedLinearCorrResults.getInterceptSig();
+                    covSlopeInterW[i] = weightedLinearCorrResults.getSlopeInterceptCov();
+                    // bad is never used
+
                 } else {
                     WtdAvCorrResults wtdAvCorrResults = wtdAvCorr(y2, convertCorrelationsToCovariances(sigRho2));
+
                     interW[i] = wtdAvCorrResults.getMeanVal();
-                    sigmaInterW[i] = wtdAvCorrResults.getMeanValSigma();
+                    sigmaInterW[i] = wtdAvCorrResults.getSigmaMeanVal();
                     mswdW[i] = wtdAvCorrResults.getMswd();
                     probW[i] = wtdAvCorrResults.getProb();
                 }
@@ -112,8 +129,7 @@ public final class WeightedMeanCalculators {
                 if (i == 0) {
                     if (probW[0] > 0.1) {
                         minIndex = 0;
-//                        minMSWD = mswdW[0]; never used
-
+//                        minMSWD = mswdW[0]; // assignment never used
                         // exit for loop of i
                         break;
                     }
@@ -146,13 +162,17 @@ public final class WeightedMeanCalculators {
                     doContinue = false;
                 } else {
                     deletePointResults = deletePoint(minIndex - 1, y1, sigRho1, x1);
-                    y2 = deletePointResults.getY2().clone();
+
+                    y2 = deletePointResults.getY2();
                     sigRho2 = deletePointResults.getSigRho2();
+                    x2 = deletePointResults.getX2();
                     n -= 1;
 
                     y1 = new double[n];
-                    x1 = new double[n];
-                    // HELP Redefine as vectors of length N + 1 (addressed 0 to N): Prob, Xbar  
+                    if (linReg) {
+                        x1 = new double[n];
+                    }
+
                     sigRho1 = new double[n][n];
 
                     for (int i = 0; i < n; i++) {
@@ -171,24 +191,20 @@ public final class WeightedMeanCalculators {
         double mswd = mswdW[minIndex];
         double probfit = probW[minIndex];
 
-        double slope = 0.0;
-        double sigmaSlope = 0.0;
-        double covSlopeInter = 0.0;
-
         if (linReg && (minIndex > 0)) {
-            slope = slopeW[minIndex];
-            sigmaSlope = slopeSigmaW[minIndex];
-            covSlopeInter = covSlopeInterW[minIndex];
+            results.setSlope(slopeW[minIndex]);
+            results.setSigmaSlope(sigmaSlopeW[minIndex]);
+            results.setCovSlopeInter(covSlopeInterW[minIndex]);
         }
-        
-        if (probfit < 0.05){
-            sigmaIntercept*= StrictMath.sqrt(mswd);
-            
-            if (linReg){
-                sigmaSlope*= StrictMath.sqrt(mswd);
+
+        if (probfit < 0.05) {
+            sigmaIntercept *= StrictMath.sqrt(mswd);
+
+            if (linReg) {
+                results.setSigmaSlope(results.getSigmaSlope() * StrictMath.sqrt(mswd));
             }
         }
-        
+
         results.setBad(false);
         results.setIntercept(intercept);
         results.setSigmaIntercept(sigmaIntercept);
@@ -205,6 +221,10 @@ public final class WeightedMeanCalculators {
         private double sigmaIntercept;
         private double mswd;
         private double probFit;
+        // used for linReg = true fitting case
+        private double slope = 0.0;
+        private double sigmaSlope = 0.0;
+        private double covSlopeInter = 0.0;
 
         public WtdLinCorrResults() {
             bad = true;
@@ -212,8 +232,11 @@ public final class WeightedMeanCalculators {
             sigmaIntercept = 0.0;
             mswd = 0.0;
             probFit = 0.0;
+            slope = 0.0;
+            sigmaSlope = 0.0;
+            covSlopeInter = 0.0;
         }
-        
+
         /**
          * @return the bad
          */
@@ -284,6 +307,244 @@ public final class WeightedMeanCalculators {
             this.probFit = probFit;
         }
 
+        /**
+         * @return the slope
+         */
+        public double getSlope() {
+            return slope;
+        }
+
+        /**
+         * @param slope the slope to set
+         */
+        public void setSlope(double slope) {
+            this.slope = slope;
+        }
+
+        /**
+         * @return the sigmaSlope
+         */
+        public double getSigmaSlope() {
+            return sigmaSlope;
+        }
+
+        /**
+         * @param sigmaSlope the sigmaSlope to set
+         */
+        public void setSigmaSlope(double sigmaSlope) {
+            this.sigmaSlope = sigmaSlope;
+        }
+
+        /**
+         * @return the covSlopeInter
+         */
+        public double getCovSlopeInter() {
+            return covSlopeInter;
+        }
+
+        /**
+         * @param covSlopeInter the covSlopeInter to set
+         */
+        public void setCovSlopeInter(double covSlopeInter) {
+            this.covSlopeInter = covSlopeInter;
+        }
+
+    }
+
+    public static WeightedLinearCorrResults weightedLinearCorr(double[] y, double[] x, double[][] sigmaRhoY) {
+        WeightedLinearCorrResults weightedLinearCorrResults = new WeightedLinearCorrResults();
+
+        Matrix omega = new Matrix(convertCorrelationsToCovariances(sigmaRhoY));
+        Matrix invOmega = omega.inverse();
+
+        int n = y.length;
+
+        double mX = 0;
+        double pX = 0;
+        double pY = 0;
+        double pXY = 0;
+        double w = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                double invOm = invOmega.get(i, j);
+                w += invOm;
+                pX += (invOm * (x[i] + x[j]));
+                pY += (invOm * (y[i] + y[j]));
+                pXY += (invOm * (((x[i] * y[j]) + (x[j] * y[i]))));
+                mX += (invOm * x[i] * x[j]);
+            }
+        }
+        double slope = ((2 * pXY * w) - (pX * pY)) / ((4 * mX * w) - (pX * pX));
+        double intercept = (pY - (slope * pX)) / (2 * w);
+
+        Matrix fischerInv = new Matrix(new double[][]{{mX, pX / 2.0}, {pX / 2.0, w}}).inverse();
+
+        double slopeSig = StrictMath.sqrt(fischerInv.get(0, 0));
+        double interceptSig = StrictMath.sqrt(fischerInv.get(1, 1));
+        double slopeInterceptCov = fischerInv.get(0, 1);
+
+        Matrix resid = new Matrix(n, 1);
+        for (int i = 0; i < n; i++) {
+            resid.set(i, 0, y[i] - (slope * x[i]) - intercept);
+        }
+
+        Matrix residT = resid.transpose();
+        Matrix mM = residT.times(omega).times(resid);
+
+        double sumSqWtdResids = mM.get(0, 0);
+        double mswd = sumSqWtdResids / (n - 2);
+
+        // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html
+        FDistribution fdist = new org.apache.commons.math3.distribution.FDistribution((n - 2), 1E9);
+        double prob = 1.0 - fdist.cumulativeProbability(mswd);
+
+        weightedLinearCorrResults.setBad(false);
+        weightedLinearCorrResults.setSlope(slope);
+        weightedLinearCorrResults.setIntercept(intercept);
+        weightedLinearCorrResults.setSlopeSig(slopeSig);
+        weightedLinearCorrResults.setInterceptSig(interceptSig);
+        weightedLinearCorrResults.setSlopeInterceptCov(slopeInterceptCov);
+        weightedLinearCorrResults.setMswd(mswd);
+        weightedLinearCorrResults.setProb(prob);
+
+        return weightedLinearCorrResults;
+    }
+
+    public static class WeightedLinearCorrResults {
+
+        private boolean bad;
+        private double slope;
+        private double intercept;
+        private double slopeSig;
+        private double interceptSig;
+        private double slopeInterceptCov;
+        private double mswd;
+        private double prob;
+
+        public WeightedLinearCorrResults() {
+            bad = true;
+            slope = 0.0;
+            intercept = 0.0;
+            slopeSig = 0.0;
+            interceptSig = 0.0;
+            slopeInterceptCov = 0.0;
+            mswd = 0.0;
+            prob = 0.0;
+        }
+
+        /**
+         * @return the bad
+         */
+        public boolean isBad() {
+            return bad;
+        }
+
+        /**
+         * @param bad the bad to set
+         */
+        public void setBad(boolean bad) {
+            this.bad = bad;
+        }
+
+        /**
+         * @return the slope
+         */
+        public double getSlope() {
+            return slope;
+        }
+
+        /**
+         * @param slope the slope to set
+         */
+        public void setSlope(double slope) {
+            this.slope = slope;
+        }
+
+        /**
+         * @return the intercept
+         */
+        public double getIntercept() {
+            return intercept;
+        }
+
+        /**
+         * @param intercept the intercept to set
+         */
+        public void setIntercept(double intercept) {
+            this.intercept = intercept;
+        }
+
+        /**
+         * @return the slopeSig
+         */
+        public double getSlopeSig() {
+            return slopeSig;
+        }
+
+        /**
+         * @param slopeSig the slopeSig to set
+         */
+        public void setSlopeSig(double slopeSig) {
+            this.slopeSig = slopeSig;
+        }
+
+        /**
+         * @return the interceptSig
+         */
+        public double getInterceptSig() {
+            return interceptSig;
+        }
+
+        /**
+         * @param interceptSig the interceptSig to set
+         */
+        public void setInterceptSig(double interceptSig) {
+            this.interceptSig = interceptSig;
+        }
+
+        /**
+         * @return the slopeInterceptCov
+         */
+        public double getSlopeInterceptCov() {
+            return slopeInterceptCov;
+        }
+
+        /**
+         * @param slopeInterceptCov the slopeInterceptCov to set
+         */
+        public void setSlopeInterceptCov(double slopeInterceptCov) {
+            this.slopeInterceptCov = slopeInterceptCov;
+        }
+
+        /**
+         * @return the mswd
+         */
+        public double getMswd() {
+            return mswd;
+        }
+
+        /**
+         * @param mswd the mswd to set
+         */
+        public void setMswd(double mswd) {
+            this.mswd = mswd;
+        }
+
+        /**
+         * @return the prob
+         */
+        public double getProb() {
+            return prob;
+        }
+
+        /**
+         * @param prob the prob to set
+         */
+        public void setProb(double prob) {
+            this.prob = prob;
+        }
+
     }
 
     public static DeletePointResults deletePoint(int rejPoint, double[] y1, double[][] sigRho1, double[] x1) {
@@ -291,13 +552,14 @@ public final class WeightedMeanCalculators {
         DeletePointResults results = new DeletePointResults();
 
         int n = y1.length;
+        boolean linReg = (x1.length == n);
+
         double[] y2 = new double[n - 1];
         double[][] sigRho2 = new double[n - 1][n - 1];
         double[] x2 = new double[0];
-        boolean linReg = false;
-        if (x1.length == n) {
+
+        if (linReg) {
             x2 = new double[n - 1];
-            linReg = true;
         }
 
         for (int j = 0; j < n; j++) {
@@ -439,7 +701,7 @@ public final class WeightedMeanCalculators {
 
             results.setBad(false);
             results.setMeanVal(meanVal);
-            results.setMeanValSigma(meanValSigma);
+            results.setSigmaMeanVal(meanValSigma);
             results.setMswd(mswd);
             results.setProb(prob);
         }
@@ -452,14 +714,14 @@ public final class WeightedMeanCalculators {
 
         private boolean bad;
         private double meanVal;
-        private double meanValSigma;
+        private double sigmaMeanVal;
         private double mswd;
         private double prob;
 
         public WtdAvCorrResults() {
             bad = true;
             meanVal = 0.0;
-            meanValSigma = 0.0;
+            sigmaMeanVal = 0.0;
             mswd = 0.0;
             prob = 0.0;
         }
@@ -493,17 +755,17 @@ public final class WeightedMeanCalculators {
         }
 
         /**
-         * @return the meanValSigma
+         * @return the sigmaMeanVal
          */
-        public double getMeanValSigma() {
-            return meanValSigma;
+        public double getSigmaMeanVal() {
+            return sigmaMeanVal;
         }
 
         /**
-         * @param meanValSigma the meanValSigma to set
+         * @param sigmaMeanVal the sigmaMeanVal to set
          */
-        public void setMeanValSigma(double meanValSigma) {
-            this.meanValSigma = meanValSigma;
+        public void setSigmaMeanVal(double sigmaMeanVal) {
+            this.sigmaMeanVal = sigmaMeanVal;
         }
 
         /**
