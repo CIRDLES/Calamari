@@ -392,7 +392,7 @@ public final class WeightedMeanCalculators {
         Matrix residT = resid.transpose();
         Matrix mM = residT.times(omega).times(resid);
 
-        double sumSqWtdResids = mM.get(0, 1);
+        double sumSqWtdResids = mM.get(0, 0);
         double mswd = sumSqWtdResids / (n - 2);
 
         // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html

@@ -78,7 +78,7 @@ public class PrawnRunFractionParser {
         prepareRunFractionMetaData(runFraction);
         parseRunFractionData();
         calculateTotalPerSpeciesCPS();
-        calculateIsotopicRatios(true, false);
+        calculateIsotopicRatios(true, true);
         
         ShrimpFraction shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
         shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
