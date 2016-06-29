@@ -96,6 +96,7 @@ public class CalamariUI extends javax.swing.JFrame {
         currentPrawnFileLocation = new javax.swing.JLabel();
         calamariInfo = new javax.swing.JLabel();
         useSBM = new javax.swing.JCheckBox();
+        userLinFits = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -172,8 +173,13 @@ public class CalamariUI extends javax.swing.JFrame {
         basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 630, -1));
 
         useSBM.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        useSBM.setSelected(true);
         useSBM.setText("use SBM");
         basePane.add(useSBM, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
+
+        userLinFits.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        userLinFits.setText("user LinFits");
+        basePane.add(userLinFits, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 190, -1, -1));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -233,7 +239,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
         try {
-            RawDataFileHandler.writeReportsFromPrawnFile(RawDataFileHandler.getCurrentPrawnFileLocation(), true, false);
+            RawDataFileHandler.writeReportsFromPrawnFile(RawDataFileHandler.getCurrentPrawnFileLocation(), useSBM.isSelected(), userLinFits.isSelected());
         } catch (IOException | JAXBException exception) {
             System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
         }
@@ -284,6 +290,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JButton selectPrawnFileLocationButton;
     private javax.swing.JButton selectReportsLocationButton;
     private javax.swing.JCheckBox useSBM;
+    private javax.swing.JCheckBox userLinFits;
     // End of variables declaration//GEN-END:variables
 
 }

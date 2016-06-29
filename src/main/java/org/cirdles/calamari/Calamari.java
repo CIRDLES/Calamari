@@ -79,10 +79,9 @@ public class Calamari {
                     // test for empty string
                     if (fileNames.get(i).trim().length() > 0) {
                         File prawnFileResource = RESOURCE_EXTRACTOR.extractResourceAsFile(fileNames.get(i));
-                        File prawnFile = new File(fileNames.get(i));
-                        if (prawnFile.exists()){
-                            prawnFile.delete();
-                        }
+                        File exampleFolder = new File("ExamplePrawnFiles");
+                        exampleFolder.mkdir();
+                        File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
                         System.out.println("PrawnFile added: " + fileNames.get(i));
                         prawnFileResource.renameTo(prawnFile);
                         prawnFiles.add(prawnFile);
