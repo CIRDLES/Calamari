@@ -1,12 +1,31 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2006-2016 CIRDLES.org.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.cirdles.calamari.userInterface;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.UIManager;
+import javax.xml.bind.JAXBException;
+import org.cirdles.calamari.Calamari;
+import org.cirdles.calamari.core.RawDataFileHandler;
+import org.cirdles.calamari.core.ReportsEngine;
+import org.cirdles.calamari.prawn.PrawnFileFilter;
 
 /**
  *
@@ -23,6 +42,11 @@ public class CalamariUI extends javax.swing.JFrame {
     }
 
     private void initUI() {
+
+        this.setPreferredSize(new Dimension(700, 450));
+        CalamariUI.setDefaultLookAndFeelDecorated(true);
+        UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
+
         // center me
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -32,9 +56,25 @@ public class CalamariUI extends javax.swing.JFrame {
         int y = (dim.height - h) / 2;
 
         this.setLocation(x, y);
-        
+
         this.setTitle("Calamari Raw Data Processing for SHRIMP");
-        
+        calamariInfo.setText("Calamari version " + Calamari.VERSION + "   built on " + Calamari.RELEASE_DATE);
+        updateCurrentPrawnFileLocation();
+        updateReportsFolderLocationText();
+
+        fileMenu.setVisible(false);
+    }
+
+    private void updateCurrentPrawnFileLocation() {
+        currentPrawnFileLocation.setText(RawDataFileHandler.getCurrentPrawnFileLocation());
+    }
+
+    private void updateReportsFolderLocationText() {
+        try {
+            this.outputFolderLocation.setText(ReportsEngine.getFolderToWriteCalamariReports().getCanonicalPath());
+        } catch (IOException iOException) {
+        }
+
     }
 
     /**
@@ -47,37 +87,93 @@ public class CalamariUI extends javax.swing.JFrame {
     private void initComponents() {
 
         basePane = new javax.swing.JLayeredPane();
+        inputFileLocationLabel = new javax.swing.JLabel();
+        outputFileLocationLabel = new javax.swing.JLabel();
+        reduceDataButton = new javax.swing.JButton();
+        selectReportsLocationButton = new javax.swing.JButton();
+        outputFolderLocation = new javax.swing.JLabel();
+        selectPrawnFileLocationButton = new javax.swing.JButton();
+        currentPrawnFileLocation = new javax.swing.JLabel();
+        calamariInfo = new javax.swing.JLabel();
+        useSBM = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
-        contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(700, 450));
 
-        basePane.setBackground(new java.awt.Color(255, 255, 255));
+        basePane.setBackground(new java.awt.Color(255, 231, 228));
         basePane.setOpaque(true);
+        basePane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout basePaneLayout = new javax.swing.GroupLayout(basePane);
-        basePane.setLayout(basePaneLayout);
-        basePaneLayout.setHorizontalGroup(
-            basePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 722, Short.MAX_VALUE)
-        );
-        basePaneLayout.setVerticalGroup(
-            basePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 408, Short.MAX_VALUE)
-        );
+        inputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        inputFileLocationLabel.setText("Prawn file path:");
+        basePane.add(inputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 250, 30));
+
+        outputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        outputFileLocationLabel.setText("CalamariReports folder location:");
+        basePane.add(outputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 295, -1, 30));
+
+        reduceDataButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        reduceDataButton.setText("Reduce Data and Produce Reports");
+        reduceDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reduceDataButtonActionPerformed(evt);
+            }
+        });
+        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 380, 30));
+
+        selectReportsLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        selectReportsLocationButton.setText("Select location for CalamariReports Folder");
+        selectReportsLocationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectReportsLocationButtonActionPerformed(evt);
+            }
+        });
+        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 295, 375, 30));
+
+        outputFolderLocation.setBackground(new java.awt.Color(255, 255, 255));
+        outputFolderLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        outputFolderLocation.setText("path");
+        outputFolderLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        outputFolderLocation.setOpaque(true);
+        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 630, -1));
+
+        selectPrawnFileLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        selectPrawnFileLocationButton.setText("Select Prawn File");
+        selectPrawnFileLocationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectPrawnFileLocationButtonActionPerformed(evt);
+            }
+        });
+        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 375, 30));
+
+        currentPrawnFileLocation.setBackground(new java.awt.Color(255, 255, 255));
+        currentPrawnFileLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        currentPrawnFileLocation.setText("path");
+        currentPrawnFileLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        currentPrawnFileLocation.setOpaque(true);
+        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 630, -1));
+
+        calamariInfo.setBackground(new java.awt.Color(255, 8, 9));
+        calamariInfo.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        calamariInfo.setForeground(new java.awt.Color(255, 255, 255));
+        calamariInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        calamariInfo.setText("jLabel1");
+        calamariInfo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        calamariInfo.setOpaque(true);
+        basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 630, -1));
+
+        useSBM.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        useSBM.setText("use SBM");
+        basePane.add(useSBM, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -106,33 +202,8 @@ public class CalamariUI extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
-
-        cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Copy");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
-
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
-
-        contentsMenuItem.setMnemonic('c');
-        contentsMenuItem.setText("Contents");
-        helpMenu.add(contentsMenuItem);
 
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
@@ -160,23 +231,59 @@ public class CalamariUI extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
+    private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
+        try {
+            RawDataFileHandler.writeReportsFromPrawnFile(RawDataFileHandler.getCurrentPrawnFileLocation(), true, false);
+        } catch (IOException | JAXBException exception) {
+            System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
+        }
+    }//GEN-LAST:event_reduceDataButtonActionPerformed
+
+    private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
+        File reportFolder = FileHelper.AllPlatformGetFolder("Select location to write reports", ReportsEngine.getFolderToWriteCalamariReports());
+        if (reportFolder != null) {
+            ReportsEngine.setFolderToWriteCalamariReports(reportFolder);
+            updateReportsFolderLocationText();
+        }       
+    }//GEN-LAST:event_selectReportsLocationButtonActionPerformed
+
+    private void selectPrawnFileLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPrawnFileLocationButtonActionPerformed
+
+        File prawnFile = FileHelper.AllPlatformGetFile(//
+                "Select Prawn file", //
+                new File(RawDataFileHandler.getCurrentPrawnFileLocation()), //
+                "*.xml", new PrawnFileFilter(), false, this)[0];
+        if (prawnFile != null) {
+            try {
+                RawDataFileHandler.setCurrentPrawnFileLocation(prawnFile.getCanonicalPath());
+                updateCurrentPrawnFileLocation();
+            } catch (IOException iOException) {
+            }
+        }
+
+
+    }//GEN-LAST:event_selectPrawnFileLocationButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JLayeredPane basePane;
-    private javax.swing.JMenuItem contentsMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
-    private javax.swing.JMenu editMenu;
+    private javax.swing.JLabel calamariInfo;
+    private javax.swing.JLabel currentPrawnFileLocation;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JLabel inputFileLocationLabel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JLabel outputFileLocationLabel;
+    private javax.swing.JLabel outputFolderLocation;
+    private javax.swing.JButton reduceDataButton;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JButton selectPrawnFileLocationButton;
+    private javax.swing.JButton selectReportsLocationButton;
+    private javax.swing.JCheckBox useSBM;
     // End of variables declaration//GEN-END:variables
 
 }

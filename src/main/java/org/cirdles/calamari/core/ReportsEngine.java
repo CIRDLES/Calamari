@@ -40,6 +40,9 @@ public class ReportsEngine {
     private static File withinSpotRatiosAtInterpolatedTimes;
     private static File meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis;
 
+    private static File folderToWriteCalamariReports = new File(System.getProperty("user.dir"));
+    private static transient String folderToWriteCalamariReportsPath;
+
     private static StringBuilder refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis;
     private static StringBuilder refMatWithinSpotRatiosAtInterpolatedTimes;
@@ -58,6 +61,16 @@ public class ReportsEngine {
         if (shrimpFractions.size() > 0) {
             // gather general info for all runs  from first fraction
             ShrimpFraction firstShrimpFraction = shrimpFractions.get(0);
+
+            folderToWriteCalamariReportsPath
+                    = folderToWriteCalamariReports.getCanonicalPath()
+                    + File.separator + "CalamariReports-" 
+                    + firstShrimpFraction.getNameOfMount()
+                    + "--" + (firstShrimpFraction.isUseSBM() ? "SBM-TRUE" : "SBM-FALSE")
+                    + "--" + (firstShrimpFraction.isUserLinFits() ? "FIT-TRUE" : "FIT-FALSE")
+                    + File.separator;
+            File reportsFolder = new File(folderToWriteCalamariReportsPath);
+            reportsFolder.mkdir();
 
             prepSpeciesReportFiles(firstShrimpFraction);
             prepRatiosReportFiles(firstShrimpFraction);
@@ -341,7 +354,7 @@ public class ReportsEngine {
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
         int countOfIntegrations = shrimpFraction.getPeakMeasurementsCount();
 
-        totalIonCountsAtMassFile = new File("Calamari_TotalIonCountsAtMass_for_" + nameOfMount + ".txt");
+        totalIonCountsAtMassFile = new File(folderToWriteCalamariReportsPath + "Calamari_TotalIonCountsAtMass_for_" + nameOfMount + ".txt");
         StringBuilder header = new StringBuilder();
         header.append("Title, Date, Scan, Type, Dead_time_ns");
 
@@ -355,7 +368,7 @@ public class ReportsEngine {
 
         Files.write(header, totalIonCountsAtMassFile, Charsets.UTF_8);
 
-        totalSBMCountsAtMassFile = new File("Calamari_TotalSBMCountsAtMass_for_" + nameOfMount + ".txt");
+        totalSBMCountsAtMassFile = new File(folderToWriteCalamariReportsPath + "Calamari_TotalSBMCountsAtMass_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type, SBM_zero_cps");
 
@@ -369,7 +382,7 @@ public class ReportsEngine {
 
         Files.write(header, totalSBMCountsAtMassFile, Charsets.UTF_8);
 
-        totalCountsAtTimeStampAndTrimMass = new File("Calamari_TotalCountsAtTimeStampAndTrimMass_for_" + nameOfMount + ".txt");
+        totalCountsAtTimeStampAndTrimMass = new File(folderToWriteCalamariReportsPath + "Calamari_TotalCountsAtTimeStampAndTrimMass_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type");
 
@@ -384,7 +397,7 @@ public class ReportsEngine {
 
         Files.write(header, totalCountsAtTimeStampAndTrimMass, Charsets.UTF_8);
 
-        totalCountsPerSecondPerSpeciesPerAnalysis = new File("Calamari_TotalCountsPerSecondPerSpeciesPerAnalysis_for_" + nameOfMount + ".txt");
+        totalCountsPerSecondPerSpeciesPerAnalysis = new File(folderToWriteCalamariReportsPath + "Calamari_TotalCountsPerSecondPerSpeciesPerAnalysis_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
         header.append("Title, Date, Type");
 
@@ -400,7 +413,7 @@ public class ReportsEngine {
     }
 
     private static void prepRatiosReportFiles(ShrimpFraction shrimpFraction) throws IOException {
-        withinSpotRatiosAtInterpolatedTimes = new File("Calamari_WithinSpotRatiosAtInterpolatedTimes_for_" + shrimpFraction.getNameOfMount() + ".txt");
+        withinSpotRatiosAtInterpolatedTimes = new File(folderToWriteCalamariReportsPath + "Calamari_WithinSpotRatiosAtInterpolatedTimes_for_" + shrimpFraction.getNameOfMount() + ".txt");
         StringBuilder header = new StringBuilder();
         header.append("Title, Date, Ndod, Type");
 
@@ -417,7 +430,7 @@ public class ReportsEngine {
         refMatWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
         unknownWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
 
-        meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new File("Calamari_MeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
+        meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new File(folderToWriteCalamariReportsPath + "Calamari_MeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis_for_" + shrimpFraction.getNameOfMount() + ".txt");
         header = new StringBuilder();
         header.append("Title, Date, Type");
 
@@ -454,6 +467,21 @@ public class ReportsEngine {
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
         return dateFormat.format(calendar.getTime());
+    }
+
+    /**
+     * @return the folderToWriteCalamariReports
+     */
+    public static File getFolderToWriteCalamariReports() {
+        return folderToWriteCalamariReports;
+    }
+
+    /**
+     * @param aFolderToWriteCalamariReports the folderToWriteCalamariReports to
+     * set
+     */
+    public static void setFolderToWriteCalamariReports(File aFolderToWriteCalamariReports) {
+        folderToWriteCalamariReports = aFolderToWriteCalamariReports;
     }
 
 }

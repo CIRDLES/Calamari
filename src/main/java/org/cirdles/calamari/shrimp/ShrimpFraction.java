@@ -49,6 +49,8 @@ public class ShrimpFraction {
     private double[][] netPkCps;
     private double[][] pkFerr;
     private boolean referenceMaterial;
+    private boolean useSBM;
+    private boolean userLinFits;
 
     public ShrimpFraction() {
         fractionID = "NONE";
@@ -414,6 +416,34 @@ public class ShrimpFraction {
      */
     public void setReferenceMaterial(boolean referenceMaterial) {
         this.referenceMaterial = referenceMaterial;
+    }
+
+    /**
+     * @return the useSBM
+     */
+    public boolean isUseSBM() {
+        return useSBM;
+    }
+
+    /**
+     * @param useSBM the useSBM to set
+     */
+    public void setUseSBM(boolean useSBM) {
+        this.useSBM = useSBM;
+    }
+
+    /**
+     * @return the userLinFits
+     */
+    public boolean isUserLinFits() {
+        return userLinFits;
+    }
+
+    /**
+     * @param userLinFits the userLinFits to set
+     */
+    public void setUserLinFits(boolean userLinFits) {
+        this.userLinFits = userLinFits;
     }
 
 }

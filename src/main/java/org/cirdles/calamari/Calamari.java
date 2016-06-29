@@ -1,13 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2006-2016 CIRDLES.org.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.cirdles.calamari;
 
+import com.google.common.base.Charsets;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import javax.xml.bind.JAXBException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import org.cirdles.calamari.core.RawDataFileHandler;
+import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.commons.util.ResourceExtractor;
 
 /**
  *
@@ -16,48 +35,93 @@ import org.cirdles.calamari.core.RawDataFileHandler;
 public class Calamari {
 
     /**
+     * Version 3.0.0 initiates switch to ET_Redux from U-Pb_Redux
+     */
+    public static String VERSION = "version";
+
+    /**
+     *
+     */
+    public static String RELEASE_DATE = "date";
+
+    private static ResourceExtractor RESOURCE_EXTRACTOR
+            = new ResourceExtractor(Calamari.class);
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+
+        // get version number and release date written by pom.xml
+        Path resourcePath = RESOURCE_EXTRACTOR.extractResourceAsPath("version.txt");
+        Charset charset = Charset.forName("US-ASCII");
+        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
+
+            String[] versionText = reader.readLine().split("=");
+            VERSION = versionText[1];
+
+            String[] versionDate = reader.readLine().split("=");
+            RELEASE_DATE = versionDate[1];
+
+            reader.close();
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+        RESOURCE_EXTRACTOR = new ResourceExtractor(PrawnFile.class);
+
+        File listOfPrawnFiles = RESOURCE_EXTRACTOR.extractResourceAsFile("listOfPrawnFiles.txt");
+        if (listOfPrawnFiles != null) {
+            List<File> prawnFiles = new ArrayList<>();
+            try {
+                List<String> fileNames = com.google.common.io.Files.readLines(listOfPrawnFiles, Charsets.ISO_8859_1);
+                for (int i = 0; i < fileNames.size(); i++) {
+                    // test for empty string
+                    if (fileNames.get(i).trim().length() > 0) {
+                        File prawnFileResource = RESOURCE_EXTRACTOR.extractResourceAsFile(fileNames.get(i));
+                        File prawnFile = new File(fileNames.get(i));
+                        if (prawnFile.exists()){
+                            prawnFile.delete();
+                        }
+                        System.out.println("PrawnFile added: " + fileNames.get(i));
+                        prawnFileResource.renameTo(prawnFile);
+                        prawnFiles.add(prawnFile);
+                    }
+                }
+                
+                RawDataFileHandler.setCurrentPrawnFileLocation(prawnFiles.get(0).getCanonicalPath());
+            } catch (IOException iOException) {
+            }
+        }
+
+        /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* If Metal is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Motif".equals(info.getName())) { //Nimbus (original), Motif, Metal
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        try {
-            RawDataFileHandler.writeReportsFromPrawnFile("/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml");
-        } catch (IOException | JAXBException exception) {
-            System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
-        }
 //        if (args.length > 0) {
 //            System.out.println("Command line mode");
 //            try {
-//                RawDataFileHandler.writeReportsFromPrawnFile(args[0]);
+//                RawDataFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
 //            } catch (IOException | JAXBException exception) {
 //                System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
 //            }
 //        } else {
-//            /* Create and display the form */
-//            java.awt.EventQueue.invokeLater(() -> {
-//                new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
-//            });
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
+        });
 //        }
     }
 }

@@ -13,12 +13,18 @@ nbproject/
 # Generated
 *.txt
 *.html
-
-*.csv
+*.xml
+*.csvß
 test_*
 *.ser
 *.zip
 
+
+# Resources
+!src/main/resources/**/*.xml
+!src/main/resources/org/cirdles/calamari/prawn/*.xml
+!src/main/resources/org/cirdles/calamari/prawn/*.txt
+!src/main/resources/org/cirdles/calamari/version.txt
 
 # MACOS
 .DS_Store
