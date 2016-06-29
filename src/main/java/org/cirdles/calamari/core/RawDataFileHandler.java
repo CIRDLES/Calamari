@@ -37,8 +37,19 @@ public class RawDataFileHandler {
 
     private static JAXBContext jaxbContext;
     private static Unmarshaller jaxbUnmarshaller;
+    private static String currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
+    //"/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml"
 
-    public static List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation)
+    /**
+     *
+     * @param prawnFileLocation the value of prawnFileLocation
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
+     * @return 
+     * @throws MalformedURLException
+     * @throws JAXBException
+     */
+    public static List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws MalformedURLException, JAXBException {
         PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
         String nameOfMount = prawnFile.getMount();
@@ -46,7 +57,7 @@ public class RawDataFileHandler {
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction);
+            ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction, useSBM, userLinFits);
             shrimpFraction.setSpotNumber(f + 1);
             shrimpFraction.setNameOfMount(nameOfMount);
             shrimpFractions.add(shrimpFraction);
@@ -55,9 +66,18 @@ public class RawDataFileHandler {
         return shrimpFractions;
     }
 
-    public static void writeReportsFromPrawnFile(String prawnFileLocation)
+    /**
+     *
+     * @param prawnFileLocation the value of prawnFileLocation
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws JAXBException
+     */
+    public static void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws IOException, MalformedURLException, JAXBException {
-        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation);
+        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
         ReportsEngine.produceReports(shrimpFractions);
     }
 
@@ -104,6 +124,20 @@ public class RawDataFileHandler {
 
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataURL);
         return myPrawnFile;
+    }
+
+    /**
+     * @return the currentPrawnFileLocation
+     */
+    public static String getCurrentPrawnFileLocation() {
+        return currentPrawnFileLocation;
+    }
+
+    /**
+     * @param aCurrentPrawnFileLocation the currentPrawnFileLocation to set
+     */
+    public static void setCurrentPrawnFileLocation(String aCurrentPrawnFileLocation) {
+        currentPrawnFileLocation = aCurrentPrawnFileLocation;
     }
 
 }

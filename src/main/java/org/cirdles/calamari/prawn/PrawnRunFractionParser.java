@@ -73,12 +73,19 @@ public class PrawnRunFractionParser {
     private static com.google.common.collect.BiMap<Integer, IsotopeNames> speciesToIndexBiMap;
     private static Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios;
     
-    public static ShrimpFraction processRunFraction(PrawnFile.Run runFraction) {
+    /**
+     *
+     * @param runFraction the value of runFraction
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
+     * @return 
+     */
+    public static ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits) {
         
         prepareRunFractionMetaData(runFraction);
         parseRunFractionData();
         calculateTotalPerSpeciesCPS();
-        calculateIsotopicRatios(true, true);
+        calculateIsotopicRatios(useSBM, userLinFits);
         
         ShrimpFraction shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
         shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
@@ -100,6 +107,8 @@ public class PrawnRunFractionParser {
         shrimpFraction.setTotalCps(totalCps);
         shrimpFraction.setNetPkCps(netPkCps);
         shrimpFraction.setPkFerr(pkFerr);
+        shrimpFraction.setUseSBM(useSBM);
+        shrimpFraction.setUserLinFits(userLinFits);
 
         // determine reference material status
         // hard coded for now
