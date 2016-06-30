@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.RawDataFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.commons.util.ResourceExtractor;
@@ -87,7 +88,7 @@ public class Calamari {
                         prawnFiles.add(prawnFile);
                     }
                 }
-                
+
                 RawDataFileHandler.setCurrentPrawnFileLocation(prawnFiles.get(0).getCanonicalPath());
             } catch (IOException iOException) {
             }
@@ -109,18 +110,18 @@ public class Calamari {
             java.util.logging.Logger.getLogger(org.cirdles.calamari.userInterface.CalamariUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-//        if (args.length > 0) {
-//            System.out.println("Command line mode");
-//            try {
-//                RawDataFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
-//            } catch (IOException | JAXBException exception) {
-//                System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
-//            }
-//        } else {
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
-        });
-//        }
+        if (args.length == 3) {// remove 4th argument from properties dialog command line arguments to get commandline
+            System.out.println("Command line mode");
+            try {
+                RawDataFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
+            } catch (IOException | JAXBException exception) {
+                System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
+            }
+        } else {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(() -> {
+                new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
+            });
+        }
     }
 }
