@@ -239,9 +239,9 @@ public class PrawnRunFractionParser {
                     BigDecimal bVcpsDeadTimeBD = bVcpsBD.divide(BigDecimal.ONE.subtract(bVcpsBD.multiply(new BigDecimal(deadTimeNanoseconds).movePointLeft(9), MathContext.DECIMAL128)), MathContext.DECIMAL128);
                     
                     totalCountsPeakBD = bVcpsDeadTimeBD.multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex]));
-                    BigDecimal countsSigmaCandidateBD = peakTukeyMean.getOneSigmaAbs().max(bigDecimalSqrtBabylonian(bVBD));
+                    BigDecimal countsSigmaCandidateBD = peakTukeyMean.getOneSigmaAbs().max(bigDecimalSqrt(bVBD));
                     totalCountsSigmaBD
-                            = countsSigmaCandidateBD.divide(bigDecimalSqrtBabylonian(new BigDecimal(peakMeasurementsCount)), MathContext.DECIMAL128)//
+                            = countsSigmaCandidateBD.divide(bigDecimalSqrt(new BigDecimal(peakMeasurementsCount)), MathContext.DECIMAL128)//
                             .multiply(bVcpsBD).multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex])).divide(bVBD, MathContext.DECIMAL128);
                     
                 } else if (median >= 0.0) {
@@ -274,8 +274,8 @@ public class PrawnRunFractionParser {
                     }
                     
                     BigDecimal peakMeanCountsBD = new BigDecimal(sumX).divide(new BigDecimal(countIncludedIntegrations), MathContext.DECIMAL128);
-                    BigDecimal poissonSigmaBD = bigDecimalSqrtBabylonian(peakMeanCountsBD);
-                    BigDecimal sigmaPeakCountsBD = bigDecimalSqrtBabylonian(new BigDecimal((sumXsquared - (sumX * sumX / countIncludedIntegrations)) / (countIncludedIntegrations - 1)));
+                    BigDecimal poissonSigmaBD = bigDecimalSqrt(peakMeanCountsBD);
+                    BigDecimal sigmaPeakCountsBD = bigDecimalSqrt(new BigDecimal((sumXsquared - (sumX * sumX / countIncludedIntegrations)) / (countIncludedIntegrations - 1)));
                     
                     BigDecimal peakCountsPerSecondBD = peakMeanCountsBD.multiply(new BigDecimal(peakMeasurementsCount)).divide(new BigDecimal(countTimeSec[speciesMeasurementIndex]), MathContext.DECIMAL128);
                     BigDecimal peakCountsPerSecondDeadTimeBD
@@ -287,7 +287,7 @@ public class PrawnRunFractionParser {
                     if (peakMeanCountsBD.compareTo(BigDecimal.ZERO) > 0) {
                         totalCountsSigmaBD
                                 = sigmaPeakCountsBD.max(poissonSigmaBD)//
-                                .divide(bigDecimalSqrtBabylonian(new BigDecimal(countIncludedIntegrations)), MathContext.DECIMAL128)//
+                                .divide(bigDecimalSqrt(new BigDecimal(countIncludedIntegrations)), MathContext.DECIMAL128)//
                                 .multiply(new BigDecimal(peakCountsPerSecond).multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex] / peakMeanCounts), MathContext.DECIMAL128));
                     }
                     
@@ -322,27 +322,8 @@ public class PrawnRunFractionParser {
         }
     }
     
-    public static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
-        
-        BigDecimal guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
-        
-        if (guess.compareTo(BigDecimal.ZERO) > 0) {
-            
-            BigDecimal precision = BigDecimal.ONE.movePointLeft(34);
-            BigDecimal theError = BigDecimal.ONE;
-            while (theError.compareTo(precision) > 0) {
-                BigDecimal nextGuess = BigDecimal.ZERO;
-                try {
-                    nextGuess = guess.add(S.divide(guess, MathContext.DECIMAL128)).divide(new BigDecimal(2.0), MathContext.DECIMAL128);
-                } catch (java.lang.ArithmeticException e) {
-                    System.out.println(e.getMessage());
-                }
-                theError = guess.subtract(nextGuess, MathContext.DECIMAL128).abs();
-                guess = nextGuess;
-            }
-        }
-        
-        return guess;
+    public static BigDecimal bigDecimalSqrt(BigDecimal n) {
+        return new BigDecimal(StrictMath.sqrt(n.doubleValue()));
     }
     
     private static void calculateTotalPerSpeciesCPS() {
