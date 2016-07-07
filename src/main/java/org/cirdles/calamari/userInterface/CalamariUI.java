@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.userInterface;
 
+import com.apple.eawt.Application;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -46,6 +47,13 @@ public class CalamariUI extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(700, 450));
         CalamariUI.setDefaultLookAndFeelDecorated(true);
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
+
+        // check for MacOS
+        String lcOSName = System.getProperty("os.name").toLowerCase();
+        boolean MAC_OS_X = lcOSName.startsWith("mac os x");
+        if (MAC_OS_X) {
+            Application myAboutHandler = new MacOSAboutHandler();
+        }
 
         // center me
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -104,6 +112,7 @@ public class CalamariUI extends javax.swing.JFrame {
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
+        calamariHelpMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -129,7 +138,7 @@ public class CalamariUI extends javax.swing.JFrame {
                 reduceDataButtonActionPerformed(evt);
             }
         });
-        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 380, 30));
+        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 365, 380, 30));
 
         selectReportsLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         selectReportsLocationButton.setText("Select location for CalamariReports Folder");
@@ -138,14 +147,14 @@ public class CalamariUI extends javax.swing.JFrame {
                 selectReportsLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 295, 375, 30));
+        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 295, 370, 30));
 
         outputFolderLocation.setBackground(new java.awt.Color(255, 255, 255));
         outputFolderLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         outputFolderLocation.setText("path");
         outputFolderLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         outputFolderLocation.setOpaque(true);
-        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 630, -1));
+        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 330, 630, -1));
 
         selectPrawnFileLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         selectPrawnFileLocationButton.setText("Select Prawn File");
@@ -154,14 +163,14 @@ public class CalamariUI extends javax.swing.JFrame {
                 selectPrawnFileLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 375, 30));
+        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 370, 30));
 
         currentPrawnFileLocation.setBackground(new java.awt.Color(255, 255, 255));
         currentPrawnFileLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         currentPrawnFileLocation.setText("path");
         currentPrawnFileLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         currentPrawnFileLocation.setOpaque(true);
-        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 630, -1));
+        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 145, 630, -1));
 
         calamariInfo.setBackground(new java.awt.Color(255, 8, 9));
         calamariInfo.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -172,13 +181,17 @@ public class CalamariUI extends javax.swing.JFrame {
         calamariInfo.setOpaque(true);
         basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 630, -1));
 
+        useSBM.setBackground(new java.awt.Color(255, 231, 228));
         useSBM.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         useSBM.setSelected(true);
         useSBM.setText("use SBM");
+        useSBM.setOpaque(true);
         basePane.add(useSBM, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
 
+        userLinFits.setBackground(new java.awt.Color(255, 231, 228));
         userLinFits.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         userLinFits.setText("user LinFits");
+        userLinFits.setOpaque(true);
         basePane.add(userLinFits, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 190, -1, -1));
 
         fileMenu.setMnemonic('f');
@@ -211,8 +224,16 @@ public class CalamariUI extends javax.swing.JFrame {
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
 
+        calamariHelpMenuItem.setText("Calamari Help");
+        helpMenu.add(calamariHelpMenuItem);
+
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -250,7 +271,7 @@ public class CalamariUI extends javax.swing.JFrame {
         if (reportFolder != null) {
             ReportsEngine.setFolderToWriteCalamariReports(reportFolder);
             updateReportsFolderLocationText();
-        }       
+        }
     }//GEN-LAST:event_selectReportsLocationButtonActionPerformed
 
     private void selectPrawnFileLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPrawnFileLocationButtonActionPerformed
@@ -270,10 +291,15 @@ public class CalamariUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_selectPrawnFileLocationButtonActionPerformed
 
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        AboutBox.getInstance().setVisible(true);
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JLayeredPane basePane;
+    private javax.swing.JMenuItem calamariHelpMenuItem;
     private javax.swing.JLabel calamariInfo;
     private javax.swing.JLabel currentPrawnFileLocation;
     private javax.swing.JMenuItem exitMenuItem;
