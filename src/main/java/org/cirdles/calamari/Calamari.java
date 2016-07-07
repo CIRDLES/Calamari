@@ -15,11 +15,11 @@
  */
 package org.cirdles.calamari;
 
-import com.google.common.base.Charsets;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.RawDataFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.commons.util.ResourceExtractor;
+
 
 /**
  *
@@ -71,11 +72,11 @@ public class Calamari {
 
         RESOURCE_EXTRACTOR = new ResourceExtractor(PrawnFile.class);
 
-        File listOfPrawnFiles = RESOURCE_EXTRACTOR.extractResourceAsFile("listOfPrawnFiles.txt");
+        Path listOfPrawnFiles = RESOURCE_EXTRACTOR.extractResourceAsPath("listOfPrawnFiles.txt");
         if (listOfPrawnFiles != null) {
             List<File> prawnFiles = new ArrayList<>();
             try {
-                List<String> fileNames = com.google.common.io.Files.readLines(listOfPrawnFiles, Charsets.ISO_8859_1);
+                List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
                 for (int i = 0; i < fileNames.size(); i++) {
                     // test for empty string
                     if (fileNames.get(i).trim().length() > 0) {
