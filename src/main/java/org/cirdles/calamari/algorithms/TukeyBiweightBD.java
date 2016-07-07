@@ -27,7 +27,7 @@ import org.cirdles.calamari.shrimp.ValueModel;
  * reduction. Note code extracted by Simon Bodorkos in emails to bowring
  * Feb.2016
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public final class TukeyBiweightBD {
 

@@ -30,7 +30,7 @@ import org.cirdles.commons.util.ResourceExtractor;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public class Calamari {
 

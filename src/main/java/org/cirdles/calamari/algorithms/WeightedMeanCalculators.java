@@ -20,7 +20,7 @@ import org.apache.commons.math3.distribution.FDistribution;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  * Based on Simon Bodorkos' interpreation of Ludwig's code:
  * https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Step-4
  */
@@ -33,7 +33,6 @@ public final class WeightedMeanCalculators {
      * WtdLinCorrResults. Indexing in Java is 0-based, hence the use of i-1 and
      * minIndex - 1 in the calls to deletePoint.
      *
-     * @param linReg
      * @param y
      * @param sigRho
      * @param x
