@@ -15,25 +15,27 @@
  */
 package org.cirdles.calamari.prawn;
 
-import com.google.common.collect.HashBiMap;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
 import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.TukeyBiweightBD;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
-import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ValueModel;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 
 /**
  *
@@ -70,7 +72,7 @@ public class PrawnRunFractionParser {
     private static double[][] sbmCps;
     private static double[][] pkFerr;
     private static double[] totalCps;
-    private static com.google.common.collect.BiMap<Integer, IsotopeNames> speciesToIndexBiMap;
+    private static Map<IsotopeNames, Integer> indexToSpeciesMap;
     private static Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios;
     
     /**
@@ -151,18 +153,18 @@ public class PrawnRunFractionParser {
         pkFerr = new double[nScans][nSpecies];
 
         // april 2016 hard-wired for prototype **********************************
-        speciesToIndexBiMap = HashBiMap.create();
-        speciesToIndexBiMap.put(0, IsotopeNames.Zr2O196);
-        speciesToIndexBiMap.put(1, IsotopeNames.Pb204);
-        speciesToIndexBiMap.put(2, IsotopeNames.BKGND);
-        speciesToIndexBiMap.put(3, IsotopeNames.Pb206);
-        speciesToIndexBiMap.put(4, IsotopeNames.Pb207);
-        speciesToIndexBiMap.put(5, IsotopeNames.Pb208);
-        speciesToIndexBiMap.put(6, IsotopeNames.U238);
-        speciesToIndexBiMap.put(7, IsotopeNames.ThO248);
-        speciesToIndexBiMap.put(8, IsotopeNames.UO254);
-        speciesToIndexBiMap.put(9, IsotopeNames.UO270);
-        
+        indexToSpeciesMap = new HashMap<>();
+        indexToSpeciesMap.put(IsotopeNames.Zr2O196, 0);
+        indexToSpeciesMap.put(IsotopeNames.Pb204, 1);
+        indexToSpeciesMap.put(IsotopeNames.BKGND, 2);
+        indexToSpeciesMap.put(IsotopeNames.Pb206, 3);
+        indexToSpeciesMap.put(IsotopeNames.Pb207, 4);
+        indexToSpeciesMap.put(IsotopeNames.Pb208, 5);
+        indexToSpeciesMap.put(IsotopeNames.U238, 6);
+        indexToSpeciesMap.put(IsotopeNames.ThO248, 7);
+        indexToSpeciesMap.put(IsotopeNames.UO254, 8);
+        indexToSpeciesMap.put(IsotopeNames.UO270, 9);
+
         isotopicRatios = new TreeMap<>();
         isotopicRatios.put(RawRatioNamesSHRIMP.r204_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r204_206w, IsotopeNames.Pb204, IsotopeNames.Pb206));
         isotopicRatios.put(RawRatioNamesSHRIMP.r207_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r207_206w, IsotopeNames.Pb207, IsotopeNames.Pb206));
@@ -418,9 +420,9 @@ public class PrawnRunFractionParser {
         // walk the ratios
         isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
             int nDod = nScans - 1;
-            int NUM = speciesToIndexBiMap.inverse().get(isotopicRatio.getNumerator());
-            int DEN = speciesToIndexBiMap.inverse().get(isotopicRatio.getDenominator());
-            
+            int NUM = indexToSpeciesMap.get(isotopicRatio.getNumerator());
+            int DEN = indexToSpeciesMap.get(isotopicRatio.getDenominator());
+
             int aOrd = (DEN > NUM) ? NUM : DEN;
             int bOrd = (DEN > NUM) ? DEN : NUM;
             
