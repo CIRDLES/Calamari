@@ -15,17 +15,21 @@
  */
 package org.cirdles.calamari.core;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
+import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.util.Arrays.asList;
 
 /**
  *
@@ -145,7 +149,7 @@ public class ReportsEngine {
                 dataLine.append(", ").append(shrimpFraction.getRawPeakData()[scanNum][i]);
             }
 
-            Files.append(dataLine + "\n", totalIonCountsAtMassFile, Charsets.UTF_8);
+            Files.write(totalIonCountsAtMassFile.toPath(), asList(dataLine), APPEND);
         }
     }
 
@@ -191,7 +195,7 @@ public class ReportsEngine {
                 dataLine.append(", ").append(shrimpFraction.getRawSBMData()[scanNum][i]);
             }
 
-            Files.append(dataLine + "\n", totalSBMCountsAtMassFile, Charsets.UTF_8);
+            Files.write(totalSBMCountsAtMassFile.toPath(), asList(dataLine), APPEND);
         }
     }
 
@@ -252,7 +256,7 @@ public class ReportsEngine {
 //                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
             }
 
-            Files.append(dataLine + "\n", totalCountsAtTimeStampAndTrimMass, Charsets.UTF_8);
+            Files.write(totalCountsAtTimeStampAndTrimMass.toPath(), asList(dataLine), APPEND);
         }
     }
 
@@ -366,7 +370,7 @@ public class ReportsEngine {
         }
         header.append("\n");
 
-        Files.write(header, totalIonCountsAtMassFile, Charsets.UTF_8);
+        Files.write(totalIonCountsAtMassFile.toPath(), header.toString().getBytes(UTF_8));
 
         totalSBMCountsAtMassFile = new File(folderToWriteCalamariReportsPath + "Calamari_TotalSBMCountsAtMass_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
@@ -380,7 +384,7 @@ public class ReportsEngine {
         }
         header.append("\n");
 
-        Files.write(header, totalSBMCountsAtMassFile, Charsets.UTF_8);
+        Files.write(totalSBMCountsAtMassFile.toPath(), header.toString().getBytes(UTF_8));
 
         totalCountsAtTimeStampAndTrimMass = new File(folderToWriteCalamariReportsPath + "Calamari_TotalCountsAtTimeStampAndTrimMass_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
@@ -395,7 +399,7 @@ public class ReportsEngine {
         }
         header.append("\n");
 
-        Files.write(header, totalCountsAtTimeStampAndTrimMass, Charsets.UTF_8);
+        Files.write(totalCountsAtTimeStampAndTrimMass.toPath(), header.toString().getBytes(UTF_8));
 
         totalCountsPerSecondPerSpeciesPerAnalysis = new File(folderToWriteCalamariReportsPath + "Calamari_TotalCountsPerSecondPerSpeciesPerAnalysis_for_" + nameOfMount + ".txt");
         header = new StringBuilder();
@@ -406,7 +410,7 @@ public class ReportsEngine {
         }
         header.append("\n");
 
-        Files.write(header, totalCountsPerSecondPerSpeciesPerAnalysis, Charsets.UTF_8);
+        Files.write(totalCountsPerSecondPerSpeciesPerAnalysis.toPath(), header.toString().getBytes(UTF_8));
 
         refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis = new StringBuilder();
         unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis = new StringBuilder();
@@ -425,7 +429,7 @@ public class ReportsEngine {
 
         header.append("\n");
 
-        Files.write(header, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
+        Files.write(withinSpotRatiosAtInterpolatedTimes.toPath(), header.toString().getBytes(UTF_8));
 
         refMatWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
         unknownWithinSpotRatiosAtInterpolatedTimes = new StringBuilder();
@@ -441,7 +445,7 @@ public class ReportsEngine {
 
         header.append("\n");
 
-        Files.write(header, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
+        Files.write(meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.toPath(), header.toString().getBytes(UTF_8));
 
         refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
         unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis = new StringBuilder();
@@ -449,16 +453,16 @@ public class ReportsEngine {
     }
 
     private static void finishSpeciesReportFiles() throws IOException {
-        Files.append(refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis, totalCountsPerSecondPerSpeciesPerAnalysis, Charsets.UTF_8);
-        Files.append(unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis, totalCountsPerSecondPerSpeciesPerAnalysis, Charsets.UTF_8);
+        Files.write(totalCountsPerSecondPerSpeciesPerAnalysis.toPath(), refMatFractionsTotalCountsPerSecondPerSpeciesPerAnalysis.toString().getBytes(UTF_8), APPEND);
+        Files.write(totalCountsPerSecondPerSpeciesPerAnalysis.toPath(), unknownFractionsTotalCountsPerSecondPerSpeciesPerAnalysis.toString().getBytes(UTF_8), APPEND);
     }
 
     private static void finishRatiosReportFiles() throws IOException {
-        Files.append(refMatWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
-        Files.append(unknownWithinSpotRatiosAtInterpolatedTimes, withinSpotRatiosAtInterpolatedTimes, Charsets.UTF_8);
+        Files.write(withinSpotRatiosAtInterpolatedTimes.toPath(), refMatWithinSpotRatiosAtInterpolatedTimes.toString().getBytes(UTF_8), APPEND);
+        Files.write(withinSpotRatiosAtInterpolatedTimes.toPath(), unknownWithinSpotRatiosAtInterpolatedTimes.toString().getBytes(UTF_8), APPEND);
 
-        Files.append(refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
-        Files.append(unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis, Charsets.UTF_8);
+        Files.write(meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.toPath(), refMatMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.toString().getBytes(UTF_8), APPEND);
+        Files.write(meanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.toPath(), unknownMeanRatioAndSigmaPctPerIsotopicRatioPerAnalysis.toString().getBytes(UTF_8), APPEND);
     }
 
     private static String getFormattedDate(long milliseconds) {
