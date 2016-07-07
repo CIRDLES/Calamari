@@ -93,11 +93,6 @@
             <artifactId>swing-layout-1.0.4</artifactId>
             <version>RELEASE80</version>
         </dependency>
-        <dependency>
-            <groupId>gov.nist.math</groupId>
-            <artifactId>jama</artifactId>
-            <version>1.0.2</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
