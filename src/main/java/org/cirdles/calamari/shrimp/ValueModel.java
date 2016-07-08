@@ -30,14 +30,9 @@ import java.util.concurrent.ConcurrentMap;
  * and their errors. It also provides additional methods for manipulating and
  * publishing these values.
  *
- * @imports <a
- * href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/XStream.html>
- * com.thoughtworks.xstream.XSream</a> @imports <a
- * href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/converters/
- * ConversionException.html>com.thoughtworks.xstream.converters.ConversionException</a>
- * @imports <a
- * href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/io/xml/
- * DomDriver.html>com.thoughtworks.xstream.io.xml.DomDriver</a>
+ * @imports <a href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/XStream.html>com.thoughtworks.xstream.XStream</a>
+ * @imports <a href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/converters/ConversionException.html>com.thoughtworks.xstream.converters.ConversionException</a>
+ * @imports <a href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/io/xml/DomDriver.html>com.thoughtworks.xstream.io.xml.DomDriver</a>
  *
  * @author James F. Bowring, javaDocs by Stan Gasque
  */
@@ -46,8 +41,7 @@ public class ValueModel implements
 
     // Instance variables
     /**
-     * name of <code>ValueModel</code>, such as ratio name. Lists of 'name' are
-     * in the {@link DataDictionary DataDictionary} class.
+     * name of <code>ValueModel</code>, such as ratio name.
      */
     protected String name;
     /**
@@ -118,7 +112,6 @@ public class ValueModel implements
      * @param value numerical value of ratio
      * @param uncertaintyType type of uncertainty; ABS or PCT
      * @param oneSigma value of one standard deviation
-     * @param oneSigmaSys the value of oneSigmaSys
      */
     public ValueModel(
             String name, BigDecimal value, String uncertaintyType, BigDecimal oneSigma) {

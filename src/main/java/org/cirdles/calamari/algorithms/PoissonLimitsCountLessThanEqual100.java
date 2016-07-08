@@ -22,7 +22,7 @@ import java.math.RoundingMode;
  * From Ken Ludwig's Squid VBA code. Poisson distribution limits for count 0
  * through 100
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public final class PoissonLimitsCountLessThanEqual100 {
 

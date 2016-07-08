@@ -19,7 +19,7 @@ import java.io.File;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
 

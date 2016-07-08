@@ -33,7 +33,7 @@ import static java.util.Arrays.asList;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public class ReportsEngine {
 

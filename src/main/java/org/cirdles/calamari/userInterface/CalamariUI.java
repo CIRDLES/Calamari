@@ -30,7 +30,7 @@ import org.cirdles.calamari.prawn.PrawnFileFilter;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
 public class CalamariUI extends javax.swing.JFrame {
 
