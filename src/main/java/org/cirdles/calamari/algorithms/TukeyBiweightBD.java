@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrtBabylonian;
+import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrt;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
@@ -77,7 +77,7 @@ public final class TukeyBiweightBD {
                 }
             }
             
-            sigma = bigDecimalSqrtBabylonian(sa.multiply(new BigDecimal(n))).divide(sb.abs(), MathContext.DECIMAL128);
+            sigma = bigDecimalSqrt(sa.multiply(new BigDecimal(n))).divide(sb.abs(), MathContext.DECIMAL128);
             mean = previousMean.add(tee.multiply(sc).divide(sb, MathContext.DECIMAL128));
 
         } // both tests against epsilon must pass OR iterations top out
