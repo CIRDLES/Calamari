@@ -224,7 +224,8 @@ public class PrawnRunFractionParser {
                 BigDecimal totalCountsSigmaBD;
                 
                 if (median > 100.0) {
-                    ValueModel peakTukeyMean = TukeyBiweightBD.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+                    ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+
                     // BV is variable used by Ludwig for Tukey Mean fo peak measurements
                     double bV = peakTukeyMean.getValue().doubleValue();
                     double bVcps = bV * peakMeasurementsCount / countTimeSec[speciesMeasurementIndex];
@@ -233,13 +234,15 @@ public class PrawnRunFractionParser {
                     totalCountsPeak = bVcpsDeadTime * countTimeSec[speciesMeasurementIndex];
                     double countsSigmaCandidate = StrictMath.max(peakTukeyMean.getOneSigmaAbs().doubleValue(), StrictMath.sqrt(bV));
                     totalCountsSigma = countsSigmaCandidate / StrictMath.sqrt(peakMeasurementsCount) * bVcps * countTimeSec[speciesMeasurementIndex] / bV;
-                    
-                    BigDecimal bVBD = peakTukeyMean.getValue();
+
+                    ValueModel peakTukeyMeanBD = TukeyBiweightBD.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+
+                    BigDecimal bVBD = peakTukeyMeanBD.getValue();
                     BigDecimal bVcpsBD = bVBD.multiply(new BigDecimal(peakMeasurementsCount)).divide(new BigDecimal(countTimeSec[speciesMeasurementIndex]), MathContext.DECIMAL128);
                     BigDecimal bVcpsDeadTimeBD = bVcpsBD.divide(BigDecimal.ONE.subtract(bVcpsBD.multiply(new BigDecimal(deadTimeNanoseconds).movePointLeft(9), MathContext.DECIMAL128)), MathContext.DECIMAL128);
                     
                     totalCountsPeakBD = bVcpsDeadTimeBD.multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex]));
-                    BigDecimal countsSigmaCandidateBD = peakTukeyMean.getOneSigmaAbs().max(bigDecimalSqrtBabylonian(bVBD));
+                    BigDecimal countsSigmaCandidateBD = peakTukeyMeanBD.getOneSigmaAbs().max(bigDecimalSqrtBabylonian(bVBD));
                     totalCountsSigmaBD
                             = countsSigmaCandidateBD.divide(bigDecimalSqrtBabylonian(new BigDecimal(peakMeasurementsCount)), MathContext.DECIMAL128)//
                             .multiply(bVcpsBD).multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex])).divide(bVBD, MathContext.DECIMAL128);
