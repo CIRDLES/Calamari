@@ -22,7 +22,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.UIManager;
-import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.RawDataFileHandler;
 import org.cirdles.calamari.core.ReportsEngine;
@@ -105,6 +104,7 @@ public class CalamariUI extends javax.swing.JFrame {
         calamariInfo = new javax.swing.JLabel();
         useSBM = new javax.swing.JCheckBox();
         userLinFits = new javax.swing.JCheckBox();
+        reduceDataProgressBar = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -138,7 +138,7 @@ public class CalamariUI extends javax.swing.JFrame {
                 reduceDataButtonActionPerformed(evt);
             }
         });
-        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 365, 380, 30));
+        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 360, 380, 30));
 
         selectReportsLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         selectReportsLocationButton.setText("Select location for CalamariReports Folder");
@@ -193,6 +193,7 @@ public class CalamariUI extends javax.swing.JFrame {
         userLinFits.setText("user LinFits");
         userLinFits.setOpaque(true);
         basePane.add(userLinFits, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 190, -1, -1));
+        basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 360, 170, 30));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -259,11 +260,10 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
-        try {
-            RawDataFileHandler.writeReportsFromPrawnFile(RawDataFileHandler.getCurrentPrawnFileLocation(), useSBM.isSelected(), userLinFits.isSelected());
-        } catch (IOException | JAXBException exception) {
-            System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
-        }
+        new ReduceDataWorker(
+                useSBM.isSelected(),
+                userLinFits.isSelected(),
+                reduceDataProgressBar).execute();
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
@@ -311,6 +311,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JLabel outputFileLocationLabel;
     private javax.swing.JLabel outputFolderLocation;
     private javax.swing.JButton reduceDataButton;
+    private javax.swing.JProgressBar reduceDataProgressBar;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton selectPrawnFileLocationButton;
