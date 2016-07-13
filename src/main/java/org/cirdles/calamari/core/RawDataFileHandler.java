@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -39,6 +40,8 @@ public class RawDataFileHandler {
     private static Unmarshaller jaxbUnmarshaller;
     private static String currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
     //"/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml"
+
+    private static Consumer<Integer> progressSubscriber;
 
     /**
      *
@@ -61,6 +64,11 @@ public class RawDataFileHandler {
             shrimpFraction.setSpotNumber(f + 1);
             shrimpFraction.setNameOfMount(nameOfMount);
             shrimpFractions.add(shrimpFraction);
+
+            if (progressSubscriber != null) {
+                int progress = (f + 1) * 100 / prawnFile.getRuns();
+                progressSubscriber.accept(progress);
+            }
         }
 
         return shrimpFractions;
@@ -138,6 +146,10 @@ public class RawDataFileHandler {
      */
     public static void setCurrentPrawnFileLocation(String aCurrentPrawnFileLocation) {
         currentPrawnFileLocation = aCurrentPrawnFileLocation;
+    }
+
+    public static void setProgressSubscriber(Consumer<Integer> progressSubscriber) {
+        RawDataFileHandler.progressSubscriber = progressSubscriber;
     }
 
 }
