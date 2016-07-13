@@ -42,7 +42,7 @@ public final class WeightedMeanCalculators {
      */
     public static WtdLinCorrResults wtdLinCorr(double[] y, double[][] sigRho, double[] x) {
 
-        WtdLinCorrResults results = new WtdLinCorrResults();
+        WtdLinCorrResults wtdLinCorrResults = new WtdLinCorrResults();
 
         boolean linReg = (y.length == x.length);
 
@@ -193,26 +193,27 @@ public final class WeightedMeanCalculators {
         double probfit = probW[minIndex];
 
         if (linReg && (minIndex > 0)) {
-            results.setSlope(slopeW[minIndex]);
-            results.setSigmaSlope(sigmaSlopeW[minIndex]);
-            results.setCovSlopeInter(covSlopeInterW[minIndex]);
+            wtdLinCorrResults.setSlope(slopeW[minIndex]);
+            wtdLinCorrResults.setSigmaSlope(sigmaSlopeW[minIndex]);
+            wtdLinCorrResults.setCovSlopeInter(covSlopeInterW[minIndex]);
         }
 
         if (probfit < 0.05) {
             sigmaIntercept *= StrictMath.sqrt(mswd);
 
             if (linReg) {
-                results.setSigmaSlope(results.getSigmaSlope() * StrictMath.sqrt(mswd));
+                wtdLinCorrResults.setSigmaSlope(wtdLinCorrResults.getSigmaSlope() * StrictMath.sqrt(mswd));
             }
         }
 
-        results.setBad(false);
-        results.setIntercept(intercept);
-        results.setSigmaIntercept(sigmaIntercept);
-        results.setMswd(mswd);
-        results.setProbFit(probfit);
+        wtdLinCorrResults.setBad(false);
+        wtdLinCorrResults.setIntercept(intercept);
+        wtdLinCorrResults.setSigmaIntercept(sigmaIntercept);
+        wtdLinCorrResults.setMswd(mswd);
+        wtdLinCorrResults.setProbFit(probfit);
+        wtdLinCorrResults.setMinIndex(minIndex);
 
-        return results;
+        return wtdLinCorrResults;
     }
 
     public static class WtdLinCorrResults {
@@ -226,6 +227,7 @@ public final class WeightedMeanCalculators {
         private double slope = 0.0;
         private double sigmaSlope = 0.0;
         private double covSlopeInter = 0.0;
+        private int minIndex;
 
         public WtdLinCorrResults() {
             bad = true;
@@ -236,6 +238,7 @@ public final class WeightedMeanCalculators {
             slope = 0.0;
             sigmaSlope = 0.0;
             covSlopeInter = 0.0;
+            minIndex = -1;
         }
 
         /**
@@ -348,6 +351,20 @@ public final class WeightedMeanCalculators {
          */
         public void setCovSlopeInter(double covSlopeInter) {
             this.covSlopeInter = covSlopeInter;
+        }
+
+        /**
+         * @return the minIndex
+         */
+        public int getMinIndex() {
+            return minIndex;
+        }
+
+        /**
+         * @param minIndex the minIndex to set
+         */
+        public void setMinIndex(int minIndex) {
+            this.minIndex = minIndex;
         }
 
     }
