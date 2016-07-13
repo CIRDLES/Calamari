@@ -1,6 +1,8 @@
 Calamari
 ========
 
+[![Build Status](https://travis-ci.org/bowring/Calamari.svg?branch=master)](https://travis-ci.org/bowring/Calamari)
+
 **Calamari** is a joint cyber infrastructure product of [CIRDLES](http://cirdles.org),
 the Cyber Infrastructure Research and Development Lab for the Earth Sciences, 
 an undergraduate research
