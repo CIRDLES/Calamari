@@ -25,6 +25,7 @@ test_*
 !src/main/resources/org/cirdles/calamari/prawn/*.xml
 !src/main/resources/org/cirdles/calamari/prawn/*.txt
 !src/main/resources/org/cirdles/calamari/version.txt
+!src/test/resources/org/cirdles/calamari/core/*.txt
 
 # MACOS
 .DS_Store
