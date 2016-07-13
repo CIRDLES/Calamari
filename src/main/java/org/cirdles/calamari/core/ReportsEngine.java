@@ -15,21 +15,19 @@
  */
 package org.cirdles.calamari.core;
 
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
-
 import java.io.File;
 import java.io.IOException;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
+import static java.nio.file.StandardOpenOption.APPEND;
 import java.text.SimpleDateFormat;
+import static java.util.Arrays.asList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.util.Arrays.asList;
+import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 /**
  *
@@ -68,7 +66,7 @@ public class ReportsEngine {
 
             folderToWriteCalamariReportsPath
                     = folderToWriteCalamariReports.getCanonicalPath()
-                    + File.separator + "CalamariReports-" 
+                    + File.separator + "CalamariReports-"
                     + firstShrimpFraction.getNameOfMount()
                     + "--" + (firstShrimpFraction.isUseSBM() ? "SBM-TRUE" : "SBM-FALSE")
                     + "--" + (firstShrimpFraction.isUserLinFits() ? "FIT-TRUE" : "FIT-FALSE")
@@ -341,6 +339,7 @@ public class ReportsEngine {
         dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            dataLine.append(", ").append(String.valueOf(entry.getValue().getMinIndex()));
             dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioVal()));
             dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioFractErr() * 100.0));
         }
@@ -422,7 +421,7 @@ public class ReportsEngine {
         header.append("Title, Date, Ndod, Type");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTIme");
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTime");
             header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
             header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
         }
@@ -439,6 +438,7 @@ public class ReportsEngine {
         header.append("Title, Date, Type");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
+            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".MinIndex");
             header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
             header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
         }

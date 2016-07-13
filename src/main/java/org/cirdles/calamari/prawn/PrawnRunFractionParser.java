@@ -15,16 +15,6 @@
  */
 package org.cirdles.calamari.prawn;
 
-import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
-import org.cirdles.calamari.algorithms.TukeyBiweight;
-import org.cirdles.calamari.algorithms.TukeyBiweightBD;
-import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
-import org.cirdles.calamari.shrimp.IsotopeNames;
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
-import org.cirdles.calamari.shrimp.ValueModel;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.ParseException;
@@ -34,8 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
+import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
+import org.cirdles.calamari.algorithms.TukeyBiweight;
+import org.cirdles.calamari.algorithms.TukeyBiweightBD;
+import org.cirdles.calamari.algorithms.WeightedMeanCalculators.WtdLinCorrResults;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
+import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
  *
@@ -224,7 +222,9 @@ public class PrawnRunFractionParser {
                 BigDecimal totalCountsSigmaBD;
                 
                 if (median > 100.0) {
-                    ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+                    // See Zeringue's pull request #14 for discussion
+                    //ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+                    ValueModel peakTukeyMean = TukeyBiweightBD.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
 
                     // BV is variable used by Ludwig for Tukey Mean fo peak measurements
                     double bV = peakTukeyMean.getValue().doubleValue();
@@ -698,6 +698,8 @@ public class PrawnRunFractionParser {
                             isotopicRatio.setRatioVal(ratioMean);
                             isotopicRatio.setRatioFractErr(StrictMath.max(SQUID_TINY_VALUE, ratioMeanSig) / StrictMath.abs(ratioMean));
                         }
+                        
+                        isotopicRatio.setMinIndex(wtdLinCorrResults.getMinIndex());
                         
                         break;
                 }
