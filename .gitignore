@@ -1,6 +1,10 @@
 # Maven
 target
 
+# Gradle
+.gradle/
+build/
+
 # Netbeans
 nbactions.xml
 dependency-reduced-pom.xml
