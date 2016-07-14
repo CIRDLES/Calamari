@@ -131,8 +131,9 @@ public class ReportsEngine {
     private static void reportTotalIonCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
         int countOfSpecies = shrimpFraction.getNamesOfSpecies().length;
+        int[][] rawPeakData = shrimpFraction.getRawPeakData();
 
-        for (int scanNum = 0; scanNum < shrimpFraction.getRawPeakData().length; scanNum++) {
+        for (int scanNum = 0; scanNum < rawPeakData.length; scanNum++) {
             StringBuilder dataLine = new StringBuilder();
             dataLine.append(shrimpFraction.getFractionID()).append(", ");
             dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
@@ -140,11 +141,12 @@ public class ReportsEngine {
             dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown").append(", ");
             dataLine.append(String.valueOf(shrimpFraction.getDeadTimeNanoseconds()));
 
-            for (int i = 0; i < shrimpFraction.getRawPeakData()[scanNum].length; i++) {
+            double[] countTimeSec = shrimpFraction.getCountTimeSec();
+            for (int i = 0; i < rawPeakData[scanNum].length; i++) {
                 if ((i % countOfSpecies) == 0) {
-                    dataLine.append(", ").append(String.valueOf(shrimpFraction.getCountTimeSec()[i / countOfSpecies]));
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
                 }
-                dataLine.append(", ").append(shrimpFraction.getRawPeakData()[scanNum][i]);
+                dataLine.append(", ").append(rawPeakData[scanNum][i]);
             }
 
             Files.write(totalIonCountsAtMassFile.toPath(), asList(dataLine), APPEND);
@@ -177,8 +179,10 @@ public class ReportsEngine {
     private static void reportTotalSBMCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
         int countOfSpecies = shrimpFraction.getNamesOfSpecies().length;
+        int[][] rawSBMData = shrimpFraction.getRawSBMData();
+        double[] countTimeSec = shrimpFraction.getCountTimeSec();
 
-        for (int scanNum = 0; scanNum < shrimpFraction.getRawSBMData().length; scanNum++) {
+        for (int scanNum = 0; scanNum < rawSBMData.length; scanNum++) {
             StringBuilder dataLine = new StringBuilder();
             dataLine.append(shrimpFraction.getFractionID()).append(", ");
             dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
@@ -186,11 +190,11 @@ public class ReportsEngine {
             dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown").append(", ");
             dataLine.append(String.valueOf(shrimpFraction.getSbmZeroCps()));
 
-            for (int i = 0; i < shrimpFraction.getRawSBMData()[scanNum].length; i++) {
+            for (int i = 0; i < rawSBMData[scanNum].length; i++) {
                 if ((i % countOfSpecies) == 0) {
-                    dataLine.append(", ").append(String.valueOf(shrimpFraction.getCountTimeSec()[i / countOfSpecies]));
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
                 }
-                dataLine.append(", ").append(shrimpFraction.getRawSBMData()[scanNum][i]);
+                dataLine.append(", ").append(rawSBMData[scanNum][i]);
             }
 
             Files.write(totalSBMCountsAtMassFile.toPath(), asList(dataLine), APPEND);
@@ -232,26 +236,32 @@ public class ReportsEngine {
      */
     private static void reportTotalCountsAtTimeStampAndTrimMass(ShrimpFraction shrimpFraction) throws IOException {
 
-        for (int scanNum = 0; scanNum < shrimpFraction.getTimeStampSec().length; scanNum++) {
+        double[][] timeStampSec = shrimpFraction.getTimeStampSec();
+        double[][] totalCounts = shrimpFraction.getTotalCounts();
+        double[][] totalCountsOneSigmaAbs = shrimpFraction.getTotalCountsOneSigmaAbs();
+        double[][] totalCountsSBM = shrimpFraction.getTotalCountsSBM();
+        double[][] trimMass = shrimpFraction.getTrimMass();
+
+        for (int scanNum = 0; scanNum < timeStampSec.length; scanNum++) {
             StringBuilder dataLine = new StringBuilder();
             dataLine.append(shrimpFraction.getFractionID()).append(", ");
             dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
             dataLine.append(String.valueOf(scanNum + 1)).append(", ");
             dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
-            for (int i = 0; i < shrimpFraction.getTimeStampSec()[scanNum].length; i++) {
-                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
-                dataLine.append(", ").append(shrimpFraction.getTotalCounts()[scanNum][i]);
-                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbs()[scanNum][i]);
-                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBM()[scanNum][i]);
-                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
+            for (int i = 0; i < timeStampSec[scanNum].length; i++) {
+                dataLine.append(", ").append(timeStampSec[scanNum][i]);
+                dataLine.append(", ").append(totalCounts[scanNum][i]);
+                dataLine.append(", ").append(totalCountsOneSigmaAbs[scanNum][i]);
+                dataLine.append(", ").append(totalCountsSBM[scanNum][i]);
+                dataLine.append(", ").append(trimMass[scanNum][i]);
 
                 // these lines produce the big decimal scale 20 numbers used to check floating point math
-//                dataLine.append(", ").append(shrimpFraction.getTimeStampSec()[scanNum][i]);
+//                dataLine.append(", ").append(timeStampSec[scanNum][i]);
 //                dataLine.append(", ").append(shrimpFraction.getTotalCountsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
 //                dataLine.append(", ").append(shrimpFraction.getTotalCountsOneSigmaAbsBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
 //                dataLine.append(", ").append(shrimpFraction.getTotalCountsSBMBD()[scanNum][i].setScale(20, RoundingMode.HALF_EVEN).toPlainString());
-//                dataLine.append(", ").append(shrimpFraction.getTrimMass()[scanNum][i]);
+//                dataLine.append(", ").append(trimMass[scanNum][i]);
             }
 
             Files.write(totalCountsAtTimeStampAndTrimMass.toPath(), asList(dataLine), APPEND);
@@ -290,8 +300,10 @@ public class ReportsEngine {
         dataLine.append(getFormattedDate(shrimpFraction.getDateTimeMilliseconds())).append(", ");
         dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
-        for (int i = 0; i < shrimpFraction.getTotalCps().length; i++) {
-            dataLine.append(", ").append(shrimpFraction.getTotalCps()[i]);
+        double[] totalCps = shrimpFraction.getTotalCps();
+
+        for (int i = 0; i < totalCps.length; i++) {
+            dataLine.append(", ").append(totalCps[i]);
         }
 
         dataLine.append("\n");
