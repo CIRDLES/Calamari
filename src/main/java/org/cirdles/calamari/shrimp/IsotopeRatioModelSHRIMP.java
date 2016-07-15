@@ -43,7 +43,7 @@ public class IsotopeRatioModelSHRIMP {
         this.ratEqErr = new ArrayList<>();
         this.ratioVal = 0;
         this.ratioFractErr = 0;
-        this.minIndex = -1;
+        this.minIndex = -2;
     }
 
     public boolean numeratorAtomicRatioLessThanDenominator() {
