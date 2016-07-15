@@ -34,8 +34,6 @@
         
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd MMMM yyyy</maven.build.timestamp.format>
-
-        <skipTests>true</skipTests>
     </properties>
     
     <!--Need SCM -->
@@ -129,7 +127,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <skipTests>${skipTests}</skipTests>
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*IT.java</include>
