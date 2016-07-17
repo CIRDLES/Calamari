@@ -422,6 +422,7 @@ public class PrawnRunFractionParser {
         // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-3)
         // walk the ratios
         isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
+//            if (rawRatioName.compareTo(RawRatioNamesSHRIMP.r206_254w)==0){
             int nDod = nScans - 1;
             int NUM = indexToSpeciesMap.get(isotopicRatio.getNumerator());
             int DEN = indexToSpeciesMap.get(isotopicRatio.getDenominator());
@@ -710,7 +711,7 @@ public class PrawnRunFractionParser {
             isotopicRatio.setRatEqTime(ratEqTime);
             isotopicRatio.setRatEqVal(ratEqVal);
             isotopicRatio.setRatEqErr(ratEqErr);
-            
+//            } 
         }); // end iteration through isotopicRatios
 
     }

@@ -17,7 +17,7 @@ package org.cirdles.calamari.algorithms;
 
 import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.linear.BlockRealMatrix;
-import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 /**
@@ -373,8 +373,7 @@ public final class WeightedMeanCalculators {
         WeightedLinearCorrResults weightedLinearCorrResults = new WeightedLinearCorrResults();
 
         RealMatrix omega = new BlockRealMatrix(convertCorrelationsToCovariances(sigmaRhoY));
-        RealMatrix invOmega = new LUDecomposition(omega).getSolver().getInverse();
-
+        RealMatrix invOmega = MatrixUtils.inverse(omega);
         int n = y.length;
 
         double mX = 0;
@@ -392,24 +391,24 @@ public final class WeightedMeanCalculators {
                 pXY += (invOm * (((x[i] * y[j]) + (x[j] * y[i]))));
                 mX += (invOm * x[i] * x[j]);
             }
-        }
+        }       
         double slope = ((2 * pXY * w) - (pX * pY)) / ((4 * mX * w) - (pX * pX));
         double intercept = (pY - (slope * pX)) / (2 * w);
 
         RealMatrix fischer = new BlockRealMatrix(new double[][]{{mX, pX / 2.0}, {pX / 2.0, w}});
-        RealMatrix fischerInv = new LUDecomposition(fischer).getSolver().getInverse();
+        RealMatrix fischerInv = MatrixUtils.inverse(fischer);
 
         double slopeSig = StrictMath.sqrt(fischerInv.getEntry(0, 0));
         double interceptSig = StrictMath.sqrt(fischerInv.getEntry(1, 1));
         double slopeInterceptCov = fischerInv.getEntry(0, 1);
-
+        
         RealMatrix resid = new BlockRealMatrix(n, 1);
         for (int i = 0; i < n; i++) {
             resid.setEntry(i, 0, y[i] - (slope * x[i]) - intercept);
         }
 
         RealMatrix residT = resid.transpose();
-        RealMatrix mM = residT.multiply(omega).multiply(resid);
+        RealMatrix mM = residT.multiply(invOmega).multiply(resid);
 
         double sumSqWtdResids = mM.getEntry(0, 0);
         double mswd = sumSqWtdResids / (n - 2);
@@ -417,7 +416,7 @@ public final class WeightedMeanCalculators {
         // http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/distribution/FDistribution.html
         FDistribution fdist = new org.apache.commons.math3.distribution.FDistribution((n - 2), 1E9);
         double prob = 1.0 - fdist.cumulativeProbability(mswd);
-
+        
         weightedLinearCorrResults.setBad(false);
         weightedLinearCorrResults.setSlope(slope);
         weightedLinearCorrResults.setIntercept(intercept);
@@ -681,7 +680,7 @@ public final class WeightedMeanCalculators {
 
         int n = varCov.length;
         RealMatrix omegaInv = new BlockRealMatrix(varCov);
-        RealMatrix omega = new LUDecomposition(omegaInv).getSolver().getInverse();
+        RealMatrix omega = MatrixUtils.inverse(omegaInv);
 
         double numer = 0.0;
         double denom = 0.0;
