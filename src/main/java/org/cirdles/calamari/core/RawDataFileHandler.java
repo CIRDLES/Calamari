@@ -48,7 +48,7 @@ public class RawDataFileHandler {
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
-     * @return 
+     * @return
      * @throws MalformedURLException
      * @throws JAXBException
      */
@@ -60,11 +60,12 @@ public class RawDataFileHandler {
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction, useSBM, userLinFits);
-            shrimpFraction.setSpotNumber(f + 1);
-            shrimpFraction.setNameOfMount(nameOfMount);
-            shrimpFractions.add(shrimpFraction);
-
+//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("OG1.7.1.1") == 0) {
+                ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction, useSBM, userLinFits);
+                shrimpFraction.setSpotNumber(f + 1);
+                shrimpFraction.setNameOfMount(nameOfMount);
+                shrimpFractions.add(shrimpFraction);
+//            }
             if (progressSubscriber != null) {
                 int progress = (f + 1) * 100 / prawnFile.getRuns();
                 progressSubscriber.accept(progress);
