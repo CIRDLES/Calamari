@@ -112,7 +112,7 @@ public class CalamariUI extends javax.swing.JFrame {
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
-        calamariHelpMenuItem = new javax.swing.JMenuItem();
+        documentationMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -223,10 +223,15 @@ public class CalamariUI extends javax.swing.JFrame {
         menuBar.add(fileMenu);
 
         helpMenu.setMnemonic('h');
-        helpMenu.setText("Help");
+        helpMenu.setText("Calamari");
 
-        calamariHelpMenuItem.setText("Calamari Help");
-        helpMenu.add(calamariHelpMenuItem);
+        documentationMenuItem.setText("Documentation");
+        documentationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                documentationMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(documentationMenuItem);
 
         aboutMenuItem.setMnemonic('a');
         aboutMenuItem.setText("About");
@@ -295,13 +300,17 @@ public class CalamariUI extends javax.swing.JFrame {
         AboutBox.getInstance().setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
+    private void documentationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentationMenuItemActionPerformed
+        BrowserControl.showURI("https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Intro");
+    }//GEN-LAST:event_documentationMenuItemActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JLayeredPane basePane;
-    private javax.swing.JMenuItem calamariHelpMenuItem;
     private javax.swing.JLabel calamariInfo;
     private javax.swing.JLabel currentPrawnFileLocation;
+    private javax.swing.JMenuItem documentationMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
