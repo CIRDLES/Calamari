@@ -21,7 +21,7 @@
     <groupId>org.cirdles</groupId>
     <artifactId>Calamari</artifactId>
     <name>Calamari</name>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <description>Replacement for data reduction in Ludwig's Squid 2.50 for SHRIMP</description>
     <url>https://cirdles.org</url>
     <inceptionYear>2016</inceptionYear>
