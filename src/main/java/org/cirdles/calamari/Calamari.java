@@ -36,14 +36,8 @@ import org.cirdles.commons.util.ResourceExtractor;
  */
 public class Calamari {
 
-    /**
-     * Version 3.0.0 initiates switch to ET_Redux from U-Pb_Redux
-     */
     public static String VERSION = "version";
 
-    /**
-     *
-     */
     public static String RELEASE_DATE = "date";
 
     private static ResourceExtractor RESOURCE_EXTRACTOR
