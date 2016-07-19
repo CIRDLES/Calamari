@@ -36,7 +36,6 @@ import org.cirdles.calamari.shrimp.ShrimpFraction;
  */
 public class RawDataFileHandler {
 
-    private static JAXBContext jaxbContext;
     private static Unmarshaller jaxbUnmarshaller;
     private static String currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
     //"/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml"
@@ -94,7 +93,7 @@ public class RawDataFileHandler {
             throws MalformedURLException, JAXBException {
         PrawnFile myPrawnFile;
 
-        jaxbContext = JAXBContext.newInstance(PrawnFile.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         if (resource.toLowerCase(Locale.ENGLISH).startsWith("http")) {
