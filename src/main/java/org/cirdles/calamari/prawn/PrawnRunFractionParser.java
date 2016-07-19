@@ -36,6 +36,7 @@ public class PrawnRunFractionParser {
      * @param userLinFits the value of userLinFits
      * @return 
      */
+    @Deprecated
     public static ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits) {
         return PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
     }
