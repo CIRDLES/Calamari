@@ -36,33 +36,41 @@ import org.cirdles.commons.util.ResourceExtractor;
  */
 public class Calamari {
 
-    public static String VERSION = "version";
+    public static final String VERSION;
 
-    public static String RELEASE_DATE = "date";
+    public static final String RELEASE_DATE;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        
+    static {
         ResourceExtractor calamariResourceExtractor
                 = new ResourceExtractor(Calamari.class);
+
+        String version;
+        String releaseDate;
 
         // get version number and release date written by pom.xml
         Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
         Charset charset = Charset.forName("US-ASCII");
         try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
-
             String[] versionText = reader.readLine().split("=");
-            VERSION = versionText[1];
+            version = versionText[1];
 
             String[] versionDate = reader.readLine().split("=");
-            RELEASE_DATE = versionDate[1];
-
-            reader.close();
+            releaseDate = versionDate[1];
         } catch (IOException x) {
+            version = "version";
+            releaseDate = "date";
+
             System.err.format("IOException: %s%n", x);
         }
+
+        VERSION = version;
+        RELEASE_DATE = releaseDate;
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
 
         ResourceExtractor prawnFileResourceExtractor
                 = new ResourceExtractor(PrawnFile.class);
