@@ -27,6 +27,7 @@ import java.util.function.Consumer;
  *
  * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
+@Deprecated
 public class RawDataFileHandler {
 
     private static final PrawnFileHandler PRAWN_FILE_HANDLER = new PrawnFileHandler();
@@ -40,6 +41,7 @@ public class RawDataFileHandler {
      * @throws MalformedURLException
      * @throws JAXBException
      */
+    @Deprecated
     public static List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws MalformedURLException, JAXBException {
         return PRAWN_FILE_HANDLER.extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
@@ -54,6 +56,7 @@ public class RawDataFileHandler {
      * @throws MalformedURLException
      * @throws JAXBException
      */
+    @Deprecated
     public static void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws IOException, MalformedURLException, JAXBException {
         PRAWN_FILE_HANDLER.writeReportsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
@@ -62,6 +65,7 @@ public class RawDataFileHandler {
     /**
      * @return the currentPrawnFileLocation
      */
+    @Deprecated
     public static String getCurrentPrawnFileLocation() {
         return PRAWN_FILE_HANDLER.getCurrentPrawnFileLocation();
     }
@@ -69,10 +73,12 @@ public class RawDataFileHandler {
     /**
      * @param aCurrentPrawnFileLocation the currentPrawnFileLocation to set
      */
+    @Deprecated
     public static void setCurrentPrawnFileLocation(String aCurrentPrawnFileLocation) {
         PRAWN_FILE_HANDLER.setCurrentPrawnFileLocation(aCurrentPrawnFileLocation);
     }
 
+    @Deprecated
     public static void setProgressSubscriber(Consumer<Integer> progressSubscriber) {
         PRAWN_FILE_HANDLER.setProgressSubscriber(progressSubscriber);
     }
