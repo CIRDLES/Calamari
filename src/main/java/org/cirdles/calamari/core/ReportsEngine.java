@@ -25,6 +25,7 @@ import java.util.List;
  *
  * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
+@Deprecated
 public class ReportsEngine {
 
     private static final CalamariReportsEngine CALAMARI_REPORTS_ENGINE
@@ -36,6 +37,7 @@ public class ReportsEngine {
      * @param shrimpFractions the value of shrimpFractions
      * @throws java.io.IOException
      */
+    @Deprecated
     protected static void produceReports(List<ShrimpFraction> shrimpFractions) throws IOException {
         CALAMARI_REPORTS_ENGINE.produceReports(shrimpFractions);
     }
@@ -43,6 +45,7 @@ public class ReportsEngine {
     /**
      * @return the folderToWriteCalamariReports
      */
+    @Deprecated
     public static File getFolderToWriteCalamariReports() {
         return CALAMARI_REPORTS_ENGINE.getFolderToWriteCalamariReports();
     }
@@ -51,6 +54,7 @@ public class ReportsEngine {
      * @param aFolderToWriteCalamariReports the folderToWriteCalamariReports to
      * set
      */
+    @Deprecated
     public static void setFolderToWriteCalamariReports(File aFolderToWriteCalamariReports) {
         CALAMARI_REPORTS_ENGINE.setFolderToWriteCalamariReports(aFolderToWriteCalamariReports);
     }
