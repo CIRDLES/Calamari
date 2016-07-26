@@ -1,0 +1,32 @@
+subprojects {
+    apply plugin: "java"
+
+    group = "org.cirdles"
+    version = "1.0.8"
+
+    description = "Replacement for data reduction in Ludwig's Squid 2.50 for SHRIMP"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    dependencies {
+        testCompile "junit:junit:4.12"
+        testCompile "org.assertj:assertj-core:3.5.1"
+    }
+
+    repositories {
+        mavenCentral()
+
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
+    javadoc {
+        options.tags = [
+            'pre:a:"Precondition:"',
+            'post:a:"Postcondition:',
+            'imports:a:"Imports libraries:"'
+        ]
+    }
+}
