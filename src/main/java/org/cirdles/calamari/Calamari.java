@@ -36,43 +36,46 @@ import org.cirdles.commons.util.ResourceExtractor;
  */
 public class Calamari {
 
-    /**
-     * Version 3.0.0 initiates switch to ET_Redux from U-Pb_Redux
-     */
-    public static String VERSION = "version";
+    public static final String VERSION;
 
-    /**
-     *
-     */
-    public static String RELEASE_DATE = "date";
+    public static final String RELEASE_DATE;
 
-    private static ResourceExtractor RESOURCE_EXTRACTOR
-            = new ResourceExtractor(Calamari.class);
+    static {
+        ResourceExtractor calamariResourceExtractor
+                = new ResourceExtractor(Calamari.class);
+
+        String version;
+        String releaseDate;
+
+        // get version number and release date written by pom.xml
+        Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
+        Charset charset = Charset.forName("US-ASCII");
+        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
+            String[] versionText = reader.readLine().split("=");
+            version = versionText[1];
+
+            String[] versionDate = reader.readLine().split("=");
+            releaseDate = versionDate[1];
+        } catch (IOException x) {
+            version = "version";
+            releaseDate = "date";
+
+            System.err.format("IOException: %s%n", x);
+        }
+
+        VERSION = version;
+        RELEASE_DATE = releaseDate;
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
 
-        // get version number and release date written by pom.xml
-        Path resourcePath = RESOURCE_EXTRACTOR.extractResourceAsPath("version.txt");
-        Charset charset = Charset.forName("US-ASCII");
-        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
+        ResourceExtractor prawnFileResourceExtractor
+                = new ResourceExtractor(PrawnFile.class);
 
-            String[] versionText = reader.readLine().split("=");
-            VERSION = versionText[1];
-
-            String[] versionDate = reader.readLine().split("=");
-            RELEASE_DATE = versionDate[1];
-
-            reader.close();
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
-        }
-
-        RESOURCE_EXTRACTOR = new ResourceExtractor(PrawnFile.class);
-
-        Path listOfPrawnFiles = RESOURCE_EXTRACTOR.extractResourceAsPath("listOfPrawnFiles.txt");
+        Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("listOfPrawnFiles.txt");
         if (listOfPrawnFiles != null) {
             List<File> prawnFiles = new ArrayList<>();
             try {
@@ -80,7 +83,7 @@ public class Calamari {
                 for (int i = 0; i < fileNames.size(); i++) {
                     // test for empty string
                     if (fileNames.get(i).trim().length() > 0) {
-                        File prawnFileResource = RESOURCE_EXTRACTOR.extractResourceAsFile(fileNames.get(i));
+                        File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
                         File exampleFolder = new File("ExamplePrawnFiles");
                         exampleFolder.mkdir();
                         File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
