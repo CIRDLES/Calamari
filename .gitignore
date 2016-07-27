@@ -1,6 +1,10 @@
 # Maven
 target
 
+# Gradle
+.gradle/
+build/
+
 # Netbeans
 nb-configuration.xml
 nbactions.xml
@@ -22,11 +26,10 @@ test_*
 
 
 # Resources
-!src/main/resources/**/*.xml
-!src/main/resources/org/cirdles/calamari/prawn/*.xml
-!src/main/resources/org/cirdles/calamari/prawn/*.txt
-!src/main/resources/org/cirdles/calamari/version.txt
-!src/test/resources/org/cirdles/calamari/core/*.txt
+!core/src/main/resources/org/cirdles/calamari/prawn/*.xml
+!core/src/main/resources/org/cirdles/calamari/prawn/*.txt
+!app/src/main/resources/org/cirdles/calamari/version.txt
+!core/src/test/resources/org/cirdles/calamari/core/*.txt
 
 # MACOS
 .DS_Store
