@@ -16,16 +16,17 @@
 package org.cirdles.calamari.userInterface;
 
 import com.apple.eawt.Application;
+import org.cirdles.calamari.Calamari;
+import org.cirdles.calamari.core.CalamariReportsEngine;
+import org.cirdles.calamari.core.PrawnFileHandler;
+import org.cirdles.calamari.prawn.PrawnFileFilter;
+
+import javax.swing.UIManager;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.UIManager;
-import org.cirdles.calamari.Calamari;
-import org.cirdles.calamari.core.RawDataFileHandler;
-import org.cirdles.calamari.core.ReportsEngine;
-import org.cirdles.calamari.prawn.PrawnFileFilter;
 
 /**
  *
@@ -33,10 +34,14 @@ import org.cirdles.calamari.prawn.PrawnFileFilter;
  */
 public class CalamariUI extends javax.swing.JFrame {
 
+    private final PrawnFileHandler prawnFileHandler;
+
     /**
      * Creates new form Calamari
      */
-    public CalamariUI() {
+    public CalamariUI(PrawnFileHandler prawnFileHandler) {
+        this.prawnFileHandler = prawnFileHandler;
+
         initComponents();
         initUI();
     }
@@ -73,12 +78,12 @@ public class CalamariUI extends javax.swing.JFrame {
     }
 
     private void updateCurrentPrawnFileLocation() {
-        currentPrawnFileLocation.setText(RawDataFileHandler.getCurrentPrawnFileLocation());
+        currentPrawnFileLocation.setText(prawnFileHandler.getCurrentPrawnFileLocation());
     }
 
     private void updateReportsFolderLocationText() {
         try {
-            this.outputFolderLocation.setText(ReportsEngine.getFolderToWriteCalamariReports().getCanonicalPath());
+            this.outputFolderLocation.setText(prawnFileHandler.getReportsEngine().getFolderToWriteCalamariReports().getCanonicalPath());
         } catch (IOException iOException) {
         }
 
@@ -266,15 +271,17 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
         new ReduceDataWorker(
+                prawnFileHandler,
                 useSBM.isSelected(),
                 userLinFits.isSelected(),
                 reduceDataProgressBar).execute();
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
-        File reportFolder = FileHelper.AllPlatformGetFolder("Select location to write reports", ReportsEngine.getFolderToWriteCalamariReports());
+        CalamariReportsEngine reportsEngine = prawnFileHandler.getReportsEngine();
+        File reportFolder = FileHelper.AllPlatformGetFolder("Select location to write reports", reportsEngine.getFolderToWriteCalamariReports());
         if (reportFolder != null) {
-            ReportsEngine.setFolderToWriteCalamariReports(reportFolder);
+            reportsEngine.setFolderToWriteCalamariReports(reportFolder);
             updateReportsFolderLocationText();
         }
     }//GEN-LAST:event_selectReportsLocationButtonActionPerformed
@@ -283,11 +290,11 @@ public class CalamariUI extends javax.swing.JFrame {
 
         File prawnFile = FileHelper.AllPlatformGetFile(//
                 "Select Prawn file", //
-                new File(RawDataFileHandler.getCurrentPrawnFileLocation()), //
+                new File(prawnFileHandler.getCurrentPrawnFileLocation()), //
                 "*.xml", new PrawnFileFilter(), false, this)[0];
         if (prawnFile != null) {
             try {
-                RawDataFileHandler.setCurrentPrawnFileLocation(prawnFile.getCanonicalPath());
+                prawnFileHandler.setCurrentPrawnFileLocation(prawnFile.getCanonicalPath());
                 updateCurrentPrawnFileLocation();
             } catch (IOException iOException) {
             }

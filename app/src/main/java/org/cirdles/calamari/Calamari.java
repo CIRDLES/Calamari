@@ -15,19 +15,21 @@
  */
 package org.cirdles.calamari;
 
+import org.cirdles.calamari.core.PrawnFileHandler;
+import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.commons.util.ResourceExtractor;
+
+import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBException;
-import org.cirdles.calamari.core.RawDataFileHandler;
-import org.cirdles.calamari.prawn.PrawnFile;
-import org.cirdles.commons.util.ResourceExtractor;
+
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 
 /**
@@ -75,6 +77,8 @@ public class Calamari {
         ResourceExtractor prawnFileResourceExtractor
                 = new ResourceExtractor(PrawnFile.class);
 
+        PrawnFileHandler prawnFileHandler = new PrawnFileHandler();
+
         Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("listOfPrawnFiles.txt");
         if (listOfPrawnFiles != null) {
             List<File> prawnFiles = new ArrayList<>();
@@ -93,7 +97,7 @@ public class Calamari {
                     }
                 }
 
-                RawDataFileHandler.setCurrentPrawnFileLocation(prawnFiles.get(0).getCanonicalPath());
+                prawnFileHandler.setCurrentPrawnFileLocation(prawnFiles.get(0).getCanonicalPath());
             } catch (IOException iOException) {
             }
         }
@@ -117,14 +121,14 @@ public class Calamari {
         if (args.length == 3) {// remove 4th argument from properties dialog command line arguments to get commandline
             System.out.println("Command line mode");
             try {
-                RawDataFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
+                prawnFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
             } catch (IOException | JAXBException exception) {
                 System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
             }
         } else {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(() -> {
-                new org.cirdles.calamari.userInterface.CalamariUI().setVisible(true);
+                new org.cirdles.calamari.userInterface.CalamariUI(prawnFileHandler).setVisible(true);
             });
         }
     }

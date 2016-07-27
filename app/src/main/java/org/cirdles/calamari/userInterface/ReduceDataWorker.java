@@ -15,12 +15,13 @@
  */
 package org.cirdles.calamari.userInterface;
 
-import java.io.IOException;
-import java.util.List;
+import org.cirdles.calamari.core.PrawnFileHandler;
+
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.xml.bind.JAXBException;
-import org.cirdles.calamari.core.RawDataFileHandler;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Reduces data in the background, updating the UI as it works.
@@ -29,15 +30,18 @@ import org.cirdles.calamari.core.RawDataFileHandler;
  */
 public class ReduceDataWorker extends SwingWorker<Void, Integer> {
 
+    private final PrawnFileHandler prawnFileHandler;
     private final boolean useSBM;
     private final boolean userLinFits;
     private final JProgressBar progressBar;
 
     public ReduceDataWorker(
+            PrawnFileHandler prawnFileHandler,
             boolean useSBM,
             boolean userLinFits,
             JProgressBar progressBar) {
 
+        this.prawnFileHandler = prawnFileHandler;
         this.useSBM = useSBM;
         this.userLinFits = userLinFits;
         this.progressBar = progressBar;
@@ -45,11 +49,11 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        RawDataFileHandler.setProgressSubscriber(progress -> publish(progress));
+        prawnFileHandler.setProgressSubscriber(progress -> publish(progress));
 
         try {
-            RawDataFileHandler.writeReportsFromPrawnFile(
-                    RawDataFileHandler.getCurrentPrawnFileLocation(),
+            prawnFileHandler.writeReportsFromPrawnFile(
+                    prawnFileHandler.getCurrentPrawnFileLocation(),
                     useSBM,
                     userLinFits);
         } catch (IOException | JAXBException exception) {
@@ -57,7 +61,7 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
                     + exception.getStackTrace()[0].toString());
         }
 
-        RawDataFileHandler.setProgressSubscriber(null);
+        prawnFileHandler.setProgressSubscriber(null);
 
         return null;
     }

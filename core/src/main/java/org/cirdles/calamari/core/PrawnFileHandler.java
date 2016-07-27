@@ -40,10 +40,24 @@ public class PrawnFileHandler {
     private Unmarshaller jaxbUnmarshaller;
     private String currentPrawnFileLocation;
     private Consumer<Integer> progressSubscriber;
+    private CalamariReportsEngine reportsEngine;
 
+    /**
+     * Creates a new {@link PrawnFileHandler} using a new reports engine.
+     */
     public PrawnFileHandler() {
+        this(new CalamariReportsEngine());
+    }
+
+    /**
+     * Creates a new {@link PrawnFileHandler}.
+     *
+     * @param reportsEngine the reports engine to use
+     */
+    public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
         currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
         //"/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml"
+        this.reportsEngine = reportsEngine;
     }
 
     /**
@@ -88,7 +102,7 @@ public class PrawnFileHandler {
     public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws IOException, MalformedURLException, JAXBException {
         List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
-        ReportsEngine.produceReports(shrimpFractions);
+        reportsEngine.produceReports(shrimpFractions);
     }
 
     private PrawnFile unmarshallRawDataXML(String resource)
@@ -150,6 +164,10 @@ public class PrawnFileHandler {
 
     public void setProgressSubscriber(Consumer<Integer> progressSubscriber) {
         this.progressSubscriber = progressSubscriber;
+    }
+
+    public CalamariReportsEngine getReportsEngine() {
+        return reportsEngine;
     }
 
 }
