@@ -17,6 +17,7 @@
 package org.cirdles.calamari.core;
 
 import org.cirdles.commons.util.ResourceExtractor;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -26,13 +27,13 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RawDataFileHandlerIT {
+public class PrawnFileHandlerIT {
 
     private static final String PRAWN_FILE_RESOURCE
             = "/org/cirdles/calamari/prawn/100142_G6147_10111109.43.xml";
 
     private static final ResourceExtractor RESOURCE_EXTRACTOR
-            = new ResourceExtractor(RawDataFileHandlerIT.class);
+            = new ResourceExtractor(PrawnFileHandlerIT.class);
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -40,15 +41,22 @@ public class RawDataFileHandlerIT {
     @Rule
     public Timeout timeout = Timeout.seconds(60);
 
+    private PrawnFileHandler prawnFileHandler;
+
+    @Before
+    public void setUp() {
+        prawnFileHandler = new PrawnFileHandler();
+    }
+
     @Test
     public void writesReportsFromPrawnFile() throws Exception {
         File reportsFolder = temporaryFolder.getRoot();
-        ReportsEngine.setFolderToWriteCalamariReports(reportsFolder);
+        prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(reportsFolder);
 
         File prawnFile = RESOURCE_EXTRACTOR
                 .extractResourceAsFile(PRAWN_FILE_RESOURCE);
 
-        RawDataFileHandler.writeReportsFromPrawnFile(
+        prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFile.getAbsolutePath(), // prawnFileLocation
                 true,                        // useSBM
                 false);                      // userLinFits
