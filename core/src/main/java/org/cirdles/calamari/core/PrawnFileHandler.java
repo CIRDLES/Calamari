@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.core;
 
 import org.cirdles.calamari.prawn.PrawnFile;
-import org.cirdles.calamari.prawn.PrawnRunFractionParser;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 import javax.xml.bind.JAXBContext;
@@ -31,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
 
 /**
  * Handles common operations involving Prawn files.
@@ -41,6 +40,9 @@ public class PrawnFileHandler {
     private String currentPrawnFileLocation;
     private Consumer<Integer> progressSubscriber;
     private CalamariReportsEngine reportsEngine;
+
+    private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
+            = new PrawnFileRunFractionParser();
 
     /**
      * Creates a new {@link PrawnFileHandler} using a new reports engine.
@@ -62,8 +64,8 @@ public class PrawnFileHandler {
 
     /**
      * @param prawnFileLocation the value of prawnFileLocation
-     * @param useSBM            the value of useSBM
-     * @param userLinFits       the value of userLinFits
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
      * @return
      * @throws MalformedURLException
      * @throws JAXBException
@@ -76,12 +78,11 @@ public class PrawnFileHandler {
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("OG1.7.1.1") == 0) {
-            ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction, useSBM, userLinFits);
+            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
             shrimpFraction.setSpotNumber(f + 1);
             shrimpFraction.setNameOfMount(nameOfMount);
             shrimpFractions.add(shrimpFraction);
-//            }
+            
             if (progressSubscriber != null) {
                 int progress = (f + 1) * 100 / prawnFile.getRuns();
                 progressSubscriber.accept(progress);
@@ -93,8 +94,8 @@ public class PrawnFileHandler {
 
     /**
      * @param prawnFileLocation the value of prawnFileLocation
-     * @param useSBM            the value of useSBM
-     * @param userLinFits       the value of userLinFits
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException

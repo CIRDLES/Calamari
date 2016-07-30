@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.prawn;
+package org.cirdles.calamari.algorithms;
 
-import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -24,22 +23,7 @@ import java.math.MathContext;
  *
  * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
-public class PrawnRunFractionParser {
-
-    private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
-            = new PrawnFileRunFractionParser();
-    
-    /**
-     *
-     * @param runFraction the value of runFraction
-     * @param useSBM the value of useSBM
-     * @param userLinFits the value of userLinFits
-     * @return 
-     */
-    @Deprecated
-    public static ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits) {
-        return PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
-    }
+public class BigDecimalCustomAlgorithms {
 
     public static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
         

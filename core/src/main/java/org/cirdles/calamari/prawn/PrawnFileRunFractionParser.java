@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
-import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrtBabylonian;
+import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
 
 /**
  * Parses run fractions from Prawn files into

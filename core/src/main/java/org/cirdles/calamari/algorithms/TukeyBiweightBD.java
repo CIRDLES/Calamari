@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrtBabylonian;
+import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
