@@ -43,7 +43,7 @@ import org.cirdles.calamari.shrimp.ValueModel;
 public class PrawnFileRunFractionParser {
 
     private static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
-    private static final double SQUID_TINY_VALUE = 1e-32;
+    public static final double SQUID_TINY_VALUE = 1e-32;
     private static final double ERROR_VALUE = -9.87654321012346;
 
     private String fractionID;

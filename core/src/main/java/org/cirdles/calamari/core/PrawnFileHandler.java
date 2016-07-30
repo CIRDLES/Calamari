@@ -77,7 +77,7 @@ public class PrawnFileHandler {
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("C9.1") == 0) {
+//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("A_4.1") == 0) {
                 System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
                 ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
                 if (shrimpFraction != null) {
