@@ -33,6 +33,7 @@ public class IsotopeRatioModelSHRIMP {
     private double ratioVal;
     private double ratioFractErr;
     private int minIndex;
+    private boolean active;
 
     public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
         this.rawRatioName = rawRatioName;
@@ -44,6 +45,7 @@ public class IsotopeRatioModelSHRIMP {
         this.ratioVal = 0;
         this.ratioFractErr = 0;
         this.minIndex = -2;
+        this.active = false;
     }
 
     public boolean numeratorAtomicRatioLessThanDenominator() {
@@ -178,6 +180,20 @@ public class IsotopeRatioModelSHRIMP {
      */
     public void setMinIndex(int minIndex) {
         this.minIndex = minIndex;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

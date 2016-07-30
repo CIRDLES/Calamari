@@ -15,12 +15,6 @@
  */
 package org.cirdles.calamari.core;
 
-import org.cirdles.calamari.prawn.PrawnFile;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,7 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 /**
  * Handles common operations involving Prawn files.
@@ -78,11 +77,16 @@ public class PrawnFileHandler {
 
         for (int f = 0; f < prawnFile.getRuns(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
-            shrimpFraction.setSpotNumber(f + 1);
-            shrimpFraction.setNameOfMount(nameOfMount);
-            shrimpFractions.add(shrimpFraction);
-            
+//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("C9.1") == 0) {
+                System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
+                ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
+                if (shrimpFraction != null) {
+                    shrimpFraction.setSpotNumber(f + 1);
+                    shrimpFraction.setNameOfMount(nameOfMount);
+                    shrimpFractions.add(shrimpFraction);
+                }
+//            }
+
             if (progressSubscriber != null) {
                 int progress = (f + 1) * 100 / prawnFile.getRuns();
                 progressSubscriber.accept(progress);

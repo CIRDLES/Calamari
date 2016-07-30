@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.core;
-
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 import java.io.File;
 import java.io.IOException;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
+import static java.nio.file.StandardOpenOption.APPEND;
 import java.text.SimpleDateFormat;
+import static java.util.Arrays.asList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.util.Arrays.asList;
+import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 /**
  * Calamari's reports engine.
@@ -136,7 +133,7 @@ public class CalamariReportsEngine {
      */
     private void reportTotalIonCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
-        int countOfSpecies = shrimpFraction.getNamesOfSpecies().length;
+        int countOfSpecies = shrimpFraction.getPeakMeasurementsCount();
         int[][] rawPeakData = shrimpFraction.getRawPeakData();
 
         for (int scanNum = 0; scanNum < rawPeakData.length; scanNum++) {
@@ -149,10 +146,14 @@ public class CalamariReportsEngine {
 
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
-                if ((i % countOfSpecies) == 0) {
-                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
+                try {
+                    if ((i % countOfSpecies) == 0) {
+                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
+                    }
+                    dataLine.append(", ").append(rawPeakData[scanNum][i]);
+                } catch (Exception e) {
+                    System.out.println();
                 }
-                dataLine.append(", ").append(rawPeakData[scanNum][i]);
             }
 
             Files.write(totalIonCountsAtMassFile.toPath(), asList(dataLine), APPEND);
@@ -184,7 +185,7 @@ public class CalamariReportsEngine {
      */
     private void reportTotalSBMCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
-        int countOfSpecies = shrimpFraction.getNamesOfSpecies().length;
+        int countOfSpecies = shrimpFraction.getPeakMeasurementsCount();
         int[][] rawSBMData = shrimpFraction.getRawSBMData();
         double[] countTimeSec = shrimpFraction.getCountTimeSec();
 
@@ -334,9 +335,12 @@ public class CalamariReportsEngine {
             dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
             for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-                dataLine.append(", ").append(String.valueOf(entry.getValue().getRatEqTime().get(nDodNum)));
-                dataLine.append(", ").append(String.valueOf(entry.getValue().getRatEqVal().get(nDodNum)));
-                dataLine.append(", ").append(String.valueOf(entry.getValue().getRatEqErr().get(nDodNum)));
+                IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
+                if (isotopeRatioModel.isActive()) {
+                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqTime().get(nDodNum)));
+                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqVal().get(nDodNum)));
+                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqErr().get(nDodNum)));
+                }
             }
 
             dataLine.append("\n");
@@ -500,7 +504,7 @@ public class CalamariReportsEngine {
 
     /**
      * @param aFolderToWriteCalamariReports the folderToWriteCalamariReports to
-     *                                      set
+     * set
      */
     public void setFolderToWriteCalamariReports(File aFolderToWriteCalamariReports) {
         folderToWriteCalamariReports = aFolderToWriteCalamariReports;
