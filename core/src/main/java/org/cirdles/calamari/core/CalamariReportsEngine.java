@@ -133,7 +133,7 @@ public class CalamariReportsEngine {
      */
     private void reportTotalIonCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
-        int countOfSpecies = shrimpFraction.getPeakMeasurementsCount();
+        int countOfPeaks = shrimpFraction.getPeakMeasurementsCount();
         int[][] rawPeakData = shrimpFraction.getRawPeakData();
 
         for (int scanNum = 0; scanNum < rawPeakData.length; scanNum++) {
@@ -147,8 +147,8 @@ public class CalamariReportsEngine {
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
                 try {
-                    if ((i % countOfSpecies) == 0) {
-                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
+                    if ((i % countOfPeaks) == 0) {
+                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                     }
                     dataLine.append(", ").append(rawPeakData[scanNum][i]);
                 } catch (Exception e) {
@@ -185,7 +185,7 @@ public class CalamariReportsEngine {
      */
     private void reportTotalSBMCountsAtMass(ShrimpFraction shrimpFraction) throws IOException {
 
-        int countOfSpecies = shrimpFraction.getPeakMeasurementsCount();
+        int countOfPeaks = shrimpFraction.getPeakMeasurementsCount();
         int[][] rawSBMData = shrimpFraction.getRawSBMData();
         double[] countTimeSec = shrimpFraction.getCountTimeSec();
 
@@ -198,8 +198,8 @@ public class CalamariReportsEngine {
             dataLine.append(String.valueOf(shrimpFraction.getSbmZeroCps()));
 
             for (int i = 0; i < rawSBMData[scanNum].length; i++) {
-                if ((i % countOfSpecies) == 0) {
-                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfSpecies]));
+                if ((i % countOfPeaks) == 0) {
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                 }
                 dataLine.append(", ").append(rawSBMData[scanNum][i]);
             }
