@@ -28,7 +28,7 @@ task fatJar(type: Jar) {
         attributes 'Main-Class': mainClassName
     }
 
-    baseName += "-all"
+    baseName = 'Calamari'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
