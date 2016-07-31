@@ -8,7 +8,7 @@ mainClassName = "org.cirdles.calamari.Calamari"
 
 dependencies {
     compile project(":core")
-    compile "org.netbeans.external:AbsoluteLayout:RELEASE701"
+    compile "org.netbeans.external:AbsoluteLayout:RELEASE731"
     compile "com.apple:AppleJavaExtensions:1.4"
     compile "org.netbeans.external:swing-layout-1.0.4:RELEASE80"
     compile "com.github.cirdles:Commons:-SNAPSHOT"
@@ -17,6 +17,7 @@ dependencies {
 repositories {
     maven {
         url "http://bits.netbeans.org/maven2/"
+        url "http://jcenter.bintray.com/"
     }
 }
 
@@ -27,7 +28,7 @@ task fatJar(type: Jar) {
         attributes 'Main-Class': mainClassName
     }
 
-    baseName += "-all"
+    baseName = 'Calamari'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.core;
 
-import org.cirdles.calamari.prawn.PrawnFile;
-import org.cirdles.calamari.prawn.PrawnRunFractionParser;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,6 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
 
 /**
  * Handles common operations involving Prawn files.
@@ -41,6 +39,9 @@ public class PrawnFileHandler {
     private String currentPrawnFileLocation;
     private Consumer<Integer> progressSubscriber;
     private CalamariReportsEngine reportsEngine;
+
+    private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
+            = new PrawnFileRunFractionParser();
 
     /**
      * Creates a new {@link PrawnFileHandler} using a new reports engine.
@@ -62,8 +63,8 @@ public class PrawnFileHandler {
 
     /**
      * @param prawnFileLocation the value of prawnFileLocation
-     * @param useSBM            the value of useSBM
-     * @param userLinFits       the value of userLinFits
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
      * @return
      * @throws MalformedURLException
      * @throws JAXBException
@@ -74,16 +75,21 @@ public class PrawnFileHandler {
         String nameOfMount = prawnFile.getMount();
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
-        for (int f = 0; f < prawnFile.getRuns(); f++) {
+        // July 2016 prawnFile.getRuns() is not reliable
+        for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("OG1.7.1.1") == 0) {
-            ShrimpFraction shrimpFraction = PrawnRunFractionParser.processRunFraction(runFraction, useSBM, userLinFits);
-            shrimpFraction.setSpotNumber(f + 1);
-            shrimpFraction.setNameOfMount(nameOfMount);
-            shrimpFractions.add(shrimpFraction);
+//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("ILB-23.1") == 0) {
+                System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
+                ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
+                if (shrimpFraction != null) {
+                    shrimpFraction.setSpotNumber(f + 1);
+                    shrimpFraction.setNameOfMount(nameOfMount);
+                    shrimpFractions.add(shrimpFraction);
+                }
 //            }
+
             if (progressSubscriber != null) {
-                int progress = (f + 1) * 100 / prawnFile.getRuns();
+                int progress = (f + 1) * 100 / prawnFile.getRun().size();
                 progressSubscriber.accept(progress);
             }
         }
@@ -93,8 +99,8 @@ public class PrawnFileHandler {
 
     /**
      * @param prawnFileLocation the value of prawnFileLocation
-     * @param useSBM            the value of useSBM
-     * @param userLinFits       the value of userLinFits
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException

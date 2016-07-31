@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.prawn;
-
-import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
-import org.cirdles.calamari.algorithms.TukeyBiweight;
-import org.cirdles.calamari.algorithms.TukeyBiweightBD;
-import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
-import org.cirdles.calamari.shrimp.IsotopeNames;
-import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.shrimp.ShrimpFraction;
-import org.cirdles.calamari.shrimp.ValueModel;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -35,9 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
+import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
+import org.cirdles.calamari.algorithms.TukeyBiweight;
+import org.cirdles.calamari.algorithms.TukeyBiweightBD;
+import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
-import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrtBabylonian;
+import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
  * Parses run fractions from Prawn files into
@@ -46,7 +43,7 @@ import static org.cirdles.calamari.prawn.PrawnRunFractionParser.bigDecimalSqrtBa
 public class PrawnFileRunFractionParser {
 
     private static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
-    private static final double SQUID_TINY_VALUE = 1e-32;
+    public static final double SQUID_TINY_VALUE = 1e-32;
     private static final double ERROR_VALUE = -9.87654321012346;
 
     private String fractionID;
@@ -90,40 +87,42 @@ public class PrawnFileRunFractionParser {
      */
     public ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits) {
 
+        ShrimpFraction shrimpFraction = null;
         prepareRunFractionMetaData(runFraction);
-        parseRunFractionData();
-        calculateTotalPerSpeciesCPS();
-        calculateIsotopicRatios(useSBM, userLinFits);
+        if (nScans > 1) {
+            parseRunFractionData();
+            calculateTotalPerSpeciesCPS();
+            calculateIsotopicRatios(useSBM, userLinFits);
 
-        ShrimpFraction shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
-        shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
-        shrimpFraction.setDeadTimeNanoseconds(deadTimeNanoseconds);
-        shrimpFraction.setSbmZeroCps(sbmZeroCps);
-        shrimpFraction.setCountTimeSec(countTimeSec);
-        shrimpFraction.setNamesOfSpecies(namesOfSpecies);
-        shrimpFraction.setPeakMeasurementsCount(peakMeasurementsCount);
-        shrimpFraction.setTotalCounts(totalCounts);
-        shrimpFraction.setTotalCountsOneSigmaAbs(totalCountsOneSigmaAbs);
-        shrimpFraction.setTotalCountsSBM(totalCountsSBM);
-        shrimpFraction.setTotalCountsBD(totalCountsBD);
-        shrimpFraction.setTotalCountsOneSigmaAbsBD(totalCountsOneSigmaAbsBD);
-        shrimpFraction.setTotalCountsSBMBD(totalCountsSBMBD);
-        shrimpFraction.setTimeStampSec(timeStampSec);
-        shrimpFraction.setTrimMass(trimMass);
-        shrimpFraction.setRawPeakData(rawPeakData);
-        shrimpFraction.setRawSBMData(rawSBMData);
-        shrimpFraction.setTotalCps(totalCps);
-        shrimpFraction.setNetPkCps(netPkCps);
-        shrimpFraction.setPkFerr(pkFerr);
-        shrimpFraction.setUseSBM(useSBM);
-        shrimpFraction.setUserLinFits(userLinFits);
+            shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
+            shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
+            shrimpFraction.setDeadTimeNanoseconds(deadTimeNanoseconds);
+            shrimpFraction.setSbmZeroCps(sbmZeroCps);
+            shrimpFraction.setCountTimeSec(countTimeSec);
+            shrimpFraction.setNamesOfSpecies(namesOfSpecies);
+            shrimpFraction.setPeakMeasurementsCount(peakMeasurementsCount);
+            shrimpFraction.setTotalCounts(totalCounts);
+            shrimpFraction.setTotalCountsOneSigmaAbs(totalCountsOneSigmaAbs);
+            shrimpFraction.setTotalCountsSBM(totalCountsSBM);
+            shrimpFraction.setTotalCountsBD(totalCountsBD);
+            shrimpFraction.setTotalCountsOneSigmaAbsBD(totalCountsOneSigmaAbsBD);
+            shrimpFraction.setTotalCountsSBMBD(totalCountsSBMBD);
+            shrimpFraction.setTimeStampSec(timeStampSec);
+            shrimpFraction.setTrimMass(trimMass);
+            shrimpFraction.setRawPeakData(rawPeakData);
+            shrimpFraction.setRawSBMData(rawSBMData);
+            shrimpFraction.setTotalCps(totalCps);
+            shrimpFraction.setNetPkCps(netPkCps);
+            shrimpFraction.setPkFerr(pkFerr);
+            shrimpFraction.setUseSBM(useSBM);
+            shrimpFraction.setUserLinFits(userLinFits);
 
-        // determine reference material status
-        // hard coded for now
-        if (fractionID.startsWith("T")) {
-            shrimpFraction.setReferenceMaterial(true);
+            // determine reference material status
+            // hard coded for now
+            if (fractionID.startsWith("T")) {
+                shrimpFraction.setReferenceMaterial(true);
+            }
         }
-
         return shrimpFraction;
     }
 
@@ -406,297 +405,302 @@ public class PrawnFileRunFractionParser {
         // Step 3 of Development for SHRIMP
         // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-3)
         // walk the ratios
-        isotopicRatios.forEach((rawRatioName, isotopicRatio) -> {
-//            if (rawRatioName.compareTo(RawRatioNamesSHRIMP.r206_254w)==0){
+        isotopicRatios.forEach((rawRatioName, isotopicRatioModel) -> {
             int nDod = nScans - 1;
-            int NUM = indexToSpeciesMap.get(isotopicRatio.getNumerator());
-            int DEN = indexToSpeciesMap.get(isotopicRatio.getDenominator());
+            int NUM = indexToSpeciesMap.get(isotopicRatioModel.getNumerator());
+            int DEN = indexToSpeciesMap.get(isotopicRatioModel.getDenominator());
 
-            int aOrd = (DEN > NUM) ? NUM : DEN;
-            int bOrd = (DEN > NUM) ? DEN : NUM;
+            // test that ratio is legal
+            if ((DEN < nSpecies) && (NUM < nSpecies)) {
+                isotopicRatioModel.setActive(true);
+                int aOrd = (DEN > NUM) ? NUM : DEN;
+                int bOrd = (DEN > NUM) ? DEN : NUM;
 
-            double totCtsNUM = 0.0;
-            double totCtsDEN = 0.0;
+                double totCtsNUM = 0.0;
+                double totCtsDEN = 0.0;
 
-            for (int j = 0; j < nScans; j++) {
-                totCtsNUM += netPkCps[j][NUM] * countTimeSec[NUM];
-                totCtsDEN += netPkCps[j][DEN] * countTimeSec[DEN];
-            }
-
-            double ratioVal;
-            double ratioFractErr;
-            double[] ratioInterpTime;
-            double[] interpRatVal;
-            double[] ratValFerr;
-            double[] ratValSig;
-            double[][] sigRho;
-            boolean[] zerPkCt;
-
-            List<Double> ratEqTime = new ArrayList<>();
-            List<Double> ratEqVal = new ArrayList<>();
-            List<Double> ratEqErr = new ArrayList<>();
-
-            if ((totCtsNUM < 32) || (totCtsDEN < 32) || (nDod == 0)) {
-                ratioFractErr = 1.0;
-                if (totCtsNUM == 0.0) {
-                    ratioVal = SQUID_TINY_VALUE;
-                } else if (totCtsDEN == 0.0) {
-                    ratioVal = 1e16;
-                } else {
-                    ratioVal = (totCtsNUM / countTimeSec[NUM]) / (totCtsDEN / countTimeSec[DEN]);
-                    ratioFractErr = StrictMath.sqrt((1.0 / StrictMath.abs(totCtsNUM)) + (1.0 / StrictMath.abs(totCtsDEN)));
+                for (int j = 0; j < nScans; j++) {
+                    totCtsNUM += netPkCps[j][NUM] * countTimeSec[NUM];
+                    totCtsDEN += netPkCps[j][DEN] * countTimeSec[DEN];
                 }
 
-                ratioInterpTime = new double[]{//
+                double ratioVal;
+                double ratioFractErr;
+                double[] ratioInterpTime;
+                double[] interpRatVal;
+                double[] ratValFerr;
+                double[] ratValSig;
+                double[][] sigRho;
+                boolean[] zerPkCt;
+
+                List<Double> ratEqTime = new ArrayList<>();
+                List<Double> ratEqVal = new ArrayList<>();
+                List<Double> ratEqErr = new ArrayList<>();
+
+                if ((totCtsNUM < 32) || (totCtsDEN < 32) || (nDod == 0)) {
+                    ratioFractErr = 1.0;
+                    if (totCtsNUM == 0.0) {
+                        ratioVal = SQUID_TINY_VALUE;
+                    } else if (totCtsDEN == 0.0) {
+                        ratioVal = 1e16;
+                    } else {
+                        ratioVal = (totCtsNUM / countTimeSec[NUM]) / (totCtsDEN / countTimeSec[DEN]);
+                        ratioFractErr = StrictMath.sqrt((1.0 / StrictMath.abs(totCtsNUM)) + (1.0 / StrictMath.abs(totCtsDEN)));
+                    }
+
+                    ratioInterpTime = new double[]{//
                         0.5 * (StrictMath.min(timeStampSec[0][NUM], timeStampSec[0][DEN]) + StrictMath.max(timeStampSec[nScans - 1][NUM], timeStampSec[nScans - 1][DEN]))
-                };
+                    };
 
-                isotopicRatio.setRatioVal(ratioVal);
-                isotopicRatio.setRatioFractErr(ratioFractErr);
+                    isotopicRatioModel.setRatioVal(ratioVal);
+                    isotopicRatioModel.setRatioFractErr(ratioFractErr);
 
-                ratEqTime.add(ratioInterpTime[0]);
-                ratEqVal.add(ratioVal);
-                ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
+                    ratEqTime.add(ratioInterpTime[0]);
+                    ratEqVal.add(ratioVal);
+                    ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
 
-                // flush out for reports to andle empty entries
-                for (int i = 0; i < (nDod - 1); i++) {
-                    ratEqTime.add(0.0);
-                    ratEqVal.add(0.0);
-                    ratEqErr.add(0.0);
-                }
+                    // flush out for reports to andle empty entries
+                    for (int i = 0; i < (nDod - 1); i++) {
+                        ratEqTime.add(0.0);
+                        ratEqVal.add(0.0);
+                        ratEqErr.add(0.0);
+                    }
 
-            } else {
-                // main treatment using double interpolation following Dodson (1978): http://dx.doi.org/10.1088/0022-3735/11/4/004)
-                double[] pkF = new double[nDod];
-                double sumPkF = 0.0;
-                for (int j = 0; j < nDod; j++) {
-                    pkF[j] = (timeStampSec[j][bOrd] - timeStampSec[j][aOrd]) / (timeStampSec[j + 1][aOrd] - timeStampSec[j][aOrd]);
-                    sumPkF += pkF[j];
-                }
+                } else {
+                    // main treatment using double interpolation following Dodson (1978): http://dx.doi.org/10.1088/0022-3735/11/4/004)
+                    double[] pkF = new double[nDod];
+                    double sumPkF = 0.0;
+                    for (int j = 0; j < nDod; j++) {
+                        pkF[j] = (timeStampSec[j][bOrd] - timeStampSec[j][aOrd]) / (timeStampSec[j + 1][aOrd] - timeStampSec[j][aOrd]);
+                        sumPkF += pkF[j];
+                    }
 
-                double avPkF = sumPkF / nDod;
-                double f1 = (1.0 - avPkF) / 2.0;
-                double f2 = (1.0 + avPkF) / 2.0;
-                double rhoIJ;// = (1.0 - avPkF * avPkF) / (1.0 + avPkF * avPkF) / 2.0;
+                    double avPkF = sumPkF / nDod;
+                    double f1 = (1.0 - avPkF) / 2.0;
+                    double f2 = (1.0 + avPkF) / 2.0;
+                    double rhoIJ;// = (1.0 - avPkF * avPkF) / (1.0 + avPkF * avPkF) / 2.0;
 
-                ratioInterpTime = new double[nDod];
-                interpRatVal = new double[nDod];
-                ratValFerr = new double[nDod];
-                ratValSig = new double[nDod];
-                sigRho = new double[nDod][nDod];
-                zerPkCt = new boolean[nScans];
+                    ratioInterpTime = new double[nDod];
+                    interpRatVal = new double[nDod];
+                    ratValFerr = new double[nDod];
+                    ratValSig = new double[nDod];
+                    sigRho = new double[nDod][nDod];
+                    zerPkCt = new boolean[nScans];
 
-                int rct = -1;
+                    int rct = -1;
 
-                for (int sNum = 0; sNum < nDod; sNum++) {
-                    boolean continueWithScanProcessing = true;
-                    int sn1 = sNum + 1;
-                    double totT = timeStampSec[sNum][aOrd] + timeStampSec[sNum][bOrd]
-                            + timeStampSec[sn1][aOrd] + timeStampSec[sn1][bOrd];
-                    double meanT = totT / 4.0;
-                    ratioInterpTime[sNum] = meanT;
+                    for (int sNum = 0; sNum < nDod; sNum++) {
+                        boolean continueWithScanProcessing = true;
+                        int sn1 = sNum + 1;
+                        double totT = timeStampSec[sNum][aOrd] + timeStampSec[sNum][bOrd]
+                                + timeStampSec[sn1][aOrd] + timeStampSec[sn1][bOrd];
+                        double meanT = totT / 4.0;
+                        ratioInterpTime[sNum] = meanT;
 
-                    zerPkCt[sNum] = false;
-                    zerPkCt[sn1] = false;
+                        zerPkCt[sNum] = false;
+                        zerPkCt[sn1] = false;
 //                    boolean hasZerPk = false;
 
-                    double[] aPkCts = new double[2];
-                    double[] bPkCts = new double[2];
-                    for (int numDenom = 0; numDenom < 2; numDenom++) {
-                        if (continueWithScanProcessing) {
-                            int k = sNum + numDenom;
-                            double aNetCPS = netPkCps[k][aOrd];
-                            double bNetCPS = netPkCps[k][bOrd];
-
-                            if ((aNetCPS == ERROR_VALUE) || (bNetCPS == ERROR_VALUE)) {
-//                                hasZerPk = true;
-                                zerPkCt[k] = true;
-                                continueWithScanProcessing = false;
-                            }
-
+                        double[] aPkCts = new double[2];
+                        double[] bPkCts = new double[2];
+                        for (int numDenom = 0; numDenom < 2; numDenom++) {
                             if (continueWithScanProcessing) {
-                                aPkCts[numDenom] = aNetCPS * countTimeSec[aOrd];
-                                bPkCts[numDenom] = bNetCPS * countTimeSec[bOrd];
+                                int k = sNum + numDenom;
+                                double aNetCPS = netPkCps[k][aOrd];
+                                double bNetCPS = netPkCps[k][bOrd];
 
-                                if (useSBM) {
-                                    if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)
-                                            || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)) {
-                                        zerPkCt[k] = true;
-                                        continueWithScanProcessing = false;
-                                    }
-                                }
-                            }
-                        } // test continueWithScanProcessing
-                    } // iteration through numDenom
-
-                    if (continueWithScanProcessing) {
-                        for (int k = 0; k < 2; k++) {
-                            int numDenom = (k == 0) ? 1 : 0;
-
-                            double a = aPkCts[k];
-                            double b = aPkCts[numDenom];
-                            if ((a <= 0) && (b > 16)) {
-                                zerPkCt[sNum + k - 1] = true;
-                            }
-
-                            a = bPkCts[k];
-                            b = bPkCts[numDenom];
-                            if ((a <= 0) && (b > 16)) {
-                                zerPkCt[sNum + k - 1] = true;
-                            }
-                        } // k iteration
-
-                        // test whether to continue
-                        if (!zerPkCt[sNum] && !zerPkCt[sn1]) {
-                            double aPk1 = netPkCps[sNum][aOrd];
-                            double bPk1 = netPkCps[sNum][bOrd];
-                            double aPk2 = netPkCps[sn1][aOrd];
-                            double bPk2 = netPkCps[sn1][bOrd];
-
-                            if (useSBM) {
-                                aPk1 /= sbmCps[sNum][aOrd];
-                                bPk1 /= sbmCps[sNum][bOrd];
-                                aPk2 /= sbmCps[sn1][aOrd];
-                                bPk2 /= sbmCps[sn1][bOrd];
-                            }
-
-                            double scanDeltaT = timeStampSec[sn1][aOrd] - timeStampSec[sNum][aOrd];
-                            double bTfract = timeStampSec[sNum][bOrd] - timeStampSec[sNum][aOrd];
-                            pkF[sNum] = bTfract / scanDeltaT;
-                            double ff1 = (1.0 - pkF[sNum]) / 2.0;
-                            double ff2 = (1.0 + pkF[sNum]) / 2.0;
-                            double aInterp = (ff1 * aPk1) + (ff2 * aPk2);
-                            double bInterp = (ff2 * bPk1) + (ff1 * bPk2);
-
-                            double rNum = (NUM < DEN) ? aInterp : bInterp;
-                            double rDen = (NUM < DEN) ? bInterp : aInterp;
-
-                            if (rDen != 0.0) {
-                                rct++;
-                                interpRatVal[rct] = rNum / rDen;
-                                double a1PkSig = pkFerr[sNum][aOrd] * aPk1;
-                                double a2PkSig = pkFerr[sn1][aOrd] * aPk2;
-                                double b1PkSig = pkFerr[sNum][bOrd] * bPk1;
-                                double b2PkSig = pkFerr[sn1][bOrd] * bPk2;
-
-                                if (useSBM) {
-                                    a1PkSig = StrictMath.sqrt(a1PkSig * a1PkSig
-                                            + (aPk1 * aPk1 / sbmCps[sNum][aOrd] / countTimeSec[aOrd]));
-                                    a2PkSig = StrictMath.sqrt(a2PkSig * a2PkSig
-                                            + (aPk2 * aPk2 / sbmCps[sn1][aOrd] / countTimeSec[aOrd]));
-                                    b1PkSig = StrictMath.sqrt(b1PkSig * b1PkSig
-                                            + (bPk1 * bPk1 / sbmCps[sNum][bOrd] / countTimeSec[bOrd]));
-                                    b2PkSig = StrictMath.sqrt(b2PkSig * b2PkSig
-                                            + (bPk2 * bPk2 / sbmCps[sn1][bOrd] / countTimeSec[bOrd]));
+                                if ((aNetCPS == ERROR_VALUE) || (bNetCPS == ERROR_VALUE)) {
+//                                hasZerPk = true;
+                                    zerPkCt[k] = true;
+                                    continueWithScanProcessing = false;
                                 }
 
-                                if ((aInterp == 0.0) || (bInterp == 0.0)) {
-                                    ratValFerr[rct] = 1.0;
-                                    ratValSig[rct] = SQUID_TINY_VALUE;
-                                    sigRho[rct][rct] = SQUID_TINY_VALUE;
-                                } else {
-                                    double term1 = ((f1 * a1PkSig) * (f1 * a1PkSig) + (f2 * a2PkSig) * (f2 * a2PkSig));
-                                    double term2 = ((f2 * b1PkSig) * (f2 * b1PkSig) + (f1 * b2PkSig) * (f1 * b2PkSig));
-                                    double ratValFvar = (term1 / (aInterp * aInterp)) + (term2 / (bInterp * bInterp));
-                                    double ratValVar = ratValFvar * (interpRatVal[rct] * interpRatVal[rct]);
-                                    ratValFerr[rct] = StrictMath.sqrt(ratValFvar);
-                                    ratValSig[rct] = StrictMath.max(1E-10, StrictMath.sqrt(ratValVar));
-                                    sigRho[rct][rct] = ratValSig[rct];
+                                if (continueWithScanProcessing) {
+                                    aPkCts[numDenom] = aNetCPS * countTimeSec[aOrd];
+                                    bPkCts[numDenom] = bNetCPS * countTimeSec[bOrd];
 
-                                    if (rct > 0) {
-                                        rhoIJ = (zerPkCt[sNum - 1]) ? 0.0 : (1 - pkF[sNum] * pkF[sNum]) / (1 + pkF[sNum] * pkF[sNum]) / 2.0;
-
-                                        sigRho[rct][rct - 1] = rhoIJ;
-                                        sigRho[rct - 1][rct] = rhoIJ;
+                                    if (useSBM) {
+                                        if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)
+                                                || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)) {
+                                            zerPkCt[k] = true;
+                                            continueWithScanProcessing = false;
+                                        }
                                     }
-                                } // test aInterp andbInterp
-                            } // test rDen
+                                }
+                            } // test continueWithScanProcessing
+                        } // iteration through numDenom
 
-                        } // test !zerPkCt[sNum] && !zerPkCt[sn1]
+                        if (continueWithScanProcessing) {
+                            for (int k = 0; k < 2; k++) {
+                                int numDenom = (k == 0) ? 1 : 0;
 
-                    } // continueWithScanProcessing is true
+                                double a = aPkCts[k];
+                                double b = aPkCts[numDenom];
+                                if ((a <= 0) && (b > 16)) {
+                                    zerPkCt[sNum + k - 1] = true;
+                                }
 
-                } // iteration through nDod using sNum (see "NextScanNum" in pseudocode)
-                switch (rct) {
-                    case -1:
-                        ratioVal = ERROR_VALUE;
-                        ratioFractErr = ERROR_VALUE;
+                                a = bPkCts[k];
+                                b = bPkCts[numDenom];
+                                if ((a <= 0) && (b > 16)) {
+                                    zerPkCt[sNum + k - 1] = true;
+                                }
+                            } // k iteration
 
-                        ratEqTime.add(ratioInterpTime[0]);
-                        ratEqVal.add(ratioVal);
-                        ratEqErr.add(ratioFractErr);
+                            // test whether to continue
+                            if (!zerPkCt[sNum] && !zerPkCt[sn1]) {
+                                double aPk1 = netPkCps[sNum][aOrd];
+                                double bPk1 = netPkCps[sNum][bOrd];
+                                double aPk2 = netPkCps[sn1][aOrd];
+                                double bPk2 = netPkCps[sn1][bOrd];
 
-                        isotopicRatio.setRatioVal(ratioVal);
-                        isotopicRatio.setRatioFractErr(ratioFractErr);
+                                if (useSBM) {
+                                    aPk1 /= sbmCps[sNum][aOrd];
+                                    bPk1 /= sbmCps[sNum][bOrd];
+                                    aPk2 /= sbmCps[sn1][aOrd];
+                                    bPk2 /= sbmCps[sn1][bOrd];
+                                }
 
-                        break;
-                    case 0:
-                        ratioVal = interpRatVal[0];
-                        if (ratioVal == 0.0) {
-                            ratioVal = SQUID_TINY_VALUE;
-                            ratioFractErr = 1.0;
-                        } else {
-                            ratioFractErr = ratValFerr[0];// this is abs not percent
-                        }
+                                double scanDeltaT = timeStampSec[sn1][aOrd] - timeStampSec[sNum][aOrd];
+                                double bTfract = timeStampSec[sNum][bOrd] - timeStampSec[sNum][aOrd];
+                                pkF[sNum] = bTfract / scanDeltaT;
+                                double ff1 = (1.0 - pkF[sNum]) / 2.0;
+                                double ff2 = (1.0 + pkF[sNum]) / 2.0;
+                                double aInterp = (ff1 * aPk1) + (ff2 * aPk2);
+                                double bInterp = (ff2 * bPk1) + (ff1 * bPk2);
 
-                        ratEqTime.add(ratioInterpTime[0]);
-                        ratEqVal.add(ratioVal);
-                        ratEqErr.add(ratioFractErr);
+                                double rNum = (NUM < DEN) ? aInterp : bInterp;
+                                double rDen = (NUM < DEN) ? bInterp : aInterp;
 
-                        isotopicRatio.setRatioVal(ratioVal);
-                        isotopicRatio.setRatioFractErr(ratioFractErr);
+                                if (rDen != 0.0) {
+                                    rct++;
+                                    interpRatVal[rct] = rNum / rDen;
+                                    double a1PkSig = pkFerr[sNum][aOrd] * aPk1;
+                                    double a2PkSig = pkFerr[sn1][aOrd] * aPk2;
+                                    double b1PkSig = pkFerr[sNum][bOrd] * bPk1;
+                                    double b2PkSig = pkFerr[sn1][bOrd] * bPk2;
 
-                        break;
-                    default:
-                        for (int j = 0; j < (rct + 1); j++) {
-                            ratEqTime.add(ratioInterpTime[j]);
-                            ratEqVal.add(interpRatVal[j]);
-                            ratEqErr.add(StrictMath.abs(ratValFerr[j] * interpRatVal[j]));
-                        }
+                                    if (useSBM) {
+                                        a1PkSig = StrictMath.sqrt(a1PkSig * a1PkSig
+                                                + (aPk1 * aPk1 / sbmCps[sNum][aOrd] / countTimeSec[aOrd]));
+                                        a2PkSig = StrictMath.sqrt(a2PkSig * a2PkSig
+                                                + (aPk2 * aPk2 / sbmCps[sn1][aOrd] / countTimeSec[aOrd]));
+                                        b1PkSig = StrictMath.sqrt(b1PkSig * b1PkSig
+                                                + (bPk1 * bPk1 / sbmCps[sNum][bOrd] / countTimeSec[bOrd]));
+                                        b2PkSig = StrictMath.sqrt(b2PkSig * b2PkSig
+                                                + (bPk2 * bPk2 / sbmCps[sn1][bOrd] / countTimeSec[bOrd]));
+                                    }
 
-                        // step 4
-                        WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
-                        double ratioMean;
-                        double ratioMeanSig;
+                                    if ((aInterp == 0.0) || (bInterp == 0.0)) {
+                                        ratValFerr[rct] = 1.0;
+                                        ratValSig[rct] = SQUID_TINY_VALUE;
+                                        sigRho[rct][rct] = SQUID_TINY_VALUE;
+                                    } else {
+                                        double term1 = ((f1 * a1PkSig) * (f1 * a1PkSig) + (f2 * a2PkSig) * (f2 * a2PkSig));
+                                        double term2 = ((f2 * b1PkSig) * (f2 * b1PkSig) + (f1 * b2PkSig) * (f1 * b2PkSig));
+                                        double ratValFvar = (term1 / (aInterp * aInterp)) + (term2 / (bInterp * bInterp));
+                                        double ratValVar = ratValFvar * (interpRatVal[rct] * interpRatVal[rct]);
+                                        ratValFerr[rct] = StrictMath.sqrt(ratValFvar);
+                                        ratValSig[rct] = StrictMath.max(1E-10, StrictMath.sqrt(ratValVar));
+                                        sigRho[rct][rct] = ratValSig[rct];
 
-                        if (userLinFits && rct > 3) {
-                            wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, ratioInterpTime);
+                                        if (rct > 0) {
+                                            rhoIJ = (zerPkCt[sNum - 1]) ? 0.0 : (1 - pkF[sNum] * pkF[sNum]) / (1 + pkF[sNum] * pkF[sNum]) / 2.0;
 
-                            double midTime = (timeStampSec[nScans - 1][nSpecies - 1] + timeStampSec[0][0]) / 2.0;
-                            ratioMean = (wtdLinCorrResults.getSlope() * midTime) + wtdLinCorrResults.getIntercept();
-                            ratioMeanSig = StrictMath.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
-                                    + wtdLinCorrResults.getSigmaIntercept() * wtdLinCorrResults.getSigmaIntercept() //
-                                    + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
+                                            sigRho[rct][rct - 1] = rhoIJ;
+                                            sigRho[rct - 1][rct] = rhoIJ;
+                                        }
+                                    } // test aInterp andbInterp
+                                } // test rDen
 
-                        } else {
-                            wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, new double[0]);
-                            ratioMean = wtdLinCorrResults.getIntercept();
-                            ratioMeanSig = wtdLinCorrResults.getSigmaIntercept();
-                        }
+                            } // test !zerPkCt[sNum] && !zerPkCt[sn1]
 
-                        if (wtdLinCorrResults.isBad()) {
-                            isotopicRatio.setRatioVal(ERROR_VALUE);
-                            isotopicRatio.setRatioFractErr(ERROR_VALUE);
-                        } else if (wtdLinCorrResults.getIntercept() == 0.0) {
-                            isotopicRatio.setRatioVal(SQUID_TINY_VALUE);
-                            isotopicRatio.setRatioFractErr(1.0);
-                        } else {
-                            isotopicRatio.setRatioVal(ratioMean);
-                            isotopicRatio.setRatioFractErr(StrictMath.max(SQUID_TINY_VALUE, ratioMeanSig) / StrictMath.abs(ratioMean));
-                        }
+                        } // continueWithScanProcessing is true
 
-                        isotopicRatio.setMinIndex(wtdLinCorrResults.getMinIndex());
+                    } // iteration through nDod using sNum (see "NextScanNum" in pseudocode)
+                    switch (rct) {
+                        case -1:
+                            ratioVal = ERROR_VALUE;
+                            ratioFractErr = ERROR_VALUE;
 
-                        break;
-                }
+                            ratEqTime.add(ratioInterpTime[0]);
+                            ratEqVal.add(ratioVal);
+                            ratEqErr.add(ratioFractErr);
 
-            } // end decision on which ratio procedure to use
+                            isotopicRatioModel.setRatioVal(ratioVal);
+                            isotopicRatioModel.setRatioFractErr(ratioFractErr);
 
-            // store values for reports
-            isotopicRatio.setRatEqTime(ratEqTime);
-            isotopicRatio.setRatEqVal(ratEqVal);
-            isotopicRatio.setRatEqErr(ratEqErr);
-//            }
+                            break;
+                        case 0:
+                            ratioVal = interpRatVal[0];
+                            if (ratioVal == 0.0) {
+                                ratioVal = SQUID_TINY_VALUE;
+                                ratioFractErr = 1.0;
+                            } else {
+                                ratioFractErr = ratValFerr[0];// this is abs not percent
+                            }
+
+                            ratEqTime.add(ratioInterpTime[0]);
+                            ratEqVal.add(ratioVal);
+                            ratEqErr.add(ratioFractErr);
+
+                            isotopicRatioModel.setRatioVal(ratioVal);
+                            isotopicRatioModel.setRatioFractErr(ratioFractErr);
+
+                            break;
+                        default:
+                            for (int j = 0; j < (rct + 1); j++) {
+                                ratEqTime.add(ratioInterpTime[j]);
+                                ratEqVal.add(interpRatVal[j]);
+                                ratEqErr.add(StrictMath.abs(ratValFerr[j] * interpRatVal[j]));
+                            }
+
+                            // step 4
+                            WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
+                            double ratioMean;
+                            double ratioMeanSig;
+
+                            if (userLinFits && rct > 3) {
+                                wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, ratioInterpTime);
+
+                                double midTime = (timeStampSec[nScans - 1][nSpecies - 1] + timeStampSec[0][0]) / 2.0;
+                                ratioMean = (wtdLinCorrResults.getSlope() * midTime) + wtdLinCorrResults.getIntercept();
+                                ratioMeanSig = StrictMath.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
+                                        + wtdLinCorrResults.getSigmaIntercept() * wtdLinCorrResults.getSigmaIntercept() //
+                                        + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
+
+                            } else {
+                                wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, new double[0]);
+                                ratioMean = wtdLinCorrResults.getIntercept();
+                                ratioMeanSig = wtdLinCorrResults.getSigmaIntercept();
+                            }
+
+                            if (wtdLinCorrResults.isBad()) {
+                                isotopicRatioModel.setRatioVal(ERROR_VALUE);
+                                isotopicRatioModel.setRatioFractErr(ERROR_VALUE);
+                            } else if (wtdLinCorrResults.getIntercept() == 0.0) {
+                                isotopicRatioModel.setRatioVal(SQUID_TINY_VALUE);
+                                isotopicRatioModel.setRatioFractErr(1.0);
+                            } else {
+                                isotopicRatioModel.setRatioVal(ratioMean);
+                                isotopicRatioModel.setRatioFractErr(StrictMath.max(SQUID_TINY_VALUE, ratioMeanSig) / StrictMath.abs(ratioMean));
+                            }
+
+                            isotopicRatioModel.setMinIndex(wtdLinCorrResults.getMinIndex());
+
+                            break;
+                    }
+
+                } // end decision on which ratio procedure to use
+
+                // store values for reports
+                isotopicRatioModel.setRatEqTime(ratEqTime);
+                isotopicRatioModel.setRatEqVal(ratEqVal);
+                isotopicRatioModel.setRatEqErr(ratEqErr);
+            } 
+            else {
+                isotopicRatioModel.setActive(false);
+            }// check for number of species present
         }); // end iteration through isotopicRatios
 
     }

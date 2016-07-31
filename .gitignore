@@ -11,6 +11,7 @@ nbactions.xml
 dependency-reduced-pom.xml
 nbproject/
 .nb-gradle/
+.nb-gradle-properties
 
 # IntelliJ
 .idea/
