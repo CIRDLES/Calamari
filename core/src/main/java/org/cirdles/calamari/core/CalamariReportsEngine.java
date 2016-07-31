@@ -337,9 +337,16 @@ public class CalamariReportsEngine {
             for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
                 IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
                 if (isotopeRatioModel.isActive()) {
-                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqTime().get(nDodNum)));
-                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqVal().get(nDodNum)));
-                    dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqErr().get(nDodNum)));
+                    // July 2016 case of less than nDodCount = rare
+                    if (nDodNum < isotopeRatioModel.getRatEqTime().size()) {
+                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqTime().get(nDodNum)));
+                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqVal().get(nDodNum)));
+                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqErr().get(nDodNum)));
+                    } else {
+                        dataLine.append(", ").append("n/a");
+                        dataLine.append(", ").append("n/a");
+                        dataLine.append(", ").append("n/a");
+                    }
                 }
             }
 
@@ -361,9 +368,12 @@ public class CalamariReportsEngine {
         dataLine.append(shrimpFraction.isReferenceMaterial() ? "ref mat" : "unknown");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            dataLine.append(", ").append(String.valueOf(entry.getValue().getMinIndex()));
-            dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioVal()));
-            dataLine.append(", ").append(String.valueOf(entry.getValue().getRatioFractErr() * 100.0));
+            IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
+            if (isotopeRatioModel.isActive()) {
+                dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
+                dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatioVal()));
+                dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatioFractErr() * 100.0));
+            }
         }
 
         dataLine.append("\n");
@@ -443,9 +453,11 @@ public class CalamariReportsEngine {
         header.append("Title, Date, Ndod, Type");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTime");
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
+            if (entry.getValue().isActive()) {
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTime");
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
+            }
         }
 
         header.append("\n");
@@ -460,9 +472,11 @@ public class CalamariReportsEngine {
         header.append("Title, Date, Type");
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".MinIndex");
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-            header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+            if (entry.getValue().isActive()) {
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".MinIndex");
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+            }
         }
 
         header.append("\n");

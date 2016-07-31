@@ -75,9 +75,10 @@ public class PrawnFileHandler {
         String nameOfMount = prawnFile.getMount();
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
-        for (int f = 0; f < prawnFile.getRuns(); f++) {
+        // July 2016 prawnFile.getRuns() is not reliable
+        for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("A_4.1") == 0) {
+//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("ILB-23.1") == 0) {
                 System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
                 ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
                 if (shrimpFraction != null) {
@@ -88,7 +89,7 @@ public class PrawnFileHandler {
 //            }
 
             if (progressSubscriber != null) {
-                int progress = (f + 1) * 100 / prawnFile.getRuns();
+                int progress = (f + 1) * 100 / prawnFile.getRun().size();
                 progressSubscriber.accept(progress);
             }
         }
