@@ -30,6 +30,9 @@ import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.TukeyBiweightBD;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
+import static org.cirdles.calamari.constants.CalamariConstants.HARD_WIRED_INDEX_OF_BACKGROUND;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_ERROR_VALUE;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
@@ -40,11 +43,7 @@ import org.cirdles.calamari.shrimp.ValueModel;
  * Parses run fractions from Prawn files into
  * {@link org.cirdles.calamari.shrimp.ShrimpFraction}s.
  */
-public class PrawnFileRunFractionParser {
-
-    private static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
-    public static final double SQUID_TINY_VALUE = 1e-32;
-    private static final double ERROR_VALUE = -9.87654321012346;
+public class PrawnFileRunFractionParser {  
 
     private String fractionID;
     private long dateTimeMilliseconds;
@@ -509,7 +508,7 @@ public class PrawnFileRunFractionParser {
                                 double aNetCPS = netPkCps[k][aOrd];
                                 double bNetCPS = netPkCps[k][bOrd];
 
-                                if ((aNetCPS == ERROR_VALUE) || (bNetCPS == ERROR_VALUE)) {
+                                if ((aNetCPS == SQUID_ERROR_VALUE) || (bNetCPS == SQUID_ERROR_VALUE)) {
 //                                hasZerPk = true;
                                     zerPkCt[k] = true;
                                     continueWithScanProcessing = false;
@@ -520,8 +519,8 @@ public class PrawnFileRunFractionParser {
                                     bPkCts[numDenom] = bNetCPS * countTimeSec[bOrd];
 
                                     if (useSBM) {
-                                        if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)
-                                                || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == ERROR_VALUE)) {
+                                        if ((sbmCps[k][aOrd] <= 0.0) || (sbmCps[k][aOrd] == SQUID_ERROR_VALUE)
+                                                || (sbmCps[k][bOrd] <= 0.0) || (sbmCps[k][aOrd] == SQUID_ERROR_VALUE)) {
                                             zerPkCt[k] = true;
                                             continueWithScanProcessing = false;
                                         }
@@ -620,8 +619,8 @@ public class PrawnFileRunFractionParser {
                     } // iteration through nDod using sNum (see "NextScanNum" in pseudocode)
                     switch (rct) {
                         case -1:
-                            ratioVal = ERROR_VALUE;
-                            ratioFractErr = ERROR_VALUE;
+                            ratioVal = SQUID_ERROR_VALUE;
+                            ratioFractErr = SQUID_ERROR_VALUE;
 
                             ratEqTime.add(ratioInterpTime[0]);
                             ratEqVal.add(ratioVal);
@@ -676,8 +675,8 @@ public class PrawnFileRunFractionParser {
                             }
 
                             if (wtdLinCorrResults.isBad()) {
-                                isotopicRatioModel.setRatioVal(ERROR_VALUE);
-                                isotopicRatioModel.setRatioFractErr(ERROR_VALUE);
+                                isotopicRatioModel.setRatioVal(SQUID_ERROR_VALUE);
+                                isotopicRatioModel.setRatioFractErr(SQUID_ERROR_VALUE);
                             } else if (wtdLinCorrResults.getIntercept() == 0.0) {
                                 isotopicRatioModel.setRatioVal(SQUID_TINY_VALUE);
                                 isotopicRatioModel.setRatioFractErr(1.0);

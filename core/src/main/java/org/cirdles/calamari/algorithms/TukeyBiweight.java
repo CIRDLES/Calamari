@@ -17,6 +17,7 @@ package org.cirdles.calamari.algorithms;
 
 import java.math.BigDecimal;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
@@ -43,7 +44,7 @@ public final class TukeyBiweight {
         for (int i = 0; i < values.length; i++) {
             deviations[i] = StrictMath.abs(values[i] - mean);
         }
-        double sigma = calculateMedian(deviations);
+        double sigma = StrictMath.max(calculateMedian(deviations), SQUID_TINY_VALUE);
 
         double previousMean;
         double previousSigma;
@@ -74,6 +75,7 @@ public final class TukeyBiweight {
                 }
             }
             sigma = StrictMath.sqrt(n * sa) / StrictMath.abs(sb);
+            sigma = StrictMath.max(sigma, SQUID_TINY_VALUE);
             mean = previousMean + tee * sc / sb;
 
         } // both tests against epsilon must pass OR iterations top out

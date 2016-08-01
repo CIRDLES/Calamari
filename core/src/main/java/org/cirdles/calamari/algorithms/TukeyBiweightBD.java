@@ -20,7 +20,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
-import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
@@ -47,11 +47,7 @@ public final class TukeyBiweightBD {
         for (int i = 0; i < values.length; i++) {
             deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
         }
-        BigDecimal sigma = calculateMedian(deviations);
-        // July 2016 possible solution to sigma == 0
-        if (sigma.compareTo(BigDecimal.ZERO) == 0) {
-            sigma = new BigDecimal(PrawnFileRunFractionParser.SQUID_TINY_VALUE);
-        }
+        BigDecimal sigma = calculateMedian(deviations).max(new BigDecimal(SQUID_TINY_VALUE));
 
         BigDecimal previousMean;
         BigDecimal previousSigma;
@@ -83,10 +79,7 @@ public final class TukeyBiweightBD {
             }
 
             sigma = bigDecimalSqrtBabylonian(sa.multiply(new BigDecimal(n))).divide(sb.abs(), MathContext.DECIMAL128);
-            // July 2016 possible solution to sigma == 0
-            if (sigma.compareTo(BigDecimal.ZERO) == 0) {
-                sigma = new BigDecimal(PrawnFileRunFractionParser.SQUID_TINY_VALUE);
-            }
+            sigma = sigma.max(new BigDecimal(SQUID_TINY_VALUE));
             mean = previousMean.add(tee.multiply(sc).divide(sb, MathContext.DECIMAL128));
 
         } // both tests against epsilon must pass OR iterations top out
