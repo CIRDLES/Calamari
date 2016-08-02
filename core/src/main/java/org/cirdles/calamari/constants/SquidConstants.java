@@ -17,7 +17,7 @@ package org.cirdles.calamari.constants;
 
 public final class SquidConstants {
 
-    public static final double SQUID_TINY_VALUE = 1e-32;
+    public static final double SQUID_TINY_VALUE = 1e-30;
     public static final double SQUID_ERROR_VALUE = -9.87654321012346;
 
 }
