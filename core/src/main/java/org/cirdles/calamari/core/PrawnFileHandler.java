@@ -57,7 +57,6 @@ public class PrawnFileHandler {
      */
     public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
         currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
-        //"/Users/sbowring/Google Drive/_ETRedux_ProjectData/SHRIMP/100142_G6147_10111109.43.xml"
         this.reportsEngine = reportsEngine;
     }
 
@@ -72,20 +71,24 @@ public class PrawnFileHandler {
     public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws MalformedURLException, JAXBException {
         PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
+        
         String nameOfMount = prawnFile.getMount();
+        if (nameOfMount == null) {
+            nameOfMount = "No-Mount-Name";
+        }
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
 //            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("ILB-23.1") == 0) {
-                System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
-                ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
-                if (shrimpFraction != null) {
-                    shrimpFraction.setSpotNumber(f + 1);
-                    shrimpFraction.setNameOfMount(nameOfMount);
-                    shrimpFractions.add(shrimpFraction);
-                }
+//                System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
+            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
+            if (shrimpFraction != null) {
+                shrimpFraction.setSpotNumber(f + 1);
+                shrimpFraction.setNameOfMount(nameOfMount);
+                shrimpFractions.add(shrimpFraction);
+            }
 //            }
 
             if (progressSubscriber != null) {
