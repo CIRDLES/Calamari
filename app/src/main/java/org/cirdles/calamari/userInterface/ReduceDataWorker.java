@@ -59,7 +59,10 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
         } catch (IOException | JAXBException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());
-            String []message = exception.toString().split(";");
+            String []message = 
+                    ("Exception extracting data.;"
+                    + "Please alert the development team.;"
+                    + exception.toString()).split(";");
             JOptionPane.showMessageDialog(
                     null,
                     message,
