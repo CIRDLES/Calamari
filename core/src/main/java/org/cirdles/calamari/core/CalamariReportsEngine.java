@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import static java.nio.file.StandardOpenOption.APPEND;
 import java.text.SimpleDateFormat;
 import static java.util.Arrays.asList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,19 @@ import org.cirdles.calamari.shrimp.ShrimpFraction;
  */
 public class CalamariReportsEngine {
 
+    private transient String folderToWriteCalamariReportsPath;
+    private transient String reportParameterValues;
+    private transient String reportNamePrefix;
+
+    private File folderToWriteCalamariReports;
+    private String nameOfPrawnXMLFile;
+
     private File ionIntegrations_PerScan;
     private File sBMIntegrations_PerScan;
     private File totalCounts_IonsAndSBM_PerScan;
     private File nuclideCPS_PerSpot;
     private File withinSpotRatios_PerScanMinus1;
     private File meanRatios_PerSpot;
-
-    private File folderToWriteCalamariReports;
-    private transient String folderToWriteCalamariReportsPath;
 
     private StringBuilder refMatFractionsNuclideCPS_PerSpot;
     private StringBuilder unknownFractionsNuclideCPS_PerSpot;
@@ -53,6 +58,7 @@ public class CalamariReportsEngine {
 
     public CalamariReportsEngine() {
         folderToWriteCalamariReports = new File(System.getProperty("user.dir"));
+        nameOfPrawnXMLFile = "";
     }
 
     /**
@@ -67,15 +73,22 @@ public class CalamariReportsEngine {
             // gather general info for all runs  from first fraction
             ShrimpFraction firstShrimpFraction = shrimpFractions.get(0);
 
+            SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMdd-HHmmss");
+
+            reportParameterValues
+                    = "_" + (firstShrimpFraction.isUseSBM() ? "SBM" : "NOSBM")
+                    + "_" + (firstShrimpFraction.isUserLinFits() ? "LINREG" : "SPOTAV");
+
+            reportNamePrefix = nameOfPrawnXMLFile.substring(0, 8) + "_" + reportParameterValues + "_";
+
             folderToWriteCalamariReportsPath
                     = folderToWriteCalamariReports.getCanonicalPath()
-                    + File.separator + "CalamariReports-"
-                    + firstShrimpFraction.getNameOfMount()
-                    + "--" + (firstShrimpFraction.isUseSBM() ? "SBM-TRUE" : "SBM-FALSE")
-                    + "--" + (firstShrimpFraction.isUserLinFits() ? "FIT-TRUE" : "FIT-FALSE")
+                    + File.separator + nameOfPrawnXMLFile
+                    + File.separator + sdfTime.format(new Date())
+                    + reportParameterValues
                     + File.separator;
             File reportsFolder = new File(folderToWriteCalamariReportsPath);
-            reportsFolder.mkdir();
+            reportsFolder.mkdirs();
 
             prepSpeciesReportFiles(firstShrimpFraction);
             prepRatiosReportFiles(firstShrimpFraction);
@@ -382,7 +395,7 @@ public class CalamariReportsEngine {
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
         int countOfIntegrations = shrimpFraction.getPeakMeasurementsCount();
 
-        ionIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + "Check_01_IonIntegrations_PerScan_for_" + nameOfMount + ".csv");
+        ionIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "Check_01_IonIntegrations_PerScan.csv");
         StringBuilder header = new StringBuilder();
         header.append("Title, Date, Scan, Type, Dead_time_ns");
 
@@ -396,7 +409,7 @@ public class CalamariReportsEngine {
 
         Files.write(ionIntegrations_PerScan.toPath(), header.toString().getBytes(UTF_8));
 
-        sBMIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + "Check_02_SBMIntegrations_PerScan_for_" + nameOfMount + ".csv");
+        sBMIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "Check_02_SBMIntegrations_PerScan.csv");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type, SBM_zero_cps");
 
@@ -410,7 +423,7 @@ public class CalamariReportsEngine {
 
         Files.write(sBMIntegrations_PerScan.toPath(), header.toString().getBytes(UTF_8));
 
-        totalCounts_IonsAndSBM_PerScan = new File(folderToWriteCalamariReportsPath + "SQUID_01_TotalCounts_IonsAndSBM_PerScan_for_" + nameOfMount + ".csv");
+        totalCounts_IonsAndSBM_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "SQUID_01_TotalCounts_IonsAndSBM_PerScan.csv");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type");
 
@@ -425,7 +438,7 @@ public class CalamariReportsEngine {
 
         Files.write(totalCounts_IonsAndSBM_PerScan.toPath(), header.toString().getBytes(UTF_8));
 
-        nuclideCPS_PerSpot = new File(folderToWriteCalamariReportsPath + "SQUID_02_NuclideCPS_PerSpot_for_" + nameOfMount + ".csv");
+        nuclideCPS_PerSpot = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "SQUID_02_NuclideCPS_PerSpot.csv");
         header = new StringBuilder();
         header.append("Title, Date, Type");
 
@@ -441,7 +454,7 @@ public class CalamariReportsEngine {
     }
 
     private void prepRatiosReportFiles(ShrimpFraction shrimpFraction) throws IOException {
-        withinSpotRatios_PerScanMinus1 = new File(folderToWriteCalamariReportsPath + "SQUID_03_WithinSpotRatios_PerScanMinus1_for_" + shrimpFraction.getNameOfMount() + ".csv");
+        withinSpotRatios_PerScanMinus1 = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "SQUID_03_WithinSpotRatios_PerScanMinus1.csv");
         StringBuilder header = new StringBuilder();
         header.append("Title, Date, Ndod, Type");
 
@@ -460,7 +473,7 @@ public class CalamariReportsEngine {
         refMatWithinSpotRatios_PerScanMinus1 = new StringBuilder();
         unknownWithinSpotRatios_PerScanMinus1 = new StringBuilder();
 
-        meanRatios_PerSpot = new File(folderToWriteCalamariReportsPath + "SQUID_04_MeanRatios_PerSpot_for_" + shrimpFraction.getNameOfMount() + ".csv");
+        meanRatios_PerSpot = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "SQUID_04_MeanRatios_PerSpot.csv");
         header = new StringBuilder();
         header.append("Title, Date, Type");
 
@@ -515,6 +528,20 @@ public class CalamariReportsEngine {
      */
     public void setFolderToWriteCalamariReports(File aFolderToWriteCalamariReports) {
         folderToWriteCalamariReports = aFolderToWriteCalamariReports;
+    }
+
+    /**
+     * @param nameOfPrawnXMLFile the nameOfPrawnXMLFile to set
+     */
+    public void setNameOfPrawnXMLFile(String nameOfPrawnXMLFile) {
+        this.nameOfPrawnXMLFile = nameOfPrawnXMLFile;
+    }
+
+    /**
+     * @return the folderToWriteCalamariReportsPath
+     */
+    public String getFolderToWriteCalamariReportsPath() {
+        return folderToWriteCalamariReportsPath;
     }
 
 }

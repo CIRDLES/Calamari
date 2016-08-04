@@ -154,17 +154,16 @@ public class FileHelper {
 
         File fractionFolder = null;
 
-        if (location == null) {
-            location = new File("default location");
-        }
-
         JFileChooser fc = new JFileChooser();
+        fc.setApproveButtonText("Select");
+        fc.setApproveButtonToolTipText("Select the folder that will contain the Calamari Reports.");
 
         // this moves up one level so we can choose folder
-        fc.setCurrentDirectory(location.getParentFile());
+        fc.setCurrentDirectory(location.getAbsoluteFile().getParentFile());
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.setDialogTitle(dialogTitle);
-
+        fc.setSelectedFile(location.getAbsoluteFile());
+      
         // Show open dialog; this method does not return until the dialog is closed
         int result = fc.showOpenDialog(new JFrame());
         if (result == JFileChooser.APPROVE_OPTION) {

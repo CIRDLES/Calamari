@@ -157,6 +157,15 @@ public class PrawnFileHandler {
         return myPrawnFile;
     }
 
+    public boolean currentPrawnFileLocationIsFile(){
+        return new File(currentPrawnFileLocation).isFile();
+    }
+    
+    public void initReportsEngineWithCurrentPrawnFileName(){
+        // strip .xml from file name
+        reportsEngine.setNameOfPrawnXMLFile(new File(currentPrawnFileLocation).getName().split("\\.")[0]);
+    }
+    
     /**
      * @return the currentPrawnFileLocation
      */

@@ -16,16 +16,14 @@
 
 package org.cirdles.calamari.core;
 
+import java.io.File;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.cirdles.commons.util.ResourceExtractor;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.Timeout;
-
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrawnFileHandlerIT {
 
@@ -39,7 +37,7 @@ public class PrawnFileHandlerIT {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
-    public Timeout timeout = Timeout.seconds(60);
+    public Timeout timeout = Timeout.seconds(120);
 
     private PrawnFileHandler prawnFileHandler;
 
@@ -51,23 +49,24 @@ public class PrawnFileHandlerIT {
     @Test
     public void writesReportsFromPrawnFile() throws Exception {
         File reportsFolder = temporaryFolder.getRoot();
+        
         prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(reportsFolder);
 
         File prawnFile = RESOURCE_EXTRACTOR
                 .extractResourceAsFile(PRAWN_FILE_RESOURCE);
 
+        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFile.getAbsolutePath(), // prawnFileLocation
                 true,                        // useSBM
                 false);                      // userLinFits
+        
+        assertThat(reportsFolder.listFiles()).hasSize(1); //Temp Calamari Reports Folder
+        assertThat(reportsFolder.listFiles()[0].listFiles()).hasSize(1); //Reports folder with name of this Prawn File
+        assertThat(reportsFolder.listFiles()[0].listFiles()[0]).isDirectory(); // the currently written folder of reports
+        assertThat(reportsFolder.listFiles()[0].listFiles()[0].listFiles()).hasSize(6); // 6 reports
 
-        assertThat(reportsFolder.listFiles()).hasSize(1);
-
-        assertThat(reportsFolder.listFiles()[0])
-                .isDirectory()
-                .hasName("CalamariReports-G6147--SBM-TRUE--FIT-FALSE");
-
-        for (File report : reportsFolder.listFiles()[0].listFiles()) {
+        for (File report : reportsFolder.listFiles()[0].listFiles()[0].listFiles()) {
             File expectedReport = RESOURCE_EXTRACTOR
                     .extractResourceAsFile(report.getName());
 

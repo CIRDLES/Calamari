@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.AbstractButton;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.CalamariReportsEngine;
@@ -36,7 +37,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private final PrawnFileHandler prawnFileHandler;
     private boolean normalizeIonCountsToSBM;
-    private boolean useLinearRegreosionToCalcualteRatios;
+    private boolean useLinearRegressionToCalculateRatios;
 
     /**
      * Creates new form Calamari
@@ -47,7 +48,7 @@ public class CalamariUI extends javax.swing.JFrame {
         this.prawnFileHandler = prawnFileHandler;
 
         normalizeIonCountsToSBM = true;
-        useLinearRegreosionToCalcualteRatios = false;
+        useLinearRegressionToCalculateRatios = false;
 
         initComponents();
         initUI();
@@ -343,16 +344,27 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
-        new ReduceDataWorker(
-                prawnFileHandler,
-                normalizeIonCountsToSBM,
-                useLinearRegreosionToCalcualteRatios,
-                reduceDataProgressBar).execute();
+        if (prawnFileHandler.currentPrawnFileLocationIsFile()) {
+            prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
+            new ReduceDataWorker(
+                    prawnFileHandler,
+                    normalizeIonCountsToSBM,
+                    useLinearRegressionToCalculateRatios,
+                    reduceDataProgressBar).execute();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please specify a Prawn XML file for processing.",
+                    "Calamari Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
         CalamariReportsEngine reportsEngine = prawnFileHandler.getReportsEngine();
-        File reportFolder = FileHelper.AllPlatformGetFolder("Select location to write reports", reportsEngine.getFolderToWriteCalamariReports());
+        File reportFolder
+                = FileHelper.AllPlatformGetFolder("Select location to write reports",
+                        reportsEngine.getFolderToWriteCalamariReports());
         if (reportFolder != null) {
             reportsEngine.setFolderToWriteCalamariReports(reportFolder);
             updateReportsFolderLocationText();
@@ -393,11 +405,11 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_normalizeIonCountsNoActionPerformed
 
     private void useLinearRegressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLinearRegressionActionPerformed
-       useLinearRegreosionToCalcualteRatios = ((AbstractButton)evt.getSource()).isSelected();
+        useLinearRegressionToCalculateRatios = ((AbstractButton) evt.getSource()).isSelected();
     }//GEN-LAST:event_useLinearRegressionActionPerformed
 
     private void useSpotAverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useSpotAverageActionPerformed
-       useLinearRegreosionToCalcualteRatios = !((AbstractButton)evt.getSource()).isSelected();
+        useLinearRegressionToCalculateRatios = !((AbstractButton) evt.getSource()).isSelected();
     }//GEN-LAST:event_useSpotAverageActionPerformed
 
 

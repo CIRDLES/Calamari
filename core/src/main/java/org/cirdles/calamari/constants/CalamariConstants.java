@@ -19,4 +19,13 @@ public final class CalamariConstants {
 
     public static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
 
+    public static final String XML_HEADER_FOR_PRAWN_FILES
+            = "<?xml version=\"1.0\"?>\n"
+            + "<!-- SHRIMP SW PRAWN Data File -->\n"
+            + "<prawn_file xmlns=\"https://raw.githubusercontent.com\"\n"
+            + "            xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n"
+            + "            xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+            + "            xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
+            + "                                https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd\">";
+
 }

@@ -2,7 +2,7 @@ subprojects {
     apply plugin: "java"
 
     group = "org.cirdles"
-    version = "1.0.8"
+    version = "1.0.9"
 
     description = "Replacement for data reduction in Ludwig's Squid 2.50 for SHRIMP"
 
