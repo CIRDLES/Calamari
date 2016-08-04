@@ -29,7 +29,6 @@ import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.commons.util.ResourceExtractor;
 
-
 /**
  *
  * @author James F. Bowring &lt;bowring at gmail.com&gt;
@@ -37,7 +36,6 @@ import org.cirdles.commons.util.ResourceExtractor;
 public class Calamari {
 
     public static final String VERSION;
-
     public static final String RELEASE_DATE;
 
     static {
@@ -71,7 +69,7 @@ public class Calamari {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        // set up folder of example Prawn files
         ResourceExtractor prawnFileResourceExtractor
                 = new ResourceExtractor(PrawnFile.class);
 
@@ -99,6 +97,11 @@ public class Calamari {
             } catch (IOException iOException) {
             }
         }
+
+        // Set up default folder for reports
+        File defaultCalamariReportsFolder = new File("CalamariReports_v" + VERSION);
+        defaultCalamariReportsFolder.mkdir();
+        prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
 
         /* Set the Metal look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

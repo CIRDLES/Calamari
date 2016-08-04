@@ -36,7 +36,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private final PrawnFileHandler prawnFileHandler;
     private boolean normalizeIonCountsToSBM;
-    private boolean useLinearRegreosionToCalcualteRatios;
+    private boolean useLinearRegressionToCalculateRatios;
 
     /**
      * Creates new form Calamari
@@ -47,7 +47,7 @@ public class CalamariUI extends javax.swing.JFrame {
         this.prawnFileHandler = prawnFileHandler;
 
         normalizeIonCountsToSBM = true;
-        useLinearRegreosionToCalcualteRatios = false;
+        useLinearRegressionToCalculateRatios = false;
 
         initComponents();
         initUI();
@@ -346,7 +346,7 @@ public class CalamariUI extends javax.swing.JFrame {
         new ReduceDataWorker(
                 prawnFileHandler,
                 normalizeIonCountsToSBM,
-                useLinearRegreosionToCalcualteRatios,
+                useLinearRegressionToCalculateRatios,
                 reduceDataProgressBar).execute();
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
@@ -393,11 +393,11 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_normalizeIonCountsNoActionPerformed
 
     private void useLinearRegressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLinearRegressionActionPerformed
-       useLinearRegreosionToCalcualteRatios = ((AbstractButton)evt.getSource()).isSelected();
+       useLinearRegressionToCalculateRatios = ((AbstractButton)evt.getSource()).isSelected();
     }//GEN-LAST:event_useLinearRegressionActionPerformed
 
     private void useSpotAverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useSpotAverageActionPerformed
-       useLinearRegreosionToCalcualteRatios = !((AbstractButton)evt.getSource()).isSelected();
+       useLinearRegressionToCalculateRatios = !((AbstractButton)evt.getSource()).isSelected();
     }//GEN-LAST:event_useSpotAverageActionPerformed
 
 
