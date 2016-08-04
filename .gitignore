@@ -21,7 +21,7 @@ nbproject/
 *.txt
 *.html
 *.xml
-*.csvß
+*.csv
 test_*
 *.ser
 *.zip
@@ -31,8 +31,8 @@ test_*
 !core/src/main/resources/org/cirdles/calamari/prawn/*.xml
 !core/src/main/resources/org/cirdles/calamari/prawn/*.txt
 !app/src/main/resources/org/cirdles/calamari/version.txt
-!core/src/test/resources/org/cirdles/calamari/core/*.txt
-!web/src/test/resources/org/cirdles/calamari/core/*.txt
+!core/src/test/resources/org/cirdles/calamari/core/*.csv
+!web/src/test/resources/org/cirdles/calamari/core/*.csv
 
 # MACOS
 .DS_Store

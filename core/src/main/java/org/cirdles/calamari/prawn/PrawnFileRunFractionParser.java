@@ -15,8 +15,6 @@
  */
 package org.cirdles.calamari.prawn;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,10 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
 import org.cirdles.calamari.algorithms.TukeyBiweight;
-import org.cirdles.calamari.algorithms.TukeyBiweightBD;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import static org.cirdles.calamari.constants.CalamariConstants.HARD_WIRED_INDEX_OF_BACKGROUND;
@@ -50,9 +46,6 @@ public class PrawnFileRunFractionParser {
     private double[][] totalCounts;
     private double[][] totalCountsOneSigmaAbs;
     private double[][] totalCountsSBM;
-    private BigDecimal[][] totalCountsBD;
-    private BigDecimal[][] totalCountsOneSigmaAbsBD;
-    private BigDecimal[][] totalCountsSBMBD;
     private int[][] rawPeakData;
     private int[][] rawSBMData;
     private int nSpecies;
@@ -103,9 +96,6 @@ public class PrawnFileRunFractionParser {
             shrimpFraction.setTotalCounts(totalCounts);
             shrimpFraction.setTotalCountsOneSigmaAbs(totalCountsOneSigmaAbs);
             shrimpFraction.setTotalCountsSBM(totalCountsSBM);
-            shrimpFraction.setTotalCountsBD(totalCountsBD);
-            shrimpFraction.setTotalCountsOneSigmaAbsBD(totalCountsOneSigmaAbsBD);
-            shrimpFraction.setTotalCountsSBMBD(totalCountsSBMBD);
             shrimpFraction.setTimeStampSec(timeStampSec);
             shrimpFraction.setTrimMass(trimMass);
             shrimpFraction.setRawPeakData(rawPeakData);
@@ -196,9 +186,6 @@ public class PrawnFileRunFractionParser {
         totalCounts = new double[nScans][nSpecies];
         totalCountsOneSigmaAbs = new double[nScans][nSpecies];
         totalCountsSBM = new double[nScans][nSpecies];
-        totalCountsBD = new BigDecimal[nScans][nSpecies];
-        totalCountsOneSigmaAbsBD = new BigDecimal[nScans][nSpecies];
-        totalCountsSBMBD = new BigDecimal[nScans][nSpecies];
         rawPeakData = new int[nScans][nSpecies * peakMeasurementsCount];
         rawSBMData = new int[nScans][nSpecies * peakMeasurementsCount];
 
@@ -224,13 +211,11 @@ public class PrawnFileRunFractionParser {
                 double median = TukeyBiweight.calculateMedian(peakMeasurements);
                 double totalCountsPeak;
                 double totalCountsSigma;
-                BigDecimal totalCountsPeakBD;
-                BigDecimal totalCountsSigmaBD;
 
                 if (median > 100.0) {
                     // See Zeringue's pull request #14 for discussion
                     //ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
-                    ValueModel peakTukeyMean = TukeyBiweightBD.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
+                    ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
 
                     // BV is variable used by Ludwig for Tukey Mean fo peak measurements
                     double bV = peakTukeyMean.getValue().doubleValue();
@@ -240,18 +225,6 @@ public class PrawnFileRunFractionParser {
                     totalCountsPeak = bVcpsDeadTime * countTimeSec[speciesMeasurementIndex];
                     double countsSigmaCandidate = StrictMath.max(peakTukeyMean.getOneSigmaAbs().doubleValue(), StrictMath.sqrt(bV));
                     totalCountsSigma = countsSigmaCandidate / StrictMath.sqrt(peakMeasurementsCount) * bVcps * countTimeSec[speciesMeasurementIndex] / bV;
-
-                    ValueModel peakTukeyMeanBD = TukeyBiweightBD.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
-
-                    BigDecimal bVBD = peakTukeyMeanBD.getValue();
-                    BigDecimal bVcpsBD = bVBD.multiply(new BigDecimal(peakMeasurementsCount)).divide(new BigDecimal(countTimeSec[speciesMeasurementIndex]), MathContext.DECIMAL128);
-                    BigDecimal bVcpsDeadTimeBD = bVcpsBD.divide(BigDecimal.ONE.subtract(bVcpsBD.multiply(new BigDecimal(deadTimeNanoseconds).movePointLeft(9), MathContext.DECIMAL128)), MathContext.DECIMAL128);
-
-                    totalCountsPeakBD = bVcpsDeadTimeBD.multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex]));
-                    BigDecimal countsSigmaCandidateBD = peakTukeyMeanBD.getOneSigmaAbs().max(bigDecimalSqrtBabylonian(bVBD));
-                    totalCountsSigmaBD
-                            = countsSigmaCandidateBD.divide(bigDecimalSqrtBabylonian(new BigDecimal(peakMeasurementsCount)), MathContext.DECIMAL128)//
-                            .multiply(bVcpsBD).multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex])).divide(bVBD, MathContext.DECIMAL128);
 
                 } else if (median >= 0.0) {
 
@@ -282,37 +255,14 @@ public class PrawnFileRunFractionParser {
                                 = StrictMath.max(sigmaPeakCounts, poissonSigma) / StrictMath.sqrt(countIncludedIntegrations) * peakCountsPerSecond * countTimeSec[speciesMeasurementIndex] / peakMeanCounts;
                     }
 
-                    BigDecimal peakMeanCountsBD = new BigDecimal(sumX).divide(new BigDecimal(countIncludedIntegrations), MathContext.DECIMAL128);
-                    BigDecimal poissonSigmaBD = bigDecimalSqrtBabylonian(peakMeanCountsBD);
-                    BigDecimal sigmaPeakCountsBD = bigDecimalSqrtBabylonian(new BigDecimal((sumXsquared - (sumX * sumX / countIncludedIntegrations)) / (countIncludedIntegrations - 1)));
-
-                    BigDecimal peakCountsPerSecondBD = peakMeanCountsBD.multiply(new BigDecimal(peakMeasurementsCount)).divide(new BigDecimal(countTimeSec[speciesMeasurementIndex]), MathContext.DECIMAL128);
-                    BigDecimal peakCountsPerSecondDeadTimeBD
-                            = peakCountsPerSecondBD.divide(BigDecimal.ONE.subtract(peakCountsPerSecondBD.multiply(new BigDecimal(deadTimeNanoseconds).movePointLeft(9))), MathContext.DECIMAL128);
-
-                    totalCountsPeakBD = peakCountsPerSecondDeadTimeBD.multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex]));
-
-                    totalCountsSigmaBD = BigDecimal.ZERO;
-                    if (peakMeanCountsBD.compareTo(BigDecimal.ZERO) > 0) {
-                        totalCountsSigmaBD
-                                = sigmaPeakCountsBD.max(poissonSigmaBD)//
-                                .divide(bigDecimalSqrtBabylonian(new BigDecimal(countIncludedIntegrations)), MathContext.DECIMAL128)//
-                                .multiply(new BigDecimal(peakCountsPerSecond).multiply(new BigDecimal(countTimeSec[speciesMeasurementIndex] / peakMeanCounts), MathContext.DECIMAL128));
-                    }
-
                 } else {
                     // set flag as this should be impossible for count data
                     totalCountsPeak = -1.0;
                     totalCountsSigma = -1.0;
-
-                    totalCountsPeakBD = BigDecimal.ONE.negate();
-                    totalCountsSigmaBD = BigDecimal.ONE.negate();
                 }
 
                 totalCounts[scanNum][speciesMeasurementIndex] = totalCountsPeak;
-                totalCountsBD[scanNum][speciesMeasurementIndex] = totalCountsPeakBD;
                 totalCountsOneSigmaAbs[scanNum][speciesMeasurementIndex] = totalCountsSigma;
-                totalCountsOneSigmaAbsBD[scanNum][speciesMeasurementIndex] = totalCountsSigmaBD;
 
                 // handle SBM measurements
                 String[] sbmMeasurementsRaw = measurements.get(speciesMeasurementIndex).getData().get(1).getValue().split(",");
@@ -322,11 +272,9 @@ public class PrawnFileRunFractionParser {
                     sbm[i] = Double.parseDouble(sbmMeasurementsRaw[i]);
                     rawSBMData[scanNum][speciesMeasurementIndex + speciesMeasurementIndex * (sbmMeasurementsCount - 1) + i] = (int) sbm[i];
                 }
-                ValueModel sbmTukeyMean = TukeyBiweightBD.calculateTukeyBiweightMean("SBM", 6.0, sbm);
+                ValueModel sbmTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("SBM", 6.0, sbm);
                 double totalCountsSpeciesSBM = sbmMeasurementsCount * sbmTukeyMean.getValue().doubleValue();
-                BigDecimal totalCountsSpeciesSBMBD = new BigDecimal(sbmMeasurementsCount).multiply(sbmTukeyMean.getValue());
                 totalCountsSBM[scanNum][speciesMeasurementIndex] = totalCountsSpeciesSBM;
-                totalCountsSBMBD[scanNum][speciesMeasurementIndex] = totalCountsSpeciesSBMBD;
             }
         }
     }
