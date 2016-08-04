@@ -108,6 +108,7 @@ public class PrawnFileHandlerService {
         Path reportsDestination = Files.createTempDirectory("reports-destination");
         reportsEngine.setFolderToWriteCalamariReports(reportsDestination.toFile());
         
+        // this gives reportengine the name of the Prawnfile for use in report names
         prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
         
         prawnFileHandler.writeReportsFromPrawnFile(
@@ -119,6 +120,7 @@ public class PrawnFileHandlerService {
         
         Path dest = null;
         try {
+            // this should be location of report folder ... could not get subpaths to go there
             dest = Paths.get(new URI(reportsDestination.toFile().listFiles()[0].listFiles()[0].getCanonicalPath()));
             System.out.println("<<<<" + dest.toFile().getCanonicalPath());
         } catch (IOException | URISyntaxException iOException) {
