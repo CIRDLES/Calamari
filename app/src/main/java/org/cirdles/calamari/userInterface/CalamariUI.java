@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.AbstractButton;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.CalamariReportsEngine;
@@ -343,11 +344,20 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
-        new ReduceDataWorker(
-                prawnFileHandler,
-                normalizeIonCountsToSBM,
-                useLinearRegressionToCalculateRatios,
-                reduceDataProgressBar).execute();
+        if (prawnFileHandler.currentPrawnFileLocationIsFile()) {
+            prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
+            new ReduceDataWorker(
+                    prawnFileHandler,
+                    normalizeIonCountsToSBM,
+                    useLinearRegressionToCalculateRatios,
+                    reduceDataProgressBar).execute();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please specify a Prawn XML file for processing.",
+                    "Calamari Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
@@ -393,11 +403,11 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_normalizeIonCountsNoActionPerformed
 
     private void useLinearRegressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLinearRegressionActionPerformed
-       useLinearRegressionToCalculateRatios = ((AbstractButton)evt.getSource()).isSelected();
+        useLinearRegressionToCalculateRatios = ((AbstractButton) evt.getSource()).isSelected();
     }//GEN-LAST:event_useLinearRegressionActionPerformed
 
     private void useSpotAverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useSpotAverageActionPerformed
-       useLinearRegressionToCalculateRatios = !((AbstractButton)evt.getSource()).isSelected();
+        useLinearRegressionToCalculateRatios = !((AbstractButton) evt.getSource()).isSelected();
     }//GEN-LAST:event_useSpotAverageActionPerformed
 
 

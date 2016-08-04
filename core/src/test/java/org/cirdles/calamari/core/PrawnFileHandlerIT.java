@@ -16,16 +16,14 @@
 
 package org.cirdles.calamari.core;
 
+import java.io.File;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.cirdles.commons.util.ResourceExtractor;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.Timeout;
-
-import java.io.File;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrawnFileHandlerIT {
 
@@ -51,6 +49,7 @@ public class PrawnFileHandlerIT {
     @Test
     public void writesReportsFromPrawnFile() throws Exception {
         File reportsFolder = temporaryFolder.getRoot();
+        
         prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(reportsFolder);
 
         File prawnFile = RESOURCE_EXTRACTOR
@@ -60,12 +59,13 @@ public class PrawnFileHandlerIT {
                 prawnFile.getAbsolutePath(), // prawnFileLocation
                 true,                        // useSBM
                 false);                      // userLinFits
-
-        assertThat(reportsFolder.listFiles()).hasSize(1);
-
-        assertThat(reportsFolder.listFiles()[0])
-                .isDirectory()
-                .hasName("CalamariReports-G6147--SBM-TRUE--FIT-FALSE");
+        
+        System.out.println(">>>> REPORTS" + reportsFolder.getAbsolutePath());
+        System.out.println(">>>> REPORTS" + reportsFolder.listFiles()[0].getAbsolutePath());
+        
+        assertThat(reportsFolder.listFiles()).hasSize(1); //Reports folder with name of this Prawn File
+        assertThat(reportsFolder.listFiles()[0]).isDirectory(); // the currently written folder of reports
+        assertThat(reportsFolder.listFiles()[0].listFiles()).hasSize(6); // 6 reports
 
         for (File report : reportsFolder.listFiles()[0].listFiles()) {
             File expectedReport = RESOURCE_EXTRACTOR

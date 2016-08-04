@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import static java.nio.file.StandardOpenOption.APPEND;
 import java.text.SimpleDateFormat;
 import static java.util.Arrays.asList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,16 @@ import org.cirdles.calamari.shrimp.ShrimpFraction;
  */
 public class CalamariReportsEngine {
 
+    private transient String folderToWriteCalamariReportsPath;    
+    private File folderToWriteCalamariReports;
+    private String nameOfPrawnXMLFile;
+    
     private File ionIntegrations_PerScan;
     private File sBMIntegrations_PerScan;
     private File totalCounts_IonsAndSBM_PerScan;
     private File nuclideCPS_PerSpot;
     private File withinSpotRatios_PerScanMinus1;
     private File meanRatios_PerSpot;
-
-    private File folderToWriteCalamariReports;
-    private transient String folderToWriteCalamariReportsPath;
 
     private StringBuilder refMatFractionsNuclideCPS_PerSpot;
     private StringBuilder unknownFractionsNuclideCPS_PerSpot;
@@ -53,6 +55,7 @@ public class CalamariReportsEngine {
 
     public CalamariReportsEngine() {
         folderToWriteCalamariReports = new File(System.getProperty("user.dir"));
+        nameOfPrawnXMLFile = "";
     }
 
     /**
@@ -66,16 +69,18 @@ public class CalamariReportsEngine {
         if (shrimpFractions.size() > 0) {
             // gather general info for all runs  from first fraction
             ShrimpFraction firstShrimpFraction = shrimpFractions.get(0);
-
+        
+             SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMdd-HHmmss");
+             
             folderToWriteCalamariReportsPath
                     = folderToWriteCalamariReports.getCanonicalPath()
-                    + File.separator + "CalamariReports-"
-                    + firstShrimpFraction.getNameOfMount()
-                    + "--" + (firstShrimpFraction.isUseSBM() ? "SBM-TRUE" : "SBM-FALSE")
-                    + "--" + (firstShrimpFraction.isUserLinFits() ? "FIT-TRUE" : "FIT-FALSE")
+                    + File.separator + nameOfPrawnXMLFile
+                    + File.separator + sdfTime.format(new Date())
+                    + "_" + (firstShrimpFraction.isUseSBM() ? "SBM" : "NOSBM")
+                    + "_" + (firstShrimpFraction.isUserLinFits() ? "LINREG" : "SPOTAV")
                     + File.separator;
             File reportsFolder = new File(folderToWriteCalamariReportsPath);
-            reportsFolder.mkdir();
+            reportsFolder.mkdirs();
 
             prepSpeciesReportFiles(firstShrimpFraction);
             prepRatiosReportFiles(firstShrimpFraction);
@@ -515,6 +520,13 @@ public class CalamariReportsEngine {
      */
     public void setFolderToWriteCalamariReports(File aFolderToWriteCalamariReports) {
         folderToWriteCalamariReports = aFolderToWriteCalamariReports;
+    }
+
+    /**
+     * @param nameOfPrawnXMLFile the nameOfPrawnXMLFile to set
+     */
+    public void setNameOfPrawnXMLFile(String nameOfPrawnXMLFile) {
+        this.nameOfPrawnXMLFile = nameOfPrawnXMLFile;
     }
 
 }
