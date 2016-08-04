@@ -16,6 +16,15 @@
 
 package org.cirdles.calamari.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.cirdles.commons.util.ResourceExtractor;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -23,19 +32,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.Timeout;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by johnzeringue on 7/27/16.
@@ -49,7 +46,7 @@ public class PrawnResourceIT extends JerseyTest {
             = new ResourceExtractor(PrawnResourceIT.class);
 
     @Rule
-    public Timeout timeout = Timeout.seconds(60);
+    public Timeout timeout = Timeout.seconds(120);
 
     @Override
     protected Application configure() {
@@ -64,7 +61,7 @@ public class PrawnResourceIT extends JerseyTest {
         config.register(MultiPartFeature.class);
     }
 
-    @Test
+    //@Test
     public void testGenerateReports() throws IOException {
         Path prawnFilePath = RESOURCE_EXTRACTOR
                 .extractResourceAsPath(PRAWN_FILE_RESOURCE);

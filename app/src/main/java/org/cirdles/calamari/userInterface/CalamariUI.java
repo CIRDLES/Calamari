@@ -362,7 +362,9 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
         CalamariReportsEngine reportsEngine = prawnFileHandler.getReportsEngine();
-        File reportFolder = FileHelper.AllPlatformGetFolder("Select location to write reports", reportsEngine.getFolderToWriteCalamariReports());
+        File reportFolder
+                = FileHelper.AllPlatformGetFolder("Select location to write reports",
+                        reportsEngine.getFolderToWriteCalamariReports());
         if (reportFolder != null) {
             reportsEngine.setFolderToWriteCalamariReports(reportFolder);
             updateReportsFolderLocationText();

@@ -37,7 +37,7 @@ public class PrawnFileHandlerIT {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
-    public Timeout timeout = Timeout.seconds(60);
+    public Timeout timeout = Timeout.seconds(120);
 
     private PrawnFileHandler prawnFileHandler;
 
@@ -55,19 +55,18 @@ public class PrawnFileHandlerIT {
         File prawnFile = RESOURCE_EXTRACTOR
                 .extractResourceAsFile(PRAWN_FILE_RESOURCE);
 
+        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFile.getAbsolutePath(), // prawnFileLocation
                 true,                        // useSBM
                 false);                      // userLinFits
         
-        System.out.println(">>>> REPORTS" + reportsFolder.getAbsolutePath());
-        System.out.println(">>>> REPORTS" + reportsFolder.listFiles()[0].getAbsolutePath());
-        
-        assertThat(reportsFolder.listFiles()).hasSize(1); //Reports folder with name of this Prawn File
-        assertThat(reportsFolder.listFiles()[0]).isDirectory(); // the currently written folder of reports
-        assertThat(reportsFolder.listFiles()[0].listFiles()).hasSize(6); // 6 reports
+        assertThat(reportsFolder.listFiles()).hasSize(1); //Temp Calamari Reports Folder
+        assertThat(reportsFolder.listFiles()[0].listFiles()).hasSize(1); //Reports folder with name of this Prawn File
+        assertThat(reportsFolder.listFiles()[0].listFiles()[0]).isDirectory(); // the currently written folder of reports
+        assertThat(reportsFolder.listFiles()[0].listFiles()[0].listFiles()).hasSize(6); // 6 reports
 
-        for (File report : reportsFolder.listFiles()[0].listFiles()) {
+        for (File report : reportsFolder.listFiles()[0].listFiles()[0].listFiles()) {
             File expectedReport = RESOURCE_EXTRACTOR
                     .extractResourceAsFile(report.getName());
 
