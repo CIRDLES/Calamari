@@ -15,13 +15,13 @@
  */
 package org.cirdles.calamari.userInterface;
 
-import org.cirdles.calamari.core.PrawnFileHandler;
-
+import java.io.IOException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.util.List;
+import org.cirdles.calamari.core.PrawnFileHandler;
 
 /**
  * Reduces data in the background, updating the UI as it works.
@@ -59,6 +59,15 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
         } catch (IOException | JAXBException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());
+            String []message = 
+                    ("Exception extracting data.;"
+                    + "Please alert the development team.;"
+                    + exception.toString()).split(";");
+            JOptionPane.showMessageDialog(
+                    null,
+                    message,
+                    "Calamari Warning",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
         prawnFileHandler.setProgressSubscriber(null);

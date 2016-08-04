@@ -29,10 +29,12 @@ public class MacOSAboutHandler extends Application {
      *
      * @param theParent
      */
+    @SuppressWarnings("deprecation")
     public MacOSAboutHandler() {
         addApplicationListener(new AboutBoxHandler());
     }
 
+    @SuppressWarnings("deprecation")
     class AboutBoxHandler extends ApplicationAdapter {
 
         @Override

@@ -20,10 +20,8 @@
  */
 package org.cirdles.calamari.userInterface;
 
-import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
-import java.io.FilenameFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -61,58 +59,32 @@ public class FileHelper {
 
         File selectedFile;
 
-        if (false) {//System.getProperty("os.name").toLowerCase().startsWith("mac os x")) {
-            // Apple recommends awt
-            FileDialog fd = new FileDialog(parentFrame, dialogTitle, FileDialog.SAVE);
-            fd.setDirectory(directory);
-            fd.setFilenameFilter(new FilenameFilter() {
+        JFileChooser fc = new JFileChooser();
+        fc.setSelectedFile(new File(directory + File.separator + fractionFileName));
+        fc.setFileFilter(nonMacFileFilter);
+        fc.setDialogTitle(dialogTitle);
 
-                public boolean accept(File file, String string) {
-                    return string.toLowerCase().endsWith(fileExtension);
+        // Show save dialog; this method does not return until the dialog is closed
+        int result = fc.showSaveDialog(new Frame());
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fc.getSelectedFile();
+            // check for already exists
+            int response = 0;
+            if (selectedFile.exists()) {
+                // Modal dialog with OK/cancel and a text field
+                response = JOptionPane.showConfirmDialog(null,
+                        new String[]{"The file exists.",
+                            "Do you want to replace it?"
+                        },
+                        "ET Redux Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+                if (response == JOptionPane.NO_OPTION) {
+                    selectedFile = null;
                 }
-            });
-
-            fd.setFile(fractionFileName);
-
-            fd.setAlwaysOnTop(true);
-            fd.setVisible(true);
-
-            if (fd.getFile() != null) {
-                selectedFile
-                        = new File(fd.getDirectory() + File.separator + fd.getFile());
-            } else {
-                selectedFile = null;
             }
         } else {
-            // not-MAC os use JfileChooser
-
-            JFileChooser fc = new JFileChooser();
-            fc.setSelectedFile(new File(directory + File.separator + fractionFileName));
-            fc.setFileFilter(nonMacFileFilter);
-            fc.setDialogTitle(dialogTitle);
-
-            // Show save dialog; this method does not return until the dialog is closed
-            int result = fc.showSaveDialog(new Frame());
-            if (result == JFileChooser.APPROVE_OPTION) {
-                selectedFile = fc.getSelectedFile();
-                // check for already exists
-                int response = 0;
-                if (selectedFile.exists()) {
-                    // Modal dialog with OK/cancel and a text field
-                    response = JOptionPane.showConfirmDialog(null,
-                            new String[]{"The file exists.",
-                                "Do you want to replace it?"
-                            },
-                            "ET Redux Warning",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE);
-                    if (response == JOptionPane.NO_OPTION) {
-                        selectedFile = null;
-                    }
-                }
-            } else {
-                selectedFile = null;
-            }
+            selectedFile = null;
         }
 
         return selectedFile;
@@ -187,7 +159,7 @@ public class FileHelper {
         }
 
         JFileChooser fc = new JFileChooser();
-        
+
         // this moves up one level so we can choose folder
         fc.setCurrentDirectory(location.getParentFile());
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

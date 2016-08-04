@@ -15,21 +15,19 @@
  */
 package org.cirdles.calamari;
 
-import org.cirdles.calamari.core.PrawnFileHandler;
-import org.cirdles.calamari.prawn.PrawnFile;
-import org.cirdles.commons.util.ResourceExtractor;
-
-import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import javax.xml.bind.JAXBException;
+import org.cirdles.calamari.core.PrawnFileHandler;
+import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.commons.util.ResourceExtractor;
 
 
 /**
@@ -88,7 +86,7 @@ public class Calamari {
                     // test for empty string
                     if (fileNames.get(i).trim().length() > 0) {
                         File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
-                        File exampleFolder = new File("ExamplePrawnFiles");
+                        File exampleFolder = new File("ExamplePrawnXMLFiles");
                         exampleFolder.mkdir();
                         File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
                         System.out.println("PrawnFile added: " + fileNames.get(i));

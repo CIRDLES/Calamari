@@ -16,17 +16,17 @@
 package org.cirdles.calamari.userInterface;
 
 import com.apple.eawt.Application;
-import org.cirdles.calamari.Calamari;
-import org.cirdles.calamari.core.CalamariReportsEngine;
-import org.cirdles.calamari.core.PrawnFileHandler;
-import org.cirdles.calamari.prawn.PrawnFileFilter;
-
-import javax.swing.UIManager;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.AbstractButton;
+import javax.swing.UIManager;
+import org.cirdles.calamari.Calamari;
+import org.cirdles.calamari.core.CalamariReportsEngine;
+import org.cirdles.calamari.core.PrawnFileHandler;
+import org.cirdles.calamari.prawn.PrawnFileFilter;
 
 /**
  *
@@ -35,12 +35,19 @@ import java.io.IOException;
 public class CalamariUI extends javax.swing.JFrame {
 
     private final PrawnFileHandler prawnFileHandler;
+    private boolean normalizeIonCountsToSBM;
+    private boolean useLinearRegreosionToCalcualteRatios;
 
     /**
      * Creates new form Calamari
+     *
+     * @param prawnFileHandler
      */
     public CalamariUI(PrawnFileHandler prawnFileHandler) {
         this.prawnFileHandler = prawnFileHandler;
+
+        normalizeIonCountsToSBM = true;
+        useLinearRegreosionToCalcualteRatios = false;
 
         initComponents();
         initUI();
@@ -75,6 +82,7 @@ public class CalamariUI extends javax.swing.JFrame {
         updateReportsFolderLocationText();
 
         fileMenu.setVisible(false);
+
     }
 
     private void updateCurrentPrawnFileLocation() {
@@ -98,6 +106,8 @@ public class CalamariUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        normalizeIonCounts = new javax.swing.ButtonGroup();
+        selectRatioCalculationMethod = new javax.swing.ButtonGroup();
         basePane = new javax.swing.JLayeredPane();
         inputFileLocationLabel = new javax.swing.JLabel();
         outputFileLocationLabel = new javax.swing.JLabel();
@@ -107,9 +117,14 @@ public class CalamariUI extends javax.swing.JFrame {
         selectPrawnFileLocationButton = new javax.swing.JButton();
         currentPrawnFileLocation = new javax.swing.JLabel();
         calamariInfo = new javax.swing.JLabel();
-        useSBM = new javax.swing.JCheckBox();
-        userLinFits = new javax.swing.JCheckBox();
         reduceDataProgressBar = new javax.swing.JProgressBar();
+        normalizeCountsLabel = new javax.swing.JLabel();
+        normalizeIonCountsYes = new javax.swing.JRadioButton();
+        normalizeIonCountsNo = new javax.swing.JRadioButton();
+        selectRatioCalcluationMethodLabel = new javax.swing.JLabel();
+        useLinearRegression = new javax.swing.JRadioButton();
+        useSpotAverage = new javax.swing.JRadioButton();
+        normalizeCountsLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -128,12 +143,16 @@ public class CalamariUI extends javax.swing.JFrame {
         basePane.setOpaque(true);
         basePane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        inputFileLocationLabel.setBackground(new java.awt.Color(255, 231, 228));
         inputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        inputFileLocationLabel.setText("Prawn file path:");
-        basePane.add(inputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 250, 30));
+        inputFileLocationLabel.setText("Prawn XML file path:");
+        inputFileLocationLabel.setOpaque(true);
+        basePane.add(inputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 250, 30));
 
+        outputFileLocationLabel.setBackground(new java.awt.Color(255, 231, 228));
         outputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
         outputFileLocationLabel.setText("CalamariReports folder location:");
+        outputFileLocationLabel.setOpaque(true);
         basePane.add(outputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 295, -1, 30));
 
         reduceDataButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -159,23 +178,23 @@ public class CalamariUI extends javax.swing.JFrame {
         outputFolderLocation.setText("path");
         outputFolderLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         outputFolderLocation.setOpaque(true);
-        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 330, 630, -1));
+        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 325, 630, -1));
 
         selectPrawnFileLocationButton.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
-        selectPrawnFileLocationButton.setText("Select Prawn File");
+        selectPrawnFileLocationButton.setText("Select Prawn XML File");
         selectPrawnFileLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectPrawnFileLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, 370, 30));
+        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 370, 30));
 
         currentPrawnFileLocation.setBackground(new java.awt.Color(255, 255, 255));
         currentPrawnFileLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         currentPrawnFileLocation.setText("path");
         currentPrawnFileLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         currentPrawnFileLocation.setOpaque(true);
-        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 145, 630, -1));
+        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 630, -1));
 
         calamariInfo.setBackground(new java.awt.Color(255, 8, 9));
         calamariInfo.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -185,20 +204,74 @@ public class CalamariUI extends javax.swing.JFrame {
         calamariInfo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         calamariInfo.setOpaque(true);
         basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 630, -1));
-
-        useSBM.setBackground(new java.awt.Color(255, 231, 228));
-        useSBM.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        useSBM.setSelected(true);
-        useSBM.setText("use SBM");
-        useSBM.setOpaque(true);
-        basePane.add(useSBM, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
-
-        userLinFits.setBackground(new java.awt.Color(255, 231, 228));
-        userLinFits.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        userLinFits.setText("user LinFits");
-        userLinFits.setOpaque(true);
-        basePane.add(userLinFits, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 190, -1, -1));
         basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 360, 170, 30));
+
+        normalizeCountsLabel.setBackground(new java.awt.Color(255, 231, 228));
+        normalizeCountsLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        normalizeCountsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        normalizeCountsLabel.setText("Normalise Ion Counts to SBM?");
+        normalizeCountsLabel.setOpaque(true);
+        basePane.add(normalizeCountsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 220, 30));
+
+        normalizeIonCountsYes.setBackground(new java.awt.Color(255, 231, 228));
+        normalizeIonCounts.add(normalizeIonCountsYes);
+        normalizeIonCountsYes.setSelected(true);
+        normalizeIonCountsYes.setText("Yes");
+        normalizeIonCountsYes.setOpaque(true);
+        normalizeIonCountsYes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                normalizeIonCountsYesActionPerformed(evt);
+            }
+        });
+        basePane.add(normalizeIonCountsYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, -1, -1));
+
+        normalizeIonCountsNo.setBackground(new java.awt.Color(255, 231, 228));
+        normalizeIonCounts.add(normalizeIonCountsNo);
+        normalizeIonCountsNo.setText("No");
+        normalizeIonCountsNo.setOpaque(true);
+        normalizeIonCountsNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                normalizeIonCountsNoActionPerformed(evt);
+            }
+        });
+        basePane.add(normalizeIonCountsNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 185, -1, -1));
+
+        selectRatioCalcluationMethodLabel.setBackground(new java.awt.Color(255, 231, 228));
+        selectRatioCalcluationMethodLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        selectRatioCalcluationMethodLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        selectRatioCalcluationMethodLabel.setText("Select Ratio Calculation Method:");
+        selectRatioCalcluationMethodLabel.setOpaque(true);
+        basePane.add(selectRatioCalcluationMethodLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 250, 30));
+
+        useLinearRegression.setBackground(new java.awt.Color(255, 231, 228));
+        selectRatioCalculationMethod.add(useLinearRegression);
+        useLinearRegression.setText("Linear Regression to burn mid-time");
+        useLinearRegression.setOpaque(true);
+        useLinearRegression.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                useLinearRegressionActionPerformed(evt);
+            }
+        });
+        basePane.add(useLinearRegression, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 230, -1, -1));
+
+        useSpotAverage.setBackground(new java.awt.Color(255, 231, 228));
+        selectRatioCalculationMethod.add(useSpotAverage);
+        useSpotAverage.setSelected(true);
+        useSpotAverage.setText("Spot Average (time-invariant)");
+        useSpotAverage.setOpaque(true);
+        useSpotAverage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                useSpotAverageActionPerformed(evt);
+            }
+        });
+        basePane.add(useSpotAverage, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 255, -1, -1));
+
+        normalizeCountsLabel1.setBackground(new java.awt.Color(255, 231, 228));
+        normalizeCountsLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        normalizeCountsLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        normalizeCountsLabel1.setText("Calamari will read a Prawn XML file and validate it before processing and reporting.");
+        normalizeCountsLabel1.setOpaque(true);
+        basePane.add(normalizeCountsLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 630, 30));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -272,8 +345,8 @@ public class CalamariUI extends javax.swing.JFrame {
     private void reduceDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reduceDataButtonActionPerformed
         new ReduceDataWorker(
                 prawnFileHandler,
-                useSBM.isSelected(),
-                userLinFits.isSelected(),
+                normalizeIonCountsToSBM,
+                useLinearRegreosionToCalcualteRatios,
                 reduceDataProgressBar).execute();
     }//GEN-LAST:event_reduceDataButtonActionPerformed
 
@@ -311,6 +384,22 @@ public class CalamariUI extends javax.swing.JFrame {
         BrowserControl.showURI("https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Intro");
     }//GEN-LAST:event_documentationMenuItemActionPerformed
 
+    private void normalizeIonCountsYesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_normalizeIonCountsYesActionPerformed
+        normalizeIonCountsToSBM = ((AbstractButton) evt.getSource()).isSelected();
+    }//GEN-LAST:event_normalizeIonCountsYesActionPerformed
+
+    private void normalizeIonCountsNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_normalizeIonCountsNoActionPerformed
+        normalizeIonCountsToSBM = !((AbstractButton) evt.getSource()).isSelected();
+    }//GEN-LAST:event_normalizeIonCountsNoActionPerformed
+
+    private void useLinearRegressionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLinearRegressionActionPerformed
+       useLinearRegreosionToCalcualteRatios = ((AbstractButton)evt.getSource()).isSelected();
+    }//GEN-LAST:event_useLinearRegressionActionPerformed
+
+    private void useSpotAverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useSpotAverageActionPerformed
+       useLinearRegreosionToCalcualteRatios = !((AbstractButton)evt.getSource()).isSelected();
+    }//GEN-LAST:event_useSpotAverageActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -323,6 +412,11 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel inputFileLocationLabel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JLabel normalizeCountsLabel;
+    private javax.swing.JLabel normalizeCountsLabel1;
+    private javax.swing.ButtonGroup normalizeIonCounts;
+    private javax.swing.JRadioButton normalizeIonCountsNo;
+    private javax.swing.JRadioButton normalizeIonCountsYes;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JLabel outputFileLocationLabel;
     private javax.swing.JLabel outputFolderLocation;
@@ -331,9 +425,11 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton selectPrawnFileLocationButton;
+    private javax.swing.JLabel selectRatioCalcluationMethodLabel;
+    private javax.swing.ButtonGroup selectRatioCalculationMethod;
     private javax.swing.JButton selectReportsLocationButton;
-    private javax.swing.JCheckBox useSBM;
-    private javax.swing.JCheckBox userLinFits;
+    private javax.swing.JRadioButton useLinearRegression;
+    private javax.swing.JRadioButton useSpotAverage;
     // End of variables declaration//GEN-END:variables
 
 }

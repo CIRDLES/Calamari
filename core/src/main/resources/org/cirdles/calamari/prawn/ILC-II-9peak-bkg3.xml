@@ -9,7 +9,6 @@
     <runs>39</runs>
     <session_quality>uknown</session_quality>
     <session_comments>uknown</session_comments>
-    <mount>MissingMountEntry</mount>
     <run>
         <par name="title" value="6266-3-1.1" />
         <par name="sets" value="1" />

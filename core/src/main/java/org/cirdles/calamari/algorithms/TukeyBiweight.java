@@ -16,7 +16,10 @@
 package org.cirdles.calamari.algorithms;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import static org.cirdles.calamari.algorithms.BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_TINY_VALUE;
 import org.cirdles.calamari.shrimp.ValueModel;
 
 /**
@@ -30,23 +33,23 @@ public final class TukeyBiweight {
 
     public static ValueModel calculateTukeyBiweightMean(String name, double tuningConstant, double[] values) {
         // guarantee termination
-        double epsilon = 1e-10;
+        BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);
         int iterationMax = 100;
         int iterationCounter = 0;
 
         int n = values.length;
         // initial mean is median
-        double mean = calculateMedian(values);
+        BigDecimal mean = new BigDecimal(calculateMedian(values));
 
         // initial sigma is median absolute deviation from mean = median (MAD)
         double deviations[] = new double[n];
         for (int i = 0; i < values.length; i++) {
-            deviations[i] = StrictMath.abs(values[i] - mean);
+            deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
         }
-        double sigma = calculateMedian(deviations);
+        BigDecimal sigma = new BigDecimal(calculateMedian(deviations)).max(new BigDecimal(SQUID_TINY_VALUE));
 
-        double previousMean;
-        double previousSigma;
+        BigDecimal previousMean;
+        BigDecimal previousSigma;
 
         do {
             iterationCounter++;
@@ -54,35 +57,37 @@ public final class TukeyBiweight {
             previousSigma = sigma;
 
             // init to zeroes
-            double[] deltas = new double[n];
-            double[] u = new double[n];
-            double sa = 0.0;
-            double sb = 0.0;
-            double sc = 0.0;
+            BigDecimal[] deltas = new BigDecimal[n];
+            BigDecimal[] u = new BigDecimal[n];
+            BigDecimal sa = BigDecimal.ZERO;
+            BigDecimal sb = BigDecimal.ZERO;
+            BigDecimal sc = BigDecimal.ZERO;
 
-            double tee = tuningConstant * sigma;
+            BigDecimal tee = new BigDecimal(tuningConstant).multiply(sigma);
 
             for (int i = 0; i < n; i++) {
-                deltas[i] = values[i] - mean;
-                if (StrictMath.abs(deltas[i]) < tee) {
-                    deltas[i] = values[i] - mean;
-                    u[i] = deltas[i] / tee;
-                    double uSquared = u[i] * u[i];
-                    sa += StrictMath.pow(deltas[i] * StrictMath.pow((1.0 - uSquared), 2), 2);
-                    sb += (1.0 - uSquared) * (1.0 - 5.0 * uSquared);
-                    sc += u[i] * StrictMath.pow(1.0 - uSquared, 2);
+                deltas[i] = new BigDecimal(values[i]).subtract(mean);
+                if (tee.compareTo(deltas[i].abs()) > 0) {
+                    deltas[i] = new BigDecimal(values[i]).subtract(mean);
+                    u[i] = deltas[i].divide(tee, MathContext.DECIMAL128);
+                    BigDecimal uSquared = u[i].multiply(u[i]);
+                    sa = sa.add(deltas[i].multiply(BigDecimal.ONE.subtract(uSquared).pow(2)).pow(2));
+                    sb = sb.add(BigDecimal.ONE.subtract(uSquared).multiply(BigDecimal.ONE.subtract(new BigDecimal(5.0).multiply(uSquared))));
+                    sc = sc.add(u[i].multiply(BigDecimal.ONE.subtract(uSquared).pow(2)));
                 }
             }
-            sigma = StrictMath.sqrt(n * sa) / StrictMath.abs(sb);
-            mean = previousMean + tee * sc / sb;
+
+            sigma = bigDecimalSqrtBabylonian(sa.multiply(new BigDecimal(n))).divide(sb.abs(), MathContext.DECIMAL128);
+            sigma = sigma.max(new BigDecimal(SQUID_TINY_VALUE));
+            mean = previousMean.add(tee.multiply(sc).divide(sb, MathContext.DECIMAL128));
 
         } // both tests against epsilon must pass OR iterations top out
         // april 2016 Simon B discovered we need 101 iterations possible, hence the "<=" below
-        while (((StrictMath.abs(sigma - previousSigma) / sigma > epsilon)//
-                || (StrictMath.abs(mean - previousMean) / mean > epsilon))//
+        while (((sigma.subtract(previousSigma).abs().divide(sigma, MathContext.DECIMAL128).compareTo(epsilon) > 0)//
+                || mean.subtract(previousMean).abs().divide(mean, MathContext.DECIMAL128).compareTo(epsilon) > 0)//
                 && (iterationCounter <= iterationMax));
 
-        return new ValueModel(name, new BigDecimal(mean), "ABS", new BigDecimal(sigma));
+        return new ValueModel(name, mean, "ABS", sigma);
     }
 
     /**
