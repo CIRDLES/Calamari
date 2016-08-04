@@ -22,7 +22,6 @@ import java.nio.charset.Charset;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
@@ -77,23 +76,22 @@ public class Calamari {
 
         Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("listOfPrawnFiles.txt");
         if (listOfPrawnFiles != null) {
-            List<File> prawnFiles = new ArrayList<>();
+            File exampleFolder = new File("ExamplePrawnXMLFiles");
+            exampleFolder.mkdir();
             try {
                 List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
                 for (int i = 0; i < fileNames.size(); i++) {
                     // test for empty string
                     if (fileNames.get(i).trim().length() > 0) {
                         File prawnFileResource = prawnFileResourceExtractor.extractResourceAsFile(fileNames.get(i));
-                        File exampleFolder = new File("ExamplePrawnXMLFiles");
-                        exampleFolder.mkdir();
                         File prawnFile = new File(exampleFolder.getCanonicalPath() + File.separator + fileNames.get(i));
                         System.out.println("PrawnFile added: " + fileNames.get(i));
                         prawnFileResource.renameTo(prawnFile);
-                        prawnFiles.add(prawnFile);
                     }
                 }
 
-                prawnFileHandler.setCurrentPrawnFileLocation(prawnFiles.get(0).getCanonicalPath());
+                // point to directory, but no default choice
+                prawnFileHandler.setCurrentPrawnFileLocation(exampleFolder.getCanonicalPath());
             } catch (IOException iOException) {
             }
         }
