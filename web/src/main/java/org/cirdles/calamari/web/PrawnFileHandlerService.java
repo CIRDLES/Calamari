@@ -15,10 +15,10 @@
  */
 package org.cirdles.calamari.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -38,30 +38,30 @@ import org.cirdles.calamari.core.PrawnFileHandler;
  * Created by johnzeringue on 7/27/16.
  */
 public class PrawnFileHandlerService {
-    
+
     private static final Map<String, String> ZIP_FILE_ENV;
-    
+
     static {
         Map<String, String> zipFileEnv = new HashMap<>();
         zipFileEnv.put("create", "true");
-        
+
         ZIP_FILE_ENV = Collections.unmodifiableMap(zipFileEnv);
     }
-    
+
     private final PrawnFileHandler prawnFileHandler;
     private final CalamariReportsEngine reportsEngine;
-    
+
     public PrawnFileHandlerService() {
         prawnFileHandler = new PrawnFileHandler();
         reportsEngine = prawnFileHandler.getReportsEngine();
     }
-    
+
     private Path zip(Path target) throws IOException {
         Path zipFilePath = target.resolveSibling("reports.zip");
-        
+
         try (FileSystem zipFileFileSystem = FileSystems.newFileSystem(
                 URI.create("jar:file:" + zipFilePath), ZIP_FILE_ENV)) {
-            
+
             Files.list(target).forEach(entry -> {
                 try {
                     Files.copy(entry, zipFileFileSystem.getPath("/" + entry.getFileName()));
@@ -70,72 +70,65 @@ public class PrawnFileHandlerService {
                 }
             });
         }
-        
+
         return zipFilePath;
     }
-    
+
     private void recursiveDelete(Path directory) throws IOException {
         Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(
                     Path file,
                     BasicFileAttributes attrs) throws IOException {
-                
+
                 Files.delete(file);
                 return FileVisitResult.CONTINUE;
             }
-            
+
             @Override
             public FileVisitResult postVisitDirectory(
                     Path dir,
                     IOException exc) throws IOException {
-                
+
                 Files.delete(dir);
                 return FileVisitResult.CONTINUE;
             }
         });
     }
-    
+
     public Path generateReports(
             InputStream prawnFile,
             boolean useSBM,
             boolean userLinFits) throws IOException, JAXBException {
-        
+
         Path uploadDirectory = Files.createTempDirectory("upload");
         Path prawnFilePath = uploadDirectory.resolve("prawn-file.xml");
         Files.copy(prawnFile, prawnFilePath);
-        
-        Path reportsDestination = Files.createTempDirectory("reports-destination");
-        reportsEngine.setFolderToWriteCalamariReports(reportsDestination.toFile());
-        
+
+        Path calamarirReportsFolderAlias = Files.createTempDirectory("reports-destination");
+        File reportsDestinationFile = calamarirReportsFolderAlias.toFile();
+
+        reportsEngine.setFolderToWriteCalamariReports(reportsDestinationFile);
+
         // this gives reportengine the name of the Prawnfile for use in report names
         prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
-        
+
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFilePath.toString(),
                 useSBM,
                 userLinFits);
-        
-        Files.delete(prawnFilePath);
-        
-        Path dest = null;
-        try {
-            // this should be location of report folder ... could not get subpaths to go there
-            dest = Paths.get(new URI(reportsDestination.toFile().listFiles()[0].listFiles()[0].getCanonicalPath()));
-            System.out.println("<<<<" + dest.toFile().getCanonicalPath());
-        } catch (IOException | URISyntaxException iOException) {
-            System.out.println("<<<<" + "NADA");
-        }
-        
-        System.out.println(">>>>" + reportsDestination);
 
-        Path reports = Files.list(dest)
+        Files.delete(prawnFilePath);
+
+        Path reportsFolder = Paths.get(reportsEngine.getFolderToWriteCalamariReportsPath()).getParent();
+
+        Path reports = Files.list(reportsFolder)
                 .findFirst().orElseThrow(() -> new IllegalStateException());
-        
+
         Path reportsZip = zip(reports);
         recursiveDelete(reports);
-        
+
         return reportsZip;
     }
-    
+
 }

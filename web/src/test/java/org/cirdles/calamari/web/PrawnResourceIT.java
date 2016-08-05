@@ -32,6 +32,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.Timeout;
 
 /**
@@ -46,7 +47,7 @@ public class PrawnResourceIT extends JerseyTest {
             = new ResourceExtractor(PrawnResourceIT.class);
 
     @Rule
-    public Timeout timeout = Timeout.seconds(120);
+    public Timeout timeout = Timeout.seconds(180);
 
     @Override
     protected Application configure() {
@@ -61,7 +62,7 @@ public class PrawnResourceIT extends JerseyTest {
         config.register(MultiPartFeature.class);
     }
 
-    //@Test
+    @Test
     public void testGenerateReports() throws IOException {
         Path prawnFilePath = RESOURCE_EXTRACTOR
                 .extractResourceAsPath(PRAWN_FILE_RESOURCE);
