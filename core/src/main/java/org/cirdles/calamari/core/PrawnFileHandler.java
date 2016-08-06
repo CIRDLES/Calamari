@@ -56,7 +56,7 @@ public class PrawnFileHandler {
      * @param reportsEngine the reports engine to use
      */
     public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
-        currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
+//        currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
         this.reportsEngine = reportsEngine;
     }
 
@@ -70,8 +70,10 @@ public class PrawnFileHandler {
      */
     public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
             throws MalformedURLException, JAXBException {
+        currentPrawnFileLocation = prawnFileLocation;
+
         PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
-        
+
         String nameOfMount = prawnFile.getMount();
         if (nameOfMount == null) {
             nameOfMount = "No-Mount-Name";
@@ -157,15 +159,20 @@ public class PrawnFileHandler {
         return myPrawnFile;
     }
 
-    public boolean currentPrawnFileLocationIsFile(){
+    public boolean currentPrawnFileLocationIsFile() {
         return new File(currentPrawnFileLocation).isFile();
     }
-    
-    public void initReportsEngineWithCurrentPrawnFileName(){
+
+    public void initReportsEngineWithCurrentPrawnFileName() {
         // strip .xml from file name
         reportsEngine.setNameOfPrawnXMLFile(new File(currentPrawnFileLocation).getName().split("\\.")[0]);
     }
-    
+
+    public void initReportsEngineWithCurrentPrawnFileName(String prawnFileLocation) {
+        // strip .xml from file name
+        reportsEngine.setNameOfPrawnXMLFile(new File(prawnFileLocation).getName().split("\\.")[0]);
+    }
+
     /**
      * @return the currentPrawnFileLocation
      */

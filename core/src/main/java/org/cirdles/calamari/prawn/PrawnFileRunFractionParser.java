@@ -39,7 +39,7 @@ import org.cirdles.calamari.shrimp.ValueModel;
  * Parses run fractions from Prawn files into
  * {@link org.cirdles.calamari.shrimp.ShrimpFraction}s.
  */
-public class PrawnFileRunFractionParser {  
+public class PrawnFileRunFractionParser {
 
     private String fractionID;
     private long dateTimeMilliseconds;
@@ -644,8 +644,7 @@ public class PrawnFileRunFractionParser {
                 isotopicRatioModel.setRatEqTime(ratEqTime);
                 isotopicRatioModel.setRatEqVal(ratEqVal);
                 isotopicRatioModel.setRatEqErr(ratEqErr);
-            } 
-            else {
+            } else {
                 isotopicRatioModel.setActive(false);
             }// check for number of species present
         }); // end iteration through isotopicRatios

@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE_NAME;
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
@@ -79,7 +80,7 @@ public class CalamariReportsEngine {
                     = "_" + (firstShrimpFraction.isUseSBM() ? "SBM" : "NOSBM")
                     + "_" + (firstShrimpFraction.isUserLinFits() ? "LINREG" : "SPOTAV");
 
-            reportNamePrefix = nameOfPrawnXMLFile.substring(0, 8) + "_" + reportParameterValues + "_";
+            reportNamePrefix = nameOfPrawnXMLFile.substring(0, DEFAULT_PRAWNFILE_NAME.length()) + "_" + reportParameterValues + "_";
 
             folderToWriteCalamariReportsPath
                     = folderToWriteCalamariReports.getCanonicalPath()
