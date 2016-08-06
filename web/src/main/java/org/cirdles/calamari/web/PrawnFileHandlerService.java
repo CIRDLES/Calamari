@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
 import java.util.HashMap;
@@ -74,6 +75,30 @@ public class PrawnFileHandlerService {
         return zipFilePath;
     }
 
+    private void unZip(Path zippedFilePath, Path target) throws IOException {
+        Map<String, String> zip_properties = new HashMap<>();
+        zip_properties.put("create", "false");
+
+        URI zip_disk = URI.create("jar:file:" + zippedFilePath);
+
+        try (FileSystem zipFileSystem = FileSystems.newFileSystem(zip_disk, zip_properties)) {
+            final Path root = zipFileSystem.getPath("/");
+
+            //walk the zip file tree and copy files to the destination
+            Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file,
+                        BasicFileAttributes attrs) throws IOException {
+                    final Path destFile = Paths.get(target.toString(),
+                            file.toString());
+                    //System.out.printf("Extracting file %s to %s\n", file, destFile);
+                    Files.copy(file, destFile, StandardCopyOption.REPLACE_EXISTING);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        }
+    }
+
     private void recursiveDelete(Path directory) throws IOException {
         Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
             @Override
@@ -97,6 +122,7 @@ public class PrawnFileHandlerService {
     }
 
     public Path generateReports(
+            String fileName,
             InputStream prawnFile,
             boolean useSBM,
             boolean userLinFits) throws IOException, JAXBException {
@@ -111,7 +137,7 @@ public class PrawnFileHandlerService {
         reportsEngine.setFolderToWriteCalamariReports(reportsDestinationFile);
 
         // this gives reportengine the name of the Prawnfile for use in report names
-        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
+        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(fileName);//"100142_G6147_10111109.43.xml");
 
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFilePath.toString(),

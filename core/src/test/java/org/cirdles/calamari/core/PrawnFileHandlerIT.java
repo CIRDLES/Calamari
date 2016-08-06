@@ -55,7 +55,7 @@ public class PrawnFileHandlerIT {
         File prawnFile = RESOURCE_EXTRACTOR
                 .extractResourceAsFile(PRAWN_FILE_RESOURCE);
 
-        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName();
+        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(PRAWN_FILE_RESOURCE);
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFile.getAbsolutePath(), // prawnFileLocation
                 true,                        // useSBM

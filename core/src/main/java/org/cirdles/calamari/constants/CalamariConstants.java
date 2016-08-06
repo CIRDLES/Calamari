@@ -27,5 +27,7 @@ public final class CalamariConstants {
             + "            xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
             + "            xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
             + "                                https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd\">";
+    
+    public static final String DEFAULT_PRAWNFILE_NAME = "NO_NAME_";
 
 }
