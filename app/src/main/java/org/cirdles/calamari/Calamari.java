@@ -27,6 +27,7 @@ import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.commons.util.ResourceExtractor;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -121,7 +122,7 @@ public class Calamari {
             System.out.println("Command line mode");
             try {
                 prawnFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
-            } catch (IOException | JAXBException exception) {
+            } catch (IOException | JAXBException | SAXException exception) {
                 System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
             }
         } else {

@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Created by johnzeringue on 7/27/16.
@@ -125,7 +126,7 @@ public class PrawnFileHandlerService {
             String fileName,
             InputStream prawnFile,
             boolean useSBM,
-            boolean userLinFits) throws IOException, JAXBException {
+            boolean userLinFits) throws IOException, JAXBException, SAXException {
 
         Path uploadDirectory = Files.createTempDirectory("upload");
         Path prawnFilePath = uploadDirectory.resolve("prawn-file.xml");
