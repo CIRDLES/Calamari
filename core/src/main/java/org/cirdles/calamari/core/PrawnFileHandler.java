@@ -15,10 +15,20 @@
  */
 package org.cirdles.calamari.core;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,9 +36,11 @@ import java.util.function.Consumer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import static org.cirdles.calamari.constants.CalamariConstants.XML_HEADER_FOR_PRAWN_FILES;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.xml.sax.SAXException;
 
 /**
  * Handles common operations involving Prawn files.
@@ -56,7 +68,6 @@ public class PrawnFileHandler {
      * @param reportsEngine the reports engine to use
      */
     public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
-//        currentPrawnFileLocation = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml";
         this.reportsEngine = reportsEngine;
     }
 
@@ -67,9 +78,10 @@ public class PrawnFileHandler {
      * @return
      * @throws MalformedURLException
      * @throws JAXBException
+     * @throws org.xml.sax.SAXException
      */
     public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
-            throws MalformedURLException, JAXBException {
+            throws IOException, MalformedURLException, JAXBException, SAXException {
         currentPrawnFileLocation = prawnFileLocation;
 
         PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
@@ -78,20 +90,18 @@ public class PrawnFileHandler {
         if (nameOfMount == null) {
             nameOfMount = "No-Mount-Name";
         }
+        
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-//            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("ILB-23.1") == 0) {
-//                System.out.println("SHRIMPFRACTION " + runFraction.getPar().get(0).getValue());
             ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
             if (shrimpFraction != null) {
                 shrimpFraction.setSpotNumber(f + 1);
                 shrimpFraction.setNameOfMount(nameOfMount);
                 shrimpFractions.add(shrimpFraction);
             }
-//            }
 
             if (progressSubscriber != null) {
                 int progress = (f + 1) * 100 / prawnFile.getRun().size();
@@ -109,32 +119,84 @@ public class PrawnFileHandler {
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
+     * @throws org.xml.sax.SAXException
      */
     public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
-            throws IOException, MalformedURLException, JAXBException {
+            throws IOException, MalformedURLException, JAXBException, SAXException {
         List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
         reportsEngine.produceReports(shrimpFractions);
     }
 
     private PrawnFile unmarshallRawDataXML(String resource)
-            throws MalformedURLException, JAXBException {
+            throws IOException, MalformedURLException, JAXBException, SAXException {
+        
+        String localPrawnXMLFile = resource;
         PrawnFile myPrawnFile;
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
+        // test for URL such as "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml"
+        boolean isURL = false;
         if (resource.toLowerCase(Locale.ENGLISH).startsWith("http")) {
             java.net.URL prawnDataURL;
             prawnDataURL = new URL(resource);
-            myPrawnFile = readRawDataURL(prawnDataURL);
-        } else {
-            // assume file
-            File prawnDataFile = new File(resource);
-            myPrawnFile = readRawDataFile(prawnDataFile);
+            localPrawnXMLFile = "tempURLtoXML.xml";
+            isURL = true;
+
+            ReadableByteChannel rbc = Channels.newChannel(prawnDataURL.openStream());
+            FileOutputStream fOutStream = new FileOutputStream(localPrawnXMLFile);
+            fOutStream.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fOutStream.close();
+            rbc.close();
         }
 
-        return myPrawnFile;
+        // localPrawnXMLFile is now a local file
+        // swap out bad header
+        Path pathToLocalPrawnXMLFile = FileSystems.getDefault().getPath(localPrawnXMLFile);
 
+        // read localPrawnXMLFile and determine location of required tag
+        List<String> lines = Files.readAllLines(pathToLocalPrawnXMLFile, Charset.defaultCharset());
+        int indexOfSoftwareTagLine = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).contains("<software")) {
+                indexOfSoftwareTagLine = i;
+                break;
+            }
+        }
+        
+        // delete tempURLtoXML.xml 
+        if (isURL){
+            pathToLocalPrawnXMLFile.toFile().delete();
+        }
+
+        // remove header up to <software tag
+        for (int i = 0; i < indexOfSoftwareTagLine; i++) {
+            lines.remove(0);
+        }
+
+        String[] headerArray = XML_HEADER_FOR_PRAWN_FILES.split("\\n");
+
+        // add correct header
+        for (int i = 0; i < headerArray.length; i++) {
+            lines.add(i, headerArray[i]);
+        }
+
+        String tempPrawnXMLFileName = "tempPrawnXMLFileName.xml";
+        Path pathTempXML = Paths.get(tempPrawnXMLFileName);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathTempXML, StandardCharsets.UTF_8)) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+
+        File prawnDataFile = new File(tempPrawnXMLFileName);
+        myPrawnFile = readRawDataFile(prawnDataFile);
+
+        prawnDataFile.delete();
+
+        return myPrawnFile;
     }
 
     /**
@@ -145,17 +207,6 @@ public class PrawnFileHandler {
     private PrawnFile readRawDataFile(File prawnDataFile) throws JAXBException {
 
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataFile);
-        return myPrawnFile;
-    }
-
-    /**
-     * @param prawnDataURL the value of prawnDataURL
-     * @return the PrawnFile
-     * @throws javax.xml.bind.JAXBException
-     */
-    private PrawnFile readRawDataURL(URL prawnDataURL) throws JAXBException {
-
-        PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataURL);
         return myPrawnFile;
     }
 

@@ -23,7 +23,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE_NAME;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
@@ -42,15 +42,15 @@ public class PrawnResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/zip")
     public Response generateReports(
-            @DefaultValue(DEFAULT_PRAWNFILE_NAME) @FormDataParam("fileName") String fileName,
             @FormDataParam("prawnFile") InputStream prawnFile,
+            @FormDataParam("prawnFile") FormDataContentDisposition contentDispositionHeader,
             @DefaultValue("true") @FormDataParam("useSBM") boolean useSBM,
             @DefaultValue("false") @FormDataParam("userLinFits") boolean userLinFits)
             throws Exception {
 
         return Response
                 .ok(prawnFileHandlerService
-                        .generateReports(fileName, prawnFile, useSBM, userLinFits)
+                        .generateReports(contentDispositionHeader.getFileName(), prawnFile, useSBM, userLinFits)
                         .toFile())
                 .header("Content-Disposition",
                         "attachment; filename=calamari-reports.zip")
