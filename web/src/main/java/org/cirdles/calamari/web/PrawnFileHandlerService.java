@@ -138,7 +138,7 @@ public class PrawnFileHandlerService {
         reportsEngine.setFolderToWriteCalamariReports(reportsDestinationFile);
 
         // this gives reportengine the name of the Prawnfile for use in report names
-        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(fileName);//"100142_G6147_10111109.43.xml");
+        prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(fileName);
 
         prawnFileHandler.writeReportsFromPrawnFile(
                 prawnFilePath.toString(),
