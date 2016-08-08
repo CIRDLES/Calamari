@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
+import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE_NAME;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.xml.sax.SAXException;
@@ -123,11 +124,16 @@ public class PrawnFileHandlerService {
     }
 
     public Path generateReports(
-            String fileName,
+            String myFileName,
             InputStream prawnFile,
             boolean useSBM,
             boolean userLinFits) throws IOException, JAXBException, SAXException {
 
+        String fileName = myFileName;
+        if (myFileName == null){
+            fileName = DEFAULT_PRAWNFILE_NAME;
+        }
+        
         Path uploadDirectory = Files.createTempDirectory("upload");
         Path prawnFilePath = uploadDirectory.resolve("prawn-file.xml");
         Files.copy(prawnFile, prawnFilePath);
