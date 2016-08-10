@@ -108,7 +108,7 @@ public class PrawnFileRunFractionParser {
 
             // determine reference material status
             // hard coded for now
-            if (fractionID.startsWith("T")) {
+            if (fractionID.toUpperCase().startsWith("T")) {
                 shrimpFraction.setReferenceMaterial(true);
             }
         }
