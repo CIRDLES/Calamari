@@ -484,13 +484,13 @@ public class PrawnFileRunFractionParser {
                                 double a = aPkCts[k];
                                 double b = aPkCts[numDenom];
                                 if ((a <= 0) && (b > 16)) {
-                                    zerPkCt[sNum + k - 1] = true;
+                                    zerPkCt[sNum + k] = true;
                                 }
 
                                 a = bPkCts[k];
                                 b = bPkCts[numDenom];
                                 if ((a <= 0) && (b > 16)) {
-                                    zerPkCt[sNum + k - 1] = true;
+                                    zerPkCt[sNum + k] = true;
                                 }
                             } // k iteration
 
