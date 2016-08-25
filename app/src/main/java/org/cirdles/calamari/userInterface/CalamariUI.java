@@ -146,6 +146,7 @@ public class CalamariUI extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(700, 475));
 
         basePane.setBackground(new java.awt.Color(255, 231, 228));
+        basePane.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         basePane.setOpaque(true);
         basePane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -161,27 +162,25 @@ public class CalamariUI extends javax.swing.JFrame {
         outputFileLocationLabel.setOpaque(true);
         basePane.add(outputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 330, 20));
 
-        reduceDataButton.setBackground(new java.awt.Color(255, 231, 228));
+        reduceDataButton.setBackground(new java.awt.Color(255, 255, 255));
         reduceDataButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
         reduceDataButton.setText("Reduce Data and Produce Reports");
-        reduceDataButton.setOpaque(true);
         reduceDataButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reduceDataButtonActionPerformed(evt);
             }
         });
-        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 380, 30));
+        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 380, 25));
 
-        selectReportsLocationButton.setBackground(new java.awt.Color(255, 231, 228));
+        selectReportsLocationButton.setBackground(new java.awt.Color(255, 255, 255));
         selectReportsLocationButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
         selectReportsLocationButton.setText("Select location for CalamariReports Folder");
-        selectReportsLocationButton.setOpaque(true);
         selectReportsLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectReportsLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 370, 30));
+        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 143, 370, 25));
 
         outputFolderLocation.setBackground(new java.awt.Color(255, 255, 255));
         outputFolderLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
@@ -190,16 +189,15 @@ public class CalamariUI extends javax.swing.JFrame {
         outputFolderLocation.setOpaque(true);
         basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 630, -1));
 
-        selectPrawnFileLocationButton.setBackground(new java.awt.Color(255, 231, 228));
+        selectPrawnFileLocationButton.setBackground(new java.awt.Color(255, 255, 255));
         selectPrawnFileLocationButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
         selectPrawnFileLocationButton.setText("Select Prawn XML File");
-        selectPrawnFileLocationButton.setOpaque(true);
         selectPrawnFileLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectPrawnFileLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 220, 30));
+        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 63, 220, 25));
 
         currentPrawnFileLocation.setBackground(new java.awt.Color(255, 255, 255));
         currentPrawnFileLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
@@ -221,7 +219,7 @@ public class CalamariUI extends javax.swing.JFrame {
         reduceDataProgressBar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         reduceDataProgressBar.setOpaque(true);
         reduceDataProgressBar.setStringPainted(true);
-        basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, 170, 30));
+        basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, 170, 25));
 
         normalizeCountsLabel.setBackground(new java.awt.Color(255, 231, 228));
         normalizeCountsLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -294,17 +292,16 @@ public class CalamariUI extends javax.swing.JFrame {
         normalizeCountsLabel1.setOpaque(true);
         basePane.add(normalizeCountsLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 55, 350, 40));
 
-        readMeButton.setBackground(new java.awt.Color(255, 231, 228));
+        readMeButton.setBackground(new java.awt.Color(255, 255, 255));
         readMeButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
         readMeButton.setForeground(new java.awt.Color(255, 8, 9));
         readMeButton.setText("Please click here for Information about Calamari");
-        readMeButton.setOpaque(true);
         readMeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 readMeButtonActionPerformed(evt);
             }
         });
-        basePane.add(readMeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 520, 30));
+        basePane.add(readMeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 520, 25));
 
         selectReferenceMaterialInitialLetterLabel.setBackground(new java.awt.Color(255, 231, 228));
         selectReferenceMaterialInitialLetterLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -313,12 +310,11 @@ public class CalamariUI extends javax.swing.JFrame {
         selectReferenceMaterialInitialLetterLabel.setOpaque(true);
         basePane.add(selectReferenceMaterialInitialLetterLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 260, 30));
 
-        referenceMaterialFirstLetterComboBox.setBackground(new java.awt.Color(255, 231, 228));
+        referenceMaterialFirstLetterComboBox.setBackground(new java.awt.Color(255, 255, 255));
         referenceMaterialFirstLetterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" }));
         referenceMaterialFirstLetterComboBox.setSelectedIndex(19);
         referenceMaterialFirstLetterComboBox.setFocusCycleRoot(true);
         referenceMaterialFirstLetterComboBox.setName("T"); // NOI18N
-        referenceMaterialFirstLetterComboBox.setOpaque(true);
         basePane.add(referenceMaterialFirstLetterComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 310, -1, -1));
 
         fileMenu.setMnemonic('f');

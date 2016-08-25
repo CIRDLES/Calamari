@@ -113,7 +113,7 @@ public class Calamari {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Motif".equals(info.getName())) { //Nimbus (original), Motif, Metal
+                if ("Metal".equals(info.getName())) { //Nimbus (original), Motif, Metal
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
