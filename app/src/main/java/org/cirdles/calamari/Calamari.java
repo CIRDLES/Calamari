@@ -26,6 +26,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.calamari.utilities.FileUtilities;
 import org.cirdles.commons.util.ResourceExtractor;
 import org.xml.sax.SAXException;
 
@@ -79,7 +80,10 @@ public class Calamari {
         if (listOfPrawnFiles != null) {
             File exampleFolder = new File("ExamplePrawnXMLFiles");
             exampleFolder.mkdir();
+
             try {
+                FileUtilities.recursiveDelete(exampleFolder.toPath());
+                exampleFolder.mkdir();
                 List<String> fileNames = Files.readAllLines(listOfPrawnFiles, ISO_8859_1);
                 for (int i = 0; i < fileNames.size(); i++) {
                     // test for empty string
@@ -121,7 +125,7 @@ public class Calamari {
         if (args.length == 3) {// remove 4th argument from properties dialog command line arguments to get commandline
             System.out.println("Command line mode");
             try {
-                prawnFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]));
+                prawnFileHandler.writeReportsFromPrawnFile(args[0], Boolean.valueOf(args[1]), Boolean.valueOf(args[2]), "T");
             } catch (IOException | JAXBException | SAXException exception) {
                 System.out.println("Exception extracting data: " + exception.getStackTrace()[0].toString());
             }
