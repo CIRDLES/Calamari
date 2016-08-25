@@ -35,6 +35,7 @@ import javax.xml.bind.JAXBException;
 import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE_NAME;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
+import static org.cirdles.calamari.utilities.FileUtilities.recursiveDelete;
 import org.xml.sax.SAXException;
 
 /**
@@ -101,27 +102,27 @@ public class PrawnFileHandlerService {
         }
     }
 
-    private void recursiveDelete(Path directory) throws IOException {
-        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(
-                    Path file,
-                    BasicFileAttributes attrs) throws IOException {
-
-                Files.delete(file);
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult postVisitDirectory(
-                    Path dir,
-                    IOException exc) throws IOException {
-
-                Files.delete(dir);
-                return FileVisitResult.CONTINUE;
-            }
-        });
-    }
+//    private void recursiveDelete(Path directory) throws IOException {
+//        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+//            @Override
+//            public FileVisitResult visitFile(
+//                    Path file,
+//                    BasicFileAttributes attrs) throws IOException {
+//
+//                Files.delete(file);
+//                return FileVisitResult.CONTINUE;
+//            }
+//
+//            @Override
+//            public FileVisitResult postVisitDirectory(
+//                    Path dir,
+//                    IOException exc) throws IOException {
+//
+//                Files.delete(dir);
+//                return FileVisitResult.CONTINUE;
+//            }
+//        });
+//    }
 
     public Path generateReports(
             String myFileName,
@@ -146,10 +147,10 @@ public class PrawnFileHandlerService {
         // this gives reportengine the name of the Prawnfile for use in report names
         prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(fileName);
 
-        prawnFileHandler.writeReportsFromPrawnFile(
-                prawnFilePath.toString(),
+        prawnFileHandler.writeReportsFromPrawnFile(prawnFilePath.toString(),
                 useSBM,
-                userLinFits);
+                userLinFits, 
+                "T");
 
         Files.delete(prawnFilePath);
 
