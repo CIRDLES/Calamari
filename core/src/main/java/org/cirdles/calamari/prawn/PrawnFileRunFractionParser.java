@@ -75,9 +75,10 @@ public class PrawnFileRunFractionParser {
      * @param runFraction the value of runFraction
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
-     * @return
+     * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @return the org.cirdles.calamari.shrimp.ShrimpFraction
      */
-    public ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits) {
+    public ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits, String referenceMaterialLetter) {
 
         ShrimpFraction shrimpFraction = null;
         prepareRunFractionMetaData(runFraction);
@@ -108,7 +109,7 @@ public class PrawnFileRunFractionParser {
 
             // determine reference material status
             // hard coded for now
-            if (fractionID.toUpperCase().startsWith("T")) {
+            if (fractionID.toUpperCase().startsWith(referenceMaterialLetter.toUpperCase())) {
                 shrimpFraction.setReferenceMaterial(true);
             }
         }
