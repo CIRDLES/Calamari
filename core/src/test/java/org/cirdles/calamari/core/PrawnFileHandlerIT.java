@@ -56,10 +56,10 @@ public class PrawnFileHandlerIT {
                 .extractResourceAsFile(PRAWN_FILE_RESOURCE);
 
         prawnFileHandler.initReportsEngineWithCurrentPrawnFileName(PRAWN_FILE_RESOURCE);
-        prawnFileHandler.writeReportsFromPrawnFile(
-                prawnFile.getAbsolutePath(), // prawnFileLocation
-                true,                        // useSBM
-                false);                      // userLinFits
+        prawnFileHandler.writeReportsFromPrawnFile(prawnFile.getAbsolutePath(), // prawnFileLocation
+                true,   // useSBM
+                false,  // userLinFits
+                "T");   // first letter of reference material                 
         
         assertThat(reportsFolder.listFiles()).hasSize(1); //Temp Calamari Reports Folder
         assertThat(reportsFolder.listFiles()[0].listFiles()).hasSize(1); //Reports folder with name of this Prawn File

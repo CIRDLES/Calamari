@@ -33,17 +33,28 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
     private final PrawnFileHandler prawnFileHandler;
     private final boolean useSBM;
     private final boolean userLinFits;
+    private final String referenceMaterialLetter;
     private final JProgressBar progressBar;
 
+    /**
+     *
+     * @param prawnFileHandler the value of prawnFileHandler
+     * @param useSBM the value of useSBM
+     * @param userLinFits the value of userLinFits
+     * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @param progressBar the value of progressBar
+     */
     public ReduceDataWorker(
-            PrawnFileHandler prawnFileHandler,
-            boolean useSBM,
-            boolean userLinFits,
+            PrawnFileHandler prawnFileHandler, 
+            boolean useSBM, 
+            boolean userLinFits, 
+            String referenceMaterialLetter, 
             JProgressBar progressBar) {
 
         this.prawnFileHandler = prawnFileHandler;
         this.useSBM = useSBM;
         this.userLinFits = userLinFits;
+        this.referenceMaterialLetter = referenceMaterialLetter;
         this.progressBar = progressBar;
     }
 
@@ -52,10 +63,10 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
         prawnFileHandler.setProgressSubscriber(progress -> publish(progress));
 
         try {
-            prawnFileHandler.writeReportsFromPrawnFile(
-                    prawnFileHandler.getCurrentPrawnFileLocation(),
+            prawnFileHandler.writeReportsFromPrawnFile(prawnFileHandler.getCurrentPrawnFileLocation(),
                     useSBM,
-                    userLinFits);
+                    userLinFits, 
+                    referenceMaterialLetter);
         } catch (IOException | JAXBException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());

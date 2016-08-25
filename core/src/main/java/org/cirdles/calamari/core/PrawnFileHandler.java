@@ -75,12 +75,13 @@ public class PrawnFileHandler {
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
-     * @return
+     * @param referenceMaterialLetter the value of referenceMaterialLetter
      * @throws MalformedURLException
      * @throws JAXBException
      * @throws org.xml.sax.SAXException
+     * @return the java.util.List<org.cirdles.calamari.shrimp.ShrimpFraction>
      */
-    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
+    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
             throws IOException, MalformedURLException, JAXBException, SAXException {
         currentPrawnFileLocation = prawnFileLocation;
 
@@ -96,7 +97,7 @@ public class PrawnFileHandler {
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits);
+            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter);
             if (shrimpFraction != null) {
                 shrimpFraction.setSpotNumber(f + 1);
                 shrimpFraction.setNameOfMount(nameOfMount);
@@ -116,14 +117,15 @@ public class PrawnFileHandler {
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
+     * @param referenceMaterialLetter the value of referenceMaterialLetter
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
      * @throws org.xml.sax.SAXException
      */
-    public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits)
+    public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
             throws IOException, MalformedURLException, JAXBException, SAXException {
-        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits);
+        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter);
         reportsEngine.produceReports(shrimpFractions);
     }
 
