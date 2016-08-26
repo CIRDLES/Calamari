@@ -216,7 +216,8 @@ public class CalamariUI extends javax.swing.JFrame {
         basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, -1));
 
         reduceDataProgressBar.setBackground(new java.awt.Color(255, 231, 228));
-        reduceDataProgressBar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        reduceDataProgressBar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        reduceDataProgressBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         reduceDataProgressBar.setOpaque(true);
         reduceDataProgressBar.setStringPainted(true);
         basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, 170, 25));

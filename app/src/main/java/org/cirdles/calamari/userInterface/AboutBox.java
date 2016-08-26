@@ -42,7 +42,7 @@ public class AboutBox extends javax.swing.JDialog {
     }
 
     private void initInstance() {
-        setSizeAndCenter(400, 300);
+        setSizeAndCenter(400, 400);
         versionLabel.setText(Calamari.VERSION);
         buildDateLabel.setText(Calamari.RELEASE_DATE);
     }
@@ -65,13 +65,20 @@ public class AboutBox extends javax.swing.JDialog {
         versionLabel = new javax.swing.JLabel();
         buildDateLabel = new javax.swing.JLabel();
         visitGitHubButton = new javax.swing.JButton();
+        warrantyLabel = new javax.swing.JLabel();
+        contributorsLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBounds(new java.awt.Rectangle(0, 0, 400, 400));
+        setPreferredSize(new java.awt.Dimension(400, 300));
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
 
         jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jLayeredPane1.setMinimumSize(new java.awt.Dimension(400, 400));
         jLayeredPane1.setOpaque(true);
+        jLayeredPane1.setPreferredSize(new java.awt.Dimension(400, 400));
+        jLayeredPane1.setSize(new java.awt.Dimension(400, 400));
         jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         calamariLabel.setBackground(new java.awt.Color(255, 51, 0));
@@ -101,23 +108,37 @@ public class AboutBox extends javax.swing.JDialog {
         buildDateLabel.setOpaque(true);
         jLayeredPane1.add(buildDateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 175, -1));
 
+        visitGitHubButton.setBackground(new java.awt.Color(255, 255, 255));
+        visitGitHubButton.setFont(new java.awt.Font("Arial", 3, 14)); // NOI18N
+        visitGitHubButton.setForeground(new java.awt.Color(255, 51, 0));
         visitGitHubButton.setText("Visit us on GitHub");
+        visitGitHubButton.setOpaque(true);
         visitGitHubButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 visitGitHubButtonActionPerformed(evt);
             }
         });
-        jLayeredPane1.add(visitGitHubButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 175, -1));
+        jLayeredPane1.add(visitGitHubButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 175, 25));
+
+        warrantyLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        warrantyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        warrantyLabel.setText("<html><b>Warranty:</b> Calamari is provided as free open source software on an `as-is' basis.  Use at your own risk.  The developers disclaim all warranties about Calamari.</html>");
+        warrantyLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        warrantyLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jLayeredPane1.add(warrantyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 360, 70));
+
+        contributorsLabel.setText("<html><b>Contributors:</b><br>&nbsp;Jim Bowring<br>&nbsp;Simon Bodorkos<br>&nbsp;John Zeringue</html>");
+        jLayeredPane1.add(contributorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 200, 150, 80));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -138,7 +159,7 @@ public class AboutBox extends javax.swing.JDialog {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Motif".equals(info.getName())) { //Nimbus (original), Motif, Metal
+                if ("Metal".equals(info.getName())) { //Nimbus (original), Motif, Metal
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -187,8 +208,10 @@ public class AboutBox extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel buildDateLabel;
     private javax.swing.JLabel calamariLabel;
+    private javax.swing.JLabel contributorsLabel;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel versionLabel;
     private javax.swing.JButton visitGitHubButton;
+    private javax.swing.JLabel warrantyLabel;
     // End of variables declaration//GEN-END:variables
 }
