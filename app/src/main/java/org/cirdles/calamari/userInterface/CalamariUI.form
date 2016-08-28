@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="selectRatioCalculationMethod">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="fileMenu">
@@ -145,14 +147,14 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Selected Prawn XML file path:"/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="78" y="90" width="250" height="20"/>
+              <AbsoluteConstraints x="40" y="90" width="250" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -162,7 +164,7 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Selected CalamariReports folder location:"/>
             <Property name="opaque" type="boolean" value="true"/>
@@ -179,7 +181,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="16" style="3"/>
+              <Font name="Lucida Grande" size="14" style="3"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Reduce Data and Produce Reports"/>
           </Properties>
@@ -188,7 +190,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="60" y="360" width="380" height="25"/>
+              <AbsoluteConstraints x="80" y="375" width="390" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -198,7 +200,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="16" style="3"/>
+              <Font name="Lucida Grande" size="14" style="3"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Select location for CalamariReports Folder"/>
           </Properties>
@@ -207,7 +209,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="160" y="143" width="370" height="25"/>
+              <AbsoluteConstraints x="80" y="143" width="420" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -215,9 +217,6 @@
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="13" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="path"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -229,7 +228,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="40" y="190" width="630" height="-1"/>
+              <AbsoluteConstraints x="40" y="192" width="630" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -239,7 +238,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="16" style="3"/>
+              <Font name="Lucida Grande" size="14" style="3"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Select Prawn XML File"/>
           </Properties>
@@ -248,7 +247,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="100" y="63" width="220" height="25"/>
+              <AbsoluteConstraints x="80" y="63" width="220" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -256,9 +255,6 @@
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="13" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="path"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -270,7 +266,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="40" y="110" width="630" height="-1"/>
+              <AbsoluteConstraints x="40" y="112" width="630" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -280,7 +276,7 @@
               <Color blue="9" green="8" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="18" style="1"/>
+              <Font name="Lucida Grande" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -306,7 +302,7 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -318,7 +314,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="450" y="360" width="170" height="25"/>
+              <AbsoluteConstraints x="475" y="375" width="170" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -328,7 +324,7 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="Normalise Ion Counts to SBM?"/>
@@ -336,7 +332,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="110" y="220" width="220" height="30"/>
+              <AbsoluteConstraints x="40" y="225" width="290" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -349,7 +345,7 @@
               <ComponentRef name="normalizeIonCounts"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
+              <Font name="Lucida Grande" size="12" style="0"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Yes"/>
@@ -360,7 +356,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="210" width="-1" height="-1"/>
+              <AbsoluteConstraints x="340" y="215" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -373,7 +369,7 @@
               <ComponentRef name="normalizeIonCounts"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
+              <Font name="Lucida Grande" size="12" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="No"/>
             <Property name="opaque" type="boolean" value="true"/>
@@ -383,7 +379,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="230" width="-1" height="-1"/>
+              <AbsoluteConstraints x="340" y="238" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -393,7 +389,7 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="Select Ratio Calculation Method:"/>
@@ -401,7 +397,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="80" y="260" width="250" height="30"/>
+              <AbsoluteConstraints x="40" y="265" width="290" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -414,7 +410,7 @@
               <ComponentRef name="selectRatioCalculationMethod"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
+              <Font name="Lucida Grande" size="12" style="0"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Linear Regression to burn mid-time"/>
             <Property name="opaque" type="boolean" value="true"/>
@@ -424,7 +420,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="255" width="-1" height="-1"/>
+              <AbsoluteConstraints x="340" y="261" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -437,7 +433,7 @@
               <ComponentRef name="selectRatioCalculationMethod"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="0"/>
+              <Font name="Lucida Grande" size="12" style="0"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Spot Average (time-invariant)"/>
@@ -448,7 +444,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="275" width="-1" height="-1"/>
+              <AbsoluteConstraints x="340" y="284" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -458,15 +454,15 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="12" style="1"/>
+              <Font name="Lucida Grande" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Calamari will read and validate the selected Prawn XML file.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="Calamari will validate the selected Prawn XML file."/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="320" y="55" width="350" height="40"/>
+              <AbsoluteConstraints x="310" y="63" width="360" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -476,7 +472,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="16" style="3"/>
+              <Font name="Lucida Grande" size="14" style="3"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9" green="8" red="ff" type="rgb"/>
@@ -498,7 +494,7 @@
               <Color blue="e4" green="e7" red="ff" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Arial" size="14" style="1"/>
+              <Font name="Lucida Grande" size="14" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p style=&quot;text-align:right&quot;&gt;Select Case-Insensitive First Letter&lt;/br&gt; of Reference Material Name:&lt;/p&gt;&lt;/html&gt;"/>
@@ -506,7 +502,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="70" y="310" width="260" height="30"/>
+              <AbsoluteConstraints x="40" y="310" width="290" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -514,6 +510,9 @@
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Lucida Grande" size="12" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="26">
@@ -554,7 +553,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="310" width="-1" height="-1"/>
+              <AbsoluteConstraints x="340" y="315" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>

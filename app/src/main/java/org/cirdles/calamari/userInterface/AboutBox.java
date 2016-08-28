@@ -70,46 +70,44 @@ public class AboutBox extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 400, 400));
-        setPreferredSize(new java.awt.Dimension(400, 300));
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
 
         jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
         jLayeredPane1.setMinimumSize(new java.awt.Dimension(400, 400));
         jLayeredPane1.setOpaque(true);
-        jLayeredPane1.setPreferredSize(new java.awt.Dimension(400, 400));
         jLayeredPane1.setSize(new java.awt.Dimension(400, 400));
         jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         calamariLabel.setBackground(new java.awt.Color(255, 51, 0));
-        calamariLabel.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        calamariLabel.setFont(new java.awt.Font("Lucida Grande", 1, 36)); // NOI18N
         calamariLabel.setForeground(new java.awt.Color(255, 255, 255));
         calamariLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         calamariLabel.setText("Calamari");
         calamariLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         calamariLabel.setOpaque(true);
-        jLayeredPane1.add(calamariLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 175, -1));
+        jLayeredPane1.add(calamariLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 205, -1));
 
         versionLabel.setBackground(new java.awt.Color(255, 51, 0));
-        versionLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        versionLabel.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         versionLabel.setForeground(new java.awt.Color(255, 255, 255));
         versionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         versionLabel.setText("Calamari");
         versionLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         versionLabel.setOpaque(true);
-        jLayeredPane1.add(versionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 175, -1));
+        jLayeredPane1.add(versionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 205, -1));
 
         buildDateLabel.setBackground(new java.awt.Color(255, 51, 0));
-        buildDateLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        buildDateLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         buildDateLabel.setForeground(new java.awt.Color(255, 255, 255));
         buildDateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         buildDateLabel.setText("Calamari");
         buildDateLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         buildDateLabel.setOpaque(true);
-        jLayeredPane1.add(buildDateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 175, -1));
+        jLayeredPane1.add(buildDateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 205, -1));
 
         visitGitHubButton.setBackground(new java.awt.Color(255, 255, 255));
-        visitGitHubButton.setFont(new java.awt.Font("Arial", 3, 14)); // NOI18N
+        visitGitHubButton.setFont(new java.awt.Font("Lucida Grande", 3, 14)); // NOI18N
         visitGitHubButton.setForeground(new java.awt.Color(255, 51, 0));
         visitGitHubButton.setText("Visit us on GitHub");
         visitGitHubButton.setOpaque(true);
@@ -118,15 +116,16 @@ public class AboutBox extends javax.swing.JDialog {
                 visitGitHubButtonActionPerformed(evt);
             }
         });
-        jLayeredPane1.add(visitGitHubButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 175, 25));
+        jLayeredPane1.add(visitGitHubButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 205, 25));
 
-        warrantyLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        warrantyLabel.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         warrantyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         warrantyLabel.setText("<html><b>Warranty:</b> Calamari is provided as free open source software on an `as-is' basis.  Use at your own risk.  The developers disclaim all warranties about Calamari.</html>");
         warrantyLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         warrantyLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         jLayeredPane1.add(warrantyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 360, 70));
 
+        contributorsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         contributorsLabel.setText("<html><b>Contributors:</b><br>&nbsp;Jim Bowring<br>&nbsp;Simon Bodorkos<br>&nbsp;John Zeringue</html>");
         jLayeredPane1.add(contributorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 200, 150, 80));
 
