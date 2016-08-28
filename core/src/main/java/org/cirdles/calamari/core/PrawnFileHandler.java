@@ -33,9 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import static org.cirdles.calamari.constants.CalamariConstants.URL_STRING_FOR_PRAWN_XML_SCHEMA;
 import static org.cirdles.calamari.constants.CalamariConstants.XML_HEADER_FOR_PRAWN_FILES;
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
@@ -137,7 +141,12 @@ public class PrawnFileHandler {
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
+        
+        // force validation against schema
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
+        Schema schema = sf.newSchema(new URL(URL_STRING_FOR_PRAWN_XML_SCHEMA)); 
+        jaxbUnmarshaller.setSchema(schema);
+ 
         // test for URL such as "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml"
         boolean isURL = false;
         if (resource.toLowerCase(Locale.ENGLISH).startsWith("http")) {

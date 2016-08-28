@@ -28,6 +28,9 @@ public final class CalamariConstants {
             + "            xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
             + "                                https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd\">";
     
+    public static String URL_STRING_FOR_PRAWN_XML_SCHEMA 
+            = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd";
+    
     public static final String DEFAULT_PRAWNFILE_NAME = "NO_NAME_";
 
 }
