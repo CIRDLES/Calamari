@@ -1,4 +1,4 @@
-![alt tag](./app/src/main/resources/org/cirdles/calamari/squidoo-icon.png)Calamari
+![logo](./app/src/main/resources/org/cirdles/calamari/squidoo-icon.png)Calamari
 ========
 
 [![Build Status](https://travis-ci.org/bowring/Calamari.svg?branch=master)](https://travis-ci.org/bowring/Calamari)
