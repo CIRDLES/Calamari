@@ -102,33 +102,12 @@ public class PrawnFileHandlerService {
         }
     }
 
-//    private void recursiveDelete(Path directory) throws IOException {
-//        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
-//            @Override
-//            public FileVisitResult visitFile(
-//                    Path file,
-//                    BasicFileAttributes attrs) throws IOException {
-//
-//                Files.delete(file);
-//                return FileVisitResult.CONTINUE;
-//            }
-//
-//            @Override
-//            public FileVisitResult postVisitDirectory(
-//                    Path dir,
-//                    IOException exc) throws IOException {
-//
-//                Files.delete(dir);
-//                return FileVisitResult.CONTINUE;
-//            }
-//        });
-//    }
-
     public Path generateReports(
             String myFileName,
             InputStream prawnFile,
             boolean useSBM,
-            boolean userLinFits) throws IOException, JAXBException, SAXException {
+            boolean userLinFits,
+            String firstLetterRM) throws IOException, JAXBException, SAXException {
 
         String fileName = myFileName;
         if (myFileName == null){
@@ -150,7 +129,7 @@ public class PrawnFileHandlerService {
         prawnFileHandler.writeReportsFromPrawnFile(prawnFilePath.toString(),
                 useSBM,
                 userLinFits, 
-                "T");
+                firstLetterRM);
 
         Files.delete(prawnFilePath);
 

@@ -22,6 +22,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Reduces data in the background, updating the UI as it works.
@@ -59,7 +60,7 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void doInBackground() {
         prawnFileHandler.setProgressSubscriber(progress -> publish(progress));
 
         try {
@@ -67,7 +68,7 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
                     useSBM,
                     userLinFits, 
                     referenceMaterialLetter);
-        } catch (IOException | JAXBException exception) {
+        } catch (IOException | JAXBException | SAXException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());
             String []message = 

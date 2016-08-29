@@ -109,6 +109,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
         normalizeIonCounts = new javax.swing.ButtonGroup();
         selectRatioCalculationMethod = new javax.swing.ButtonGroup();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         basePane = new javax.swing.JLayeredPane();
         inputFileLocationLabel = new javax.swing.JLabel();
         outputFileLocationLabel = new javax.swing.JLabel();
@@ -146,70 +147,66 @@ public class CalamariUI extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(700, 475));
 
         basePane.setBackground(new java.awt.Color(255, 231, 228));
+        basePane.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         basePane.setOpaque(true);
         basePane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         inputFileLocationLabel.setBackground(new java.awt.Color(255, 231, 228));
-        inputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        inputFileLocationLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         inputFileLocationLabel.setText("Selected Prawn XML file path:");
         inputFileLocationLabel.setOpaque(true);
-        basePane.add(inputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 90, 250, 20));
+        basePane.add(inputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, 20));
 
         outputFileLocationLabel.setBackground(new java.awt.Color(255, 231, 228));
-        outputFileLocationLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        outputFileLocationLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         outputFileLocationLabel.setText("Selected CalamariReports folder location:");
         outputFileLocationLabel.setOpaque(true);
         basePane.add(outputFileLocationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 330, 20));
 
-        reduceDataButton.setBackground(new java.awt.Color(255, 231, 228));
-        reduceDataButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
+        reduceDataButton.setBackground(new java.awt.Color(255, 255, 255));
+        reduceDataButton.setFont(new java.awt.Font("Lucida Grande", 3, 14)); // NOI18N
         reduceDataButton.setText("Reduce Data and Produce Reports");
-        reduceDataButton.setOpaque(true);
         reduceDataButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reduceDataButtonActionPerformed(evt);
             }
         });
-        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, 380, 30));
+        basePane.add(reduceDataButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 375, 390, 25));
 
-        selectReportsLocationButton.setBackground(new java.awt.Color(255, 231, 228));
-        selectReportsLocationButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
+        selectReportsLocationButton.setBackground(new java.awt.Color(255, 255, 255));
+        selectReportsLocationButton.setFont(new java.awt.Font("Lucida Grande", 3, 14)); // NOI18N
         selectReportsLocationButton.setText("Select location for CalamariReports Folder");
-        selectReportsLocationButton.setOpaque(true);
         selectReportsLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectReportsLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 370, 30));
+        basePane.add(selectReportsLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 143, 420, 25));
 
         outputFolderLocation.setBackground(new java.awt.Color(255, 255, 255));
-        outputFolderLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         outputFolderLocation.setText("path");
         outputFolderLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         outputFolderLocation.setOpaque(true);
-        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 630, -1));
+        basePane.add(outputFolderLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 192, 630, -1));
 
-        selectPrawnFileLocationButton.setBackground(new java.awt.Color(255, 231, 228));
-        selectPrawnFileLocationButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
+        selectPrawnFileLocationButton.setBackground(new java.awt.Color(255, 255, 255));
+        selectPrawnFileLocationButton.setFont(new java.awt.Font("Lucida Grande", 3, 14)); // NOI18N
         selectPrawnFileLocationButton.setText("Select Prawn XML File");
-        selectPrawnFileLocationButton.setOpaque(true);
         selectPrawnFileLocationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectPrawnFileLocationButtonActionPerformed(evt);
             }
         });
-        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 220, 30));
+        basePane.add(selectPrawnFileLocationButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 63, 220, 25));
 
         currentPrawnFileLocation.setBackground(new java.awt.Color(255, 255, 255));
-        currentPrawnFileLocation.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         currentPrawnFileLocation.setText("path");
         currentPrawnFileLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         currentPrawnFileLocation.setOpaque(true);
-        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 630, -1));
+        basePane.add(currentPrawnFileLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 112, 630, -1));
 
         calamariInfo.setBackground(new java.awt.Color(255, 8, 9));
-        calamariInfo.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        calamariInfo.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         calamariInfo.setForeground(new java.awt.Color(255, 255, 255));
         calamariInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         calamariInfo.setText("jLabel1");
@@ -218,21 +215,22 @@ public class CalamariUI extends javax.swing.JFrame {
         basePane.add(calamariInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, -1));
 
         reduceDataProgressBar.setBackground(new java.awt.Color(255, 231, 228));
-        reduceDataProgressBar.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        reduceDataProgressBar.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        reduceDataProgressBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         reduceDataProgressBar.setOpaque(true);
         reduceDataProgressBar.setStringPainted(true);
-        basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, 170, 30));
+        basePane.add(reduceDataProgressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(475, 375, 170, 25));
 
         normalizeCountsLabel.setBackground(new java.awt.Color(255, 231, 228));
-        normalizeCountsLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        normalizeCountsLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         normalizeCountsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         normalizeCountsLabel.setText("Normalise Ion Counts to SBM?");
         normalizeCountsLabel.setOpaque(true);
-        basePane.add(normalizeCountsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 220, 30));
+        basePane.add(normalizeCountsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 225, 290, 30));
 
         normalizeIonCountsYes.setBackground(new java.awt.Color(255, 231, 228));
         normalizeIonCounts.add(normalizeIonCountsYes);
-        normalizeIonCountsYes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        normalizeIonCountsYes.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         normalizeIonCountsYes.setSelected(true);
         normalizeIonCountsYes.setText("Yes");
         normalizeIonCountsYes.setOpaque(true);
@@ -241,11 +239,11 @@ public class CalamariUI extends javax.swing.JFrame {
                 normalizeIonCountsYesActionPerformed(evt);
             }
         });
-        basePane.add(normalizeIonCountsYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, -1, -1));
+        basePane.add(normalizeIonCountsYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 215, -1, -1));
 
         normalizeIonCountsNo.setBackground(new java.awt.Color(255, 231, 228));
         normalizeIonCounts.add(normalizeIonCountsNo);
-        normalizeIonCountsNo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        normalizeIonCountsNo.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         normalizeIonCountsNo.setText("No");
         normalizeIonCountsNo.setOpaque(true);
         normalizeIonCountsNo.addActionListener(new java.awt.event.ActionListener() {
@@ -253,18 +251,18 @@ public class CalamariUI extends javax.swing.JFrame {
                 normalizeIonCountsNoActionPerformed(evt);
             }
         });
-        basePane.add(normalizeIonCountsNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 230, -1, -1));
+        basePane.add(normalizeIonCountsNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 238, -1, -1));
 
         selectRatioCalcluationMethodLabel.setBackground(new java.awt.Color(255, 231, 228));
-        selectRatioCalcluationMethodLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        selectRatioCalcluationMethodLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         selectRatioCalcluationMethodLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         selectRatioCalcluationMethodLabel.setText("Select Ratio Calculation Method:");
         selectRatioCalcluationMethodLabel.setOpaque(true);
-        basePane.add(selectRatioCalcluationMethodLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 250, 30));
+        basePane.add(selectRatioCalcluationMethodLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 265, 290, 30));
 
         useLinearRegression.setBackground(new java.awt.Color(255, 231, 228));
         selectRatioCalculationMethod.add(useLinearRegression);
-        useLinearRegression.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        useLinearRegression.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         useLinearRegression.setText("Linear Regression to burn mid-time");
         useLinearRegression.setOpaque(true);
         useLinearRegression.addActionListener(new java.awt.event.ActionListener() {
@@ -272,11 +270,11 @@ public class CalamariUI extends javax.swing.JFrame {
                 useLinearRegressionActionPerformed(evt);
             }
         });
-        basePane.add(useLinearRegression, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 255, -1, -1));
+        basePane.add(useLinearRegression, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 261, -1, -1));
 
         useSpotAverage.setBackground(new java.awt.Color(255, 231, 228));
         selectRatioCalculationMethod.add(useSpotAverage);
-        useSpotAverage.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        useSpotAverage.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         useSpotAverage.setSelected(true);
         useSpotAverage.setText("Spot Average (time-invariant)");
         useSpotAverage.setOpaque(true);
@@ -285,41 +283,40 @@ public class CalamariUI extends javax.swing.JFrame {
                 useSpotAverageActionPerformed(evt);
             }
         });
-        basePane.add(useSpotAverage, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 275, -1, -1));
+        basePane.add(useSpotAverage, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 284, -1, -1));
 
         normalizeCountsLabel1.setBackground(new java.awt.Color(255, 231, 228));
-        normalizeCountsLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        normalizeCountsLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 12)); // NOI18N
         normalizeCountsLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        normalizeCountsLabel1.setText("<html>Calamari will read and validate the selected Prawn XML file.</html>");
+        normalizeCountsLabel1.setText("Calamari will validate the selected Prawn XML file.");
         normalizeCountsLabel1.setOpaque(true);
-        basePane.add(normalizeCountsLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 55, 350, 40));
+        basePane.add(normalizeCountsLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 63, 360, 25));
 
-        readMeButton.setBackground(new java.awt.Color(255, 231, 228));
-        readMeButton.setFont(new java.awt.Font("Arial", 3, 16)); // NOI18N
+        readMeButton.setBackground(new java.awt.Color(255, 255, 255));
+        readMeButton.setFont(new java.awt.Font("Lucida Grande", 3, 14)); // NOI18N
         readMeButton.setForeground(new java.awt.Color(255, 8, 9));
         readMeButton.setText("Please click here for Information about Calamari");
-        readMeButton.setOpaque(true);
         readMeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 readMeButtonActionPerformed(evt);
             }
         });
-        basePane.add(readMeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 520, 30));
+        basePane.add(readMeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 520, 25));
 
         selectReferenceMaterialInitialLetterLabel.setBackground(new java.awt.Color(255, 231, 228));
-        selectReferenceMaterialInitialLetterLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        selectReferenceMaterialInitialLetterLabel.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
         selectReferenceMaterialInitialLetterLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         selectReferenceMaterialInitialLetterLabel.setText("<html><p style=\"text-align:right\">Select Case-Insensitive First Letter</br> of Reference Material Name:</p></html>");
         selectReferenceMaterialInitialLetterLabel.setOpaque(true);
-        basePane.add(selectReferenceMaterialInitialLetterLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 260, 30));
+        basePane.add(selectReferenceMaterialInitialLetterLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 290, 30));
 
-        referenceMaterialFirstLetterComboBox.setBackground(new java.awt.Color(255, 231, 228));
+        referenceMaterialFirstLetterComboBox.setBackground(new java.awt.Color(255, 255, 255));
+        referenceMaterialFirstLetterComboBox.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         referenceMaterialFirstLetterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" }));
         referenceMaterialFirstLetterComboBox.setSelectedIndex(19);
         referenceMaterialFirstLetterComboBox.setFocusCycleRoot(true);
         referenceMaterialFirstLetterComboBox.setName("T"); // NOI18N
-        referenceMaterialFirstLetterComboBox.setOpaque(true);
-        basePane.add(referenceMaterialFirstLetterComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 310, -1, -1));
+        basePane.add(referenceMaterialFirstLetterComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 315, -1, -1));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -480,6 +477,7 @@ public class CalamariUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JLayeredPane basePane;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel calamariInfo;
     private javax.swing.JMenu calamariMenu;
     private javax.swing.JLabel currentPrawnFileLocation;
