@@ -14,7 +14,7 @@ Our goal is to demonstrate the efficacy of our work in engineering a replacement
 
 **Calamari** reads in a SHRIMP Prawn XML file and reports if the file does not conform to our
 existing [schema](https://github.com/bowring/XSD/blob/master/SHRIMP/SHRIMP_PRAWN.xsd).  If it does conform, then
-**Calamari** will produce a folder of 6 reports as ".csv" files that are explained [here]().
+**Calamari** will produce a folder of 6 reports as ".csv" files that are explained [here](https://github.com/CIRDLES/ET_Redux/wiki/Calamari-Reports-Documentation).
 
 **Requirements:**  
 
