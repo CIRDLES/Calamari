@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author James F. Bowring &lt;bowring at gmail.com&gt;
  */
-public class ShrimpFraction {
+public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private String fractionID;
     private int spotNumber;
@@ -48,6 +48,9 @@ public class ShrimpFraction {
     private boolean useSBM;
     private boolean userLinFits;
 
+    private double[][] reducedPkHt;
+    private double[][] reducedPkHtFerr;
+
     public ShrimpFraction() {
         fractionID = "NONE";
         spotNumber = -1;
@@ -70,12 +73,26 @@ public class ShrimpFraction {
         pkFerr = new double[0][0];
         referenceMaterial = false;
 
+        reducedPkHt = new double[0][0];
+        reducedPkHtFerr = new double[0][0];
+
     }
 
     public ShrimpFraction(String fractionID, Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios) {
         this();
         this.fractionID = fractionID;
         this.isotopicRatios = isotopicRatios;
+    }
+
+    public int getIndexOfSpeciesByName(IsotopeNames speciesName) {
+        int retVal = -1;
+
+        for (int i = 0; i < namesOfSpecies.length; i++) {
+            if (namesOfSpecies[i].compareToIgnoreCase(speciesName.getPrawnName()) == 0) {
+                retVal = i;
+            }
+        }
+        return retVal;
     }
 
     /**
@@ -398,6 +415,34 @@ public class ShrimpFraction {
      */
     public void setUserLinFits(boolean userLinFits) {
         this.userLinFits = userLinFits;
+    }
+
+    /**
+     * @return the reducedPkHt
+     */
+    public double[][] getReducedPkHt() {
+        return reducedPkHt;
+    }
+
+    /**
+     * @param reducedPkHt the reducedPkHt to set
+     */
+    public void setReducedPkHt(double[][] reducedPkHt) {
+        this.reducedPkHt = reducedPkHt;
+    }
+
+    /**
+     * @return the reducedPkHtFerr
+     */
+    public double[][] getReducedPkHtFerr() {
+        return reducedPkHtFerr;
+    }
+
+    /**
+     * @param reducedPkHtFerr the reducedPkHtFerr to set
+     */
+    public void setReducedPkHtFerr(double[][] reducedPkHtFerr) {
+        this.reducedPkHtFerr = reducedPkHtFerr;
     }
 
 }

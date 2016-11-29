@@ -13,39 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
 
+package org.cirdles.calamari.tasks.expressions.storedExpressions;
+
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public class Subtract implements OperationInterface {
+public class ShrimpSpeciesNode implements ExpressionTreeInterface{
+    
+    private IsotopeNames speciesName;
+
+    public ShrimpSpeciesNode(IsotopeNames speciesName) {
+        this.speciesName = speciesName;
+    }
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param pkInterpScan the value of pkInterpScan
      * @param isotopeToIndexMap the value of isotopeToIndexMap
      * @return the double
      */
     @Override
-    public double eval(
-            ExpressionTreeInterface leftET, 
-            ExpressionTreeInterface rightET, 
-            double[] pkInterpScan, 
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal = 0.0;
-        try {
-            retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) - rightET.eval(pkInterpScan, isotopeToIndexMap);
-        } catch (Exception e) {
-        }
-
-        return retVal;
+    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {  
+        return pkInterpScan[isotopeToIndexMap.get(speciesName)];
+    }
+    
+    public String getPrettyName(){
+        return speciesName.getName();
     }
 
+    @Override
+    public List<RawRatioNamesSHRIMP> getRatiosOfInterest() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }

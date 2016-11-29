@@ -13,15 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.cirdles.calamari.tasks;
+package org.cirdles.calamari.shrimp;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public interface TaskInterface {
+public interface ShrimpFractionExpressionInterface {
 
-    public void evaluateTaskExpressions();
-    
+    public int getIndexOfSpeciesByName(IsotopeNames speciesName);
+
+    /**
+     * @return the pkInterp
+     */
+    public double[][] getReducedPkHt();
+
+    /**
+     * @return the pkInterpFerr
+     */
+    public double[][] getReducedPkHtFerr();
+
+    public String getFractionID();
+
+    /**
+     * @return the timeStampSec
+     */
+    public double[][] getTimeStampSec();
 }

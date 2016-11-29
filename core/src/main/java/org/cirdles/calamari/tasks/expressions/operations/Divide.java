@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.util.Map;
+import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -24,14 +25,26 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class Divide implements OperationInterface {
 
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double
+     */
     @Override
-    public double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+    public double eval(
+            ExpressionTreeInterface leftET,
+            ExpressionTreeInterface rightET,
+            double[] pkInterpScan,
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal = 0.0;
         try {
-            retVal = leftET.eval() / rightET.eval();
+            retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) / rightET.eval(pkInterpScan, isotopeToIndexMap);
         } catch (Exception e) {
         }
-               
+
         return retVal;
     }
 

@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks.expressions;
+
+import java.util.List;
+import java.util.Map;
+import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 
 /**
  *
@@ -22,5 +26,19 @@ package org.cirdles.calamari.tasks.expressions;
  */
 public interface ExpressionTreeInterface {
 
-    public double eval();
+    /**
+     *
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double
+     */
+    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+
+    public String getPrettyName();
+
+    /**
+     * @return the ratiosOfInterest
+     */
+    public List<RawRatioNamesSHRIMP> getRatiosOfInterest();
+
 }

@@ -59,12 +59,15 @@ public class PrawnFileRunFractionParser {
     private String[] namesOfSpecies;
     private double[][] timeStampSec;
     private double[][] trimMass;
-    private double[][] netPkCps;
+    private double[][] pkNetCps;
     private double[][] sbmCps;
     private double[][] pkFerr;
     private double[] totalCps;
     private Map<IsotopeNames, Integer> indexToSpeciesMap;
     private Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios;
+
+    private double[][] reducedPkHt;
+    private double[][] reducedPkHtFerr;
 
     public PrawnFileRunFractionParser() {
         dateTimeMilliseconds = 0l;
@@ -86,6 +89,7 @@ public class PrawnFileRunFractionParser {
             parseRunFractionData();
             calculateTotalPerSpeciesCPS();
             calculateIsotopicRatios(useSBM, userLinFits);
+            calculateInterpolatedPeakHeights();
 
             shrimpFraction = new ShrimpFraction(fractionID, isotopicRatios);
             shrimpFraction.setDateTimeMilliseconds(dateTimeMilliseconds);
@@ -102,10 +106,12 @@ public class PrawnFileRunFractionParser {
             shrimpFraction.setRawPeakData(rawPeakData);
             shrimpFraction.setRawSBMData(rawSBMData);
             shrimpFraction.setTotalCps(totalCps);
-            shrimpFraction.setNetPkCps(netPkCps);
+            shrimpFraction.setNetPkCps(pkNetCps);
             shrimpFraction.setPkFerr(pkFerr);
             shrimpFraction.setUseSBM(useSBM);
             shrimpFraction.setUserLinFits(userLinFits);
+            shrimpFraction.setReducedPkHt(reducedPkHt);
+            shrimpFraction.setReducedPkHtFerr(reducedPkHtFerr);
 
             // determine reference material status
             // hard coded for now
@@ -143,7 +149,7 @@ public class PrawnFileRunFractionParser {
 
         timeStampSec = new double[nScans][nSpecies];
         trimMass = new double[nScans][nSpecies];
-        netPkCps = new double[nScans][nSpecies];
+        pkNetCps = new double[nScans][nSpecies];
         sbmCps = new double[nScans][nSpecies];
         pkFerr = new double[nScans][nSpecies];
 
@@ -319,10 +325,10 @@ public class PrawnFileRunFractionParser {
             for (int speciesMeasurementIndex = 0; speciesMeasurementIndex < nSpecies; speciesMeasurementIndex++) {
                 if (speciesMeasurementIndex != HARD_WIRED_INDEX_OF_BACKGROUND) {
                     // correct PeakCps to NetPkCps
-                    netPkCps[scanNum][speciesMeasurementIndex] = pkCps[scanNum][speciesMeasurementIndex] - backgroundCps;
-                    sumOfCorrectedPeaks[speciesMeasurementIndex] += netPkCps[scanNum][speciesMeasurementIndex];
+                    pkNetCps[scanNum][speciesMeasurementIndex] = pkCps[scanNum][speciesMeasurementIndex] - backgroundCps;
+                    sumOfCorrectedPeaks[speciesMeasurementIndex] += pkNetCps[scanNum][speciesMeasurementIndex];
                     // calculate fractional error
-                    double absNetPeakCps = netPkCps[scanNum][speciesMeasurementIndex];
+                    double absNetPeakCps = pkNetCps[scanNum][speciesMeasurementIndex];
                     if (absNetPeakCps > 1.0e-6) {
                         double calcVariance
                                 = totalCounts[scanNum][speciesMeasurementIndex]//
@@ -368,8 +374,8 @@ public class PrawnFileRunFractionParser {
                 double totCtsDEN = 0.0;
 
                 for (int j = 0; j < nScans; j++) {
-                    totCtsNUM += netPkCps[j][NUM] * countTimeSec[NUM];
-                    totCtsDEN += netPkCps[j][DEN] * countTimeSec[DEN];
+                    totCtsNUM += pkNetCps[j][NUM] * countTimeSec[NUM];
+                    totCtsDEN += pkNetCps[j][DEN] * countTimeSec[DEN];
                 }
 
                 double ratioVal;
@@ -454,8 +460,8 @@ public class PrawnFileRunFractionParser {
                         for (int numDenom = 0; numDenom < 2; numDenom++) {
                             if (continueWithScanProcessing) {
                                 int k = sNum + numDenom;
-                                double aNetCPS = netPkCps[k][aOrd];
-                                double bNetCPS = netPkCps[k][bOrd];
+                                double aNetCPS = pkNetCps[k][aOrd];
+                                double bNetCPS = pkNetCps[k][bOrd];
 
                                 if ((aNetCPS == SQUID_ERROR_VALUE) || (bNetCPS == SQUID_ERROR_VALUE)) {
 //                                hasZerPk = true;
@@ -497,10 +503,10 @@ public class PrawnFileRunFractionParser {
 
                             // test whether to continue
                             if (!zerPkCt[sNum] && !zerPkCt[sn1]) {
-                                double aPk1 = netPkCps[sNum][aOrd];
-                                double bPk1 = netPkCps[sNum][bOrd];
-                                double aPk2 = netPkCps[sn1][aOrd];
-                                double bPk2 = netPkCps[sn1][bOrd];
+                                double aPk1 = pkNetCps[sNum][aOrd];
+                                double bPk1 = pkNetCps[sNum][bOrd];
+                                double aPk2 = pkNetCps[sn1][aOrd];
+                                double bPk2 = pkNetCps[sn1][bOrd];
 
                                 if (useSBM) {
                                     aPk1 /= sbmCps[sNum][aOrd];
@@ -650,6 +656,61 @@ public class PrawnFileRunFractionParser {
             }// check for number of species present
         }); // end iteration through isotopicRatios
 
+    }// end calculateIsotopicRatios
+
+    private void calculateInterpolatedPeakHeights() {
+        // extracted from https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-EqnInterp
+        // design decision to pre-compute all to store with shrimpFraction and enable on-tthe-fly tasks
+
+        boolean singleScan = (nScans == 1);
+        int sIndx = singleScan ? 1 : nScans - 1;
+        reducedPkHt = new double[nScans][nSpecies];
+        reducedPkHtFerr = new double[nScans][nSpecies];
+
+        // The next step is to convert SBM peak-heights, calculate uncertainties, 
+        //and assign 'working' peak-heights ("ReducedPkHt") values to both SBM-normalised 
+        //data and data not normalised to SBM.
+        for (int scanNum = 0; scanNum < nScans; scanNum++) {
+            for (int speciesIndex = 0; speciesIndex < nSpecies; speciesIndex++) {
+                int pkOrder = speciesIndex;
+                double scanPkCts;
+
+                double netPkCps = pkNetCps[scanNum][pkOrder];
+                if (netPkCps == SQUID_ERROR_VALUE) {
+                    reducedPkHt[scanNum][pkOrder] = SQUID_ERROR_VALUE;
+                } else {
+                    scanPkCts = netPkCps * countTimeSec[pkOrder];
+//                    If ScanPkCts <= 0 And ScanPkCts > 16 --verbatim, seems nonsensical
+//                    ReducedPkHt[ScanNum, PkOrder] = _[SQUID error-value]_
+//                    Exit For
+//                    End If
+                    double pkFractErr = pkFerr[scanNum][pkOrder];
+
+                    boolean sbmNorm = (sbmCps[scanNum][pkOrder] > 0.0);
+                    if (sbmNorm) {
+                        try {
+                            scanPkCts /= sbmCps[scanNum][pkOrder];
+                        } catch (Exception e) {
+                            scanPkCts = SQUID_ERROR_VALUE;
+                        }
+                        try {
+                            pkFractErr = StrictMath.sqrt(pkFractErr * pkFractErr
+                                    + 1.0 / sbmCps[scanNum][pkOrder] / countTimeSec[pkOrder]);
+                        } catch (Exception e) {
+                            pkFractErr = SQUID_ERROR_VALUE;
+                        }
+                    }
+                    
+                    try {
+                        reducedPkHt[scanNum][pkOrder] = scanPkCts / countTimeSec[pkOrder];
+                    } catch (Exception e) {
+                        reducedPkHt[scanNum][pkOrder] = SQUID_ERROR_VALUE;
+                    }
+                    reducedPkHtFerr[scanNum][pkOrder] = pkFractErr;
+                }
+            }
+        } // end of scans loop
+        // the remainder of the math is done on a per-expression basis
     }
 
 }

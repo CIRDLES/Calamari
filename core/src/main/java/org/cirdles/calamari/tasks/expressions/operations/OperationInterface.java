@@ -15,6 +15,8 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.util.Map;
+import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -23,5 +25,17 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public interface OperationInterface {
 
-    public double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET);
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double
+     */
+    public double eval(
+            ExpressionTreeInterface leftET, 
+            ExpressionTreeInterface rightET, 
+            double[] pkInterpScan,
+            Map<IsotopeNames, Integer> isotopeToIndexMap);
 }

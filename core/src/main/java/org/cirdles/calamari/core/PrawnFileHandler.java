@@ -55,6 +55,7 @@ public class PrawnFileHandler {
     private String currentPrawnFileLocation;
     private Consumer<Integer> progressSubscriber;
     private CalamariReportsEngine reportsEngine;
+    private CalamariTaskEngine taskEngine;
 
     private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
             = new PrawnFileRunFractionParser();
@@ -63,7 +64,7 @@ public class PrawnFileHandler {
      * Creates a new {@link PrawnFileHandler} using a new reports engine.
      */
     public PrawnFileHandler() {
-        this(new CalamariReportsEngine());
+        this(new CalamariReportsEngine(), new CalamariTaskEngine());
     }
 
     /**
@@ -71,8 +72,9 @@ public class PrawnFileHandler {
      *
      * @param reportsEngine the reports engine to use
      */
-    public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
+    public PrawnFileHandler(CalamariReportsEngine reportsEngine, CalamariTaskEngine taskEngine) {
         this.reportsEngine = reportsEngine;
+        this.taskEngine = taskEngine;
     }
 
     /**
@@ -130,6 +132,7 @@ public class PrawnFileHandler {
     public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
             throws IOException, MalformedURLException, JAXBException, SAXException {
         List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter);
+        taskEngine.performTask(shrimpFractions);
         reportsEngine.produceReports(shrimpFractions);
     }
 

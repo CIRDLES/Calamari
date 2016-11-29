@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package org.cirdles.calamari.tasks;
+package org.cirdles.calamari.tasks.storedTasks;
+
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.Task;
+import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus4;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public interface TaskInterface {
+public class SquidTask1 extends Task {
 
-    public void evaluateTaskExpressions();
-    
+    public SquidTask1(ShrimpFractionExpressionInterface shrimpFraction) {
+        super(shrimpFraction);
+        
+        taskExpressionsOrdered.put(1, new SquidExpressionMinus4());
+    }
+
 }
