@@ -198,7 +198,7 @@ public class Task implements TaskInterface {
                     sigRho[i - 1][i] = 0.25;
                 }
             }
-            
+
             WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
             double meanEq;
             double meanEqSig;
@@ -219,7 +219,7 @@ public class Task implements TaskInterface {
 //                    ratioMean = wtdLinCorrResults.getIntercept();
 //                    ratioMeanSig = wtdLinCorrResults.getSigmaIntercept();
 //                }
-            System.out.println(shrimpFraction.getFractionID() + "  " + expression.getPrettyName() + "   " + " = " + meanEq + "   " + eqTime[0] + "   " + eqVal[0]);
+            System.out.println(shrimpFraction.getFractionID() + "  " + expression.getPrettyName() + "   " + " = " + meanEq + "   " + eqTime[0] + "   " + eqVal[0] + "   " + eqVal[0] * fractErr[0]);
 
         }// end of visiting each expression
 

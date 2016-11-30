@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks.storedTasks;
 
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.Task;
+import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression1;
+import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus1;
+import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus4;
 
 /**
@@ -28,8 +31,12 @@ public class SquidTask1 extends Task {
 
     public SquidTask1(ShrimpFractionExpressionInterface shrimpFraction) {
         super(shrimpFraction);
-        
-        taskExpressionsOrdered.put(1, new SquidExpressionMinus4());
+
+        taskExpressionsOrdered.put(1, new CustomExpression1());
+        taskExpressionsOrdered.put(2, new CustomExpression2());
+        taskExpressionsOrdered.put(3, new SquidExpressionMinus1());
+        taskExpressionsOrdered.put(4, new SquidExpressionMinus4());
+        taskExpressionsOrdered.put(4, new SquidExpressionMinus3());
     }
 
 }
