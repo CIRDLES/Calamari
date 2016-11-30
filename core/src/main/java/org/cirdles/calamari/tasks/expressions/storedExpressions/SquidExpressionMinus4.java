@@ -19,7 +19,6 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.operations.Pow;
 
 /**
  *
@@ -42,7 +41,7 @@ public class SquidExpressionMinus4 extends ExpressionTree {
 
         ExpressionTreeInterface numeratorRatio = new ExpressionTree("238/196", 0.0, species238, species196, divide);
         ExpressionTreeInterface denominatorRatio = new ExpressionTree("254/238", 0.0, species254, species238, divide);
-        ExpressionTreeInterface denominatorRatioPow = new ExpressionTree("254/238^0.66", 0.0, denominatorRatio, new ExpressionTree("0.66)", 0.66), new Pow());
+        ExpressionTreeInterface denominatorRatioPow = new ExpressionTree("254/238^0.66", 0.0, denominatorRatio, new ExpressionTree("0.66)", 0.66), pow);
         
         leftET = numeratorRatio;
         rightET = denominatorRatioPow;

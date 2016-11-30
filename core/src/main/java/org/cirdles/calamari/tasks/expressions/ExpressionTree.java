@@ -18,18 +18,30 @@ package org.cirdles.calamari.tasks.expressions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
+import org.cirdles.calamari.tasks.expressions.operations.Log;
+import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.OperationInterface;
+import org.cirdles.calamari.tasks.expressions.operations.Pow;
+import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public class ExpressionTree implements ExpressionTreeInterface {
+public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatios {
 
+    protected static OperationInterface add = new Add();
+    protected static OperationInterface subtract = new Subtract();
+    protected static OperationInterface multiply = new Multiply();
     protected static OperationInterface divide = new Divide();
+    protected static OperationInterface log = new Log();
+    protected static OperationInterface pow = new Pow();
 
     protected String prettyName;
     protected double value;
@@ -85,6 +97,16 @@ public class ExpressionTree implements ExpressionTreeInterface {
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
         return operation == null ? value : operation.eval(leftET, rightET, pkInterpScan, isotopeToIndexMap);
+    }
+    
+    public Set extractUniqueSpeciesNumbers(){
+        // assume acquisition order is atomic weight order
+        Set<IsotopeNames> eqPkUndupeOrd = new TreeSet<>();
+        for (int i = 0; i < ratiosOfInterest.size(); i++) {
+            eqPkUndupeOrd.add(ratiosOfInterest.get(i).getNumerator());
+            eqPkUndupeOrd.add(ratiosOfInterest.get(i).getDenominator());
+        }
+        return eqPkUndupeOrd;
     }
 
     /**

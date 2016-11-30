@@ -16,10 +16,8 @@
 
 package org.cirdles.calamari.tasks.expressions.storedExpressions;
 
-import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -48,11 +46,4 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface{
     public String getPrettyName(){
         return speciesName.getName();
     }
-
-    @Override
-    public List<RawRatioNamesSHRIMP> getRatiosOfInterest() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 }

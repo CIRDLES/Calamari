@@ -29,62 +29,61 @@ package org.cirdles.calamari.shrimp;
  */
 public enum IsotopeNames {
 
-    // IsotopeNames
-    UO270("UO270", 270,"270UO"),
-    UO254("UO254", 254,"254UO"),
-    ThO248("ThO248", 248,"248ThO"),
+    // IsotopeNames in atomic number order = acquisition order
+    Hf176("Hf176", 176, "176Hf"),
+    Zr2O196("Zr2O196", 196, "196Zr2O"),
     /**
-     * 
+     *
      */
-    U238( "U238", 238,"238U"),
+    Hg202("Hg202", 202, "202Hg"),
     /**
-     * 
+     *
      */
-    U235("U235", 235,"235U"),
+    Pb204("Pb204", 204, "204Pb"),
     /**
-     * 
+     *
      */
-    Th232( "Th232", 232,"232Th"),
+    Pb206("Pb206", 206, "206Pb"),
     /**
-     * 
+     *
      */
-    Pb206( "Pb206", 206,"206Pb"),
+    Pb207("Pb207", 207, "207Pb"),
     /**
-     * 
+     *
      */
-    Pb208( "Pb208", 208,"208Pb"),
+    Pb208("Pb208", 208, "208Pb"),
     /**
-     * 
+     *
      */
-    Pb207( "Pb207", 207,"207Pb"),
+    Th232("Th232", 232, "232Th"),
     /**
-     * 
+     *
      */
-    Pb204( "Pb204", 204,"204Pb"),
+    U235("U235", 235, "235U"),
     /**
-     * 
+     *
      */
-    Hg202( "Hg202", 202,"202Hg"),
-    Zr2O196("Zr2O196", 196,"196Zr2O"),
-    Hf176( "Hf176", 176,"176Hf"),
-    BKGND("BKGND", 0,"BKGND");
+    U238("U238", 238, "238U"),
+    ThO248("ThO248", 248, "248ThO"),
+    UO254("UO254", 254, "254UO"),
+    UO270("UO270", 270, "270UO"),
+    BKGND("BKGND", 0, "BKGND");
 
     private String name;
     private int atomicMass;
     private String prawnName;
 
-    private IsotopeNames ( String name, int atomicMass, String prawnName ) {
+    private IsotopeNames(String name, int atomicMass, String prawnName) {
         this.name = name;
         this.atomicMass = atomicMass;
         this.prawnName = prawnName;
     }
-    
 
     /**
-     * 
+     *
      * @return
      */
-    public String getName () {
+    public String getName() {
         return name;
     }
 
@@ -102,5 +101,4 @@ public enum IsotopeNames {
         return prawnName;
     }
 
-  
 }

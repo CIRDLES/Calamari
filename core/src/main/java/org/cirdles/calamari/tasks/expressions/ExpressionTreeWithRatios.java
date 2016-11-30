@@ -15,23 +15,20 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
-import java.util.Map;
-import org.cirdles.calamari.shrimp.IsotopeNames;
+import java.util.List;
+import java.util.Set;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public interface ExpressionTreeInterface {
+public interface ExpressionTreeWithRatios {
 
     /**
-     *
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @return the ratiosOfInterest
      */
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+    public List<RawRatioNamesSHRIMP> getRatiosOfInterest();
 
-    public String getPrettyName();
-
+    public Set extractUniqueSpeciesNumbers();
 }

@@ -19,9 +19,8 @@ repositories {
         url "http://bits.netbeans.org/maven2/"
         url "http://jcenter.bintray.com/"
     }
+    mavenCentral()
 }
-
-
 
 task fatJar(type: Jar) {
     manifest {

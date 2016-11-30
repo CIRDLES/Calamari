@@ -413,7 +413,7 @@ public class PrawnFileRunFractionParser {
                     ratEqVal.add(ratioVal);
                     ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
 
-                    // flush out for reports to andle empty entries
+                    // flush out for reports to handle empty entries
                     for (int i = 0; i < (nDod - 1); i++) {
                         ratEqTime.add(0.0);
                         ratEqVal.add(0.0);
