@@ -18,12 +18,13 @@ package org.cirdles.calamari.tasks.expressions;
 import java.util.List;
 import java.util.Set;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.tasks.expressions.operations.Divide;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public interface ExpressionTreeWithRatios {
+public interface ExpressionTreeWithRatiosInterface {
 
     /**
      * @return the ratiosOfInterest
@@ -31,4 +32,13 @@ public interface ExpressionTreeWithRatios {
     public List<RawRatioNamesSHRIMP> getRatiosOfInterest();
 
     public Set extractUniqueSpeciesNumbers();
+
+    public default ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
+        return new ExpressionTree(
+                ratio.getDisplayName(),
+                0.0, 
+                new ShrimpSpeciesNode(ratio.getNumerator()), 
+                new ShrimpSpeciesNode(ratio.getDenominator()), 
+                new Divide());
+    }
 }

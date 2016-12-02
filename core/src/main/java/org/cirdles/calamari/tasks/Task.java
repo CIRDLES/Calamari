@@ -30,7 +30,7 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatios;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 
 /**
  *
@@ -51,7 +51,7 @@ public class Task implements TaskInterface {
         // first have to build pkInterp etc per expression and then evaluate by scan
         for (Map.Entry entry : taskExpressionsOrdered.entrySet()) {
             ExpressionTreeInterface expression = (ExpressionTreeInterface) entry.getValue();
-            List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatios) expression).getRatiosOfInterest();
+            List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
 
             int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
             Map<IsotopeNames, Integer> isotopeToIndexMap = new HashMap<>();
@@ -137,7 +137,7 @@ public class Task implements TaskInterface {
                 if (eqValTmp != 0.0) {
                     // numerical pertubation procedure
                     // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
-                    Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatios) expression).extractUniqueSpeciesNumbers();
+                    Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
                     Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
 
                     double fVar = 0.0;

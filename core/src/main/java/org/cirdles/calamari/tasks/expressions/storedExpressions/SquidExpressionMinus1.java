@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions.storedExpressions;
 
-import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -33,18 +32,15 @@ public class SquidExpressionMinus1 extends ExpressionTree {
         super("206/238 Calib Const", 0.0);
 
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r206_238w);
-        ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
-
-        ExpressionTreeInterface species206 = new ShrimpSpeciesNode(IsotopeNames.Pb206);
-        ExpressionTreeInterface species238 = new ShrimpSpeciesNode(IsotopeNames.U238);
-        ExpressionTreeInterface species254 = new ShrimpSpeciesNode(IsotopeNames.UO254);
-
-        ExpressionTreeInterface numeratorRatio = new ExpressionTree("206/238", 0.0, species206, species238, divide);
-        ExpressionTreeInterface denominatorRatio = new ExpressionTree("254/238", 0.0, species254, species238, divide);
-        ExpressionTreeInterface denominatorRatioPow = new ExpressionTree("254/238^0.66", 0.0, denominatorRatio, new ExpressionTree("2", 2.0), pow);
+        ExpressionTreeInterface r206_238w = buildRatioExpression(RawRatioNamesSHRIMP.r206_238w);
         
-        leftET = numeratorRatio;
-        rightET = denominatorRatioPow;
+        ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
+        ExpressionTreeInterface r254_238w = buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
+
+        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^0.66", 0.0, r254_238w, new ExpressionTree("2", 2.0), pow);
+        
+        leftET = r206_238w;
+        rightET = r254_238wSquared;
         operation = divide;
     }
 

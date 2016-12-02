@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions.storedExpressions;
 
-import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -33,13 +32,9 @@ public class CustomExpression1 extends ExpressionTree {
         super("Ln254/238", 0.0);
 
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
-
-        ExpressionTreeInterface species254 = new ShrimpSpeciesNode(IsotopeNames.UO254);
-        ExpressionTreeInterface species238 = new ShrimpSpeciesNode(IsotopeNames.U238);
-
-        ExpressionTreeInterface ratio = new ExpressionTree("254/238", 0.0, species254, species238, divide);
+        ExpressionTreeInterface r254_238w = buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
         
-        leftET = ratio;
+        leftET = r254_238w;
         rightET = null;
         operation = log;
     }
