@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
         reducedPkHt = new double[0][0];
         reducedPkHtFerr = new double[0][0];
+        taskExpressionsEvaluated = new ArrayList<>();
 
     }
 
@@ -459,6 +461,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
      */
+    @Override
     public void setTaskExpressionsEvaluated(List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated) {
         this.taskExpressionsEvaluated = taskExpressionsEvaluated;
     }
