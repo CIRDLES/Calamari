@@ -174,16 +174,16 @@ public class PrawnFileRunFractionParser {
         indexToSpeciesMap.put(IsotopeNames.UO270, 9);
 
         isotopicRatios = new TreeMap<>();
-        isotopicRatios.put(RawRatioNamesSHRIMP.r204_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r204_206w, IsotopeNames.Pb204, IsotopeNames.Pb206));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r207_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r207_206w, IsotopeNames.Pb207, IsotopeNames.Pb206));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r208_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r208_206w, IsotopeNames.Pb208, IsotopeNames.Pb206));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r238_196w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r238_196w, IsotopeNames.U238, IsotopeNames.Zr2O196));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r206_238w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_238w, IsotopeNames.Pb206, IsotopeNames.U238));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r254_238w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r254_238w, IsotopeNames.UO254, IsotopeNames.U238));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r248_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r248_254w, IsotopeNames.ThO248, IsotopeNames.UO254));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r206_270w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_270w, IsotopeNames.Pb206, IsotopeNames.UO270));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r270_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r270_254w, IsotopeNames.UO270, IsotopeNames.UO254));
-        isotopicRatios.put(RawRatioNamesSHRIMP.r206_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_254w, IsotopeNames.Pb206, IsotopeNames.UO254));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r204_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r204_206w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r207_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r207_206w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r208_206w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r208_206w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r238_196w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r238_196w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r206_238w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_238w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r254_238w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r254_238w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r248_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r248_254w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r206_270w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_270w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r270_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r270_254w));
+        isotopicRatios.put(RawRatioNamesSHRIMP.r206_254w, new IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP.r206_254w));
 
     }
 

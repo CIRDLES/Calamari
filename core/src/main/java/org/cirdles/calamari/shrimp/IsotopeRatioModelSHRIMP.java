@@ -35,10 +35,14 @@ public class IsotopeRatioModelSHRIMP {
     private int minIndex;
     private boolean active;
 
-    public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
+    /**
+     *
+     * @param rawRatioName the value of rawRatioName
+     */
+    public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName) {
         this.rawRatioName = rawRatioName;
-        this.numerator = numerator;
-        this.denominator = denominator;
+        this.numerator = rawRatioName.getNumerator();
+        this.denominator = rawRatioName.getDenominator();
         this.ratEqTime = new ArrayList<>();
         this.ratEqVal = new ArrayList<>();
         this.ratEqErr = new ArrayList<>();
