@@ -13,17 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks;
 
-import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
  */
-public interface TaskInterface {
+public interface TaskExpressionEvalModelInterface {
 
-    public void evaluateTaskExpressions(ShrimpFractionExpressionInterface shrimpFraction);
-    
+    /**
+     * @return the expression
+     */
+    public ExpressionTreeInterface getExpression();
+
+    /**
+     * @return the ratEqVal
+     */
+    public double[] getRatEqVal();
+
+    /**
+     * @return the ratEqTime
+     */
+    public double[] getRatEqTime();
+
+    /**
+     * @return the ratEqErr
+     */
+    public double[] getRatEqErr();
+
 }

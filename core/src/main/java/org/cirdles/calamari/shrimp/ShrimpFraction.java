@@ -16,7 +16,9 @@
 package org.cirdles.calamari.shrimp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
 
 /**
  *
@@ -50,6 +52,8 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private double[][] reducedPkHt;
     private double[][] reducedPkHtFerr;
+    
+    private List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated;
 
     public ShrimpFraction() {
         fractionID = "NONE";
@@ -443,6 +447,20 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
      */
     public void setReducedPkHtFerr(double[][] reducedPkHtFerr) {
         this.reducedPkHtFerr = reducedPkHtFerr;
+    }
+
+    /**
+     * @return the taskExpressionsEvaluated
+     */
+    public List<TaskExpressionEvalModelInterface> getTaskExpressionsEvaluated() {
+        return taskExpressionsEvaluated;
+    }
+
+    /**
+     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
+     */
+    public void setTaskExpressionsEvaluated(List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated) {
+        this.taskExpressionsEvaluated = taskExpressionsEvaluated;
     }
 
 }

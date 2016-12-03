@@ -44,6 +44,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.XML_HEADER_FOR_PR
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.xml.sax.SAXException;
 
 /**
@@ -55,7 +56,6 @@ public class PrawnFileHandler {
     private String currentPrawnFileLocation;
     private Consumer<Integer> progressSubscriber;
     private CalamariReportsEngine reportsEngine;
-    private CalamariTaskEngine taskEngine;
 
     private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
             = new PrawnFileRunFractionParser();
@@ -64,7 +64,7 @@ public class PrawnFileHandler {
      * Creates a new {@link PrawnFileHandler} using a new reports engine.
      */
     public PrawnFileHandler() {
-        this(new CalamariReportsEngine(), new CalamariTaskEngine());
+        this(new CalamariReportsEngine());
     }
 
     /**
@@ -72,22 +72,42 @@ public class PrawnFileHandler {
      *
      * @param reportsEngine the reports engine to use
      */
-    public PrawnFileHandler(CalamariReportsEngine reportsEngine, CalamariTaskEngine taskEngine) {
+    public PrawnFileHandler(CalamariReportsEngine reportsEngine) {
         this.reportsEngine = reportsEngine;
-        this.taskEngine = taskEngine;
     }
 
     /**
+     * Interface for use with no task
+     *
+     * @param prawnFileLocation
+     * @param useSBM
+     * @param userLinFits
+     * @param referenceMaterialLetter
+     * @return
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws JAXBException
+     * @throws SAXException
+     */
+    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
+            throws IOException, MalformedURLException, JAXBException, SAXException {
+        return extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, null);
+    }
+
+    /**
+     * Interface for use with task
+     *
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
      * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @param task
      * @throws MalformedURLException
      * @throws JAXBException
      * @throws org.xml.sax.SAXException
      * @return the java.util.List<org.cirdles.calamari.shrimp.ShrimpFraction>
      */
-    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
+    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task)
             throws IOException, MalformedURLException, JAXBException, SAXException {
         currentPrawnFileLocation = prawnFileLocation;
 
@@ -97,13 +117,14 @@ public class PrawnFileHandler {
         if (nameOfMount == null) {
             nameOfMount = "No-Mount-Name";
         }
-        
+
         List<ShrimpFraction> shrimpFractions = new ArrayList<>();
 
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter);
+            ShrimpFraction shrimpFraction
+                    = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
             if (shrimpFraction != null) {
                 shrimpFraction.setSpotNumber(f + 1);
                 shrimpFraction.setNameOfMount(nameOfMount);
@@ -120,36 +141,53 @@ public class PrawnFileHandler {
     }
 
     /**
+     * Interface for use without task
+     * @param prawnFileLocation
+     * @param useSBM
+     * @param userLinFits
+     * @param referenceMaterialLetter
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws JAXBException
+     * @throws SAXException 
+     */
+    public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
+            throws IOException, MalformedURLException, JAXBException, SAXException {
+        writeReportsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, null);
+    }
+
+    /**
+     * Interface for use with task
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
      * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @param task
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
      * @throws org.xml.sax.SAXException
      */
-    public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
+    public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task)
             throws IOException, MalformedURLException, JAXBException, SAXException {
-        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter);
-        taskEngine.performTask(shrimpFractions);
+        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, task);
         reportsEngine.produceReports(shrimpFractions);
     }
 
     private PrawnFile unmarshallRawDataXML(String resource)
             throws IOException, MalformedURLException, JAXBException, SAXException {
-        
+
         String localPrawnXMLFile = resource;
         PrawnFile myPrawnFile;
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        
+
         // force validation against schema
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
-        Schema schema = sf.newSchema(new URL(URL_STRING_FOR_PRAWN_XML_SCHEMA)); 
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = sf.newSchema(new URL(URL_STRING_FOR_PRAWN_XML_SCHEMA));
         jaxbUnmarshaller.setSchema(schema);
- 
+
         // test for URL such as "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml"
         boolean isURL = false;
         if (resource.toLowerCase(Locale.ENGLISH).startsWith("http")) {
@@ -178,9 +216,9 @@ public class PrawnFileHandler {
                 break;
             }
         }
-        
+
         // delete tempURLtoXML.xml 
-        if (isURL){
+        if (isURL) {
             pathToLocalPrawnXMLFile.toFile().delete();
         }
 

@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.tasks.storedTasks;
 
-import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.Task;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression1;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression2;
@@ -29,14 +28,12 @@ import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionM
  */
 public class SquidTask1 extends Task {
 
-    public SquidTask1(ShrimpFractionExpressionInterface shrimpFraction) {
-        super(shrimpFraction);
-
-        taskExpressionsOrdered.put(1, new CustomExpression1());
-        taskExpressionsOrdered.put(2, new CustomExpression2());
-        taskExpressionsOrdered.put(3, new SquidExpressionMinus1());
-        taskExpressionsOrdered.put(4, new SquidExpressionMinus4());
-        taskExpressionsOrdered.put(4, new SquidExpressionMinus3());
+    public SquidTask1() {
+        super();
+        taskExpressionsOrdered.add(new CustomExpression1());
+        taskExpressionsOrdered.add(new CustomExpression2());
+        taskExpressionsOrdered.add(new SquidExpressionMinus1());
+        taskExpressionsOrdered.add(new SquidExpressionMinus4());
+        taskExpressionsOrdered.add(new SquidExpressionMinus3());
     }
-
 }

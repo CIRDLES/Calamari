@@ -30,6 +30,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
 
 /**
  * Calamari's reports engine.
@@ -357,6 +358,20 @@ public class CalamariReportsEngine {
                 }
             }
 
+            // Handle any task expressions
+            List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+            for (TaskExpressionEvalModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+                if (nDodNum < taskExpressionEval.getRatEqTime().length) {
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqVal()[nDodNum]));
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqErr()[nDodNum]));
+                } else {
+                    dataLine.append(", ").append("n/a");
+                    dataLine.append(", ").append("n/a");
+                    dataLine.append(", ").append("n/a");
+                }
+            }
+
             dataLine.append("\n");
             if (shrimpFraction.isReferenceMaterial()) {
                 refMatWithinSpotRatios_PerScanMinus1.append(dataLine);
@@ -465,6 +480,15 @@ public class CalamariReportsEngine {
                 header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
                 header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
             }
+        }
+
+        // prepare headers for any task expressions
+        List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        for (TaskExpressionEvalModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            String expressionName = taskExpressionEval.getExpression().getPrettyName();
+            header.append(", ").append(expressionName).append(".Time");
+            header.append(", ").append(expressionName).append(".Value");
+            header.append(", ").append(expressionName).append(".1SigmaAbs");
         }
 
         header.append("\n");

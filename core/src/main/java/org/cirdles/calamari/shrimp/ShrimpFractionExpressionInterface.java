@@ -15,6 +15,9 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.util.List;
+import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
+
 /**
  *
  * @author James F. Bowring <bowring at gmail.com>
@@ -39,4 +42,9 @@ public interface ShrimpFractionExpressionInterface {
      * @return the timeStampSec
      */
     public double[][] getTimeStampSec();
+    
+        /**
+     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
+     */
+    public void setTaskExpressionsEvaluated(List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated);
 }

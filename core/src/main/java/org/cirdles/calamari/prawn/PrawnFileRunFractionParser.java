@@ -34,6 +34,7 @@ import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ValueModel;
+import org.cirdles.calamari.tasks.TaskInterface;
 
 /**
  * Parses run fractions from Prawn files into
@@ -79,9 +80,10 @@ public class PrawnFileRunFractionParser {
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
      * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @param task the value of task
      * @return the org.cirdles.calamari.shrimp.ShrimpFraction
      */
-    public ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits, String referenceMaterialLetter) {
+    public ShrimpFraction processRunFraction(PrawnFile.Run runFraction, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task) {
 
         ShrimpFraction shrimpFraction = null;
         prepareRunFractionMetaData(runFraction);
@@ -112,6 +114,11 @@ public class PrawnFileRunFractionParser {
             shrimpFraction.setUserLinFits(userLinFits);
             shrimpFraction.setReducedPkHt(reducedPkHt);
             shrimpFraction.setReducedPkHtFerr(reducedPkHtFerr);
+            
+            // handle task
+            if (task!=null){
+                task.evaluateTaskExpressions(shrimpFraction);
+            }
 
             // determine reference material status
             // hard coded for now

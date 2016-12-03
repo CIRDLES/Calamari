@@ -28,6 +28,7 @@ import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFileFilter;
+import org.cirdles.calamari.tasks.storedTasks.SquidTask1;
 
 /**
  *
@@ -403,6 +404,7 @@ public class CalamariUI extends javax.swing.JFrame {
                     normalizeIonCountsToSBM,
                     useLinearRegressionToCalculateRatios,
                     (String)referenceMaterialFirstLetterComboBox.getSelectedItem(), 
+                    new SquidTask1(), // temporarily hard-wired
                     reduceDataProgressBar).execute();
         } else {
             JOptionPane.showMessageDialog(
