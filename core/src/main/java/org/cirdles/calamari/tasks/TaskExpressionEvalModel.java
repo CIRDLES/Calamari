@@ -19,7 +19,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface {
 
@@ -33,9 +33,9 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
 
     public TaskExpressionEvalModel(ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr) {
         this.expression = expression;
-        this.ratEqVal = ratEqVal;
-        this.ratEqTime = ratEqTime;
-        this.ratEqErr = ratEqErr;
+        this.ratEqVal = ratEqVal.clone();
+        this.ratEqTime = ratEqTime.clone();
+        this.ratEqErr = ratEqErr.clone();
     }
 
     /**
@@ -49,21 +49,21 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
      * @return the ratEqVal
      */
     public double[] getRatEqVal() {
-        return ratEqVal;
+        return ratEqVal.clone();
     }
 
     /**
      * @return the ratEqTime
      */
     public double[] getRatEqTime() {
-        return ratEqTime;
+        return ratEqTime.clone();
     }
 
     /**
      * @return the ratEqErr
      */
     public double[] getRatEqErr() {
-        return ratEqErr;
+        return ratEqErr.clone();
     }
 
 

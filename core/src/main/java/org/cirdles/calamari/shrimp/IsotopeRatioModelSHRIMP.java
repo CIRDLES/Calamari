@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
 public class IsotopeRatioModelSHRIMP {
 

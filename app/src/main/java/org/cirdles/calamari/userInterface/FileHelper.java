@@ -49,7 +49,7 @@ public class FileHelper {
      * @param nonMacFileFilter
      * @return
      */
-    public static File AllPlatformSaveAs(
+    public static File allPlatformSaveAs(
             Frame parentFrame,
             String dialogTitle,
             String directory,
@@ -100,7 +100,7 @@ public class FileHelper {
      * @param parentFrame
      * @return
      */
-    public synchronized static File[] AllPlatformGetFile(
+    public synchronized static File[] allPlatformGetFile(
             String dialogTitle,
             File locationIn,
             final String fileExtension,
@@ -148,7 +148,7 @@ public class FileHelper {
      * @param location
      * @return
      */
-    public static File AllPlatformGetFolder(
+    public static File allPlatformGetFolder(
             String dialogTitle,
             File location) {
 

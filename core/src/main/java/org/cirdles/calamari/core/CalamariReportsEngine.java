@@ -161,14 +161,14 @@ public class CalamariReportsEngine {
 
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
-                try {
-                    if ((i % countOfPeaks) == 0) {
-                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
-                    }
-                    dataLine.append(", ").append(rawPeakData[scanNum][i]);
-                } catch (Exception e) {
-                    System.out.println();
+//                try {
+                if ((i % countOfPeaks) == 0) {
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                 }
+                dataLine.append(", ").append(rawPeakData[scanNum][i]);
+//                } catch (Exception e) {
+//                    System.out.println();
+//                }
             }
 
             Files.write(ionIntegrations_PerScan.toPath(), asList(dataLine), APPEND);
@@ -407,7 +407,6 @@ public class CalamariReportsEngine {
     }
 
     private void prepSpeciesReportFiles(ShrimpFraction shrimpFraction) throws IOException {
-        String nameOfMount = shrimpFraction.getNameOfMount();
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
         int countOfIntegrations = shrimpFraction.getPeakMeasurementsCount();
 

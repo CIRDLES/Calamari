@@ -38,8 +38,8 @@ public enum RawRatioNamesSHRIMP {
     
     private final String name;
     private final String displayName;
-    protected final IsotopeNames numerator;
-    protected final IsotopeNames denominator;
+    private final IsotopeNames numerator;
+    private final IsotopeNames denominator;
 
     private RawRatioNamesSHRIMP(String name, String displayName, IsotopeNames num, IsotopeNames den) {
         this.name = name;

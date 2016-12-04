@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
@@ -122,7 +123,7 @@ public class PrawnFileRunFractionParser {
 
             // determine reference material status
             // hard coded for now
-            if (fractionID.toUpperCase().startsWith(referenceMaterialLetter.toUpperCase())) {
+            if (fractionID.toUpperCase(Locale.US).startsWith(referenceMaterialLetter.toUpperCase(Locale.US))) {
                 shrimpFraction.setReferenceMaterial(true);
             }
         }
@@ -670,7 +671,7 @@ public class PrawnFileRunFractionParser {
         // design decision to pre-compute all to store with shrimpFraction and enable on-tthe-fly tasks
 
         boolean singleScan = (nScans == 1);
-        int sIndx = singleScan ? 1 : nScans - 1;
+//        int sIndx = singleScan ? 1 : nScans - 1;
         reducedPkHt = new double[nScans][nSpecies];
         reducedPkHtFerr = new double[nScans][nSpecies];
 

@@ -32,7 +32,7 @@ import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatiosInterface {
     
@@ -107,6 +107,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         return operation == null ? value : operation.eval(leftET, rightET, pkInterpScan, isotopeToIndexMap);
     }
 
+    @Override
     public Set extractUniqueSpeciesNumbers() {
         // assume acquisition order is atomic weight order
         Set<IsotopeNames> eqPkUndupeOrd = new TreeSet<>();

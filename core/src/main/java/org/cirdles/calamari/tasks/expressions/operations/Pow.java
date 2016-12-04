@@ -21,7 +21,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class Pow implements OperationInterface {
 
@@ -39,10 +39,11 @@ public class Pow implements OperationInterface {
             ExpressionTreeInterface rightET,
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal = 0.0;
+        double retVal;
         try {
             retVal = Math.pow(leftET.eval(pkInterpScan, isotopeToIndexMap), rightET.eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
+            retVal = 0.0;
         }
 
         return retVal;

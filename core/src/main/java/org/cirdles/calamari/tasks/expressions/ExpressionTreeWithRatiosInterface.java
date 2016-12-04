@@ -22,7 +22,7 @@ import org.cirdles.calamari.tasks.expressions.operations.Divide;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public interface ExpressionTreeWithRatiosInterface {
 

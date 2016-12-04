@@ -23,7 +23,7 @@ import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
 public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
@@ -90,6 +90,12 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
         this.isotopicRatios = isotopicRatios;
     }
 
+    /**
+     * 
+     * @param speciesName
+     * @return 
+     */
+    @Override
     public int getIndexOfSpeciesByName(IsotopeNames speciesName) {
         int retVal = -1;
 
@@ -427,28 +433,28 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
      * @return the reducedPkHt
      */
     public double[][] getReducedPkHt() {
-        return reducedPkHt;
+        return reducedPkHt.clone();
     }
 
     /**
      * @param reducedPkHt the reducedPkHt to set
      */
     public void setReducedPkHt(double[][] reducedPkHt) {
-        this.reducedPkHt = reducedPkHt;
+        this.reducedPkHt = reducedPkHt.clone();
     }
 
     /**
      * @return the reducedPkHtFerr
      */
     public double[][] getReducedPkHtFerr() {
-        return reducedPkHtFerr;
+        return reducedPkHtFerr.clone();
     }
 
     /**
      * @param reducedPkHtFerr the reducedPkHtFerr to set
      */
     public void setReducedPkHtFerr(double[][] reducedPkHtFerr) {
-        this.reducedPkHtFerr = reducedPkHtFerr;
+        this.reducedPkHtFerr = reducedPkHtFerr.clone();
     }
 
     /**

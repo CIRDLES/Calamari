@@ -22,7 +22,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  * Based on Simon Bodorkos' interpreation of Ludwig's code:
  * https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Step-4
  */

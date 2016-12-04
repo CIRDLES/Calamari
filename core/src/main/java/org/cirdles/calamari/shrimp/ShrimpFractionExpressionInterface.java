@@ -20,7 +20,7 @@ import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public interface ShrimpFractionExpressionInterface {
 

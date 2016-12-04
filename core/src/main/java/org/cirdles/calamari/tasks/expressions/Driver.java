@@ -13,7 +13,7 @@ import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class Driver {
 

@@ -20,7 +20,7 @@ import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public interface TaskInterface {
 

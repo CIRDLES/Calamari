@@ -33,7 +33,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class Task implements TaskInterface {
 

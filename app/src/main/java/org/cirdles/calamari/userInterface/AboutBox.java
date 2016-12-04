@@ -22,7 +22,7 @@ import org.cirdles.calamari.Calamari;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class AboutBox extends javax.swing.JDialog {
 

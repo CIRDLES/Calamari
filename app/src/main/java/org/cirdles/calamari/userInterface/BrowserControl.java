@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class BrowserControl {
 

@@ -24,7 +24,7 @@ import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionM
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class SquidTask1 extends Task {
 

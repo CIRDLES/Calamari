@@ -52,10 +52,10 @@ import org.xml.sax.SAXException;
  */
 public class PrawnFileHandler {
 
-    private Unmarshaller jaxbUnmarshaller;
+    private transient Unmarshaller jaxbUnmarshaller;
     private String currentPrawnFileLocation;
-    private Consumer<Integer> progressSubscriber;
-    private CalamariReportsEngine reportsEngine;
+    private transient Consumer<Integer> progressSubscriber;
+    private transient CalamariReportsEngine reportsEngine;
 
     private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
             = new PrawnFileRunFractionParser();
@@ -142,6 +142,7 @@ public class PrawnFileHandler {
 
     /**
      * Interface for use without task
+     *
      * @param prawnFileLocation
      * @param useSBM
      * @param userLinFits
@@ -149,7 +150,7 @@ public class PrawnFileHandler {
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
-     * @throws SAXException 
+     * @throws SAXException
      */
     public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
             throws IOException, MalformedURLException, JAXBException, SAXException {
@@ -158,6 +159,7 @@ public class PrawnFileHandler {
 
     /**
      * Interface for use with task
+     *
      * @param prawnFileLocation the value of prawnFileLocation
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits

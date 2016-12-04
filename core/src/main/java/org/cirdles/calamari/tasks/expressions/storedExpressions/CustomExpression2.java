@@ -21,7 +21,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class CustomExpression2 extends ExpressionTree {
 
