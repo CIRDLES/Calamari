@@ -16,17 +16,17 @@ subprojects {
 
     repositories {
         mavenCentral()
-
+        
         maven {
             url "https://jitpack.io"
         }
     }
-
+    
     javadoc {
         options.tags = [
-            'pre:a:"Precondition:"',
-            'post:a:"Postcondition:',
-            'imports:a:"Imports libraries:"',
+            'pre:a:Precondition:',
+            'post:a:Postcondition:',
+            'imports:a:Imports libraries:',
             'author:a:Author:'
         ]
     }
