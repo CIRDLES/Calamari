@@ -229,9 +229,9 @@ public class Task implements TaskInterface {
                 // for consistency with Bodorkos documentation
                 double[] ratEqVal = eqVal.clone();
                 double[] ratEqTime = eqTime.clone();
-                double[] ratEqErr = eqVal.clone();
+                double[] ratEqErr = new double[eqVal.length];
                 for (int i = 0; i < ratEqErr.length; i++) {
-                    ratEqErr[i] *= fractErr[i];
+                    ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
                 }
 
                 taskExpressionsEvaluated.add(new TaskExpressionEvalModel(expression, ratEqVal, ratEqTime, ratEqErr));
