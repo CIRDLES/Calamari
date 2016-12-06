@@ -20,6 +20,10 @@ subprojects {
         maven {
             url "https://jitpack.io"
         }
+        
+        maven {
+            url "https://maven.repository.redhat.com/ga/"
+        }
     }
     
     javadoc {

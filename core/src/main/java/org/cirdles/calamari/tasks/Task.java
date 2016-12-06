@@ -47,7 +47,7 @@ public class Task implements TaskInterface {
 
     /**
      * see https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-EqnInterp
-     * @param shrimpFraction 
+     * @param shrimpFraction
      */
     @Override
     public void evaluateTaskExpressions(ShrimpFractionExpressionInterface shrimpFraction) {
@@ -238,7 +238,7 @@ public class Task implements TaskInterface {
 
             }// end of visiting each expression
             shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);
-                    
+
         }
     }
 

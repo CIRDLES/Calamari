@@ -15,7 +15,10 @@
  */
 package org.cirdles.calamari.tasks.expressions.storedExpressions;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
@@ -26,22 +29,31 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 public class SquidExpressionMinus1 extends ExpressionTree {
 
     /**
-     * Squid Excel format is ["206/238"]/["254/238"]^2 has EqNum = -1 
+     * Squid Excel format is ["206/238"]/["254/238"]^2 has EqNum = -1
      */
     public SquidExpressionMinus1() {
         super("206/238 Calib Const", 0.0);
 
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r206_238w);
         ExpressionTreeInterface r206_238w = buildRatioExpression(RawRatioNamesSHRIMP.r206_238w);
-        
+
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
         ExpressionTreeInterface r254_238w = buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
 
-        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^0.66", 0.0, r254_238w, new ExpressionTree("2", 2.0), pow);
-        
+        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^0.66", 0.0, r254_238w, new ConstantNode("2", 2.0), pow);
+
         leftET = r206_238w;
         rightET = r254_238wSquared;
         operation = divide;
+    }
+
+    public static void main(String[] args) {
+
+        XStream xstream = new XStream(new DomDriver());
+
+        String xml = xstream.toXML(new SquidExpressionMinus1());
+
+        System.out.print(xml);
     }
 
 }

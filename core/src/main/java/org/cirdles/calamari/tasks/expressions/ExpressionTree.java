@@ -43,12 +43,12 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     protected OperationInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
 
-    protected OperationInterface add;
-    protected OperationInterface subtract;
-    protected OperationInterface multiply;
-    protected OperationInterface divide;
-    protected OperationInterface log;
-    protected OperationInterface pow;
+    protected transient OperationInterface add;
+    protected transient OperationInterface subtract;
+    protected transient OperationInterface multiply;
+    protected transient OperationInterface divide;
+    protected transient OperationInterface log;
+    protected transient OperationInterface pow;
 
     protected ExpressionTree() {
         this("EMPTY", 0.0);

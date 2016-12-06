@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <!-- XML Schema Generated from XML Document on Mon Dec 05 2016 19:18:07 GMT-0500 (EST) -->
+    <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
+    <xs:element name="Expression">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prettyName" type="xs:string"></xs:element>
+                <xs:element name="value" type="xs:int"></xs:element>
+                <xs:element name="leftET" ref="Expression" minOccurs="0"/>                   
+                <xs:element name="rightET" ref="Expression" minOccurs="0"/>                    
+                <xs:element name="operation" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="class" type="xs:string"></xs:attribute>
+                    </xs:complexType>
+                </xs:element> 
+                <xs:element name="ratiosOfInterest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="RawRatioNamesSHRIMP" maxOccurs="unbounded" type="xs:string"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>              
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
