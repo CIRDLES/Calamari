@@ -30,7 +30,7 @@ public class SquidExpressionMinus4 extends ExpressionTree {
      * Squid Excel format is ["238/196"]/["254/238"]^0.66 has EqNum = -4
      */
     public SquidExpressionMinus4() {
-        super("U Conc Const", 0.0);
+        super("U Conc Const");
 
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r238_196w);
         ExpressionTreeInterface r238_196w = buildRatioExpression(RawRatioNamesSHRIMP.r238_196w);
@@ -38,7 +38,7 @@ public class SquidExpressionMinus4 extends ExpressionTree {
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
         ExpressionTreeInterface r254_238w = buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
 
-        ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", 0.0, r254_238w, new ConstantNode("0.66)", 0.66), pow);
+        ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", r254_238w, new ConstantNode("0.66)", 0.66), pow);
 
         leftET = r238_196w;
         rightET = r254_238wPow;

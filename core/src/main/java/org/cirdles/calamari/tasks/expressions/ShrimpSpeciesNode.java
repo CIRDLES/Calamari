@@ -18,7 +18,6 @@ package org.cirdles.calamari.tasks.expressions;
 
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
@@ -26,10 +25,10 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class ShrimpSpeciesNode implements ExpressionTreeInterface{
     
-    private final IsotopeNames speciesName;
+    private final IsotopeNames name;
 
-    public ShrimpSpeciesNode(IsotopeNames speciesName) {
-        this.speciesName = speciesName;
+    public ShrimpSpeciesNode(IsotopeNames name) {
+        this.name = name;
     }
 
     /**
@@ -40,11 +39,11 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface{
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {  
-        return pkInterpScan[isotopeToIndexMap.get(speciesName)];
+        return pkInterpScan[isotopeToIndexMap.get(name)];
     }
     
     @Override
-    public String getPrettyName(){
-        return speciesName.getName();
+    public String getName(){
+        return name.getName();
     }
 }

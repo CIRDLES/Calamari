@@ -29,7 +29,7 @@ public class CustomExpression2 extends ExpressionTree {
      * Squid Excel format is ln(["254/238"]) has EqNum = 1 
      */
     public CustomExpression2() {
-        super("Ln206/238", 0.0);
+        super("Ln206/238");
 
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r206_238w);
         ExpressionTreeInterface r206_238w = buildRatioExpression(RawRatioNamesSHRIMP.r206_238w);

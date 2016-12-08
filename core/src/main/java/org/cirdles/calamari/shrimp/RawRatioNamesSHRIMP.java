@@ -63,6 +63,10 @@ public enum RawRatioNamesSHRIMP {
     public String getDisplayName() {
         return displayName;
     }
+    
+    public String getDisplayNameNoSpaces() {
+        return displayName.replaceAll(" ", "");
+    }
 
     /**
      * @return the numerator

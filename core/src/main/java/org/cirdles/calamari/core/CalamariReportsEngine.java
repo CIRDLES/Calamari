@@ -475,16 +475,16 @@ public class CalamariReportsEngine {
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
             if (entry.getValue().isActive()) {
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTime");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".InterpTime");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".1SigmaAbs");
             }
         }
 
         // prepare headers for any task expressions
         List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
         for (TaskExpressionEvalModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            String expressionName = taskExpressionEval.getExpression().getPrettyName();
+            String expressionName = taskExpressionEval.getExpression().getName();
             header.append(", ").append(expressionName).append(".Time");
             header.append(", ").append(expressionName).append(".Value");
             header.append(", ").append(expressionName).append(".1SigmaAbs");
@@ -503,9 +503,9 @@ public class CalamariReportsEngine {
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
             if (entry.getValue().isActive()) {
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".MinIndex");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".MinIndex");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".1SigmaPct");
             }
         }
 

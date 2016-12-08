@@ -35,8 +35,7 @@ public interface ExpressionTreeWithRatiosInterface {
 
     public default ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
         return new ExpressionTree(
-                ratio.getDisplayName(),
-                0.0, 
+                ratio.getDisplayNameNoSpaces(), 
                 new ShrimpSpeciesNode(ratio.getNumerator()), 
                 new ShrimpSpeciesNode(ratio.getDenominator()), 
                 new Divide());

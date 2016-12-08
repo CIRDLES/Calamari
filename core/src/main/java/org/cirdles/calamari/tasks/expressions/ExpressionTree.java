@@ -36,8 +36,7 @@ import org.cirdles.calamari.tasks.expressions.operations.Subtract;
  */
 public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatiosInterface {
     
-    protected String prettyName;
-    protected double value;
+    protected String name;
     protected ExpressionTreeInterface leftET;
     protected ExpressionTreeInterface rightET;
     protected OperationInterface operation;
@@ -51,37 +50,38 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     protected transient OperationInterface pow;
 
     protected ExpressionTree() {
-        this("EMPTY", 0.0);
-    }
-
-    public ExpressionTree(String prettyName, double value) {
-        this(prettyName, value, null, null, null);
+        this("EMPTY");
     }
 
     /**
      *
      * @param prettyName the value of prettyName
-     * @param value the value of value
+     */
+    public ExpressionTree(String prettyName) {
+        this(prettyName, null, null, null);
+    }
+
+    /**
+     *
+     * @param prettyName the value of name
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param operation the value of operation
      */
-    public ExpressionTree(String prettyName,
-            double value,
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
-            OperationInterface operation) {
-        this(prettyName, value, leftET, rightET, operation, new ArrayList<RawRatioNamesSHRIMP>());
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationInterface operation) {
+        this(prettyName, leftET, rightET, operation, new ArrayList<RawRatioNamesSHRIMP>());
     }
 
-    public ExpressionTree(String prettyName,
-            double value,
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
-            OperationInterface operation,
-            List<RawRatioNamesSHRIMP> ratiosOfInterest) {
-        this.prettyName = prettyName;
-        this.value = value;
+    /**
+     *
+     * @param prettyName the value of prettyName
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param operation the value of operation
+     * @param ratiosOfInterest the value of ratiosOfInterest
+     */
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
+        this.name = prettyName;
         this.leftET = leftET;
         this.rightET = rightET;
         this.operation = operation;
@@ -104,7 +104,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return operation == null ? value : operation.eval(leftET, rightET, pkInterpScan, isotopeToIndexMap);
+        return operation == null ? 0.0 : operation.eval(leftET, rightET, pkInterpScan, isotopeToIndexMap);
     }
 
     @Override
@@ -119,11 +119,11 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     }
 
     /**
-     * @return the prettyName
+     * @return the name
      */
     @Override
-    public String getPrettyName() {
-        return prettyName;
+    public String getName() {
+        return name;
     }
 
     /**

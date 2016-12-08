@@ -32,6 +32,6 @@ public interface ExpressionTreeInterface {
      */
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
-    public String getPrettyName();
+    public String getName();
 
 }

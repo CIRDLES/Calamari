@@ -24,12 +24,12 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
  */
 public class ConstantNode implements ExpressionTreeInterface {
 
-    private String prettyName;
-    private double constantValue;
+    private final String name;
+    private final double value;
 
-    public ConstantNode(String prettyName, double constantValue) {
-        this.prettyName = prettyName;
-        this.constantValue = constantValue;
+    public ConstantNode(String name, double value) {
+        this.name = name;
+        this.value = value;
     }
 
     /**
@@ -40,11 +40,11 @@ public class ConstantNode implements ExpressionTreeInterface {
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return constantValue;
+        return value;
     }
 
     @Override
-    public String getPrettyName() {
-        return prettyName;
+    public String getName() {
+        return name;
     }
 }
