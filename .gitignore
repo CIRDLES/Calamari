@@ -21,6 +21,7 @@ nbproject/
 *.txt
 *.html
 *.xml
+*.xsd
 *.csv
 test_*
 *.ser
