@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           attributeFormDefault="unqualified" 
+           elementFormDefault="qualified" 
+           targetNamespace="https://raw.githubusercontent.com"
+           xmlns="https://raw.githubusercontent.com">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            This schema defines the contents of a Squid Expression.
+
+            Copyright 2016 CIRDLES.org
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+
+            Author: James F. Bowring[smtp:bowring@gmail.com]
+            Created: December.2016
+            Revised: 
+            
+        </xs:documentation>
+    </xs:annotation>    
+    <xs:element name="Expression" type="Expression"/>
+    <xs:complexType name="Expression">
+        <xs:choice>
+            <xs:element name="ExpressionTree" type="ExpressionTree" minOccurs="0"/>
+            <xs:element name="ShrimpSpeciesNode" type="ShrimpSpeciesNode" minOccurs="0"/>
+            <xs:element name="ConstantNode" type="ConstantNode" minOccurs="0"/>
+        </xs:choice>
+    </xs:complexType>
+    
+    <xs:element name="ExpressionTree" type="ExpressionTree"/>
+    <xs:complexType name="ExpressionTree">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"></xs:element>
+            <xs:element name="leftET" type="Expression"/>                   
+            <xs:element name="rightET" type="Expression"/>                    
+            <xs:element name="operation" type="Operation"/>
+            <xs:element name="ratiosOfInterest" nillable="true" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="ratio" type="ratioType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>              
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ShrimpSpeciesNode">
+        <xs:sequence>
+            <xs:element name="name" type="shrimpSpecies"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="shrimpSpecies">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Hf176" />
+            <xs:enumeration value="Zr2O196" />
+            <xs:enumeration value="Hg202" />
+            <xs:enumeration value="Pb204" />
+            <xs:enumeration value="Pb206" />
+            <xs:enumeration value="Pb207" />
+            <xs:enumeration value="Pb208" />
+            <xs:enumeration value="Th232" />
+            <xs:enumeration value="U235" />
+            <xs:enumeration value="U238" />
+            <xs:enumeration value="ThO248" />
+            <xs:enumeration value="UO254" />
+            <xs:enumeration value="UO270" />
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="ratioType">
+        <xs:sequence>
+            <xs:element name="name" type="rawRatioNamesSHRIMP"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="rawRatioNamesSHRIMP">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="r204_206w" />
+            <xs:enumeration value="r207_206w" />
+            <xs:enumeration value="r208_206w" />
+            <xs:enumeration value="r238_196w" />
+            <xs:enumeration value="r206_238w" />
+            <xs:enumeration value="r254_238w" />
+            <xs:enumeration value="r248_254w" />
+            <xs:enumeration value="r206_270w" />
+            <xs:enumeration value="r270_254w" />
+            <xs:enumeration value="r206_254w" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="ConstantNode">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"></xs:element>
+            <xs:element name="value" type="xs:decimal"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Operation">
+        <xs:sequence>
+            <xs:element name="name" type="operationType" minOccurs="0"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="operationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="add" />
+            <xs:enumeration value="divide" />
+            <xs:enumeration value="subtract" />
+            <xs:enumeration value="multiply" />
+            <xs:enumeration value="log" />
+            <xs:enumeration value="pow" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

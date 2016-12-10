@@ -13,49 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.operations;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInterface {
+public abstract class Operation implements XMLSerializerInterface {
 
-    private String name;
-    private double value;
+    protected String name;
 
-    public ConstantNode() {
-        this("", 0.0);
-    }
-
-    public ConstantNode(String name, double value) {
-        this.name = name;
-        this.value = value;
-    }
+    public abstract double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
     @Override
     public void customizeXstream(XStream xstream) {
-        xstream.registerConverter(new ConstantNodeXMLConverter());
-        xstream.alias("ConstantNode", ConstantNode.class);
+        xstream.registerConverter(new OperationXMLConverter());
+        xstream.alias("Operation", Operation.class);
+        xstream.alias("Operation", this.getClass());
     }
 
     /**
-     *
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @return the name
      */
-    @Override
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return value;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -66,19 +51,4 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     public void setName(String name) {
         this.name = name;
     }
-
-    /**
-     * @return the value
-     */
-    public double getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(double value) {
-        this.value = value;
-    }
-
 }

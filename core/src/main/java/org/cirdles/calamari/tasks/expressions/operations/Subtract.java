@@ -23,7 +23,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Subtract implements OperationInterface {
+public class Subtract  extends Operation {
+
+    public Subtract() {
+        name = "subtract";
+    }
 
     /**
      *

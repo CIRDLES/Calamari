@@ -19,6 +19,7 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
@@ -43,6 +44,12 @@ public class SquidExpressionMinus4 extends ExpressionTree {
         leftET = r238_196w;
         rightET = r254_238wPow;
         operation = divide;
+    }
+
+    // temporary playground
+    public static void main(String[] args) {
+        XMLSerializerInterface exp = new SquidExpressionMinus4();
+        exp.serializeXMLObject(exp, "TESTXML4.xml");
     }
 
 }

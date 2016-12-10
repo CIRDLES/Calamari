@@ -23,7 +23,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Pow implements OperationInterface {
+public class Pow  extends Operation {
+
+    public Pow() {
+        name = "pow";
+    }
 
     /**
      *

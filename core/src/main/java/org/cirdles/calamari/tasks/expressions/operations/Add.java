@@ -23,7 +23,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Add implements OperationInterface {
+public class Add extends Operation {
+
+    public Add() {
+        name = "add";
+    }
 
     /**
      *

@@ -23,7 +23,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Divide implements OperationInterface {
+public class Divide extends Operation {
+
+    public Divide() {
+        name = "divide";
+    }
 
     /**
      *

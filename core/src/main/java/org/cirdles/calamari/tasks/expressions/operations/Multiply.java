@@ -23,7 +23,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Multiply implements OperationInterface {
+public class Multiply  extends Operation{
+
+    public Multiply() {
+        name = "multiply";
+    }
 
     /**
      *

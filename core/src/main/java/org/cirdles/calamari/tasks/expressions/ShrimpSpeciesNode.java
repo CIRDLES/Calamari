@@ -13,22 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks.expressions;
 
+import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ShrimpSpeciesNode implements ExpressionTreeInterface{
-    
-    private final IsotopeNames name;
+public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializerInterface {
+
+    private IsotopeNames name;
+
+    public ShrimpSpeciesNode() {
+        this.name = null;
+    }
 
     public ShrimpSpeciesNode(IsotopeNames name) {
         this.name = name;
+    }
+
+    @Override
+    public void customizeXstream(XStream xstream) {
+        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
+        xstream.alias("ShrimpSpeciesNode", ShrimpSpeciesNode.class);
     }
 
     /**
@@ -38,12 +49,19 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface{
      * @return the double
      */
     @Override
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {  
+    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
         return pkInterpScan[isotopeToIndexMap.get(name)];
     }
-    
+
     @Override
-    public String getName(){
+    public String getName() {
         return name.getName();
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(IsotopeNames name) {
+        this.name = name;
     }
 }

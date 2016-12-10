@@ -15,8 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions.storedExpressions;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
@@ -46,14 +44,4 @@ public class SquidExpressionMinus1 extends ExpressionTree {
         rightET = r254_238wSquared;
         operation = divide;
     }
-
-    public static void main(String[] args) {
-
-        XStream xstream = new XStream(new DomDriver());
-
-        String xml = xstream.toXML(new SquidExpressionMinus1());
-
-        System.out.print(xml);
-    }
-
 }

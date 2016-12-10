@@ -15,6 +15,8 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
+import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,28 +28,29 @@ import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
 import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
-import org.cirdles.calamari.tasks.expressions.operations.OperationInterface;
-import org.cirdles.calamari.tasks.expressions.operations.Pow;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
+import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatiosInterface {
-    
+public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatiosInterface, XMLSerializerInterface {
+
     protected String name;
     protected ExpressionTreeInterface leftET;
     protected ExpressionTreeInterface rightET;
-    protected OperationInterface operation;
+    protected Operation operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
 
-    protected transient OperationInterface add;
-    protected transient OperationInterface subtract;
-    protected transient OperationInterface multiply;
-    protected transient OperationInterface divide;
-    protected transient OperationInterface log;
-    protected transient OperationInterface pow;
+    protected transient Operation add;
+    protected transient Operation subtract;
+    protected transient Operation multiply;
+    protected transient Operation divide;
+    protected transient Operation log;
+    protected transient Operation pow;
 
     protected ExpressionTree() {
         this("EMPTY");
@@ -68,7 +71,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
      * @param rightET the value of rightET
      * @param operation the value of operation
      */
-    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationInterface operation) {
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, Operation operation) {
         this(prettyName, leftET, rightET, operation, new ArrayList<RawRatioNamesSHRIMP>());
     }
 
@@ -80,7 +83,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
      * @param operation the value of operation
      * @param ratiosOfInterest the value of ratiosOfInterest
      */
-    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, Operation operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
         this.name = prettyName;
         this.leftET = leftET;
         this.rightET = rightET;
@@ -92,8 +95,34 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         multiply = new Multiply();
         divide = new Divide();
         log = new Log();
-        pow = new Pow();
+        pow = new Log();
 
+    }
+
+    @Override
+    public void customizeXstream(XStream xstream) {
+        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
+        xstream.alias("ShrimpSpeciesNode", ShrimpSpeciesNode.class);
+
+        xstream.registerConverter(new ConstantNodeXMLConverter());
+        xstream.alias("ConstantNode", ConstantNode.class);
+
+        xstream.registerConverter(new OperationXMLConverter());
+        xstream.alias("operation", Operation.class);
+        xstream.alias("operation", Add.class);
+        xstream.alias("operation", Subtract.class);
+        xstream.alias("operation", Multiply.class);
+        xstream.alias("operation", Divide.class);
+        xstream.alias("operation", Log.class);
+        xstream.alias("operation", Log.class);
+        
+        xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
+        xstream.alias("ratio", RawRatioNamesSHRIMP.class);
+
+        xstream.registerConverter(new ExpressionTreeXMLConverter());
+        xstream.alias("ExpressionTree", ExpressionTree.class);
+        xstream.alias("ExpressionTree", ExpressionTreeInterface.class);
+        xstream.alias("ExpressionTree", this.getClass());
     }
 
     /**
@@ -127,11 +156,67 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     }
 
     /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the leftET
+     */
+    public ExpressionTreeInterface getLeftET() {
+        return leftET;
+    }
+
+    /**
+     * @param leftET the leftET to set
+     */
+    public void setLeftET(ExpressionTreeInterface leftET) {
+        this.leftET = leftET;
+    }
+
+    /**
+     * @return the rightET
+     */
+    public ExpressionTreeInterface getRightET() {
+        return rightET;
+    }
+
+    /**
+     * @param rightET the rightET to set
+     */
+    public void setRightET(ExpressionTreeInterface rightET) {
+        this.rightET = rightET;
+    }
+
+    /**
+     * @return the operation
+     */
+    public Operation getOperation() {
+        return operation;
+    }
+
+    /**
+     * @param operation the operation to set
+     */
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
+
+    /**
      * @return the ratiosOfInterest
      */
     @Override
     public List<RawRatioNamesSHRIMP> getRatiosOfInterest() {
         return ratiosOfInterest;
+    }
+
+    /**
+     * @param ratiosOfInterest the ratiosOfInterest to set
+     */
+    public void setRatiosOfInterest(List<RawRatioNamesSHRIMP> ratiosOfInterest) {
+        this.ratiosOfInterest = ratiosOfInterest;
     }
 
 }
