@@ -20,11 +20,10 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 
 /**
- * A <code>RawRatioNamesSHRIMPXMLConverter</code> is used to marshal and unmarshal data
- * between <code>RawRatioNamesSHRIMP</code> and XML files.
+ * A <code>RawRatioNamesSHRIMPXMLConverter</code> is used to marshal and
+ * unmarshal data between <code>RawRatioNamesSHRIMP</code> and XML files.
  *
  * @imports
  * <a href=http://xstream.codehaus.org/javadoc/com/thoughtworks/xstream/converters/Converter.html>
@@ -46,9 +45,10 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 public class RawRatioNamesSHRIMPXMLConverter implements Converter {
 
     /**
-     * checks the argument <code>clazz</code> against <code>RawRatioNamesSHRIMP</code>'s
-     * <code>Class</code>. Used to ensure that the object about to be
-     * marshalled/unmarshalled is of the correct type.
+     * checks the argument <code>clazz</code> against
+     * <code>RawRatioNamesSHRIMP</code>'s <code>Class</code>. Used to ensure
+     * that the object about to be marshalled/unmarshalled is of the correct
+     * type.
      *
      * @pre argument <code>clazz</code> is a valid <code>Class</code>
      * @post    <code>boolean</code> is returned comparing <code>clazz</code>
@@ -90,29 +90,26 @@ public class RawRatioNamesSHRIMPXMLConverter implements Converter {
     }
 
     /**
-     * reads a <code>RawRatioNamesSHRIMP</code> from the XML file specified through
-     * <code>reader</code>
+     * reads a <code>RawRatioNamesSHRIMP</code> from the XML file specified
+     * through <code>reader</code>
      *
-     * @pre     <code>reader</code> leads to a valid <code>RawRatioNamesSHRIMP</code>
+     * @pre     <code>reader</code> leads to a valid
+     * <code>RawRatioNamesSHRIMP</code>
      * @post the <code>RawRatioNamesSHRIMP</code> is read from the XML file and
      * returned
      * @param reader stream to read through
      * @param context <code>UnmarshallingContext</code> used to store generic
      * data
-     * @return  <code>RawRatioNamesSHRIMP</code> - <code>RawRatioNamesSHRIMP</code>
-     * read from file specified by <code>reader</code>
+     * @return  <code>RawRatioNamesSHRIMP</code> -
+     * <code>RawRatioNamesSHRIMP</code> read from file specified by
+     * <code>reader</code>
      */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
-
-        RawRatioNamesSHRIMP rawRatioNamesSHRIMP = null;//new RawRatioNamesSHRIMP();
-
-//        reader.moveDown();
-//        rawRatioNamesSHRIMP.setName(reader.getValue());
-//        reader.moveUp();
-
-        return rawRatioNamesSHRIMP;
+        
+        // because this is an enum, handled by ExpressionTreeXMLConverter
+        return null;
     }
 
 }

@@ -19,6 +19,7 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  *
@@ -38,10 +39,10 @@ public class SquidExpressionMinus1 extends ExpressionTree {
         ratiosOfInterest.add(RawRatioNamesSHRIMP.r254_238w);
         ExpressionTreeInterface r254_238w = buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
 
-        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^2", r254_238w, new ConstantNode("2", 2.0), pow);
+        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^2", r254_238w, new ConstantNode("2", 2.0), Operation.pow());
 
         leftET = r206_238w;
         rightET = r254_238wSquared;
-        operation = divide;
+        operation = Operation.divide();
     }
 }

@@ -20,6 +20,10 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  * A <code>ExpressionTreeXMLConverter</code> is used to marshal and unmarshal
@@ -83,26 +87,26 @@ public class ExpressionTreeXMLConverter implements Converter {
         ExpressionTree expressionTree = (ExpressionTree) value;
 
         writer.startNode("ExpressionTree");
-        
-            writer.startNode("name");
-            writer.setValue(expressionTree.getName());
-            writer.endNode();
 
-            writer.startNode("leftET");
-            context.convertAnother(expressionTree.getLeftET());
-            writer.endNode();
+        writer.startNode("name");
+        writer.setValue(expressionTree.getName());
+        writer.endNode();
 
-            writer.startNode("rightET");
-            context.convertAnother(expressionTree.getRightET());
-            writer.endNode();
+        writer.startNode("leftET");
+        context.convertAnother(expressionTree.getLeftET());
+        writer.endNode();
 
-            writer.startNode("operation");
-            context.convertAnother(expressionTree.getOperation());
-            writer.endNode();
+        writer.startNode("rightET");
+        context.convertAnother(expressionTree.getRightET());
+        writer.endNode();
 
-            writer.startNode("ratiosOfInterest");
-            context.convertAnother(expressionTree.getRatiosOfInterest());
-            writer.endNode();
+        writer.startNode("operation");
+        context.convertAnother(expressionTree.getOperation());
+        writer.endNode();
+
+        writer.startNode("ratiosOfInterest");
+        context.convertAnother(expressionTree.getRatiosOfInterest());
+        writer.endNode();
 
         writer.endNode();
 
@@ -129,6 +133,65 @@ public class ExpressionTreeXMLConverter implements Converter {
 
         reader.moveDown();
         expressionTree.setName(reader.getValue());
+        reader.moveUp();
+
+        // rightET
+        reader.moveDown();
+        reader.moveDown();
+        String etType = reader.getNodeName();
+        ExpressionTreeInterface leftET = null;
+        if (etType.compareToIgnoreCase("ExpressionTree") == 0) {
+            leftET = new ExpressionTree();
+            leftET = (ExpressionTreeInterface) context.convertAnother(leftET, ExpressionTree.class);
+        } else if (etType.compareToIgnoreCase("ShrimpSpeciesNode") == 0) {
+            leftET = new ShrimpSpeciesNode();
+            leftET = (ExpressionTreeInterface) context.convertAnother(leftET, ShrimpSpeciesNode.class);
+        } else if (etType.compareToIgnoreCase("ConstantNode") == 0) {
+            leftET = new ConstantNode();
+            leftET = (ExpressionTreeInterface) context.convertAnother(leftET, ConstantNode.class);
+        }
+        expressionTree.setLeftET(leftET);
+        reader.moveUp();
+        reader.moveUp();
+
+        // rightET
+        reader.moveDown();
+        reader.moveDown();
+        etType = reader.getNodeName();
+        ExpressionTreeInterface rightET = null;
+        if (etType.compareToIgnoreCase("ExpressionTree") == 0) {
+            rightET = new ExpressionTree();
+            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ExpressionTree.class);
+        } else if (etType.compareToIgnoreCase("ShrimpSpeciesNode") == 0) {
+            rightET = new ShrimpSpeciesNode();
+            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ShrimpSpeciesNode.class);
+        } else if (etType.compareToIgnoreCase("ConstantNode") == 0) {
+            rightET = new ConstantNode();
+            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ConstantNode.class);
+        }
+        expressionTree.setRightET(rightET);
+        reader.moveUp();
+        reader.moveUp();
+
+        // operation
+        reader.moveDown();
+        reader.moveDown();
+        Operation operation = Operation.operationFactory(reader.getValue());
+        expressionTree.setOperation(operation);
+        reader.moveUp();
+        reader.moveUp();
+
+        // ratiosOfInterest
+        reader.moveDown();
+        List<RawRatioNamesSHRIMP> ratiosOfInterest = new ArrayList<>();
+        while (reader.hasMoreChildren()) {
+            reader.moveDown(); // into ratio element
+            reader.moveDown(); // into name element
+            ratiosOfInterest.add(RawRatioNamesSHRIMP.valueOf(reader.getValue()));
+            reader.moveUp();
+            reader.moveUp();
+        }
+        expressionTree.setRatiosOfInterest(ratiosOfInterest);
         reader.moveUp();
 
         return expressionTree;

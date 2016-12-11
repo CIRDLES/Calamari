@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,14 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
 import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
+import org.cirdles.calamari.tasks.expressions.operations.Pow;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
@@ -45,14 +46,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     protected Operation operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
 
-    protected transient Operation add;
-    protected transient Operation subtract;
-    protected transient Operation multiply;
-    protected transient Operation divide;
-    protected transient Operation log;
-    protected transient Operation pow;
-
-    protected ExpressionTree() {
+    public ExpressionTree() {
         this("EMPTY");
     }
 
@@ -89,15 +83,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         this.rightET = rightET;
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
-
-        add = new Add();
-        subtract = new Subtract();
-        multiply = new Multiply();
-        divide = new Divide();
-        log = new Log();
-        pow = new Log();
-
-    }
+    }  
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -113,9 +99,9 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         xstream.alias("operation", Subtract.class);
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
+        xstream.alias("operation", Pow.class);
         xstream.alias("operation", Log.class);
-        xstream.alias("operation", Log.class);
-        
+
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
         xstream.alias("ratio", RawRatioNamesSHRIMP.class);
 
@@ -123,6 +109,26 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         xstream.alias("ExpressionTree", ExpressionTree.class);
         xstream.alias("ExpressionTree", ExpressionTreeInterface.class);
         xstream.alias("ExpressionTree", this.getClass());
+    }
+
+    /**
+     *
+     * @param xml
+     * @return
+     */
+    @Override
+    public String customizeXML(String xml) {
+        // due to recursive nature of ExpressionTree, xml may have extra ExpressionTree tag wrapping it
+        String xmlR = xml;
+        if (xmlR.startsWith("<ExpressionTree>\n  <ExpressionTree>")) {
+            // remove first tag
+            xmlR = xmlR.replaceFirst("<ExpressionTree>\n", "");
+            // remove last tag
+            int indexOfLast = xmlR.lastIndexOf("</ExpressionTree>");
+            xmlR = xmlR.substring(0, indexOfLast);
+        }
+
+        return xmlR;
     }
 
     /**

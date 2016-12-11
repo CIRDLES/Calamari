@@ -18,7 +18,7 @@ package org.cirdles.calamari.tasks.expressions;
 import java.util.List;
 import java.util.Set;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.tasks.expressions.operations.Divide;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  *
@@ -38,6 +38,6 @@ public interface ExpressionTreeWithRatiosInterface {
                 ratio.getDisplayNameNoSpaces(), 
                 new ShrimpSpeciesNode(ratio.getNumerator()), 
                 new ShrimpSpeciesNode(ratio.getDenominator()), 
-                new Divide());
+                Operation.divide());
     }
 }

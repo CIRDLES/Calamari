@@ -18,6 +18,7 @@ package org.cirdles.calamari.tasks.expressions.storedExpressions;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  *
@@ -36,7 +37,7 @@ public class CustomExpression2 extends ExpressionTree {
         
         leftET = r206_238w;
         rightET = null;
-        operation = log;
+        operation = Operation.log();
     }
 
 }

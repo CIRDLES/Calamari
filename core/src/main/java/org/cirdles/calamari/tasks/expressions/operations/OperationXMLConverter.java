@@ -105,13 +105,7 @@ public class OperationXMLConverter implements Converter {
     public Object unmarshal(HierarchicalStreamReader reader,
             UnmarshallingContext context) {
 
-        Operation operation = null;//new Operation();
-
-        reader.moveDown();
-        operation.setName(reader.getValue());
-        reader.moveUp();
-
-        return operation;
+        return null;//operation;
     }
 
 }

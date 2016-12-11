@@ -16,6 +16,8 @@
 package org.cirdles.calamari.tasks.expressions.operations;
 
 import com.thoughtworks.xstream.XStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -34,8 +36,57 @@ public abstract class Operation implements XMLSerializerInterface {
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new OperationXMLConverter());
-        xstream.alias("Operation", Operation.class);
-        xstream.alias("Operation", this.getClass());
+        xstream.alias("operation", Operation.class);
+        xstream.alias("operation", this.getClass());
+    }
+
+    public static Operation add() {
+        return new Add();
+    }
+
+    public static Operation subtract() {
+        return new Subtract();
+    }
+
+    public static Operation divide() {
+        return new Divide();
+    }
+
+    public static Operation multiply() {
+        return new Multiply();
+    }
+
+    public static Operation pow() {
+        return new Pow();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static Operation log() {
+        return new Log();
+    }
+
+    /**
+     *
+     * @param operationName
+     * @return
+     */
+    public static Operation operationFactory(String operationName) {
+        Operation retVal = null;
+        Method method;
+        if (operationName != null) {
+            try {
+                method = Operation.class.getMethod(//
+                        operationName,
+                        new Class[0]);
+                retVal = (Operation) method.invoke(null, new Object[0]);
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException noSuchMethodException) {
+                // do nothing for now
+            }
+        }
+        return retVal;
     }
 
     /**

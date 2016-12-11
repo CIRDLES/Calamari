@@ -16,11 +16,14 @@
 package org.cirdles.calamari.tasks.storedTasks;
 
 import org.cirdles.calamari.tasks.Task;
+import org.cirdles.calamari.tasks.expressions.ExpressionTree;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression1;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.CustomExpression2;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.storedExpressions.SquidExpressionMinus4;
+import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
@@ -34,6 +37,16 @@ public class SquidTask1 extends Task {
         taskExpressionsOrdered.add(new CustomExpression2());
         taskExpressionsOrdered.add(new SquidExpressionMinus1());
         taskExpressionsOrdered.add(new SquidExpressionMinus4());
+
+        // experiment
+        ExpressionTreeInterface exp = new SquidExpressionMinus4();
+        ((XMLSerializerInterface) exp).serializeXMLObject(exp, "SquidExpressionMinus4.xml");
+
+        ExpressionTreeInterface test = new ExpressionTree();
+        test = ((XMLSerializerInterface) test).readXMLObject("SquidExpressionMinus4.xml", false);
+        ((ExpressionTree)test).setName("TEST");
+        taskExpressionsOrdered.add(test);
+
         taskExpressionsOrdered.add(new SquidExpressionMinus3());
     }
 }
