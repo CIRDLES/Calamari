@@ -45,6 +45,7 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
     protected ExpressionTreeInterface rightET;
     protected Operation operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
+    protected boolean rootExpressionTree;
 
     public ExpressionTree() {
         this("EMPTY");
@@ -83,7 +84,8 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
         this.rightET = rightET;
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
-    }  
+        this.rootExpressionTree = false;
+    }
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -107,8 +109,6 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
 
         xstream.registerConverter(new ExpressionTreeXMLConverter());
         xstream.alias("ExpressionTree", ExpressionTree.class);
-        xstream.alias("ExpressionTree", ExpressionTreeInterface.class);
-        xstream.alias("ExpressionTree", this.getClass());
     }
 
     /**
@@ -118,15 +118,18 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
      */
     @Override
     public String customizeXML(String xml) {
-        // due to recursive nature of ExpressionTree, xml may have extra ExpressionTree tag wrapping it
         String xmlR = xml;
-        if (xmlR.startsWith("<ExpressionTree>\n  <ExpressionTree>")) {
-            // remove first tag
-            xmlR = xmlR.replaceFirst("<ExpressionTree>\n", "");
-            // remove last tag
-            int indexOfLast = xmlR.lastIndexOf("</ExpressionTree>");
-            xmlR = xmlR.substring(0, indexOfLast);
-        }
+
+        // TODO: Move to global once we decide where this puppy will live
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<ExpressionTree xmlns=\"https://raw.githubusercontent.com\"\n"
+                + " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n"
+                + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+                + " xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
+                + "                 https://raw.githubusercontent.com/bowring/Calamari/expressions/src/main/resources/SquidExpressionModelXMLSchema.xsd\">";
+
+        xmlR = xmlR.replaceFirst("<ExpressionTree>",
+                header);
 
         return xmlR;
     }
@@ -223,6 +226,20 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
      */
     public void setRatiosOfInterest(List<RawRatioNamesSHRIMP> ratiosOfInterest) {
         this.ratiosOfInterest = ratiosOfInterest;
+    }
+
+    /**
+     * @return the rootExpressionTree
+     */
+    public boolean isRootExpressionTree() {
+        return rootExpressionTree;
+    }
+
+    /**
+     * @param rootExpressionTree the rootExpressionTree to set
+     */
+    public void setRootExpressionTree(boolean rootExpressionTree) {
+        this.rootExpressionTree = rootExpressionTree;
     }
 
 }

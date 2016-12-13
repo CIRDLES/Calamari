@@ -86,18 +86,26 @@ public class ExpressionTreeXMLConverter implements Converter {
 
         ExpressionTree expressionTree = (ExpressionTree) value;
 
-        writer.startNode("ExpressionTree");
+        if (!expressionTree.rootExpressionTree) {
+            writer.startNode("ExpressionTree");
+        }
 
         writer.startNode("name");
         writer.setValue(expressionTree.getName());
         writer.endNode();
 
         writer.startNode("leftET");
-        context.convertAnother(expressionTree.getLeftET());
+        ExpressionTreeInterface leftET = expressionTree.getLeftET();
+        if (leftET != null) {
+            context.convertAnother(leftET);
+        }
         writer.endNode();
 
         writer.startNode("rightET");
-        context.convertAnother(expressionTree.getRightET());
+        ExpressionTreeInterface rightET = expressionTree.getRightET();
+        if (rightET != null) {
+            context.convertAnother(rightET);
+        }
         writer.endNode();
 
         writer.startNode("operation");
@@ -108,7 +116,9 @@ public class ExpressionTreeXMLConverter implements Converter {
         context.convertAnother(expressionTree.getRatiosOfInterest());
         writer.endNode();
 
-        writer.endNode();
+        if (!expressionTree.rootExpressionTree) {
+            writer.endNode();
+        }
 
     }
 
@@ -135,11 +145,11 @@ public class ExpressionTreeXMLConverter implements Converter {
         expressionTree.setName(reader.getValue());
         reader.moveUp();
 
-        // rightET
+        // leftET
+        ExpressionTreeInterface leftET = null;
         reader.moveDown();
         reader.moveDown();
         String etType = reader.getNodeName();
-        ExpressionTreeInterface leftET = null;
         if (etType.compareToIgnoreCase("ExpressionTree") == 0) {
             leftET = new ExpressionTree();
             leftET = (ExpressionTreeInterface) context.convertAnother(leftET, ExpressionTree.class);
@@ -150,28 +160,30 @@ public class ExpressionTreeXMLConverter implements Converter {
             leftET = new ConstantNode();
             leftET = (ExpressionTreeInterface) context.convertAnother(leftET, ConstantNode.class);
         }
+        reader.moveUp();
+        reader.moveUp();
         expressionTree.setLeftET(leftET);
-        reader.moveUp();
-        reader.moveUp();
 
         // rightET
-        reader.moveDown();
-        reader.moveDown();
-        etType = reader.getNodeName();
         ExpressionTreeInterface rightET = null;
-        if (etType.compareToIgnoreCase("ExpressionTree") == 0) {
-            rightET = new ExpressionTree();
-            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ExpressionTree.class);
-        } else if (etType.compareToIgnoreCase("ShrimpSpeciesNode") == 0) {
-            rightET = new ShrimpSpeciesNode();
-            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ShrimpSpeciesNode.class);
-        } else if (etType.compareToIgnoreCase("ConstantNode") == 0) {
-            rightET = new ConstantNode();
-            rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ConstantNode.class);
+        reader.moveDown();
+        if (reader.hasMoreChildren()) {
+            reader.moveDown();
+            etType = reader.getNodeName();
+            if (etType.compareToIgnoreCase("ExpressionTree") == 0) {
+                rightET = new ExpressionTree();
+                rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ExpressionTree.class);
+            } else if (etType.compareToIgnoreCase("ShrimpSpeciesNode") == 0) {
+                rightET = new ShrimpSpeciesNode();
+                rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ShrimpSpeciesNode.class);
+            } else if (etType.compareToIgnoreCase("ConstantNode") == 0) {
+                rightET = new ConstantNode();
+                rightET = (ExpressionTreeInterface) context.convertAnother(rightET, ConstantNode.class);
+            }
+            reader.moveUp();
         }
+        reader.moveUp();
         expressionTree.setRightET(rightET);
-        reader.moveUp();
-        reader.moveUp();
 
         // operation
         reader.moveDown();

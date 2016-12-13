@@ -23,7 +23,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Subtract  extends Operation {
+public class Subtract extends Operation {
 
     public Subtract() {
         name = "subtract";
@@ -39,9 +39,9 @@ public class Subtract  extends Operation {
      */
     @Override
     public double eval(
-            ExpressionTreeInterface leftET, 
-            ExpressionTreeInterface rightET, 
-            double[] pkInterpScan, 
+            ExpressionTreeInterface leftET,
+            ExpressionTreeInterface rightET,
+            double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {

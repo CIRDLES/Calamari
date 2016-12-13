@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
@@ -46,17 +45,6 @@ public interface XMLSerializerInterface {
             String xml = xstream.toXML(object).trim();
             xml = customizeXML(xml).trim();
 
-            // TODO: Move to global once we decide where this puppy will live
-            String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                    + "<ExpressionTree xmlns=\"https://raw.githubusercontent.com\"\n"
-                    + " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n"
-                    + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-                    + " xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
-                    + "                 https://raw.githubusercontent.com/bowring/Calamari/expressions/src/main/resources/SquidExpressionModelXMLSchema.xsd\">";
-
-            xml = xml.replaceFirst("<ExpressionTree>",
-                    header);
-
             outFile = new FileWriter(filename);
             try (PrintWriter out = new PrintWriter(outFile)) {
                 // Write xml to file
@@ -76,16 +64,16 @@ public interface XMLSerializerInterface {
         }
     }
 
-    public default ExpressionTreeInterface readXMLObject(String filename, boolean doValidate) {
+    public default Object readXMLObject(String filename, boolean doValidate) {
 
         String xmlContents = null;
-        ExpressionTreeInterface myModelClassInstance = null;
+        Object myModelClassInstance = null;
 
         try {
             xmlContents = new String(Files.readAllBytes(Paths.get(filename)));
             XStream xstream = new XStream(new DomDriver());
             customizeXstream(xstream);
-            myModelClassInstance = (ExpressionTreeInterface) xstream.fromXML(xmlContents);
+            myModelClassInstance = xstream.fromXML(xmlContents);
         } catch (IOException iOException) {
             // do nothing for now
         }

@@ -16,6 +16,7 @@
 package org.cirdles.calamari.tasks;
 
 import com.google.common.primitives.Doubles;
+import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,22 +28,72 @@ import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr
 import static org.cirdles.calamari.constants.SquidConstants.SQUID_ERROR_VALUE;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.expressions.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.operations.Add;
+import org.cirdles.calamari.tasks.expressions.operations.Divide;
+import org.cirdles.calamari.tasks.expressions.operations.Log;
+import org.cirdles.calamari.tasks.expressions.operations.Multiply;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
+import org.cirdles.calamari.tasks.expressions.operations.Pow;
+import org.cirdles.calamari.tasks.expressions.operations.Subtract;
+import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class Task implements TaskInterface {
+public class Task implements TaskInterface, XMLSerializerInterface {
 
+    protected String name;
     protected List<ExpressionTreeInterface> taskExpressionsOrdered;
-    protected List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated;
+    protected transient List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated;
 
     public Task() {
+        this("NoName");
+    }
+
+    public Task(String name) {
+        this.name = name;
         this.taskExpressionsOrdered = new ArrayList<>();
         this.taskExpressionsEvaluated = new ArrayList<>();
+    }
+
+    @Override
+    public void customizeXstream(XStream xstream) {
+        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
+        xstream.alias("ShrimpSpeciesNode", ShrimpSpeciesNode.class);
+
+        xstream.registerConverter(new ConstantNodeXMLConverter());
+        xstream.alias("ConstantNode", ConstantNode.class);
+
+        xstream.registerConverter(new OperationXMLConverter());
+        xstream.alias("operation", Operation.class);
+        xstream.alias("operation", Add.class);
+        xstream.alias("operation", Subtract.class);
+        xstream.alias("operation", Multiply.class);
+        xstream.alias("operation", Divide.class);
+        xstream.alias("operation", Pow.class);
+        xstream.alias("operation", Log.class);
+
+        xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
+        xstream.alias("ratio", RawRatioNamesSHRIMP.class);
+
+        xstream.registerConverter(new ExpressionTreeXMLConverter());
+        xstream.alias("ExpressionTree", ExpressionTree.class);
+        
+        xstream.registerConverter(new TaskXMLConverter());
+        xstream.alias("Task", Task.class);
+        xstream.alias("Task", this.getClass());
     }
 
     /**
@@ -237,7 +288,7 @@ public class Task implements TaskInterface {
                         ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
                     }
 
-                    taskExpressionsEvaluated.add(new TaskExpressionEvalModel(expression, ratEqVal, ratEqTime, ratEqErr));
+                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(expression, ratEqVal, ratEqTime, ratEqErr));
                 }// end of entry test
             }); // end of visiting each expression
             shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);
@@ -245,4 +296,31 @@ public class Task implements TaskInterface {
         }
     }
 
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the taskExpressionsOrdered
+     */
+    public List<ExpressionTreeInterface> getTaskExpressionsOrdered() {
+        return taskExpressionsOrdered;
+    }
+
+    /**
+     * @param taskExpressionsOrdered the taskExpressionsOrdered to set
+     */
+    public void setTaskExpressionsOrdered(List<ExpressionTreeInterface> taskExpressionsOrdered) {
+        this.taskExpressionsOrdered = taskExpressionsOrdered;
+    }
 }

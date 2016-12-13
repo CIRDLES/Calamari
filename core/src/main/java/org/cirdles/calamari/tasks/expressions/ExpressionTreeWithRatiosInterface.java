@@ -33,11 +33,11 @@ public interface ExpressionTreeWithRatiosInterface {
 
     public Set extractUniqueSpeciesNumbers();
 
-    public default ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
+    public static ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
         return new ExpressionTree(
-                ratio.getDisplayNameNoSpaces(), 
-                new ShrimpSpeciesNode(ratio.getNumerator()), 
-                new ShrimpSpeciesNode(ratio.getDenominator()), 
+                ratio.getDisplayNameNoSpaces(),
+                new ShrimpSpeciesNode(ratio.getNumerator()),
+                new ShrimpSpeciesNode(ratio.getDenominator()),
                 Operation.divide());
     }
 }

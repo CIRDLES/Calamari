@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.storedExpressions;
+package org.cirdles.calamari.tasks.expressions.builtinExpressions;
 
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression2 extends ExpressionTree {
+public class CustomExpression1 {
 
     /**
-     * Squid Excel format is ln(["254/238"]) has EqNum = 1 
+     * Squid Excel format is ln(["254/238"]) has EqNum = 1
      */
-    public CustomExpression2() {
-        super("Ln206/238");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Ln254/238");
 
-        ratiosOfInterest.add(RawRatioNamesSHRIMP.r206_238w);
-        ExpressionTreeInterface r206_238w = buildRatioExpression(RawRatioNamesSHRIMP.r206_238w);
-        
-        leftET = r206_238w;
-        rightET = null;
-        operation = Operation.log();
+    static {
+        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
+        ExpressionTreeInterface r254_238w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
+
+        ((ExpressionTree) EXPRESSION).setLeftET(r254_238w);
+        ((ExpressionTree) EXPRESSION).setRightET(null);
+        ((ExpressionTree) EXPRESSION).setOperation(Operation.log());
+
+        ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
     }
-
 }

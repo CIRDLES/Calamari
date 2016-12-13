@@ -21,17 +21,17 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface {
+public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedModelInterface {
 
     private ExpressionTreeInterface expression;
     private double[] ratEqVal;
     private double[] ratEqTime;
     private double[] ratEqErr;
 
-    private TaskExpressionEvalModel() {
+    private TaskExpressionEvaluatedModel() {
     }
 
-    public TaskExpressionEvalModel(ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr) {
+    public TaskExpressionEvaluatedModel(ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr) {
         this.expression = expression;
         this.ratEqVal = ratEqVal.clone();
         this.ratEqTime = ratEqTime.clone();
@@ -41,6 +41,7 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
     /**
      * @return the expression
      */
+    @Override
     public ExpressionTreeInterface getExpression() {
         return expression;
     }
@@ -48,6 +49,7 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
     /**
      * @return the ratEqVal
      */
+    @Override
     public double[] getRatEqVal() {
         return ratEqVal.clone();
     }
@@ -55,6 +57,7 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
     /**
      * @return the ratEqTime
      */
+    @Override
     public double[] getRatEqTime() {
         return ratEqTime.clone();
     }
@@ -62,13 +65,9 @@ public class TaskExpressionEvalModel implements TaskExpressionEvalModelInterface
     /**
      * @return the ratEqErr
      */
+    @Override
     public double[] getRatEqErr() {
         return ratEqErr.clone();
     }
 
-
-
-
-    
-    
 }

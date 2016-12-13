@@ -23,7 +23,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Log  extends Operation {
+public class Log extends Operation {
 
     public Log() {
         name = "log";

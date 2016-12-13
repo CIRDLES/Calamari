@@ -21,7 +21,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public interface TaskExpressionEvalModelInterface {
+public interface TaskExpressionEvaluatedModelInterface {
 
     /**
      * @return the expression

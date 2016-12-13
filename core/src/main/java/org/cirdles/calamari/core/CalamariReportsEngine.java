@@ -30,7 +30,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
-import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
  * Calamari's reports engine.
@@ -359,8 +359,8 @@ public class CalamariReportsEngine {
             }
 
             // Handle any task expressions
-            List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
-            for (TaskExpressionEvalModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+            for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqVal()[nDodNum]));
@@ -482,8 +482,8 @@ public class CalamariReportsEngine {
         }
 
         // prepare headers for any task expressions
-        List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
-        for (TaskExpressionEvalModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             String expressionName = taskExpressionEval.getExpression().getName();
             header.append(", ").append(expressionName).append(".Time");
             header.append(", ").append(expressionName).append(".Value");

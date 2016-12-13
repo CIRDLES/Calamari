@@ -16,7 +16,7 @@
 package org.cirdles.calamari.shrimp;
 
 import java.util.List;
-import org.cirdles.calamari.tasks.TaskExpressionEvalModelInterface;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
  *
@@ -46,5 +46,5 @@ public interface ShrimpFractionExpressionInterface {
         /**
      * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
      */
-    public void setTaskExpressionsEvaluated(List<TaskExpressionEvalModelInterface> taskExpressionsEvaluated);
+    public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated);
 }
