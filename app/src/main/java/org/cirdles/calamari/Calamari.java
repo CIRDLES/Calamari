@@ -116,7 +116,7 @@ public class Calamari {
         prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
         if (!defaultCalamariReportsFolder.exists()) {
             if (!defaultCalamariReportsFolder.mkdir()) {
-                System.out.println("Failed to make Calamari reprots directory");
+                System.out.println("Failed to make Calamari reports directory");
             }
         }
 

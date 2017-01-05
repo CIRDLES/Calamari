@@ -423,7 +423,7 @@ public class CalamariReportsEngine {
         header.append("\n");
 
         Files.write(ionIntegrations_PerScan.toPath(), header.toString().getBytes(UTF_8));
-
+        
         sBMIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "Check_02_SBMIntegrations_PerScan.csv");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type, SBM_zero_cps");

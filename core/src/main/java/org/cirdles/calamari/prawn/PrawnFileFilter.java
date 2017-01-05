@@ -24,6 +24,7 @@ import java.util.Locale;
  */
 public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
 
+    @Override
     public boolean accept(File f) {
         boolean accept = f.isDirectory();
 
@@ -41,6 +42,7 @@ public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
      *
      * @return
      */
+    @Override
     public String getDescription() {
         return "Prawn files (*.xml)";
     }
