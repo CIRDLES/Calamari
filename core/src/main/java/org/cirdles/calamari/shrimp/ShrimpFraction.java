@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,17 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
-public class ShrimpFraction {
+public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private String fractionID;
     private int spotNumber;
@@ -48,6 +51,11 @@ public class ShrimpFraction {
     private boolean useSBM;
     private boolean userLinFits;
 
+    private double[][] reducedPkHt;
+    private double[][] reducedPkHtFerr;
+    
+    private List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated;
+
     public ShrimpFraction() {
         fractionID = "NONE";
         spotNumber = -1;
@@ -70,12 +78,33 @@ public class ShrimpFraction {
         pkFerr = new double[0][0];
         referenceMaterial = false;
 
+        reducedPkHt = new double[0][0];
+        reducedPkHtFerr = new double[0][0];
+        taskExpressionsEvaluated = new ArrayList<>();
+
     }
 
     public ShrimpFraction(String fractionID, Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios) {
         this();
         this.fractionID = fractionID;
         this.isotopicRatios = isotopicRatios;
+    }
+
+    /**
+     * 
+     * @param speciesName
+     * @return 
+     */
+    @Override
+    public int getIndexOfSpeciesByName(IsotopeNames speciesName) {
+        int retVal = -1;
+
+        for (int i = 0; i < namesOfSpecies.length; i++) {
+            if (namesOfSpecies[i].compareToIgnoreCase(speciesName.getPrawnName()) == 0) {
+                retVal = i;
+            }
+        }
+        return retVal;
     }
 
     /**
@@ -398,6 +427,49 @@ public class ShrimpFraction {
      */
     public void setUserLinFits(boolean userLinFits) {
         this.userLinFits = userLinFits;
+    }
+
+    /**
+     * @return the reducedPkHt
+     */
+    public double[][] getReducedPkHt() {
+        return reducedPkHt.clone();
+    }
+
+    /**
+     * @param reducedPkHt the reducedPkHt to set
+     */
+    public void setReducedPkHt(double[][] reducedPkHt) {
+        this.reducedPkHt = reducedPkHt.clone();
+    }
+
+    /**
+     * @return the reducedPkHtFerr
+     */
+    public double[][] getReducedPkHtFerr() {
+        return reducedPkHtFerr.clone();
+    }
+
+    /**
+     * @param reducedPkHtFerr the reducedPkHtFerr to set
+     */
+    public void setReducedPkHtFerr(double[][] reducedPkHtFerr) {
+        this.reducedPkHtFerr = reducedPkHtFerr.clone();
+    }
+
+    /**
+     * @return the taskExpressionsEvaluated
+     */
+    public List<TaskExpressionEvaluatedModelInterface> getTaskExpressionsEvaluated() {
+        return taskExpressionsEvaluated;
+    }
+
+    /**
+     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
+     */
+    @Override
+    public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated) {
+        this.taskExpressionsEvaluated = taskExpressionsEvaluated;
     }
 
 }

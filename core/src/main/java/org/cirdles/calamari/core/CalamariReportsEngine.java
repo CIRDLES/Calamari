@@ -30,6 +30,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
  * Calamari's reports engine.
@@ -160,14 +161,14 @@ public class CalamariReportsEngine {
 
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
-                try {
-                    if ((i % countOfPeaks) == 0) {
-                        dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
-                    }
-                    dataLine.append(", ").append(rawPeakData[scanNum][i]);
-                } catch (Exception e) {
-                    System.out.println();
+//                try {
+                if ((i % countOfPeaks) == 0) {
+                    dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                 }
+                dataLine.append(", ").append(rawPeakData[scanNum][i]);
+//                } catch (Exception e) {
+//                    System.out.println();
+//                }
             }
 
             Files.write(ionIntegrations_PerScan.toPath(), asList(dataLine), APPEND);
@@ -357,6 +358,20 @@ public class CalamariReportsEngine {
                 }
             }
 
+            // Handle any task expressions
+            List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+            for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+                if (nDodNum < taskExpressionEval.getRatEqTime().length) {
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqVal()[nDodNum]));
+                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqErr()[nDodNum]));
+                } else {
+                    dataLine.append(", ").append("n/a");
+                    dataLine.append(", ").append("n/a");
+                    dataLine.append(", ").append("n/a");
+                }
+            }
+
             dataLine.append("\n");
             if (shrimpFraction.isReferenceMaterial()) {
                 refMatWithinSpotRatios_PerScanMinus1.append(dataLine);
@@ -392,7 +407,6 @@ public class CalamariReportsEngine {
     }
 
     private void prepSpeciesReportFiles(ShrimpFraction shrimpFraction) throws IOException {
-        String nameOfMount = shrimpFraction.getNameOfMount();
         String[] namesOfSpecies = shrimpFraction.getNamesOfSpecies();
         int countOfIntegrations = shrimpFraction.getPeakMeasurementsCount();
 
@@ -409,7 +423,7 @@ public class CalamariReportsEngine {
         header.append("\n");
 
         Files.write(ionIntegrations_PerScan.toPath(), header.toString().getBytes(UTF_8));
-
+        
         sBMIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "Check_02_SBMIntegrations_PerScan.csv");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type, SBM_zero_cps");
@@ -461,10 +475,19 @@ public class CalamariReportsEngine {
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
             if (entry.getValue().isActive()) {
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".InterpTime");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaAbs");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".InterpTime");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".1SigmaAbs");
             }
+        }
+
+        // prepare headers for any task expressions
+        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            String expressionName = taskExpressionEval.getExpression().getName();
+            header.append(", ").append(expressionName).append(".Time");
+            header.append(", ").append(expressionName).append(".Value");
+            header.append(", ").append(expressionName).append(".1SigmaAbs");
         }
 
         header.append("\n");
@@ -480,9 +503,9 @@ public class CalamariReportsEngine {
 
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
             if (entry.getValue().isActive()) {
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".MinIndex");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".Value");
-                header.append(", ").append(entry.getKey().getDisplayName().replaceAll(" ", "")).append(".1SigmaPct");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".MinIndex");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".Value");
+                header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".1SigmaPct");
             }
         }
 

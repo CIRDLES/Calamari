@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  * Based on Simon Bodorkos' interpreation of Ludwig's code:
  * https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Step-4
  */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 package org.cirdles.calamari.userInterface;
 
-import com.apple.eawt.Application;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -28,14 +28,15 @@ import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFileFilter;
+import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
 public class CalamariUI extends javax.swing.JFrame {
 
-    private final PrawnFileHandler prawnFileHandler;
+    private transient PrawnFileHandler prawnFileHandler;
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 
@@ -61,10 +62,10 @@ public class CalamariUI extends javax.swing.JFrame {
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
 
         // check for MacOS
-        String lcOSName = System.getProperty("os.name").toLowerCase();
+        String lcOSName = System.getProperty("os.name").toLowerCase(Locale.US);
         boolean MAC_OS_X = lcOSName.startsWith("mac os x");
         if (MAC_OS_X) {
-            Application myAboutHandler = new MacOSAboutHandler();
+            new MacOSAboutHandler();
         }
 
         // center me
@@ -403,6 +404,7 @@ public class CalamariUI extends javax.swing.JFrame {
                     normalizeIonCountsToSBM,
                     useLinearRegressionToCalculateRatios,
                     (String)referenceMaterialFirstLetterComboBox.getSelectedItem(), 
+                    new SquidBodorkosTask1(), // temporarily hard-wired
                     reduceDataProgressBar).execute();
         } else {
             JOptionPane.showMessageDialog(
@@ -416,7 +418,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private void selectReportsLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectReportsLocationButtonActionPerformed
         CalamariReportsEngine reportsEngine = prawnFileHandler.getReportsEngine();
         File reportFolder
-                = FileHelper.AllPlatformGetFolder("Select location to write reports",
+                = FileHelper.allPlatformGetFolder("Select location to write reports",
                         reportsEngine.getFolderToWriteCalamariReports());
         if (reportFolder != null) {
             reportsEngine.setFolderToWriteCalamariReports(reportFolder);
@@ -426,7 +428,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
     private void selectPrawnFileLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPrawnFileLocationButtonActionPerformed
 
-        File prawnFile = FileHelper.AllPlatformGetFile(//
+        File prawnFile = FileHelper.allPlatformGetFile(//
                 "Select Prawn file", //
                 new File(prawnFileHandler.getCurrentPrawnFileLocation()), //
                 "*.xml", new PrawnFileFilter(), false, this)[0];

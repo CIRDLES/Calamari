@@ -2,7 +2,7 @@
  * RawRatioNamesSHRIMP.java
  *
  *
- * Copyright 2006-2016 James F. Bowring and www.Earth-Time.org
+ * Copyright 2006-2017 James F. Bowring and www.Earth-Time.org
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,23 +25,27 @@ package org.cirdles.calamari.shrimp;
 public enum RawRatioNamesSHRIMP {
 
     // raw ratios
-    r204_206w("r204_206w", "204 / 206"),
-    r207_206w("r207_206w", "207 / 206"),
-    r208_206w("r208_206w", "208 / 206"),
-    r238_196w("r238_196w", "238 / 196"),
-    r206_238w("r206_238w", "206 / 238"),
-    r254_238w("r254_238w", "254 / 238"),
-    r248_254w("r248_254w", "248 / 254"),
-    r206_270w("r206_270w", "206 / 270"),
-    r270_254w("r270_254w", "270 / 254"),
-    r206_254w("r206_254w", "206 / 254");
+    r204_206w("r204_206w", "204 / 206", IsotopeNames.Pb204, IsotopeNames.Pb206),
+    r207_206w("r207_206w", "207 / 206", IsotopeNames.Pb207, IsotopeNames.Pb206),
+    r208_206w("r208_206w", "208 / 206", IsotopeNames.Pb208, IsotopeNames.Pb206),
+    r238_196w("r238_196w", "238 / 196", IsotopeNames.U238, IsotopeNames.Zr2O196),
+    r206_238w("r206_238w", "206 / 238", IsotopeNames.Pb206, IsotopeNames.U238),
+    r254_238w("r254_238w", "254 / 238", IsotopeNames.UO254, IsotopeNames.U238),
+    r248_254w("r248_254w", "248 / 254", IsotopeNames.ThO248, IsotopeNames.UO254),
+    r206_270w("r206_270w", "206 / 270", IsotopeNames.Pb206, IsotopeNames.UO270),
+    r270_254w("r270_254w", "270 / 254", IsotopeNames.UO270, IsotopeNames.UO254),
+    r206_254w("r206_254w", "206 / 254", IsotopeNames.Pb206, IsotopeNames.UO254);
     
     private final String name;
     private final String displayName;
+    private final IsotopeNames numerator;
+    private final IsotopeNames denominator;
 
-    private RawRatioNamesSHRIMP(String name, String displayName) {
+    private RawRatioNamesSHRIMP(String name, String displayName, IsotopeNames num, IsotopeNames den) {
         this.name = name;
         this.displayName = displayName;
+        this.numerator = num;
+        this.denominator = den;
     }
 
     /**
@@ -58,6 +62,24 @@ public enum RawRatioNamesSHRIMP {
      */
     public String getDisplayName() {
         return displayName;
+    }
+    
+    public String getDisplayNameNoSpaces() {
+        return displayName.replaceAll(" ", "");
+    }
+
+    /**
+     * @return the numerator
+     */
+    public IsotopeNames getNumerator() {
+        return numerator;
+    }
+
+    /**
+     * @return the denominator
+     */
+    public IsotopeNames getDenominator() {
+        return denominator;
     }
 
     /**

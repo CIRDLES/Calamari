@@ -26,6 +26,8 @@ test_*
 *.ser
 *.zip
 
+# xml schema store
+core/private
 
 # Resources
 !core/src/main/resources/org/cirdles/calamari/prawn/*.xml

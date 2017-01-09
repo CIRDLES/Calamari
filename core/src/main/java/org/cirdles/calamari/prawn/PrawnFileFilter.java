@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 package org.cirdles.calamari.prawn;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
 public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
 
+    @Override
     public boolean accept(File f) {
         boolean accept = f.isDirectory();
 
@@ -40,6 +42,7 @@ public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
      *
      * @return
      */
+    @Override
     public String getDescription() {
         return "Prawn files (*.xml)";
     }
@@ -49,7 +52,7 @@ public class PrawnFileFilter extends javax.swing.filechooser.FileFilter {
         int i = s.lastIndexOf('.');
 
         if (i > 0 && i < s.length() - 1) {
-            suffix = s.substring(i + 1).toLowerCase();
+            suffix = s.substring(i + 1).toLowerCase(Locale.US);
         }
 
         return suffix;

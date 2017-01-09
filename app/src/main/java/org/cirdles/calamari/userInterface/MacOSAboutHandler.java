@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.apple.eawt.ApplicationEvent;
 
 /**
  *
- * @author James F. Bowring <bowring at gmail.com>
+ * @author James F. Bowring
  */
 public class MacOSAboutHandler extends Application {
 
@@ -35,7 +35,7 @@ public class MacOSAboutHandler extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    class AboutBoxHandler extends ApplicationAdapter {
+    static class AboutBoxHandler extends ApplicationAdapter {
 
         @Override
         public void handleAbout(ApplicationEvent event) {

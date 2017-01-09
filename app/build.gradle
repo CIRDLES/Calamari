@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 import java.util.Date
-import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.filters.*
 
 apply plugin: "application"
 
@@ -19,9 +19,8 @@ repositories {
         url "http://bits.netbeans.org/maven2/"
         url "http://jcenter.bintray.com/"
     }
+    mavenCentral()
 }
-
-
 
 task fatJar(type: Jar) {
     manifest {

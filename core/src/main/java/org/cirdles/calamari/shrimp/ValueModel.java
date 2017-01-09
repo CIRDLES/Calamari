@@ -1,9 +1,6 @@
 /*
  * ValueModel.java
  *
- * Created on August 5, 2007, 7:53 AM
- *
- *
  * Copyright 2006-2015 James F. Bowring and www.Earth-Time.org
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");

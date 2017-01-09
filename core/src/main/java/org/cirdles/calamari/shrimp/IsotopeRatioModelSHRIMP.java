@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 CIRDLES.org.
+ * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  *
- * @author James F. Bowring &lt;bowring at gmail.com&gt;
+ * @author James F. Bowring
  */
 public class IsotopeRatioModelSHRIMP {
 
@@ -35,10 +35,14 @@ public class IsotopeRatioModelSHRIMP {
     private int minIndex;
     private boolean active;
 
-    public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName, IsotopeNames numerator, IsotopeNames denominator) {
+    /**
+     *
+     * @param rawRatioName the value of rawRatioName
+     */
+    public IsotopeRatioModelSHRIMP(RawRatioNamesSHRIMP rawRatioName) {
         this.rawRatioName = rawRatioName;
-        this.numerator = numerator;
-        this.denominator = denominator;
+        this.numerator = rawRatioName.getNumerator();
+        this.denominator = rawRatioName.getDenominator();
         this.ratEqTime = new ArrayList<>();
         this.ratEqVal = new ArrayList<>();
         this.ratEqErr = new ArrayList<>();

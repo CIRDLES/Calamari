@@ -22,6 +22,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,6 +36,7 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
     private final boolean useSBM;
     private final boolean userLinFits;
     private final String referenceMaterialLetter;
+    private final TaskInterface task;
     private final JProgressBar progressBar;
 
     /**
@@ -43,6 +45,7 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
      * @param useSBM the value of useSBM
      * @param userLinFits the value of userLinFits
      * @param referenceMaterialLetter the value of referenceMaterialLetter
+     * @param task the value of task
      * @param progressBar the value of progressBar
      */
     public ReduceDataWorker(
@@ -50,12 +53,14 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
             boolean useSBM, 
             boolean userLinFits, 
             String referenceMaterialLetter, 
+            TaskInterface task, 
             JProgressBar progressBar) {
 
         this.prawnFileHandler = prawnFileHandler;
         this.useSBM = useSBM;
         this.userLinFits = userLinFits;
         this.referenceMaterialLetter = referenceMaterialLetter;
+        this.task = task;
         this.progressBar = progressBar;
     }
 
@@ -64,10 +69,12 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
         prawnFileHandler.setProgressSubscriber(progress -> publish(progress));
 
         try {
-            prawnFileHandler.writeReportsFromPrawnFile(prawnFileHandler.getCurrentPrawnFileLocation(),
+            prawnFileHandler.writeReportsFromPrawnFile(
+                    prawnFileHandler.getCurrentPrawnFileLocation(),
                     useSBM,
                     userLinFits, 
-                    referenceMaterialLetter);
+                    referenceMaterialLetter,
+                    task);
         } catch (IOException | JAXBException | SAXException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());

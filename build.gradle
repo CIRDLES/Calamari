@@ -2,7 +2,7 @@ subprojects {
     apply plugin: "java"
 
     group = "org.cirdles"
-    version = "1.2.1"
+    version = "1.3.1"
 
     description = "Replacement for data reduction in Ludwig's Squid 2.50 for SHRIMP"
 
@@ -16,17 +16,30 @@ subprojects {
 
     repositories {
         mavenCentral()
-
+        
         maven {
             url "https://jitpack.io"
         }
+        
+        maven {
+            url "https://maven.repository.redhat.com/ga/"
+        }
     }
-
+    
     javadoc {
         options.tags = [
-            'pre:a:"Precondition:"',
-            'post:a:"Postcondition:',
-            'imports:a:"Imports libraries:"'
+            'pre:a:Precondition:',
+            'post:a:Postcondition:',
+            'imports:a:Imports libraries:',
+            'author:a:Author:'
         ]
+    }
+    
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
     }
 }
