@@ -53,4 +53,9 @@ public class Add extends Operation {
         return retVal;
     }
 
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

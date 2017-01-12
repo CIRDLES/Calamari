@@ -23,7 +23,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Subtract extends Operation {
+public class Subtract extends Operation  {
 
     public Subtract() {
         name = "subtract";
@@ -51,6 +51,11 @@ public class Subtract extends Operation {
         }
 
         return retVal;
+    }
+
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

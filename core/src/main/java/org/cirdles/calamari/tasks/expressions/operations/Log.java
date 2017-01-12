@@ -53,4 +53,15 @@ public class Log extends Operation {
         return retVal;
     }
 
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        String retVal
+                = "<mi>ln</mi>\n"
+                + "<mfenced>\n"
+                + leftET.toStringMathML()
+                + "</mfenced>\n";
+
+        return retVal;
+    }
+
 }

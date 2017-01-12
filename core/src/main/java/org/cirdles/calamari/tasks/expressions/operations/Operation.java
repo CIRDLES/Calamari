@@ -27,7 +27,9 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
  *
  * @author James F. Bowring
  */
-public abstract class Operation implements XMLSerializerInterface {
+public abstract class Operation
+        implements
+        XMLSerializerInterface {
 
     protected String name;
 
@@ -89,6 +91,11 @@ public abstract class Operation implements XMLSerializerInterface {
         return retVal;
     }
 
+    public abstract String toStringMathML(
+            ExpressionTreeInterface leftET,
+            ExpressionTreeInterface rightET);
+ 
+    
     /**
      * @return the name
      */

@@ -53,4 +53,19 @@ public class Divide extends Operation {
         return retVal;
     }
 
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        String retVal
+                = "<mfrac>\n"
+                + "<mrow>\n"
+                + leftET.toStringMathML()
+                + "\n</mrow>\n"
+                + "<mrow>\n"
+                + rightET.toStringMathML()
+                + "\n</mrow>\n"
+                + "</mfrac>\n";
+        
+        return retVal;
+    }
+
 }

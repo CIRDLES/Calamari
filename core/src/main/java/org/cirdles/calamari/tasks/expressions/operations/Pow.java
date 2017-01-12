@@ -53,4 +53,21 @@ public class Pow extends Operation {
         return retVal;
     }
 
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        String retVal
+                = "<mrow>\n"
+                + "<msup>\n"
+                + "<mfenced>\n"
+                + "<mrow>\n"
+                + leftET.toStringMathML()
+                + "</mrow>\n"
+                + "</mfenced>\n"
+                + rightET.toStringMathML()
+                + "</msup>\n"
+                + "</mrow>\n";
+
+        return retVal;
+    }
+
 }

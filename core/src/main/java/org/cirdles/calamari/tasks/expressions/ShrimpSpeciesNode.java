@@ -58,6 +58,10 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
+    public String toStringMathML(){
+        return "<mi>" + name.getName() + "</mi>";
+    }
+    
     @Override
     public String getName() {
         return name.getName();

@@ -34,4 +34,6 @@ public interface ExpressionTreeInterface {
 
     public String getName();
 
+    public String toStringMathML();
+
 }

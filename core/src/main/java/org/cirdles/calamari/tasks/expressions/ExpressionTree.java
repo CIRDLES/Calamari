@@ -38,7 +38,10 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
  *
  * @author James F. Bowring
  */
-public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWithRatiosInterface, XMLSerializerInterface {
+public class ExpressionTree 
+        implements ExpressionTreeInterface, 
+        ExpressionTreeWithRatiosInterface, 
+        XMLSerializerInterface {
 
     protected String name;
     protected ExpressionTreeInterface leftET;
@@ -154,6 +157,17 @@ public class ExpressionTree implements ExpressionTreeInterface, ExpressionTreeWi
             eqPkUndupeOrd.add(ratiosOfInterest.get(i).getDenominator());
         }
         return eqPkUndupeOrd;
+    }
+
+    @Override
+    public String toStringMathML() {
+        String retVal = "";
+        if (operation == null){
+            retVal = "NULL";
+        }else {
+            retVal = operation.toStringMathML(leftET, rightET);
+        }
+        return retVal;
     }
 
     /**
