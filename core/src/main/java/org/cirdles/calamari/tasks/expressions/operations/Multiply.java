@@ -55,7 +55,14 @@ public class Multiply extends Operation {
 
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String retVal
+                = "<mrow>\n"
+                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
+                + "<mo>&times;</mo>\n"
+                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
+                + "</mrow>\n";
+
+        return retVal;
     }
 
 }

@@ -58,10 +58,24 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
-    public String toStringMathML(){
-        return "<mi>" + name.getName() + "</mi>";
+    public String toStringMathML() {
+        String retVal
+                = "<msubsup>\n"
+                + "<mstyle mathsize='90%'>\n"
+                + "<mtext>\n"
+                + name.getAtomicMass()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "<mstyle  mathsize='150%'>\n"
+                + "<mtext>\n"
+                + name.getElementName()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "</msubsup>\n";
+
+        return retVal;
     }
-    
+
     @Override
     public String getName() {
         return name.getName();
@@ -72,5 +86,10 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      */
     public void setName(IsotopeNames name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean isRootExpressionTree() {
+        return false;
     }
 }

@@ -34,6 +34,11 @@ public interface ExpressionTreeInterface {
 
     public String getName();
 
+    /**
+     * @return the rootExpressionTree
+     */
+    public boolean isRootExpressionTree();
+
     public String toStringMathML();
 
 }

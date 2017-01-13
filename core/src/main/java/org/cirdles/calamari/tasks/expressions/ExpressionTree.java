@@ -245,6 +245,7 @@ public class ExpressionTree
     /**
      * @return the rootExpressionTree
      */
+    @Override
     public boolean isRootExpressionTree() {
         return rootExpressionTree;
     }

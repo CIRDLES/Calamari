@@ -94,8 +94,21 @@ public abstract class Operation
     public abstract String toStringMathML(
             ExpressionTreeInterface leftET,
             ExpressionTreeInterface rightET);
- 
-    
+
+    protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
+        String retVal = expression.toStringMathML();
+        if (expression.isRootExpressionTree()) {
+            retVal
+                    = "<mtext>\n"
+                    + "[Expression "
+                    + expression.getName()
+                    + "]\n"
+                    + "</mtext>\n";
+        }
+
+        return retVal;
+    }
+
     /**
      * @return the name
      */

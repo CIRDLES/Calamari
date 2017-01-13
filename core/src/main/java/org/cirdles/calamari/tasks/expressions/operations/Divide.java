@@ -58,10 +58,10 @@ public class Divide extends Operation {
         String retVal
                 = "<mfrac>\n"
                 + "<mrow>\n"
-                + leftET.toStringMathML()
+                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
                 + "\n</mrow>\n"
                 + "<mrow>\n"
-                + rightET.toStringMathML()
+                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
                 + "\n</mrow>\n"
                 + "</mfrac>\n";
         

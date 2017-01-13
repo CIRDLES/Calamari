@@ -58,7 +58,7 @@ public class Log extends Operation {
         String retVal
                 = "<mi>ln</mi>\n"
                 + "<mfenced>\n"
-                + leftET.toStringMathML()
+                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
                 + "</mfenced>\n";
 
         return retVal;

@@ -60,7 +60,7 @@ public class Pow extends Operation {
                 + "<msup>\n"
                 + "<mfenced>\n"
                 + "<mrow>\n"
-                + leftET.toStringMathML()
+                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
                 + "</mrow>\n"
                 + "</mfenced>\n"
                 + rightET.toStringMathML()
