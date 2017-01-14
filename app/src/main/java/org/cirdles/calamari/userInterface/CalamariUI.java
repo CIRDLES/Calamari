@@ -20,16 +20,9 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.AbstractButton;
@@ -56,6 +49,7 @@ import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 public class CalamariUI extends javax.swing.JFrame {
 
     private transient PrawnFileHandler prawnFileHandler;
+    private transient JFXPanel fxPanel = new JFXPanel();
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 
@@ -80,14 +74,7 @@ public class CalamariUI extends javax.swing.JFrame {
         CalamariUI.setDefaultLookAndFeelDecorated(true);
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
 
-        // check for MacOS
-        String lcOSName = System.getProperty("os.name").toLowerCase(Locale.US);
-        boolean MAC_OS_X = lcOSName.startsWith("mac os x");
-        if (MAC_OS_X) {
-            new MacOSAboutHandler();
-        }
-
-        // center me
+       // center me
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         int w = this.getSize().width;
@@ -109,8 +96,7 @@ public class CalamariUI extends javax.swing.JFrame {
     }
 
     private void initExpressionsFX() {
-        final JFXPanel fxPanel = new JFXPanel();
-        fxPanel.setBounds(0, 0, 400, 400);
+
         expressionsPane.add(fxPanel);
 
         Platform.runLater(new Runnable() {
@@ -124,33 +110,11 @@ public class CalamariUI extends javax.swing.JFrame {
     private static void initFX(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
 
-        VBox vbox = new VBox();
-        Scene scene = new Scene(vbox);
-
         final WebView browser = new WebView();
-
         final WebEngine webEngine = browser.getEngine();
+        browser.setMaxSize(200, 200);
 
-//        File file = new File("test.html");
-//        if (file.exists()) {
-////            // It's even easier in Java 8 
-////            StringBuilder fileContents = new StringBuilder();
-////            try {
-////                Files.lines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)
-////                        .forEach(fileContents::append);
-////
-////                webEngine.loadContent(fileContents.toString());
-////
-////            } catch (IOException iOException) {
-////            }
-//
-////            try {
-////                webEngine.load(file.toURI().toURL().toString());
-////            } catch (MalformedURLException malformedURLException) {
-////            }
-//        } else {
-//            webEngine.loadContent("<html><head><title>Unable to show expression./title></head><body><h2 style=\"text-align: center; \">The current chosen term has no associated expression to show please choose another.</h2></body></html>");
-//        }
+        Scene scene = new Scene(browser);
 
         ExpressionTreeInterface EXPRESSION = new ExpressionTree("test");
 
@@ -174,29 +138,11 @@ public class CalamariUI extends javax.swing.JFrame {
         ((ExpressionTree) EXPRESSION2).setRootExpressionTree(true);
         webEngine.loadContent(
                 ExpressionWriterMathML.toStringBuilderMathML(
+                        EXPRESSION2).toString()
+        +  ExpressionWriterMathML.toStringBuilderMathML(
                         EXPRESSION2).toString());
         
-
-        HBox hbox = new HBox();
-
-        vbox.getChildren().addAll(hbox, browser);
-        VBox.setVgrow(browser, Priority.ALWAYS);
         fxPanel.setScene(scene);
-    }
-
-    private static Scene createScene() {
-        Group root = new Group();
-        Scene scene = new Scene(root, Color.ROSYBROWN);
-        Text text = new Text();
-
-        text.setX(40);
-        text.setY(100);
-        text.setFont(new javafx.scene.text.Font(25));
-        text.setText("Welcome JavaFX!");
-
-        root.getChildren().add(text);
-
-        return (scene);
     }
 
     private void updateCurrentPrawnFileLocation() {
@@ -260,6 +206,17 @@ public class CalamariUI extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(700, 475));
         setSize(new java.awt.Dimension(700, 475));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
+
+        jTabbedPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                jTabbedPane1ComponentResized(evt);
+            }
+        });
 
         prawnDataPane.setBackground(new java.awt.Color(255, 231, 228));
         prawnDataPane.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -603,6 +560,16 @@ public class CalamariUI extends javax.swing.JFrame {
     private void exitTwoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitTwoMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitTwoMenuItemActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        
+    }//GEN-LAST:event_formComponentResized
+
+    private void jTabbedPane1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jTabbedPane1ComponentResized
+        fxPanel.setBounds(
+                25, expressionsPane.getHeight()/2, 
+                expressionsPane.getWidth() - 50, expressionsPane.getHeight()/2);
+    }//GEN-LAST:event_jTabbedPane1ComponentResized
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
