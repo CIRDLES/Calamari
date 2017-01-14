@@ -21,10 +21,6 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -37,7 +33,6 @@ import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
@@ -49,7 +44,8 @@ import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 public class CalamariUI extends javax.swing.JFrame {
 
     private transient PrawnFileHandler prawnFileHandler;
-    private transient JFXPanel fxPanel = new JFXPanel();
+    //private transient JFXPanel fxPanel = new JFXPanel();
+    private ExpressionsFX fx;
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 
@@ -74,7 +70,7 @@ public class CalamariUI extends javax.swing.JFrame {
         CalamariUI.setDefaultLookAndFeelDecorated(true);
         UIManager.getLookAndFeelDefaults().put("defaultFont", new Font("SansSerif", Font.PLAIN, 12));
 
-       // center me
+        // center me
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         int w = this.getSize().width;
@@ -90,31 +86,6 @@ public class CalamariUI extends javax.swing.JFrame {
         updateReportsFolderLocationText();
 
         fileMenu.setVisible(false);
-
-        initExpressionsFX();
-
-    }
-
-    private void initExpressionsFX() {
-
-        expressionsPane.add(fxPanel);
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                initFX(fxPanel);
-            }
-        });
-    }
-
-    private static void initFX(JFXPanel fxPanel) {
-        // This method is invoked on the JavaFX thread
-
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-        browser.setMaxSize(200, 200);
-
-        Scene scene = new Scene(browser);
 
         ExpressionTreeInterface EXPRESSION = new ExpressionTree("test");
 
@@ -136,13 +107,25 @@ public class CalamariUI extends javax.swing.JFrame {
         ((ExpressionTree) EXPRESSION2).setOperation(Operation.add());
 
         ((ExpressionTree) EXPRESSION2).setRootExpressionTree(true);
-        webEngine.loadContent(
-                ExpressionWriterMathML.toStringBuilderMathML(
-                        EXPRESSION2).toString()
-        +  ExpressionWriterMathML.toStringBuilderMathML(
-                        EXPRESSION2).toString());
-        
-        fxPanel.setScene(scene);
+
+
+        fx = new ExpressionsFX(EXPRESSION);
+        expressionsPane.add(fx);
+        initExpressionsFX(fx);
+        pack();
+
+    }
+
+    private void initExpressionsFX(ExpressionsFX fxPanel) {
+
+//        expressionsPane.add(fxPanel);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fxPanel.initFX();
+            }
+        });
     }
 
     private void updateCurrentPrawnFileLocation() {
@@ -191,6 +174,7 @@ public class CalamariUI extends javax.swing.JFrame {
         selectReferenceMaterialInitialLetterLabel = new javax.swing.JLabel();
         referenceMaterialFirstLetterComboBox = new javax.swing.JComboBox<>();
         expressionsPane = new javax.swing.JLayeredPane();
+        jButton1 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -392,16 +376,14 @@ public class CalamariUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Data", prawnDataPane);
 
-        javax.swing.GroupLayout expressionsPaneLayout = new javax.swing.GroupLayout(expressionsPane);
-        expressionsPane.setLayout(expressionsPaneLayout);
-        expressionsPaneLayout.setHorizontalGroup(
-            expressionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
-        );
-        expressionsPaneLayout.setVerticalGroup(
-            expressionsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 414, Short.MAX_VALUE)
-        );
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        expressionsPane.add(jButton1);
+        jButton1.setBounds(66, 0, 97, 29);
 
         jTabbedPane1.addTab("Expressions", expressionsPane);
 
@@ -562,14 +544,23 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitTwoMenuItemActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        
+
     }//GEN-LAST:event_formComponentResized
 
     private void jTabbedPane1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jTabbedPane1ComponentResized
-        fxPanel.setBounds(
-                25, expressionsPane.getHeight()/2, 
-                expressionsPane.getWidth() - 50, expressionsPane.getHeight()/2);
+        if (fx != null) {
+            fx.setBounds(
+                    25, expressionsPane.getHeight() / 2,
+                    expressionsPane.getWidth() - 50, expressionsPane.getHeight() / 2);
+        }
     }//GEN-LAST:event_jTabbedPane1ComponentResized
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        fx.setExpression(SquidExpressionMinus3.EXPRESSION);
+//        fx.refreshExpression();
+//        fx.repaint();
+        initExpressionsFX(fx);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -584,6 +575,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JLayeredPane expressionsPane;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel inputFileLocationLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel normalizeCountsLabel;
