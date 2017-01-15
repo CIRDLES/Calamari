@@ -21,7 +21,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 
 /**
- *
+ * @see http://rypress.com/tutorials/mathml/advanced-formatting
  * @author CIRDLES.org
  */
 public class ExpressionWriterMathML {
@@ -43,6 +43,10 @@ public class ExpressionWriterMathML {
                 + "        <mstyle  mathsize='100%'\n>"
         );
 
+        fileContents.append(
+                "<mtext mathcolor='#cc0000'>[" + expression.getName() + "] = &nbsp;&nbsp; </mtext>\n"
+        );
+        
         fileContents.append(expression.toStringMathML());
 
         fileContents.append(

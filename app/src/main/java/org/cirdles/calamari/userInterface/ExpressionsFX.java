@@ -30,43 +30,24 @@ import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
  */
 public class ExpressionsFX extends JFXPanel {
 
-    private WebView browser;
-
-    private WebEngine webEngine;
-
-    /**
-     * @param expression the expression to set
-     */
-    public void setExpression(ExpressionTreeInterface expression) {
-        this.expression = expression;
-    }
-
-    private ExpressionTreeInterface expression;
-
-    public ExpressionsFX(ExpressionTreeInterface expression) {
+    public ExpressionsFX() {
         super();
-        this.expression = expression;
     }
 
-    public void initFX() {
+    public void initFX(ExpressionTreeInterface expression) {
         // This method is invoked on a JavaFX thread
 
-        browser = new WebView();
+        final WebView browser = new WebView();
         browser.setMaxSize(200, 200);
 
-        webEngine = browser.getEngine();
+        final WebEngine webEngine = browser.getEngine();
 
         Scene scene = new Scene(browser);
 
-//        webEngine.loadContent(ExpressionWriterMathML.toStringBuilderMathML(expression).toString());
-        refreshExpression();
+        webEngine.loadContent(
+                ExpressionWriterMathML.toStringBuilderMathML(expression).toString());
+        
         setScene(scene);
         setBorder(new LineBorder(Color.black, 1));
     }
-
-    public void refreshExpression() {
-        webEngine.loadContent(
-                ExpressionWriterMathML.toStringBuilderMathML(expression).toString());
-    }
-
 }

@@ -51,7 +51,7 @@ public class ExpressionTree
     protected boolean rootExpressionTree;
 
     public ExpressionTree() {
-        this("EMPTY");
+        this("No expression");
     }
 
     /**
@@ -163,7 +163,7 @@ public class ExpressionTree
     public String toStringMathML() {
         String retVal = "";
         if (operation == null){
-            retVal = "NULL";
+            retVal = "<mtext>No expression selected.</mtext>\n";
         }else {
             retVal = operation.toStringMathML(leftET, rightET);
         }
@@ -257,4 +257,7 @@ public class ExpressionTree
         this.rootExpressionTree = rootExpressionTree;
     }
 
+    public String toString(){
+        return name;
+    }
 }

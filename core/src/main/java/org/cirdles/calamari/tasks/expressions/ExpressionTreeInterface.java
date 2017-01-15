@@ -40,5 +40,5 @@ public interface ExpressionTreeInterface {
     public boolean isRootExpressionTree();
 
     public String toStringMathML();
-
+    
 }

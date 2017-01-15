@@ -22,19 +22,21 @@ import java.io.File;
 import java.io.IOException;
 import javafx.application.Platform;
 import javax.swing.AbstractButton;
+import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
 import org.cirdles.calamari.Calamari;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFileFilter;
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
-import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 
 /**
@@ -43,9 +45,8 @@ import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
  */
 public class CalamariUI extends javax.swing.JFrame {
 
-    private transient PrawnFileHandler prawnFileHandler;
-    //private transient JFXPanel fxPanel = new JFXPanel();
-    private ExpressionsFX fx;
+    private final transient PrawnFileHandler prawnFileHandler;
+    private ExpressionsFX expressionsFX;
     private boolean normalizeIonCountsToSBM;
     private boolean useLinearRegressionToCalculateRatios;
 
@@ -87,43 +88,53 @@ public class CalamariUI extends javax.swing.JFrame {
 
         fileMenu.setVisible(false);
 
-        ExpressionTreeInterface EXPRESSION = new ExpressionTree("test");
+        AbstractListModel<ExpressionTreeInterface> expressionList
+                = new AbstractListModel() {
+            ExpressionTreeInterface[] expressions
+                    = {CustomExpression1.EXPRESSION,
+                        CustomExpression2.EXPRESSION,
+                        SquidExpressionMinus1.EXPRESSION,
+                        SquidExpressionMinus3.EXPRESSION,
+                        SquidExpressionMinus4.EXPRESSION};
 
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r238_196w);
-        ExpressionTreeInterface r238_196w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r238_196w);
+            @Override
+            public int getSize() {
+                return expressions.length;
+            }
 
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
-        ExpressionTreeInterface r254_238w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
+            @Override
+            public ExpressionTreeInterface getElementAt(int i) {
+                return expressions[i];
+            }
+        };
 
-        ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", r254_238w, new ConstantNode("0.66", 0.66), Operation.pow());
+        expressions_jList.addListSelectionListener((ListSelectionEvent e) -> {
+            if (e.getValueIsAdjusting() == false) {
 
-        ((ExpressionTree) EXPRESSION).setLeftET(r238_196w);
-        ((ExpressionTree) EXPRESSION).setRightET(r254_238wPow);
-        ((ExpressionTree) EXPRESSION).setOperation(Operation.divide());
+                if (expressions_jList.getSelectedIndex() == -1) {
+                    initExpressionsFX(expressionsFX, new ExpressionTree());
 
-        ExpressionTreeInterface EXPRESSION2 = new ExpressionTree("test");
-        ((ExpressionTree) EXPRESSION2).setLeftET(EXPRESSION);
-        ((ExpressionTree) EXPRESSION2).setRightET(SquidExpressionMinus3.EXPRESSION);
-        ((ExpressionTree) EXPRESSION2).setOperation(Operation.add());
+                } else {
+                    initExpressionsFX(expressionsFX, expressions_jList.getSelectedValue());
+                }
+            }
+        });
 
-        ((ExpressionTree) EXPRESSION2).setRootExpressionTree(true);
+        expressions_jList.setModel(expressionList);
 
-
-        fx = new ExpressionsFX(EXPRESSION);
-        expressionsPane.add(fx);
-        initExpressionsFX(fx);
+        expressionsFX = new ExpressionsFX();
+        expressionsPane.add(expressionsFX);
+        initExpressionsFX(expressionsFX, new ExpressionTree());
         pack();
 
     }
 
-    private void initExpressionsFX(ExpressionsFX fxPanel) {
-
-//        expressionsPane.add(fxPanel);
+    private void initExpressionsFX(ExpressionsFX fxPanel, ExpressionTreeInterface expression) {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                fxPanel.initFX();
+                fxPanel.initFX(expression);
             }
         });
     }
@@ -174,7 +185,8 @@ public class CalamariUI extends javax.swing.JFrame {
         selectReferenceMaterialInitialLetterLabel = new javax.swing.JLabel();
         referenceMaterialFirstLetterComboBox = new javax.swing.JComboBox<>();
         expressionsPane = new javax.swing.JLayeredPane();
-        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        expressions_jList = new javax.swing.JList<>();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -196,6 +208,8 @@ public class CalamariUI extends javax.swing.JFrame {
             }
         });
 
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setOpaque(true);
         jTabbedPane1.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 jTabbedPane1ComponentResized(evt);
@@ -376,14 +390,23 @@ public class CalamariUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Data", prawnDataPane);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        expressionsPane.add(jButton1);
-        jButton1.setBounds(66, 0, 97, 29);
+        expressionsPane.setBackground(new java.awt.Color(204, 255, 255));
+        expressionsPane.setOpaque(true);
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        expressions_jList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        expressions_jList.setFixedCellHeight(18);
+        expressions_jList.setFixedCellWidth(200);
+        expressions_jList.setLayoutOrientation(javax.swing.JList.VERTICAL_WRAP);
+        expressions_jList.setSelectionBackground(new java.awt.Color(255, 0, 102));
+        expressions_jList.setSize(new java.awt.Dimension(39, 76));
+        expressions_jList.setVisibleRowCount(4);
+        jScrollPane1.setViewportView(expressions_jList);
+        expressions_jList.getAccessibleContext().setAccessibleName("");
+
+        expressionsPane.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 10, 580, 76);
 
         jTabbedPane1.addTab("Expressions", expressionsPane);
 
@@ -548,19 +571,12 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     private void jTabbedPane1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jTabbedPane1ComponentResized
-        if (fx != null) {
-            fx.setBounds(
+        if (expressionsFX != null) {
+            expressionsFX.setBounds(
                     25, expressionsPane.getHeight() / 2,
                     expressionsPane.getWidth() - 50, expressionsPane.getHeight() / 2);
         }
     }//GEN-LAST:event_jTabbedPane1ComponentResized
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        fx.setExpression(SquidExpressionMinus3.EXPRESSION);
-//        fx.refreshExpression();
-//        fx.repaint();
-        initExpressionsFX(fx);
-    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -573,9 +589,10 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenuItem exitTwoMenuItem;
     private javax.swing.JLayeredPane expressionsPane;
+    private javax.swing.JList<ExpressionTreeInterface> expressions_jList;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel inputFileLocationLabel;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel normalizeCountsLabel;
