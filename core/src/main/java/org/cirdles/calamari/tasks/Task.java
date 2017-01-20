@@ -90,7 +90,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
         xstream.registerConverter(new ExpressionTreeXMLConverter());
         xstream.alias("ExpressionTree", ExpressionTree.class);
-        
+
         xstream.registerConverter(new TaskXMLConverter());
         xstream.alias("Task", Task.class);
         xstream.alias("Task", this.getClass());
@@ -263,23 +263,35 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     double meanEq;
                     double meanEqSig;
 
-//                if (userLinFits && rct > 3) {
-                    wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
+                    if (shrimpFraction.isUserLinFits() && eqVal.length > 3) {
+                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
 
-                    double midTime = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1] + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
-                    meanEq = (wtdLinCorrResults.getSlope() * midTime) + wtdLinCorrResults.getIntercept();
-                    meanEqSig = StrictMath.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
-                            + wtdLinCorrResults.getSigmaIntercept() * wtdLinCorrResults.getSigmaIntercept() //
-                            + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
+                        double midTime = 
+                                (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1] 
+                                + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
+                        double slope = wtdLinCorrResults.getSlope();
+                        double sigmaSlope = wtdLinCorrResults.getSigmaSlope();
+                        double sigmaIntercept= wtdLinCorrResults.getSigmaIntercept();
+                        
+                        meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
+                        meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
+                                + sigmaIntercept * sigmaIntercept //
+                                + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
 
-                    double eqValFerr = StrictMath.abs(meanEqSig / meanEq);
-
-//                } else {
-//                    wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, new double[0]);
-//                    ratioMean = wtdLinCorrResults.getIntercept();
-//                    ratioMeanSig = wtdLinCorrResults.getSigmaIntercept();
-//                }
+                    } else {
+                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, new double[0]);
+                        meanEq = wtdLinCorrResults.getIntercept();
+                        meanEqSig = wtdLinCorrResults.getSigmaIntercept();
+                    }
 //                System.out.println(shrimpFraction.getFractionID() + "  " + expression.getPrettyName() + "   " + " = " + meanEq + "   " + eqTime[0] + "   " + eqVal[0] + "   " + eqVal[0] * fractErr[0]);
+
+                    double eqValFerr;
+                    if (meanEq == 0.0) {
+                        eqValFerr = 1.0;
+                    } else {
+                        eqValFerr = StrictMath.abs(meanEqSig / meanEq);
+                    }
+
                     // for consistency with Bodorkos documentation
                     double[] ratEqVal = eqVal.clone();
                     double[] ratEqTime = eqTime.clone();
@@ -288,7 +300,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
                     }
 
-                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(expression, ratEqVal, ratEqTime, ratEqErr));
+                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
+                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr));
                 }// end of entry test
             }); // end of visiting each expression
             shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);

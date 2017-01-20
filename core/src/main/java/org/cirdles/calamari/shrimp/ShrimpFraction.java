@@ -418,6 +418,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the userLinFits
      */
+    @Override
     public boolean isUserLinFits() {
         return userLinFits;
     }

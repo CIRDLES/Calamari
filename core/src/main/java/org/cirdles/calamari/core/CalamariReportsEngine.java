@@ -398,6 +398,13 @@ public class CalamariReportsEngine {
             }
         }
 
+        // Handle any task expressions
+        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatioVal()));
+            dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatioFractErr() * 100.0));
+        }
+
         dataLine.append("\n");
         if (shrimpFraction.isReferenceMaterial()) {
             refMatMeanRatios_PerSpot.append(dataLine);
@@ -423,7 +430,7 @@ public class CalamariReportsEngine {
         header.append("\n");
 
         Files.write(ionIntegrations_PerScan.toPath(), header.toString().getBytes(UTF_8));
-        
+
         sBMIntegrations_PerScan = new File(folderToWriteCalamariReportsPath + reportNamePrefix + "Check_02_SBMIntegrations_PerScan.csv");
         header = new StringBuilder();
         header.append("Title, Date, Scan, Type, SBM_zero_cps");
@@ -507,6 +514,13 @@ public class CalamariReportsEngine {
                 header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".Value");
                 header.append(", ").append(entry.getKey().getDisplayNameNoSpaces()).append(".1SigmaPct");
             }
+        }
+
+        // prepare headers for any task expressions
+        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            String expressionName = taskExpressionEval.getExpression().getName();
+            header.append(", ").append(expressionName).append(".Value");
+            header.append(", ").append(expressionName).append(".1SigmaPct");
         }
 
         header.append("\n");
