@@ -38,12 +38,14 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
  *
  * @author James F. Bowring
  */
-public class ExpressionTree 
-        implements ExpressionTreeInterface, 
-        ExpressionTreeWithRatiosInterface, 
+public class ExpressionTree
+        implements ExpressionTreeInterface,
+        ExpressionTreeBuilderInterface,
+        ExpressionTreeWithRatiosInterface,
         XMLSerializerInterface {
 
     protected String name;
+    private ExpressionTreeInterface parentET;
     protected ExpressionTreeInterface leftET;
     protected ExpressionTreeInterface rightET;
     protected Operation operation;
@@ -60,6 +62,11 @@ public class ExpressionTree
      */
     public ExpressionTree(String prettyName) {
         this(prettyName, null, null, null);
+    }
+
+    public ExpressionTree(Operation operation) {
+        this();
+        this.operation = operation;
     }
 
     /**
@@ -162,9 +169,9 @@ public class ExpressionTree
     @Override
     public String toStringMathML() {
         String retVal = "";
-        if (operation == null){
+        if (operation == null) {
             retVal = "<mtext>No expression selected.</mtext>\n";
-        }else {
+        } else {
             retVal = operation.toStringMathML(leftET, rightET);
         }
         return retVal;
@@ -186,8 +193,24 @@ public class ExpressionTree
     }
 
     /**
+     * @return the parentET
+     */
+    public ExpressionTreeInterface getParentET() {
+        return parentET;
+    }
+
+    /**
+     * @param parentET the parentET to set
+     */
+    @Override
+    public void setParentET(ExpressionTreeInterface parentET) {
+        this.parentET = parentET;
+    }
+
+    /**
      * @return the leftET
      */
+    @Override
     public ExpressionTreeInterface getLeftET() {
         return leftET;
     }
@@ -195,13 +218,18 @@ public class ExpressionTree
     /**
      * @param leftET the leftET to set
      */
+    @Override
     public void setLeftET(ExpressionTreeInterface leftET) {
         this.leftET = leftET;
+        if (leftET != null) {
+            leftET.setParentET(this);
+        }
     }
 
     /**
      * @return the rightET
      */
+    @Override
     public ExpressionTreeInterface getRightET() {
         return rightET;
     }
@@ -209,13 +237,18 @@ public class ExpressionTree
     /**
      * @param rightET the rightET to set
      */
+    @Override
     public void setRightET(ExpressionTreeInterface rightET) {
         this.rightET = rightET;
+        if (rightET != null) {
+            rightET.setParentET(this);
+        }
     }
 
     /**
      * @return the operation
      */
+    @Override
     public Operation getOperation() {
         return operation;
     }
@@ -223,6 +256,7 @@ public class ExpressionTree
     /**
      * @param operation the operation to set
      */
+    @Override
     public void setOperation(Operation operation) {
         this.operation = operation;
     }
@@ -257,7 +291,8 @@ public class ExpressionTree
         this.rootExpressionTree = rootExpressionTree;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return name;
     }
 }

@@ -27,6 +27,7 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializerInterface {
 
     private IsotopeNames name;
+    private ExpressionTreeInterface parentET;
 
     public ShrimpSpeciesNode() {
         this.name = null;
@@ -91,5 +92,19 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     @Override
     public boolean isRootExpressionTree() {
         return false;
+    }
+
+    /**
+     * @return the parentET
+     */
+    public ExpressionTreeInterface getParentET() {
+        return parentET;
+    }
+
+    /**
+     * @param parentET the parentET to set
+     */
+    public void setParentET(ExpressionTreeInterface parentET) {
+        this.parentET = parentET;
     }
 }

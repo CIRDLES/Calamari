@@ -72,6 +72,14 @@ public abstract class Operation
 
     /**
      *
+     * @return
+     */
+    public static Operation pExp() {
+        return new Pexp();
+    }
+
+    /**
+     *
      * @param operationName
      * @return
      */

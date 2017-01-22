@@ -48,7 +48,7 @@ public class Driver {
         ExpressionTreeInterface EXPRESSION2 = new ExpressionTree("test");
         ((ExpressionTree) EXPRESSION2).setLeftET(EXPRESSION);
         ((ExpressionTree) EXPRESSION2).setRightET(SquidExpressionMinus3.EXPRESSION);
-        ((ExpressionTree) EXPRESSION2).setOperation(Operation.add());
+        ((ExpressionTree) EXPRESSION2).setOperation(Operation.pExp());
 
         ((ExpressionTree) EXPRESSION2).setRootExpressionTree(true);
         System.out.println(EXPRESSION2.toStringMathML());

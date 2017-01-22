@@ -28,6 +28,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
 
     private String name;
     private double value;
+    private ExpressionTreeInterface parentET;
 
     public ConstantNode() {
         this("", 0.0);
@@ -89,6 +90,20 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     @Override
     public boolean isRootExpressionTree() {
         return false;
+    }
+
+    /**
+     * @return the parentET
+     */
+    public ExpressionTreeInterface getParentET() {
+        return parentET;
+    }
+
+    /**
+     * @param parentET the parentET to set
+     */
+    public void setParentET(ExpressionTreeInterface parentET) {
+        this.parentET = parentET;
     }
 
 }

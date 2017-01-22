@@ -21,8 +21,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 
 /**
+ * @see http://www.xmlmind.com/tutorials/MathML/
  * @see http://rypress.com/tutorials/mathml/advanced-formatting
- * @author CIRDLES.org
+ * @author James F. Bowring
  */
 public class ExpressionWriterMathML {
 
@@ -40,11 +41,14 @@ public class ExpressionWriterMathML {
                 + "    </head>\n"
                 + "    <body>\n"
                 + "        <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\">\n"
-                + "        <mstyle  mathsize='100%'\n>"
+                + "        <mstyle  mathsize='100%'>\n"
         );
 
         fileContents.append(
-                "<mtext mathcolor='#cc0000'>[" + expression.getName() + "] = &nbsp;&nbsp; </mtext>\n"
+                "<mtext mathcolor='#cc0000'>[" + expression.getName() + "] = </mtext>\n"
+        );
+        fileContents.append(
+                "<mspace depth=\"0.5ex\" height=\"0.5ex\" width=\"1ex\"/>\n"
         );
         
         fileContents.append(expression.toStringMathML());

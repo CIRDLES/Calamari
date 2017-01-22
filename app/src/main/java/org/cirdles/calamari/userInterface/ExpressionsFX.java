@@ -26,7 +26,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 
 /**
  *
- * @author CIRDLES.org
+ * @author James F. Bowring
  */
 public class ExpressionsFX extends JFXPanel {
 
