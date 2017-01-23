@@ -37,6 +37,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpressio
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
+import org.cirdles.calamari.tasks.expressions.parsing.AntlrDriver;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 
 /**
@@ -112,7 +113,7 @@ public class CalamariUI extends javax.swing.JFrame {
             if (e.getValueIsAdjusting() == false) {
 
                 if (expressions_jList.getSelectedIndex() == -1) {
-                    initExpressionsFX(expressionsFX, new ExpressionTree());
+                    initExpressionsFX(expressionsFX, new ExpressionTree("No expression selected"));
 
                 } else {
                     initExpressionsFX(expressionsFX, expressions_jList.getSelectedValue());
@@ -187,6 +188,8 @@ public class CalamariUI extends javax.swing.JFrame {
         expressionsPane = new javax.swing.JLayeredPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         expressions_jList = new javax.swing.JList<>();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -408,6 +411,19 @@ public class CalamariUI extends javax.swing.JFrame {
         expressionsPane.add(jScrollPane1);
         jScrollPane1.setBounds(10, 10, 580, 76);
 
+        jTextField1.setText("jTextField1");
+        expressionsPane.add(jTextField1);
+        jTextField1.setBounds(70, 100, 340, 26);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        expressionsPane.add(jButton1);
+        jButton1.setBounds(450, 100, 97, 29);
+
         jTabbedPane1.addTab("Expressions", expressionsPane);
 
         fileMenu.setMnemonic('f');
@@ -578,6 +594,15 @@ public class CalamariUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTabbedPane1ComponentResized
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        AntlrDriver dr = new AntlrDriver();
+        ExpressionTreeInterface result = dr.parseExpression(jTextField1.getText());
+        if (result instanceof ExpressionTree) {
+            ((ExpressionTree)result).setName("User expression");
+        }
+        initExpressionsFX(expressionsFX, result);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -592,8 +617,10 @@ public class CalamariUI extends javax.swing.JFrame {
     private javax.swing.JList<ExpressionTreeInterface> expressions_jList;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel inputFileLocationLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel normalizeCountsLabel;
     private javax.swing.JLabel normalizeCountsLabel1;

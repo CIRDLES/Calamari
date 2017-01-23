@@ -27,6 +27,7 @@ public class Add extends Operation {
 
     public Add() {
         name = "add";
+        precedence = 2;
     }
 
     /**
@@ -57,9 +58,9 @@ public class Add extends Operation {
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
         String retVal
                 = "<mrow>\n"
-                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
+                + toStringAnotherExpression(leftET)
                 + "<mo>+</mo>\n"
-                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
+                + toStringAnotherExpression(rightET)
                 + "</mrow>\n";
 
         return retVal;

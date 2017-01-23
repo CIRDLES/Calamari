@@ -27,6 +27,7 @@ public class Log extends Operation {
 
     public Log() {
         name = "log";
+        precedence = 4;//todo make function'
     }
 
     /**

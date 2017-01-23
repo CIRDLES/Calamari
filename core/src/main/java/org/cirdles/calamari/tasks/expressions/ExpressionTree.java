@@ -53,7 +53,7 @@ public class ExpressionTree
     protected boolean rootExpressionTree;
 
     public ExpressionTree() {
-        this("No expression");
+        this("No Name");
     }
 
     /**
@@ -164,6 +164,17 @@ public class ExpressionTree
             eqPkUndupeOrd.add(ratiosOfInterest.get(i).getDenominator());
         }
         return eqPkUndupeOrd;
+    }
+
+    @Override
+    public int getOperationPrecedence() {
+        int retVal = 100;
+
+        if (operation != null)  {
+            retVal = operation.getPrecedence();
+        }
+
+        return retVal;
     }
 
     @Override

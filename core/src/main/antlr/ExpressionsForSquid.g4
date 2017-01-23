@@ -26,9 +26,8 @@ expr:
     ;
 
 // some lexer rules
-CONSTANT : [a-zA-Z]+ ; // match identifiers
-VARIABLE : [0-9]+ ; // match integers
-//NEWLINE:'\r'? '\n' ; // return newlines to parser
+CONSTANT : [a-zA-Z0-9.]+ ; // match identifiers
+VARIABLE : [a-zA-Z0-9._]+ ; // match integers
 
 WS
    : [ \r\n\t] + -> channel (HIDDEN)

@@ -27,6 +27,7 @@ public class Subtract extends Operation {
 
     public Subtract() {
         name = "subtract";
+        precedence = 2;
     }
 
     /**

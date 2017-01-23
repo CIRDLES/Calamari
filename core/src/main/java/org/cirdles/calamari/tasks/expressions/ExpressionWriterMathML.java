@@ -27,47 +27,52 @@ import java.nio.file.Files;
  */
 public class ExpressionWriterMathML {
 
-    public static StringBuilder toStringBuilderMathML(ExpressionTreeInterface expression){
-                StringBuilder fileContents = new StringBuilder();
-        fileContents.append(
-                "<!DOCTYPE html>\n"
-                + "<html>\n"
-                + "    <head>\n"
-                + "        <title>" + expression.getName() + "</title>\n"
-                + "        <meta charset=\"UTF-8\">\n"
-                + "        <script type=\"text/javascript\"\n"
-                + "                src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_SVG\">\n"
-                + "        </script>\n"
-                + "    </head>\n"
-                + "    <body>\n"
-                + "        <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\">\n"
-                + "        <mstyle  mathsize='100%'>\n"
-        );
+    public static StringBuilder toStringBuilderMathML(ExpressionTreeInterface expression) {
+        StringBuilder fileContents = new StringBuilder();
 
-        fileContents.append(
-                "<mtext mathcolor='#cc0000'>[" + expression.getName() + "] = </mtext>\n"
-        );
-        fileContents.append(
-                "<mspace depth=\"0.5ex\" height=\"0.5ex\" width=\"1ex\"/>\n"
-        );
-        
-        fileContents.append(expression.toStringMathML());
+        if (expression == null) {
+            fileContents.append("No expression");
+        } else {
+            fileContents.append(
+                    "<!DOCTYPE html>\n"
+                    + "<html>\n"
+                    + "    <head>\n"
+                    + "        <title>" + expression.getName() + "</title>\n"
+                    + "        <meta charset=\"UTF-8\">\n"
+                    + "        <script type=\"text/javascript\"\n"
+                    + "                src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_SVG\">\n"
+                    + "        </script>\n"
+                    + "    </head>\n"
+                    + "    <body>\n"
+                    + "        <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\">\n"
+                    + "        <mstyle  mathsize='100%'>\n"
+            );
 
-        fileContents.append(
-                "          </mstyle>\n"
-                + "        </math>\n"
-                + "    </body>\n"
-                + "</html>");
-        
+            fileContents.append(
+                    "<mtext mathcolor='#cc0000'>[" + expression.getName() + "] = </mtext>\n"
+            );
+            fileContents.append(
+                    "<mspace depth=\"0.5ex\" height=\"0.5ex\" width=\"1ex\"/>\n"
+            );
+
+            fileContents.append(expression.toStringMathML());
+
+            fileContents.append(
+                    "          </mstyle>\n"
+                    + "        </math>\n"
+                    + "    </body>\n"
+                    + "</html>");
+        }
+
         return fileContents;
 
     }
-    
+
     public static void writeExpressionToFileHTML(ExpressionTreeInterface expression)
             throws IOException {
         File expFile = new File(expression.getName() + ".html");
         Files.write(
-                expFile.toPath(), 
+                expFile.toPath(),
                 toStringBuilderMathML(expression).toString().getBytes(UTF_8));
 
     }

@@ -26,24 +26,35 @@ public class ShuntingYard {
 
     public static void main(String[] args) {
 
-        // Input: 3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
         List<String> infixList = new ArrayList<>();
-        infixList.add("3");
-        infixList.add("+");
-        infixList.add("4");
-        infixList.add("*");
-        infixList.add("2");
-        infixList.add("/");
+
+//        // Input: 3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
+//        infixList.add("3");
+//        infixList.add("+");
+//        infixList.add("4");
+//        infixList.add("*");
+//        infixList.add("2");
+//        infixList.add("/");
+//        infixList.add("(");
+//        infixList.add("1");
+//        infixList.add("-");
+//        infixList.add("5");
+//        infixList.add(")");
+//        infixList.add("^");
+//        infixList.add("2");
+//        infixList.add("^");
+//        infixList.add("3");
         infixList.add("(");
         infixList.add("1");
-        infixList.add("-");
-        infixList.add("5");
-        infixList.add(")");
-        infixList.add("^");
+        infixList.add("/");
         infixList.add("2");
-        infixList.add("^");
-        infixList.add("3");
-
+        infixList.add(")");
+        infixList.add("/");
+        infixList.add("(");
+        infixList.add("c");
+        infixList.add("/");
+        infixList.add("4");
+        infixList.add(")");
         System.out.println("Shunt " + infixToPostfix(infixList));
     }
 
@@ -189,7 +200,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("Functions".contains(token)) {
+            } else if ("".contains(token)) {
                 retVal = FUNCTION;
             } else {
                 try {

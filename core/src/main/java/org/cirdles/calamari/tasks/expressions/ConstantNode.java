@@ -84,7 +84,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
 
     @Override
     public String toStringMathML() {
-        return "<mn>" + name + "</mn>";
+        return "<mn>" + name + "</mn>\n";
     }
 
     @Override

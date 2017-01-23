@@ -35,6 +35,7 @@ import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.parsing.ShuntingYard.TokenTypes;
@@ -45,7 +46,7 @@ import org.cirdles.calamari.tasks.expressions.parsing.ShuntingYard.TokenTypes;
  */
 public class AntlrDriver {
 
-    private void parseExpression(String expression) {
+    public ExpressionTreeInterface parseExpression(String expression) {
         // Get our lexer
         ExpressionsForSquidLexer lexer = new ExpressionsForSquidLexer(new ANTLRInputStream(expression));
 
@@ -68,18 +69,25 @@ public class AntlrDriver {
         List<ParseTree> children = expSentenceContext.children;
 
         List<String> parsed = new ArrayList<>();
-        System.out.println();
-        for (int i = 0; i < children.size(); i++) {
-            printTree(parser, children.get(i), parsed);
-        }
+        List<String> parsedRPN = new ArrayList<>();
 
-        System.out.println("Infix  " + parsed);
-        List<String> parsedRPN = ShuntingYard.infixToPostfix(parsed);
-        System.out.println("PostFix  " + parsedRPN);
+        System.out.println();
+
+        if (children != null) {
+            for (int i = 0; i < children.size(); i++) {
+                printTree(parser, children.get(i), parsed);
+            }
+
+            System.out.println("Infix  " + parsed);
+            parsedRPN = ShuntingYard.infixToPostfix(parsed);
+            System.out.println("PostFix  " + parsedRPN);
+        } else {
+            System.out.println("Empty  ");
+        }
 
         Collections.reverse(parsedRPN);
 
-        buildTree(parsedRPN);
+        return buildTree(parsedRPN);
 
     }
 
@@ -93,7 +101,7 @@ public class AntlrDriver {
         operationsMap.put("^", "pow");
     }
 
-    private void buildTree(List<String> parsedRPNreversed) {
+    private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {
         Iterator<String> parsedRPNreversedIterator = parsedRPNreversed.iterator();
 
         ExpressionTreeInterface exp = null;
@@ -115,7 +123,8 @@ public class AntlrDriver {
             }
         }
 
-        System.out.println(savedExp.toStringMathML());
+        // System.out.println(savedExp.toStringMathML());
+        return savedExp;
     }
 
     private ExpressionTreeInterface walkUpTreeToEmptyLeftChild(ExpressionTreeInterface exp) {
@@ -169,7 +178,9 @@ public class AntlrDriver {
             case CONSTANT:
                 retExpTree = new ConstantNode(token, Double.parseDouble(token));
 
-                if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
+                if (exp == null) {
+                    // do nothing
+                } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
@@ -179,8 +190,10 @@ public class AntlrDriver {
 
             case VARIABLE:
                 retExpTree = new ConstantNode(token, 0.0);
-
-                if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
+                
+                if (exp == null) {
+                    // do nothing
+                } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
@@ -222,7 +235,10 @@ public class AntlrDriver {
         AntlrDriver dr = new AntlrDriver();
 //        dr.parseExpression("(aaa+bbb)*ccc");
 //        dr.parseExpression("a +b+c+d+e");
-        dr.parseExpression("AA+4*2/(1-5)^2^AA");
+        //dr.parseExpression("AA+4*2/(1-5)^2^AA");
+        ExpressionTreeInterface expression = dr.parseExpression("(0.03446*[\"254/238\"]+0.868)*[\"248/254\"]");
+
+        System.out.println(ExpressionWriterMathML.toStringBuilderMathML(expression).toString());
     }
 
 }

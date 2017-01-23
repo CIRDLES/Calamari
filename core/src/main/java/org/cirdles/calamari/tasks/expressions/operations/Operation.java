@@ -32,6 +32,7 @@ public abstract class Operation
         XMLSerializerInterface {
 
     protected String name;
+    protected int precedence;
 
     public abstract double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
@@ -129,5 +130,12 @@ public abstract class Operation
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the precedence
+     */
+    public int getPrecedence() {
+        return precedence;
     }
 }

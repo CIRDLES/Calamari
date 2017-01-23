@@ -67,7 +67,8 @@ public enum IsotopeNames {
     ThO248("ThO248", 248,  "ThO", "248ThO"),
     UO254("UO254", 254,  "UO", "254UO"),
     UO270("UO270", 270, "UO",  "270UO"),
-    BKGND("BKGND", 0, "BKGND",  "BKGND");
+    BKGND("BKGND", 0, "BKGND",  "BKGND"),
+    NONE("NONE", 0, "NONE","NONE");
 
     private String name;
     private int atomicMass;

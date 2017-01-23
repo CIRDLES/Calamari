@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.operations;
 
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -27,6 +28,7 @@ public class Divide extends Operation {
 
     public Divide() {
         name = "divide";
+        precedence = 3;
     }
 
     /**
@@ -55,16 +57,31 @@ public class Divide extends Operation {
 
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+        boolean leftChildHasLowerPrecedence = false;
+        try {
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+        boolean rightChildHasLowerPrecedence = false;
+        try {
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+
         String retVal
                 = "<mfrac>\n"
                 + "<mrow>\n"
-                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
+                + (leftChildHasLowerPrecedence ? "<mfenced>\n" : "")
+                + toStringAnotherExpression(leftET)
+                + (leftChildHasLowerPrecedence ? "</mfenced>\n" : "")
                 + "\n</mrow>\n"
                 + "<mrow>\n"
-                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
+                + (rightChildHasLowerPrecedence ? "<mfenced>\n" : "")
+                + toStringAnotherExpression(rightET)
+                + (rightChildHasLowerPrecedence ? "</mfenced>\n" : "")
                 + "\n</mrow>\n"
                 + "</mfrac>\n";
-        
+
         return retVal;
     }
 
