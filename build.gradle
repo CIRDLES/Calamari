@@ -1,3 +1,7 @@
+import org.gradle.api.artifacts.*
+
+apply plugin: 'base' // To add "clean" task to the root project.
+
 subprojects {
     apply plugin: "java"
 
