@@ -8,8 +8,13 @@ and open the template in the editor.
     Author     : bowring
 */
 
+/*font-family:
+ 1  -apple-system, BlinkMacSystemFont,
+ 2  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+ 3  "Helvetica Neue", sans-serif;*/
+
 .background {
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: #FFE7E4;
 }
 
 .label {
@@ -125,8 +130,8 @@ and open the template in the editor.
 }
 
 .button:pressed, .button:default:hover:pressed {
-  -fx-background-color: white;
-  -fx-text-fill: #1d1d1d;
+    -fx-background-color: white;
+    -fx-text-fill: #1d1d1d;
 }
 
 .button:focused {

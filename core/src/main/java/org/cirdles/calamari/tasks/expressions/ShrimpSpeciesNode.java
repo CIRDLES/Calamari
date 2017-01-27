@@ -97,6 +97,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     /**
      * @return the parentET
      */
+    @Override
     public ExpressionTreeInterface getParentET() {
         return parentET;
     }
@@ -104,6 +105,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     /**
      * @param parentET the parentET to set
      */
+    @Override
     public void setParentET(ExpressionTreeInterface parentET) {
         this.parentET = parentET;
     }

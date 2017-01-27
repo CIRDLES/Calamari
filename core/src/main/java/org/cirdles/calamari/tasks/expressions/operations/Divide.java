@@ -15,10 +15,13 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
 
 /**
  *
@@ -46,10 +49,19 @@ public class Divide extends Operation {
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
+
         try {
             retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) / rightET.eval(pkInterpScan, isotopeToIndexMap);
         } catch (Exception e) {
             retVal = 0.0;
+        }
+
+        // Experiment to mimic VBA results
+        if (leftET instanceof ShrimpSpeciesNode) {
+            BigDecimal ratio = new BigDecimal(retVal);
+            int newScale = 15 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_EVEN);
+            System.out.println(">>>  " + retVal + "\t    " + ratio2.toPlainString() + "\t   " + ratio2.doubleValue());
         }
 
         return retVal;
