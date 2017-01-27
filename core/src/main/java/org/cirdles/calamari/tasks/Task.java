@@ -193,6 +193,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         double eqFerr = 0.0;
 
+                        StringBuilder testOutput = new StringBuilder();
+
                         if (eqValTmp != 0.0) {
                             // numerical pertubation procedure
                             // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
@@ -200,14 +202,26 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
                             Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
 
+                            testOutput.append(
+                                    shrimpFraction.getFractionID() + ", "
+                                    + expression.getName() + ", "
+                                    + scanNum + ", "
+                                    + eqValTmp + ", "
+                            );
+
                             double fVar = 0.0;
                             while (species.hasNext()) {
-                                int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
+                                IsotopeNames specie = species.next();
+                                int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(specie);
 
                                 // clone pkInterp[scanNum] for use in pertubation
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
                                 double pertVal = expression.eval(perturbed, isotopeToIndexMap);
+
+                                testOutput.append(specie.getName() + ">>, ");
+                                testOutput.append(pertVal + ", ");
+
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
                                 double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
@@ -240,7 +254,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             }
                         }
 
+                        System.out.println(testOutput.toString());
+
                     } // end scanNum loop
+                    System.out.println();
 
                     // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
                     // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
@@ -266,13 +283,13 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     if (shrimpFraction.isUserLinFits() && eqVal.length > 3) {
                         wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
 
-                        double midTime = 
-                                (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1] 
+                        double midTime
+                                = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1]
                                 + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
                         double slope = wtdLinCorrResults.getSlope();
                         double sigmaSlope = wtdLinCorrResults.getSigmaSlope();
-                        double sigmaIntercept= wtdLinCorrResults.getSigmaIntercept();
-                        
+                        double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
+
                         meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
                         meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
                                 + sigmaIntercept * sigmaIntercept //

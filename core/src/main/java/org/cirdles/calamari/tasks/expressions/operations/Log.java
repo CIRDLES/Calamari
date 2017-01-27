@@ -46,7 +46,7 @@ public class Log extends Operation {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = Math.log(leftET.eval(pkInterpScan, isotopeToIndexMap));
+            retVal = StrictMath.log(leftET.eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }
