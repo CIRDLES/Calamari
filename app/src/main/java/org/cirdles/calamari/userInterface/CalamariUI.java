@@ -37,7 +37,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpressio
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
-import org.cirdles.calamari.tasks.expressions.parsing.AntlrDriver;
+import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 
 /**
@@ -595,7 +595,7 @@ public class CalamariUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1ComponentResized
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        AntlrDriver dr = new AntlrDriver();
+        ExpressionParser dr = new ExpressionParser();
         ExpressionTreeInterface result = dr.parseExpression(jTextField1.getText());
         if (result instanceof ExpressionTree) {
             ((ExpressionTree)result).setName("User expression");
