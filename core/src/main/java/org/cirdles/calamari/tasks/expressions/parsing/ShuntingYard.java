@@ -58,9 +58,9 @@ public class ShuntingYard {
 //        infixList.add("/");
 //        infixList.add("4");
 //        infixList.add(")");
-        infixList.add("2");
-        infixList.add("+");
-        infixList.add("-");
+//        infixList.add("2");
+//        infixList.add("+");
+        infixList.add("ln");
         infixList.add("(");
         infixList.add("1");
         infixList.add("/");
@@ -229,7 +229,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("".contains(token)) {
+            } else if ("-ln-".contains(token)) {
                 retVal = FUNCTION;
             } else {
                 if (isNumber(token)) {

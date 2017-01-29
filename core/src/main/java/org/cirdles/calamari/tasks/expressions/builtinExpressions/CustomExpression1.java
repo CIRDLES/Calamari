@@ -17,9 +17,10 @@ package org.cirdles.calamari.tasks.expressions.builtinExpressions;
 
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
-import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.functions.Function;
 
 /**
  *
@@ -36,9 +37,9 @@ public class CustomExpression1 {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
         ExpressionTreeInterface r254_238w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
 
-        ((ExpressionTree) EXPRESSION).setLeftET(r254_238w);
-        ((ExpressionTree) EXPRESSION).setRightET(null);
-        ((ExpressionTree) EXPRESSION).setOperation(Operation.log());
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(r254_238w);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(null);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
     }

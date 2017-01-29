@@ -26,6 +26,7 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
@@ -258,9 +259,13 @@ public class ExpressionTree
      */
     @Override
     public void setRightET(ExpressionTreeInterface rightET) {
-        this.rightET = rightET;
-        if (rightET != null) {
-            rightET.setParentET(this);
+        if (operation instanceof Function) {
+            setLeftET(rightET);
+        } else {
+            this.rightET = rightET;
+            if (rightET != null) {
+                rightET.setParentET(this);
+            }
         }
     }
 
