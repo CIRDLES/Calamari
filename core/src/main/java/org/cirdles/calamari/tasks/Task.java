@@ -30,14 +30,14 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import org.cirdles.calamari.tasks.expressions.ConstantNode;
-import org.cirdles.calamari.tasks.expressions.ConstantNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
 import org.cirdles.calamari.tasks.expressions.operations.Log;
@@ -254,10 +254,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             }
                         }
 
-                        System.out.println(testOutput.toString());
+//                        System.out.println(testOutput.toString());
 
                     } // end scanNum loop
-                    System.out.println();
+//                    System.out.println();
 
                     // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
                     // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
@@ -300,7 +300,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         meanEq = wtdLinCorrResults.getIntercept();
                         meanEqSig = wtdLinCorrResults.getSigmaIntercept();
                     }
-//                System.out.println(shrimpFraction.getFractionID() + "  " + expression.getPrettyName() + "   " + " = " + meanEq + "   " + eqTime[0] + "   " + eqVal[0] + "   " + eqVal[0] * fractErr[0]);
 
                     double eqValFerr;
                     if (meanEq == 0.0) {

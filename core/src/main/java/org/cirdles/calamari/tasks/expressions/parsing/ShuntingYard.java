@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,14 @@ package org.cirdles.calamari.tasks.expressions.parsing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * @author James F. Bowring
  */
 public class ShuntingYard {
+
+    private static final Pattern numberPattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     public static void main(String[] args) {
 
@@ -44,16 +47,24 @@ public class ShuntingYard {
 //        infixList.add("2");
 //        infixList.add("^");
 //        infixList.add("3");
+//        infixList.add("(");
+//        infixList.add("1");
+//        infixList.add("/");
+//        infixList.add("2");
+//        infixList.add(")");
+//        infixList.add("/");
+//        infixList.add("(");
+//        infixList.add("c");
+//        infixList.add("/");
+//        infixList.add("4");
+//        infixList.add(")");
+        infixList.add("2");
+        infixList.add("+");
+        infixList.add("-");
         infixList.add("(");
         infixList.add("1");
         infixList.add("/");
         infixList.add("2");
-        infixList.add(")");
-        infixList.add("/");
-        infixList.add("(");
-        infixList.add("c");
-        infixList.add("/");
-        infixList.add("4");
         infixList.add(")");
         System.out.println("Shunt " + infixToPostfix(infixList));
     }
@@ -66,6 +77,7 @@ public class ShuntingYard {
     public static List<String> infixToPostfix(List<String> infix) {
         Stack<String> operatorStack = new Stack<>();
         List<String> outputQueue = new ArrayList<>();
+        boolean lastWasOperationOrFunction = true;
 
         for (String token : infix) {
             // classify token
@@ -78,18 +90,28 @@ public class ShuntingYard {
                     pop o2 off the operator stack, onto the output queue;
                     at the end of iteration push o1 onto the operator stack.
                      */
+
                     boolean keepLooking = true;
-                    while (!operatorStack.empty() && keepLooking) {
-                        TokenTypes peek = TokenTypes.getType(operatorStack.peek());
-                        if ((peek.compareTo(TokenTypes.OPERATOR_A) == 0)
-                                || (peek.compareTo(TokenTypes.OPERATOR_M) == 0)
-                                || (peek.compareTo(TokenTypes.OPERATOR_E) == 0)) {
-                            outputQueue.add(operatorStack.pop());
-                        } else {
-                            keepLooking = false;
+
+                    // allow for negative expressions by inserting -1 *
+                    if (lastWasOperationOrFunction && token.compareTo("-") == 0) {
+                        outputQueue.add("-1");
+                        operatorStack.push("*");
+                        lastWasOperationOrFunction = true;
+                    } else {
+                        while (!operatorStack.empty() && keepLooking) {
+                            TokenTypes peek = TokenTypes.getType(operatorStack.peek());
+                            if ((peek.compareTo(TokenTypes.OPERATOR_A) == 0)
+                                    || (peek.compareTo(TokenTypes.OPERATOR_M) == 0)
+                                    || (peek.compareTo(TokenTypes.OPERATOR_E) == 0)) {
+                                outputQueue.add(operatorStack.pop());
+                            } else {
+                                keepLooking = false;
+                            }
                         }
+                        operatorStack.push(token);
+                        lastWasOperationOrFunction = true;
                     }
-                    operatorStack.push(token);
                     break;
                 case OPERATOR_M:
                     /* while there is an operator token o2, at the top of the operator stack and either
@@ -109,6 +131,7 @@ public class ShuntingYard {
                         }
                     }
                     operatorStack.push(token);
+                    lastWasOperationOrFunction = true;
                     break;
                 case OPERATOR_E:
                     /* while there is an operator token o2, at the top of the operator stack and either
@@ -118,9 +141,11 @@ public class ShuntingYard {
                     at the end of iteration push o1 onto the operator stack.
                      */
                     operatorStack.push(token);
+                    lastWasOperationOrFunction = true;
                     break;
                 case LEFT_PAREN:
                     operatorStack.push(token);
+                    lastWasOperationOrFunction = true;
                     break;
                 case RIGHT_PAREN:
                     /* Until the token at the top of the stack is a left parenthesis, pop operators off the stack onto the output queue.
@@ -142,15 +167,19 @@ public class ShuntingYard {
                             }
                         }
                     }
+                    lastWasOperationOrFunction = false;
                     break;
                 case CONSTANT:
                     outputQueue.add(token);
+                    lastWasOperationOrFunction = false;
                     break;
                 case VARIABLE:
                     outputQueue.add(token);
+                    lastWasOperationOrFunction = false;
                     break;
                 case FUNCTION:
                     operatorStack.push(token);
+                    lastWasOperationOrFunction = true;
                     break;
                 case COMMA:
                     /*If the token is a function argument separator (e.g., a comma):
@@ -203,14 +232,21 @@ public class ShuntingYard {
             } else if ("".contains(token)) {
                 retVal = FUNCTION;
             } else {
-                try {
-                    Double number = Double.parseDouble(token);
+                if (isNumber(token)) {
                     retVal = CONSTANT;
-                } catch (NumberFormatException numberFormatException) {
                 }
+//                try {
+//                    Double number = Double.parseDouble(token);
+//                    retVal = CONSTANT;
+//                } catch (NumberFormatException numberFormatException) {
+//                }
             }
 
             return retVal;
         }
+    }
+
+    public static boolean isNumber(String string) {
+        return string != null && numberPattern.matcher(string).matches();
     }
 }

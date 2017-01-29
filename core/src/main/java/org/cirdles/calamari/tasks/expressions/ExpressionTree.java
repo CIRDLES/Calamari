@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,10 @@ import java.util.TreeSet;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
 import org.cirdles.calamari.tasks.expressions.operations.Log;
@@ -48,7 +52,7 @@ public class ExpressionTree
     private ExpressionTreeInterface parentET;
     protected ExpressionTreeInterface leftET;
     protected ExpressionTreeInterface rightET;
-    protected Operation operation;
+    protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
     protected boolean rootExpressionTree;
 
@@ -64,7 +68,7 @@ public class ExpressionTree
         this(prettyName, null, null, null);
     }
 
-    public ExpressionTree(Operation operation) {
+    public ExpressionTree(OperationOrFunctionInterface operation) {
         this();
         this.operation = operation;
     }
@@ -76,7 +80,7 @@ public class ExpressionTree
      * @param rightET the value of rightET
      * @param operation the value of operation
      */
-    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, Operation operation) {
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationOrFunctionInterface operation) {
         this(prettyName, leftET, rightET, operation, new ArrayList<RawRatioNamesSHRIMP>());
     }
 
@@ -88,7 +92,7 @@ public class ExpressionTree
      * @param operation the value of operation
      * @param ratiosOfInterest the value of ratiosOfInterest
      */
-    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, Operation operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
+    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationOrFunctionInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
         this.name = prettyName;
         this.leftET = leftET;
         this.rightET = rightET;
@@ -152,7 +156,10 @@ public class ExpressionTree
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return operation == null ? 0.0 : operation.eval(leftET, rightET, pkInterpScan, isotopeToIndexMap);
+        List<ExpressionTreeInterface> childrenET = new ArrayList<>();
+        childrenET.add(leftET);
+        childrenET.add(rightET);
+        return operation == null ? 0.0 : operation.eval(childrenET, pkInterpScan, isotopeToIndexMap);
     }
 
     @Override
@@ -170,7 +177,7 @@ public class ExpressionTree
     public int getOperationPrecedence() {
         int retVal = 100;
 
-        if (operation != null)  {
+        if (operation != null) {
             retVal = operation.getPrecedence();
         }
 
@@ -206,6 +213,7 @@ public class ExpressionTree
     /**
      * @return the parentET
      */
+    @Override
     public ExpressionTreeInterface getParentET() {
         return parentET;
     }
@@ -260,7 +268,7 @@ public class ExpressionTree
      * @return the operation
      */
     @Override
-    public Operation getOperation() {
+    public OperationOrFunctionInterface getOperation() {
         return operation;
     }
 
@@ -268,7 +276,7 @@ public class ExpressionTree
      * @param operation the operation to set
      */
     @Override
-    public void setOperation(Operation operation) {
+    public void setOperation(OperationOrFunctionInterface operation) {
         this.operation = operation;
     }
 

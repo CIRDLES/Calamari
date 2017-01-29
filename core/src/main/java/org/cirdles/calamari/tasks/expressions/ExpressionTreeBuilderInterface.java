@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
-import org.cirdles.calamari.tasks.expressions.operations.Operation;
-
 /**
  *
  * @author James F. Bowring
@@ -26,12 +24,12 @@ public interface ExpressionTreeBuilderInterface {
     /**
      * @param operation the operation to set
      */
-    public void setOperation(Operation operation);
+    public void setOperation(OperationOrFunctionInterface operation);
 
     /**
      * @return the operation
      */
-    public Operation getOperation();
+    public OperationOrFunctionInterface getOperation();
 
     /**
      * @return the leftET

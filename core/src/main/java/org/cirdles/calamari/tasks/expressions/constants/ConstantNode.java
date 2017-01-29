@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.constants;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializerInterface {
+public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInterface {
 
-    private IsotopeNames name;
+    private String name;
+    private double value;
     private ExpressionTreeInterface parentET;
 
-    public ShrimpSpeciesNode() {
-        this.name = null;
+    public ConstantNode() {
+        this("", 0.0);
     }
 
-    public ShrimpSpeciesNode(IsotopeNames name) {
+    public ConstantNode(String name, double value) {
         this.name = name;
+        this.value = value;
     }
 
     @Override
     public void customizeXstream(XStream xstream) {
-        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
-        xstream.alias("ShrimpSpeciesNode", ShrimpSpeciesNode.class);
+        xstream.registerConverter(new ConstantNodeXMLConverter());
+        xstream.alias("ConstantNode", ConstantNode.class);
     }
 
     /**
@@ -51,42 +54,38 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal = 0.0;
-        Integer index = isotopeToIndexMap.get(name);
-        if (index != null) {
-            retVal = pkInterpScan[isotopeToIndexMap.get(name)];
-        }
-        return retVal;
-    }
-
-    public String toStringMathML() {
-        String retVal
-                = "<msubsup>\n"
-                + "<mstyle mathsize='90%'>\n"
-                + "<mtext>\n"
-                + name.getAtomicMass()
-                + "\n</mtext>\n"
-                + "</mstyle>\n"
-                + "<mstyle  mathsize='150%'>\n"
-                + "<mtext>\n"
-                + name.getElementName()
-                + "\n</mtext>\n"
-                + "</mstyle>\n"
-                + "</msubsup>\n";
-
-        return retVal;
+        return value;
     }
 
     @Override
     public String getName() {
-        return name.getName();
+        return name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(IsotopeNames name) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the value
+     */
+    public double getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toStringMathML() {
+        return "<mn>" + name + "</mn>\n";
     }
 
     @Override
@@ -97,7 +96,6 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     /**
      * @return the parentET
      */
-    @Override
     public ExpressionTreeInterface getParentET() {
         return parentET;
     }
@@ -105,8 +103,8 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     /**
      * @param parentET the parentET to set
      */
-    @Override
     public void setParentET(ExpressionTreeInterface parentET) {
         this.parentET = parentET;
     }
+
 }

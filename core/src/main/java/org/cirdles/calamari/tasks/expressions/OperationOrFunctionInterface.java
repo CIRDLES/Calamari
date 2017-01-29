@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 
@@ -22,33 +23,16 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
  *
  * @author James F. Bowring
  */
-public interface ExpressionTreeInterface {
+public interface OperationOrFunctionInterface {
+
+    public abstract double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
     /**
-     *
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @return the precedence
      */
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+    public int getPrecedence();
 
-    public String getName();
-
-    /**
-     * @return the parentET
-     */
-    public ExpressionTreeInterface getParentET();
-
-    /**
-     * @param parentET the parentET to set
-     */
-    public void setParentET(ExpressionTreeInterface parentET);
-
-    /**
-     * @return the rootExpressionTree
-     */
-    public boolean isRootExpressionTree();
-
-    public String toStringMathML();
-
+    public abstract String toStringMathML(
+            ExpressionTreeInterface leftET,
+            ExpressionTreeInterface rightET);
 }

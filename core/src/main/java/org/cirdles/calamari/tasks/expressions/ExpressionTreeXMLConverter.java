@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
@@ -188,7 +190,7 @@ public class ExpressionTreeXMLConverter implements Converter {
         // operation
         reader.moveDown();
         reader.moveDown();
-        Operation operation = Operation.operationFactory(reader.getValue());
+        OperationOrFunctionInterface operation = Operation.operationFactory(reader.getValue());
         expressionTree.setOperation(operation);
         reader.moveUp();
         reader.moveUp();

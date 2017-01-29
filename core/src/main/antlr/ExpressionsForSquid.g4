@@ -1,5 +1,5 @@
 /******************************************************
- * A multi-line Javadoc-like comment about my grammar *
+ * A multi-line Javadoc-like comment                  *
  ******************************************************/
 grammar ExpressionsForSquid;
 
@@ -15,19 +15,23 @@ grammar ExpressionsForSquid;
  A multi-line Java-like comment
  */
 expr:
-    expr ('*'|'/') expr
+    CONSTANT
+    | VARIABLE
+    | ('-') expr
+    | expr ('*'|'/') expr
     | expr ('+'|'-') expr
     | expr ('^') expr
-    | CONSTANT
-    | VARIABLE
     | '(' expr ')'
     | '[' expr ']'
 
     ;
 
+fragment
+Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+
 // some lexer rules
-CONSTANT : [a-zA-Z0-9.]+ ; // match identifiers
-VARIABLE : [a-zA-Z0-9._]+ ; // match integers
+CONSTANT : [0-9]+['.']?[0-9]+Exponent? ; // match identifiers
+VARIABLE : [a-zA-Z0-9_]+ ; // match Variable Names
 
 WS
    : [ \r\n\t] + -> channel (HIDDEN)

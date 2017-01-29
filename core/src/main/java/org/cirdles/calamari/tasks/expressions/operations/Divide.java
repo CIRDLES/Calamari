@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 
 /**
  *
@@ -61,7 +61,6 @@ public class Divide extends Operation {
             BigDecimal ratio = new BigDecimal(retVal);
             int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_EVEN);
-            //System.out.println(">>>  " + retVal + "\t    " + ratio2.toPlainString() + "\t   " + ratio2.doubleValue());
             retVal = ratio2.doubleValue();
         }
 

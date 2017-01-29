@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import java.util.List;
 import java.util.Set;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;

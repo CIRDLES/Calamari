@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,11 +27,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.cirdles.calamari.ExpressionsForSquidLexer;
 import org.cirdles.calamari.ExpressionsForSquidParser;
 import org.cirdles.calamari.ExpressionsForSquidParser.ExprContext;
-import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.parsing.ShuntingYard.TokenTypes;
 
@@ -145,7 +146,7 @@ public class ExpressionParser {
             case OPERATOR_A:
             case OPERATOR_M:
             case OPERATOR_E:
-                Operation operation = Operation.operationFactory(OPERATIONS_MAP.get(token));
+                OperationOrFunctionInterface operation = Operation.operationFactory(OPERATIONS_MAP.get(token));
                 retExpTree = new ExpressionTree(operation);
 
                 if (exp == null) {

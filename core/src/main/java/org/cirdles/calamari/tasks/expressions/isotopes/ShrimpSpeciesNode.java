@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,36 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.isotopes;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInterface {
+public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializerInterface {
 
-    private String name;
-    private double value;
+    private IsotopeNames name;
     private ExpressionTreeInterface parentET;
 
-    public ConstantNode() {
-        this("", 0.0);
+    public ShrimpSpeciesNode() {
+        this.name = null;
     }
 
-    public ConstantNode(String name, double value) {
+    public ShrimpSpeciesNode(IsotopeNames name) {
         this.name = name;
-        this.value = value;
     }
 
     @Override
     public void customizeXstream(XStream xstream) {
-        xstream.registerConverter(new ConstantNodeXMLConverter());
-        xstream.alias("ConstantNode", ConstantNode.class);
+        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
+        xstream.alias("ShrimpSpeciesNode", ShrimpSpeciesNode.class);
     }
 
     /**
@@ -53,38 +52,42 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return value;
+        double retVal = 0.0;
+        Integer index = isotopeToIndexMap.get(name);
+        if (index != null) {
+            retVal = pkInterpScan[isotopeToIndexMap.get(name)];
+        }
+        return retVal;
+    }
+
+    public String toStringMathML() {
+        String retVal
+                = "<msubsup>\n"
+                + "<mstyle mathsize='90%'>\n"
+                + "<mtext>\n"
+                + name.getAtomicMass()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "<mstyle  mathsize='150%'>\n"
+                + "<mtext>\n"
+                + name.getElementName()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "</msubsup>\n";
+
+        return retVal;
     }
 
     @Override
     public String getName() {
-        return name;
+        return name.getName();
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name) {
+    public void setName(IsotopeNames name) {
         this.name = name;
-    }
-
-    /**
-     * @return the value
-     */
-    public double getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toStringMathML() {
-        return "<mn>" + name + "</mn>\n";
     }
 
     @Override
@@ -95,6 +98,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     /**
      * @return the parentET
      */
+    @Override
     public ExpressionTreeInterface getParentET() {
         return parentET;
     }
@@ -102,8 +106,8 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     /**
      * @param parentET the parentET to set
      */
+    @Override
     public void setParentET(ExpressionTreeInterface parentET) {
         this.parentET = parentET;
     }
-
 }

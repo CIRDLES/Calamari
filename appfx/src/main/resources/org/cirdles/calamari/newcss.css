@@ -20,8 +20,8 @@ and open the template in the editor.
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 0.6;
+    -fx-text-fill: black;
+    -fx-opacity: 1;
 }
 
 .label-bright {
