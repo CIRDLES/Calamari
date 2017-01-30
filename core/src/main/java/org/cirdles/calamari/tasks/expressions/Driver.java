@@ -19,9 +19,9 @@ import java.io.IOException;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.functions.Ln;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
-import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
@@ -40,7 +40,7 @@ public class Driver {
         ExpressionTreeInterface expT2 = new ExpressionTree("NONAME", expT, expT, new Subtract());
         ExpressionTreeInterface expT3 = new ExpressionTree("NONAME", expT, expT, new Multiply());
         ExpressionTreeInterface expT4 = new ExpressionTree("NONAME", expT3, expT, new Divide());
-        ExpressionTreeInterface expT5 = new ExpressionTree("NONAME", expT3, null, new Log());
+        ExpressionTreeInterface expT5 = new ExpressionTree("NONAME", expT3, null, new Ln());
 
         ExpressionTreeInterface EXPRESSION = new ExpressionTree("test");
 

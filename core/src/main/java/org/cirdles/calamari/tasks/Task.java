@@ -36,11 +36,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.functions.Ln;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
-import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
@@ -83,7 +83,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
         xstream.alias("operation", Pow.class);
-        xstream.alias("operation", Log.class);
+        
+        xstream.alias("function", Ln.class);
 
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
         xstream.alias("ratio", RawRatioNamesSHRIMP.class);

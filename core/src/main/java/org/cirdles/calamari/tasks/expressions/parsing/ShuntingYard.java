@@ -60,16 +60,21 @@ public class ShuntingYard {
 //        infixList.add(")");
 //        infixList.add("2");
 //        infixList.add("+");
-        infixList.add("ln");
+        infixList.add("zzz");
         infixList.add("(");
         infixList.add("1");
         infixList.add("/");
         infixList.add("2");
+        infixList.add(",");
+        infixList.add("3");
         infixList.add(")");
         System.out.println("Shunt " + infixToPostfix(infixList));
     }
 
     /**
+     * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation#The_postfix_algorithm
+     * @see https://blog.kallisti.net.nz/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/
+     * @see http://www.reedbeta.com/blog/the-shunting-yard-algorithm/
      * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
      * @param infix
      * @return
@@ -77,6 +82,8 @@ public class ShuntingYard {
     public static List<String> infixToPostfix(List<String> infix) {
         Stack<String> operatorStack = new Stack<>();
         List<String> outputQueue = new ArrayList<>();
+        Stack<Boolean> wereValues = new Stack<>();
+        Stack<Integer> argCount = new Stack<>();
         boolean lastWasOperationOrFunction = true;
 
         for (String token : infix) {
@@ -163,7 +170,26 @@ public class ShuntingYard {
                         } else {
                             keepLooking = false;
                             if (peek.compareTo(TokenTypes.LEFT_PAREN) == 0) {
-                                operatorStack.pop();
+                                operatorStack.pop(); 
+                                try {                                                                      
+                                    String func = operatorStack.pop();
+                                    try {
+                                        peek = TokenTypes.getType(operatorStack.peek());
+                                        if (peek.compareTo(TokenTypes.FUNCTION) == 0) {
+                                            
+                                            int a = argCount.pop();
+                                            boolean w = wereValues.pop();
+                                            if (w) {
+                                                a++;
+                                                String funcWithArgCount = func + ":" + String.valueOf(a);
+//                                            outputQueue.add(func);// temp simplify(funcWithArgCount);
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                    }
+                                    outputQueue.add(func);// temp simplify(funcWithArgCount);
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -171,6 +197,10 @@ public class ShuntingYard {
                     break;
                 case CONSTANT:
                     outputQueue.add(token);
+                    if (!wereValues.empty()){
+                        wereValues.pop();
+                        wereValues.push(true);
+                    }
                     lastWasOperationOrFunction = false;
                     break;
                 case VARIABLE:
@@ -179,6 +209,12 @@ public class ShuntingYard {
                     break;
                 case FUNCTION:
                     operatorStack.push(token);
+                    if (!wereValues.empty()){
+                        wereValues.pop();
+                        wereValues.push(true);
+                    }
+                    wereValues.push(false);
+                    argCount.push(0);
                     lastWasOperationOrFunction = true;
                     break;
                 case COMMA:
@@ -187,6 +223,35 @@ public class ShuntingYard {
                     pop operators off the stack onto the output queue. If no left parentheses 
                     are encountered, either the separator was misplaced or parentheses were mismatched.
                      */
+                    keepLooking = true;
+                    while (!operatorStack.empty() && keepLooking) {
+                        TokenTypes peek = TokenTypes.getType(operatorStack.peek());
+                        if (peek.compareTo(TokenTypes.LEFT_PAREN) == 0) {
+                            keepLooking = false;
+                        } else {
+                            outputQueue.add(operatorStack.pop());
+                        }
+////                        
+//                        if ((peek.compareTo(TokenTypes.OPERATOR_A) == 0)
+//                                || (peek.compareTo(TokenTypes.OPERATOR_M) == 0)
+//                                || (peek.compareTo(TokenTypes.OPERATOR_E) == 0)
+//                                || (peek.compareTo(TokenTypes.FUNCTION) == 0)) {
+//                            outputQueue.add(operatorStack.pop());
+//                        } else {
+//                            keepLooking = false;
+//                            if (peek.compareTo(TokenTypes.LEFT_PAREN) == 0) {
+//                                operatorStack.pop();
+//                            }
+//                        }
+                    }
+                    
+                    boolean w = wereValues.pop();
+                    if (w){
+                        int a = argCount.pop();
+                        argCount.push(a+1);
+                    }
+                    wereValues.push(false);
+                    lastWasOperationOrFunction = false;
                     break;
                 default:
                     break;

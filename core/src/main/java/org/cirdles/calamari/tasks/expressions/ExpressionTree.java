@@ -27,11 +27,11 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.functions.Ln;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
-import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
@@ -53,6 +53,7 @@ public class ExpressionTree
     private ExpressionTreeInterface parentET;
     protected ExpressionTreeInterface leftET;
     protected ExpressionTreeInterface rightET;
+    protected List<ExpressionTreeInterface> childrenET;
     protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
     protected boolean rootExpressionTree;
@@ -100,6 +101,9 @@ public class ExpressionTree
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
         this.rootExpressionTree = false;
+        this.childrenET = new ArrayList<>();
+        addChild(leftET);
+        addChild(rightET);
     }
 
     @Override
@@ -117,7 +121,8 @@ public class ExpressionTree
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
         xstream.alias("operation", Pow.class);
-        xstream.alias("operation", Log.class);
+
+        xstream.alias("function", Ln.class);
 
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
         xstream.alias("ratio", RawRatioNamesSHRIMP.class);
@@ -157,9 +162,6 @@ public class ExpressionTree
      */
     @Override
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        List<ExpressionTreeInterface> childrenET = new ArrayList<>();
-        childrenET.add(leftET);
-        childrenET.add(rightET);
         return operation == null ? 0.0 : operation.eval(childrenET, pkInterpScan, isotopeToIndexMap);
     }
 
@@ -186,12 +188,27 @@ public class ExpressionTree
     }
 
     @Override
+    public boolean isTypeFunction() {
+        return (operation instanceof Function);
+    }
+    
+    @Override
+    public int argumentCount(){
+        int retVal = -1;
+        if (isTypeFunction()){
+            retVal = ((Function)operation).getArgumentCount();
+        }
+        
+        return retVal;
+    }
+    
+    @Override
     public String toStringMathML() {
         String retVal = "";
         if (operation == null) {
             retVal = "<mtext>No expression selected.</mtext>\n";
         } else {
-            retVal = operation.toStringMathML(leftET, rightET);
+            retVal = operation.toStringMathML(leftET, rightET, childrenET);
         }
         return retVal;
     }
@@ -232,7 +249,12 @@ public class ExpressionTree
      */
     @Override
     public ExpressionTreeInterface getLeftET() {
-        return leftET;
+        ExpressionTreeInterface retVal = null;
+        try {
+            retVal = childrenET.get(0);
+        } catch (Exception e) {
+        }
+        return retVal;
     }
 
     /**
@@ -241,9 +263,13 @@ public class ExpressionTree
     @Override
     public void setLeftET(ExpressionTreeInterface leftET) {
         this.leftET = leftET;
-        if (leftET != null) {
-            leftET.setParentET(this);
+        try {
+            if (childrenET.get(0) == null) {
+                childrenET.remove(0);
+            }
+        } catch (Exception e) {
         }
+        addChild(0, leftET);
     }
 
     /**
@@ -251,7 +277,12 @@ public class ExpressionTree
      */
     @Override
     public ExpressionTreeInterface getRightET() {
-        return rightET;
+        ExpressionTreeInterface retVal = null;
+        try {
+            retVal = childrenET.get(1);
+        } catch (Exception e) {
+        }
+        return retVal;
     }
 
     /**
@@ -259,13 +290,35 @@ public class ExpressionTree
      */
     @Override
     public void setRightET(ExpressionTreeInterface rightET) {
-        if (operation instanceof Function) {
-            setLeftET(rightET);
-        } else {
-            this.rightET = rightET;
-            if (rightET != null) {
-                rightET.setParentET(this);
-            }
+        this.rightET = rightET;
+        if (childrenET.isEmpty()) {
+            // add in null left for logic
+            childrenET.add(null);
+        }
+
+        addChild(rightET);
+    }
+    
+    @Override
+    public int getCountOfChildren(){
+        return childrenET.size();
+    }
+
+    /**
+     *
+     * @param childET
+     */
+    public void addChild(ExpressionTreeInterface childET) {
+        if (childET != null) {
+            childrenET.add(childET);
+            childET.setParentET(this);
+        }
+    }
+
+    public void addChild(int index, ExpressionTreeInterface childET) {
+        if (childET != null) {
+            childrenET.add(index, childET);
+            childET.setParentET(this);
         }
     }
 

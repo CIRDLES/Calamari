@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -54,13 +55,19 @@ public class Pexp extends Operation {
         return retVal;
     }
 
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>\n"
-                + "<mfenced>\n"
+                + "<mo>(</mo>\n"
                 + toStringAnotherExpression(leftET)
-                + "</mfenced>\n"
+                + "<mo>)</mo>\n"
                 + "</mrow>\n";
 
         return retVal;

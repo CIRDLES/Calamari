@@ -32,6 +32,7 @@ public abstract class Function
         XMLSerializerInterface {
 
     protected String name;
+    protected int argumentCount;
     protected int precedence;
 
     @Override
@@ -92,6 +93,20 @@ public abstract class Function
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the argumentCount
+     */
+    public int getArgumentCount() {
+        return argumentCount;
+    }
+
+    /**
+     * @param argumentCount the argumentCount to set
+     */
+    public void setArgumentCount(int argumentCount) {
+        this.argumentCount = argumentCount;
     }
 
     /**

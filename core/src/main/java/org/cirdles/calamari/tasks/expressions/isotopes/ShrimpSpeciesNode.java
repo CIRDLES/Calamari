@@ -110,4 +110,18 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     public void setParentET(ExpressionTreeInterface parentET) {
         this.parentET = parentET;
     }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isTypeFunction() {
+        return false;
+    }
+
+    @Override
+    public int argumentCount() {
+        return 0;
+    }
 }

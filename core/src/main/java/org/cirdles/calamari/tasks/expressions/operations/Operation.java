@@ -75,14 +75,6 @@ public abstract class Operation
      *
      * @return
      */
-    public static OperationOrFunctionInterface log() {
-        return new Log();
-    }
-
-    /**
-     *
-     * @return
-     */
     public static OperationOrFunctionInterface pExp() {
         return new Pexp();
     }
@@ -109,14 +101,20 @@ public abstract class Operation
     }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
-        String retVal = expression.toStringMathML();
-        if (expression.isRootExpressionTree()) {
-            retVal
-                    = "<mtext>\n"
-                    + "[Expression "
-                    + expression.getName()
-                    + "]\n"
-                    + "</mtext>\n";
+
+        String retVal = "Not a valid expression";
+
+        if (expression != null) {
+            retVal = expression.toStringMathML();
+            
+            if (expression.isRootExpressionTree()) {
+                retVal
+                        = "<mtext>\n"
+                        + "[Expression "
+                        + expression.getName()
+                        + "]\n"
+                        + "</mtext>\n";
+            }
         }
 
         return retVal;

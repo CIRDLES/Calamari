@@ -28,6 +28,7 @@ public class Ln extends Function {
 
     public Ln() {
         name = "ln";
+        argumentCount = 3; // for testing
         precedence = 4;
     }
 
@@ -53,13 +54,25 @@ public class Ln extends Function {
         return retVal;
     }
 
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     * @return
+     */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mi>ln</mi>\n"
-                + "<mfenced>\n"
-                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
-                + "</mfenced>\n";
+                = "<mrow>"
+                + "<mi>ln</mi>"
+                + "<mfenced>";
+
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
+        }
+
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

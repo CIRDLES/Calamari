@@ -32,7 +32,13 @@ public interface OperationOrFunctionInterface {
      */
     public int getPrecedence();
 
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     * @return 
+     */
     public abstract String toStringMathML(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET);
+            ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET);
 }

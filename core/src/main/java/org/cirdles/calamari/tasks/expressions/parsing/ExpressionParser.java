@@ -124,7 +124,8 @@ public class ExpressionParser {
 
         boolean didAscend = true;
         while (didAscend) {
-            if (savedExp instanceof ExpressionTreeBuilderInterface) {
+            if ((savedExp instanceof ExpressionTreeBuilderInterface)
+                    && (!savedExp.isTypeFunction())) {
                 if (((ExpressionTreeBuilderInterface) savedExp).getLeftET() != null) {
                     expParent = savedExp.getParentET();
                     savedExp = expParent;
@@ -145,8 +146,19 @@ public class ExpressionParser {
         return expParent;
     }
 
-    private ExpressionTreeInterface walkTree(String token, ExpressionTreeInterface exp) {
+    private ExpressionTreeInterface walkTree(String token, ExpressionTreeInterface myExp) {
         TokenTypes tokenType = TokenTypes.getType(token);
+        ExpressionTreeInterface exp = myExp;
+
+        if (exp != null) {
+            if (exp.isTypeFunction()) {
+                if (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
+                        && !exp.isRootExpressionTree()) {
+                    exp = exp.getParentET();
+                }
+            }
+        }
+
         ExpressionTreeInterface retExpTree = null;
 
         switch (tokenType) {
@@ -158,6 +170,8 @@ public class ExpressionParser {
 
                 if (exp == null) {
                     // do nothing
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
@@ -172,7 +186,9 @@ public class ExpressionParser {
 
                 if (exp == null) {
                     // do nothing
-                   } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
+                } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
@@ -185,6 +201,8 @@ public class ExpressionParser {
 
                 if (exp == null) {
                     // do nothing
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
@@ -198,6 +216,8 @@ public class ExpressionParser {
 
                 if (exp == null) {
                     // do nothing
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
                     ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
                 } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {

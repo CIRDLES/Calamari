@@ -50,5 +50,9 @@ public interface ExpressionTreeInterface {
     public boolean isRootExpressionTree();
 
     public String toStringMathML();
+    
+    public boolean isTypeFunction();
+    
+    public int argumentCount();
 
 }

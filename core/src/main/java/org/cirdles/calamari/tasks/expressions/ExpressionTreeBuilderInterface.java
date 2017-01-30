@@ -50,6 +50,8 @@ public interface ExpressionTreeBuilderInterface {
      * @param rightET the rightET to set
      */
     public void setRightET(ExpressionTreeInterface rightET);
+    
+    public int getCountOfChildren();
 
     public int getOperationPrecedence();
 

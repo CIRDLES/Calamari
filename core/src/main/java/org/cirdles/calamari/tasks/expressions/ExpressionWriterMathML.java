@@ -55,7 +55,9 @@ public class ExpressionWriterMathML {
                     "<mspace depth=\"0.5ex\" height=\"0.5ex\" width=\"1ex\"/>\n"
             );
 
+            fileContents.append("<mrow>\n");
             fileContents.append(expression.toStringMathML());
+            fileContents.append("</mrow>\n");
 
             fileContents.append(
                     "          </mstyle>\n"

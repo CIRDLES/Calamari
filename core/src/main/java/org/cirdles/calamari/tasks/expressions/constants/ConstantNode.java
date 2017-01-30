@@ -107,4 +107,17 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
         this.parentET = parentET;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isTypeFunction() {
+        return false;
+    }
+
+    @Override
+    public int argumentCount() {
+        return 0;
+    }
 }

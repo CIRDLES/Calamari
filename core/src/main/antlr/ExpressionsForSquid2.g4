@@ -44,6 +44,7 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   expr '==' expr          // equality comparison (lowest priority op)
     |   ID                      // variable reference
     |   INT
+    |   FLOAT
     |   '(' expr ')'
     ;
 exprList : expr (',' expr)* ;   // arg list
@@ -53,7 +54,16 @@ ID  :   LETTER (LETTER | [0-9])* ;
 fragment
 LETTER : [a-zA-Z] ;
 
+
 INT :   [0-9]+ ;
+
+INTEGER:                '0' | ([1-9][0-9]*);
+
+FLOAT :              ('0' | ([1-9][0-9]*)) ('.' [0-9]*)? Exponent? ;
+ 
+fragment
+Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+
 
 WS  :   [ \t\n\r]+ -> skip ;
 
