@@ -246,8 +246,7 @@ public class PrawnFileHandler {
             lines.add(i, headerArray[i]);
         }
 
-        String tempPrawnXMLFileName = "tempPrawnXMLFileName.xml";
-        Path pathTempXML = Paths.get(tempPrawnXMLFileName).toAbsolutePath();
+        // Posix attributes added to support web service on Linux
         Set<PosixFilePermission> perms = EnumSet.of(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE, GROUP_READ);
         Path config = Files.createTempFile("tempPrawnXMLFileName", "xml", PosixFilePermissions.asFileAttribute(perms));
         try (BufferedWriter writer = Files.newBufferedWriter(config, StandardCharsets.UTF_8)) {
@@ -257,7 +256,7 @@ public class PrawnFileHandler {
             }
         }
 
-        File prawnDataFile = config.toFile();//    new File(tempPrawnXMLFileName);
+        File prawnDataFile = config.toFile();
         myPrawnFile = readRawDataFile(prawnDataFile);
 
         prawnDataFile.delete();
