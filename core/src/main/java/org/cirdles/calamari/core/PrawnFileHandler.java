@@ -123,6 +123,7 @@ public class PrawnFileHandler {
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
+            //if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1")==0){
             ShrimpFraction shrimpFraction
                     = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
             if (shrimpFraction != null) {
@@ -135,8 +136,9 @@ public class PrawnFileHandler {
                 int progress = (f + 1) * 100 / prawnFile.getRun().size();
                 progressSubscriber.accept(progress);
             }
+           // }
         }
-
+         
         return shrimpFractions;
     }
 
@@ -237,7 +239,7 @@ public class PrawnFileHandler {
         }
 
         String tempPrawnXMLFileName = "tempPrawnXMLFileName.xml";
-        Path pathTempXML = Paths.get(tempPrawnXMLFileName);
+        Path pathTempXML = Paths.get(tempPrawnXMLFileName).toAbsolutePath();
         try (BufferedWriter writer = Files.newBufferedWriter(pathTempXML, StandardCharsets.UTF_8)) {
             for (String line : lines) {
                 writer.write(line);
