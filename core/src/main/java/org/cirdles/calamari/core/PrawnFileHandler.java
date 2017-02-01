@@ -29,9 +29,17 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import static java.nio.file.attribute.PosixFilePermission.GROUP_READ;
+import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
+import static java.nio.file.attribute.PosixFilePermission.OWNER_READ;
+import static java.nio.file.attribute.PosixFilePermission.OWNER_WRITE;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.Consumer;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -240,14 +248,16 @@ public class PrawnFileHandler {
 
         String tempPrawnXMLFileName = "tempPrawnXMLFileName.xml";
         Path pathTempXML = Paths.get(tempPrawnXMLFileName).toAbsolutePath();
-        try (BufferedWriter writer = Files.newBufferedWriter(pathTempXML, StandardCharsets.UTF_8)) {
+        Set<PosixFilePermission> perms = EnumSet.of(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE, GROUP_READ);
+        Path config = Files.createTempFile("tempPrawnXMLFileName", "xml", PosixFilePermissions.asFileAttribute(perms));
+        try (BufferedWriter writer = Files.newBufferedWriter(config, StandardCharsets.UTF_8)) {
             for (String line : lines) {
                 writer.write(line);
                 writer.newLine();
             }
         }
 
-        File prawnDataFile = new File(tempPrawnXMLFileName);
+        File prawnDataFile = config.toFile();//    new File(tempPrawnXMLFileName);
         myPrawnFile = readRawDataFile(prawnDataFile);
 
         prawnDataFile.delete();
