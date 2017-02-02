@@ -83,7 +83,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
         xstream.alias("operation", Pow.class);
-        
+
         xstream.alias("function", Ln.class);
 
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
@@ -191,10 +191,15 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                         // The next step is to evaluate the equation ('FormulaEval', 
                         // documented separately), and approximate the uncertainties:
+                        System.out.println();
+                        System.out.println( "SCAN # " + scanNum);
+                        System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
+                        System.out.println( "\t" + eqValTmp);
+
                         double eqFerr = 0.0;
 
-                        StringBuilder testOutput = new StringBuilder();
+//                        StringBuilder testOutput = new StringBuilder();
 
                         if (eqValTmp != 0.0) {
                             // numerical pertubation procedure
@@ -203,12 +208,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
                             Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
 
-                            testOutput.append(
-                                    shrimpFraction.getFractionID() + ", "
-                                    + expression.getName() + ", "
-                                    + scanNum + ", "
-                                    + eqValTmp + ", "
-                            );
+//                            testOutput.append(
+//                                    shrimpFraction.getFractionID() + ", "
+//                                    + expression.getName() + ", "
+//                                    + scanNum + ", "
+//                                    + eqValTmp + ", "
+//                            );
 
                             double fVar = 0.0;
                             while (species.hasNext()) {
@@ -218,10 +223,13 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 // clone pkInterp[scanNum] for use in pertubation
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
-                                double pertVal = expression.eval(perturbed, isotopeToIndexMap);
 
-                                testOutput.append(specie.getName() + ">>, ");
-                                testOutput.append(pertVal + ", ");
+                                System.out.print(" pert " + specie.getName() + ":,\t");
+                                double pertVal = expression.eval(perturbed, isotopeToIndexMap);
+                                System.out.println( "\t" + pertVal);
+
+//                                testOutput.append(specie.getName() + ">>, ");
+//                                testOutput.append(pertVal + ", ");
 
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
@@ -256,9 +264,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         }
 
 //                        System.out.println(testOutput.toString());
+                        System.out.println();
 
                     } // end scanNum loop
-//                    System.out.println();
+                    System.out.println();
 
                     // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
                     // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 

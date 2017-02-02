@@ -60,9 +60,13 @@ public class Divide extends Operation {
         // Experiment to mimic VBA results
         if (leftET instanceof ShrimpSpeciesNode) {
             BigDecimal ratio = new BigDecimal(retVal);
-            int newScale = 15 - (ratio.precision() - ratio.scale());
+            int newScale = 14 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_EVEN);
+
+            System.out.print("\t" + String.valueOf(retVal) + ",\t" + ratio2.toPlainString() + ",");
+
             retVal = ratio2.doubleValue();
+
         }
 
         return retVal;
