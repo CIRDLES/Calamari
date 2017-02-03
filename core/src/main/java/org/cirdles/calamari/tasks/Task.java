@@ -194,21 +194,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         double eqFerr = 0.0;
 
-                        StringBuilder testOutput = new StringBuilder();
-
                         if (eqValTmp != 0.0) {
                             // numerical pertubation procedure
                             // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
                             // Not sure the order is critical here ... 
                             Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
                             Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
-
-                            testOutput.append(
-                                    shrimpFraction.getFractionID() + ", "
-                                    + expression.getName() + ", "
-                                    + scanNum + ", "
-                                    + eqValTmp + ", "
-                            );
 
                             double fVar = 0.0;
                             while (species.hasNext()) {
@@ -219,9 +210,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
                                 double pertVal = expression.eval(perturbed, isotopeToIndexMap);
-
-                                testOutput.append(specie.getName() + ">>, ");
-                                testOutput.append(pertVal + ", ");
 
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
@@ -255,10 +243,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             }
                         }
 
-//                        System.out.println(testOutput.toString());
-
                     } // end scanNum loop
-//                    System.out.println();
 
                     // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
                     // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
