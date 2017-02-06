@@ -17,6 +17,8 @@ package org.cirdles.calamari.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -113,6 +115,19 @@ public class CalamariReportsEngine {
     }
 
     /**
+     * Requested by Simon Bodorkos 6 Feb 2017 to help audit of Squid Excel
+     * @param value
+     * @return 
+     */
+    private String rounded(double value) {
+        BigDecimal ratio = new BigDecimal(value);
+        // calculate scale for 15 significant digits
+        int newScale = 15 - (ratio.precision() - ratio.scale());
+        BigDecimal ratio15 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+        return ratio15.toPlainString();
+    }
+
+    /**
      * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step “0a” – Total ion
      * counts at mass We’ve touched on this one once before, informally. It is a
      * direct extract from the XML, with one row per scan, and one column per
@@ -161,14 +176,10 @@ public class CalamariReportsEngine {
 
             double[] countTimeSec = shrimpFraction.getCountTimeSec();
             for (int i = 0; i < rawPeakData[scanNum].length; i++) {
-//                try {
                 if ((i % countOfPeaks) == 0) {
                     dataLine.append(", ").append(String.valueOf(countTimeSec[i / countOfPeaks]));
                 }
                 dataLine.append(", ").append(rawPeakData[scanNum][i]);
-//                } catch (Exception e) {
-//                    System.out.println();
-//                }
             }
 
             Files.write(ionIntegrations_PerScan.toPath(), asList(dataLine), APPEND);
@@ -273,9 +284,9 @@ public class CalamariReportsEngine {
 
             for (int i = 0; i < timeStampSec[scanNum].length; i++) {
                 dataLine.append(", ").append(timeStampSec[scanNum][i]);
-                dataLine.append(", ").append(totalCounts[scanNum][i]);
-                dataLine.append(", ").append(totalCountsOneSigmaAbs[scanNum][i]);
-                dataLine.append(", ").append(totalCountsSBM[scanNum][i]);
+                dataLine.append(", ").append(rounded(totalCounts[scanNum][i]));
+                dataLine.append(", ").append(rounded(totalCountsOneSigmaAbs[scanNum][i]));
+                dataLine.append(", ").append(rounded(totalCountsSBM[scanNum][i]));
                 dataLine.append(", ").append(trimMass[scanNum][i]);
             }
 
@@ -318,7 +329,7 @@ public class CalamariReportsEngine {
         double[] totalCps = shrimpFraction.getTotalCps();
 
         for (int i = 0; i < totalCps.length; i++) {
-            dataLine.append(", ").append(totalCps[i]);
+            dataLine.append(", ").append(rounded(totalCps[i]));
         }
 
         dataLine.append("\n");
@@ -347,9 +358,9 @@ public class CalamariReportsEngine {
                 if (isotopeRatioModel.isActive()) {
                     // July 2016 case of less than nDodCount = rare
                     if (nDodNum < isotopeRatioModel.getRatEqTime().size()) {
-                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqTime().get(nDodNum)));
-                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqVal().get(nDodNum)));
-                        dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatEqErr().get(nDodNum)));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqTime().get(nDodNum)));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqVal().get(nDodNum)));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqErr().get(nDodNum)));
                     } else {
                         dataLine.append(", ").append("n/a");
                         dataLine.append(", ").append("n/a");
@@ -363,8 +374,8 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqVal()[nDodNum]));
-                    dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqErr()[nDodNum]));
+                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqVal()[nDodNum]));
+                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqErr()[nDodNum]));
                 } else {
                     dataLine.append(", ").append("n/a");
                     dataLine.append(", ").append("n/a");
@@ -393,16 +404,16 @@ public class CalamariReportsEngine {
             IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
             if (isotopeRatioModel.isActive()) {
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
-                dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatioVal()));
-                dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getRatioFractErr() * 100.0));
+                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioVal()));
+                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioFractErr() * 100.0));
             }
         }
 
         // Handle any task expressions
         List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
         for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatioVal()));
-            dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatioFractErr() * 100.0));
+            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal()));
+            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0));
         }
 
         dataLine.append("\n");

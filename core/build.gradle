@@ -5,7 +5,7 @@ dependencies {
     
     compile "com.google.guava:guava:20.0"
     
-    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9.redhat-2'
+    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
     
     antlr "org.antlr:antlr4:4.6"
     compile 'org.antlr:antlr4-runtime:4.6'
