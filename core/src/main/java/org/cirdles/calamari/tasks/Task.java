@@ -192,15 +192,14 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         // The next step is to evaluate the equation ('FormulaEval', 
                         // documented separately), and approximate the uncertainties:
                         System.out.println();
-                        System.out.println( "SCAN # " + scanNum);
+                        System.out.println("SCAN # " + scanNum);
                         System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
-                        System.out.println( "\t" + eqValTmp);
+                        System.out.println("\t" + eqValTmp);
 
                         double eqFerr = 0.0;
 
 //                        StringBuilder testOutput = new StringBuilder();
-
                         if (eqValTmp != 0.0) {
                             // numerical pertubation procedure
                             // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
@@ -214,7 +213,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 //                                    + scanNum + ", "
 //                                    + eqValTmp + ", "
 //                            );
-
                             double fVar = 0.0;
                             while (species.hasNext()) {
                                 IsotopeNames specie = species.next();
@@ -226,17 +224,19 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                                 System.out.print(" pert " + specie.getName() + ":,\t");
                                 double pertVal = expression.eval(perturbed, isotopeToIndexMap);
-                                System.out.println( "\t" + pertVal);
+                                System.out.print("\t" + pertVal);
 
 //                                testOutput.append(specie.getName() + ">>, ");
 //                                testOutput.append(pertVal + ", ");
-
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
                                 double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
                                 double tC = fDelt * fDelt;
                                 double tD = (tA / tB) * (tA / tB) * tC;
                                 fVar += tD;// --fractional internal variance
+
+                                System.out.println(", " + String.valueOf(fDelt) + ", " + tA + ", " + tB + ", " + tC + ", " + tD + ", " + fVar);
+
                             } // end of visiting each isotope and perturbing equation
 
                             eqFerr = StrictMath.sqrt(fVar);
