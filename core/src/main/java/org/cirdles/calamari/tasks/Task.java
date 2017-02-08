@@ -241,7 +241,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 }
                                 eqTimeList.add(totRatTime / numPksInclDupes);
                             }
-                        }
+                        } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
 
                     } // end scanNum loop
 
