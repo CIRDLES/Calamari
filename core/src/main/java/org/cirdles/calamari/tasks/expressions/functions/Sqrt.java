@@ -24,10 +24,10 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Ln extends Function {
+public class Sqrt extends Function {
 
-    public Ln() {
-        name = "ln";
+    public Sqrt() {
+        name = "sqrt";
         argumentCount = 1;
         precedence = 4;
     }
@@ -46,7 +46,7 @@ public class Ln extends Function {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            retVal = StrictMath.sqrt(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -65,14 +65,10 @@ public class Ln extends Function {
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>ln</mi>"
-                + "<mfenced>";
+                + "<msqrt>";
+            retVal += toStringAnotherExpression(childrenET.get(0));
 
-        for (int i = 0; i < childrenET.size(); i++) {
-            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
-        }
-
-        retVal += "</mfenced></mrow>\n";
+        retVal += "</msqrt></mrow>\n";
 
         return retVal;
     }

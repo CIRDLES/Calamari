@@ -45,7 +45,11 @@ public abstract class Function
     public static OperationOrFunctionInterface ln() {
         return new Ln();
     }
-    
+
+    public static OperationOrFunctionInterface sqrt() {
+        return new Sqrt();
+    }
+
     /**
      *
      * @param operationName

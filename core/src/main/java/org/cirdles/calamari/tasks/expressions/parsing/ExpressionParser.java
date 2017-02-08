@@ -91,6 +91,7 @@ public class ExpressionParser {
     static {
 
         FUNCTIONS_MAP.put("ln", "ln");
+        FUNCTIONS_MAP.put("sqrt", "sqrt");
     }
 
     private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {

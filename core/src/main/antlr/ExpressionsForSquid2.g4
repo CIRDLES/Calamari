@@ -1,5 +1,5 @@
-/** Simple statically-typed programming language with functions and variables
- *  taken from "Language Implementation Patterns" book.
+/** Simple statically-typed language with functions and variables
+ *  based on  "Language Implementation Patterns" book.
  * https://media.pragprog.com/titles/tpantlr2/code/examples/Cymbol.g4
  */
 grammar ExpressionsForSquid2;
@@ -49,7 +49,7 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     ;
 exprList : expr (',' expr)* ;   // arg list
 
-FUNCTION : 'ln' ;
+FUNCTION : 'ln' | 'sqrt';
 ID  :   LETTER (LETTER | [0-9])* ;
 fragment
 LETTER : [a-zA-Z] ;

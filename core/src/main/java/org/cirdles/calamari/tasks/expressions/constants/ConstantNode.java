@@ -96,6 +96,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     /**
      * @return the parentET
      */
+    @Override
     public ExpressionTreeInterface getParentET() {
         return parentET;
     }
@@ -103,6 +104,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     /**
      * @param parentET the parentET to set
      */
+    @Override
     public void setParentET(ExpressionTreeInterface parentET) {
         this.parentET = parentET;
     }

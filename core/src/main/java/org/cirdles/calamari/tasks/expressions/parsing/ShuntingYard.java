@@ -294,7 +294,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-".contains(token)) {
+            } else if ("-ln-sqrt-".contains(token)) {
                 retVal = FUNCTION;
             } else {
                 if (isNumber(token)) {
