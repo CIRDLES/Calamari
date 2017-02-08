@@ -60,19 +60,19 @@ public class ShuntingYard {
 //        infixList.add(")");
 //        infixList.add("2");
 //        infixList.add("+");
-        infixList.add("ln");
-        infixList.add("(");
-        infixList.add("1");
-        infixList.add(")");
-        infixList.add("/");
-        infixList.add("(");
-        infixList.add("ln");
-        infixList.add("(");
-        infixList.add("3");
-        infixList.add(")");
-        infixList.add("+");
-        infixList.add("1");
-        infixList.add(")");
+//        infixList.add("ln");
+//        infixList.add("(");
+//        infixList.add("1");
+//        infixList.add(")");
+//        infixList.add("/");
+//        infixList.add("(");
+//        infixList.add("ln");
+//        infixList.add("(");
+//        infixList.add("3");
+//        infixList.add(")");
+//        infixList.add("+");
+//        infixList.add("1");
+        infixList.add("q");
         System.out.println("Shunt " + infixToPostfix(infixList));
         
         //1+(ln(3) +4)
@@ -305,7 +305,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-Ln-sqrt-Sqrt-".contains(token)) {
+            } else if ("-ln-Ln-sqrt-Sqrt-".contains("-" + token + "-")) {
                 retVal = FUNCTION;
             } else {
                 if (isNumber(token)) {
