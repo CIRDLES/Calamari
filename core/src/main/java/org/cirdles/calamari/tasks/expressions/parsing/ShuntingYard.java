@@ -60,20 +60,31 @@ public class ShuntingYard {
 //        infixList.add(")");
 //        infixList.add("2");
 //        infixList.add("+");
-        infixList.add("zzz");
+        infixList.add("ln");
         infixList.add("(");
         infixList.add("1");
+        infixList.add(")");
         infixList.add("/");
-        infixList.add("2");
-        infixList.add(",");
+        infixList.add("(");
+        infixList.add("ln");
+        infixList.add("(");
         infixList.add("3");
         infixList.add(")");
+        infixList.add("+");
+        infixList.add("1");
+        infixList.add(")");
         System.out.println("Shunt " + infixToPostfix(infixList));
+        
+        //1+(ln(3) +4)
+        //ln  (  ln(3) + ln(4)  )  
+        // ln(1)/(ln(3) + 1)
     }
 
     /**
-     * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation#The_postfix_algorithm
-     * @see https://blog.kallisti.net.nz/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/
+     * @see
+     * https://en.wikipedia.org/wiki/Reverse_Polish_notation#The_postfix_algorithm
+     * @see
+     * https://blog.kallisti.net.nz/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/
      * @see http://www.reedbeta.com/blog/the-shunting-yard-algorithm/
      * @see https://en.wikipedia.org/wiki/Shunting-yard_algorithm
      * @param infix
@@ -170,24 +181,24 @@ public class ShuntingYard {
                         } else {
                             keepLooking = false;
                             if (peek.compareTo(TokenTypes.LEFT_PAREN) == 0) {
-                                operatorStack.pop(); 
-                                try {                                                                      
-                                    String func = operatorStack.pop();
+                                operatorStack.pop();
+                                try {
+                                    String func;
                                     try {
                                         peek = TokenTypes.getType(operatorStack.peek());
                                         if (peek.compareTo(TokenTypes.FUNCTION) == 0) {
-                                            
+                                            func = operatorStack.pop();
                                             int a = argCount.pop();
                                             boolean w = wereValues.pop();
                                             if (w) {
                                                 a++;
                                                 String funcWithArgCount = func + ":" + String.valueOf(a);
-//                                            outputQueue.add(func);// temp simplify(funcWithArgCount);
+                                                outputQueue.add(func);// temp simplify(funcWithArgCount);
                                             }
                                         }
                                     } catch (Exception e) {
                                     }
-                                    outputQueue.add(func);// temp simplify(funcWithArgCount);
+//                                    outputQueue.add(func);// temp simplify(funcWithArgCount);
                                 } catch (Exception e) {
                                 }
                             }
@@ -197,7 +208,7 @@ public class ShuntingYard {
                     break;
                 case CONSTANT:
                     outputQueue.add(token);
-                    if (!wereValues.empty()){
+                    if (!wereValues.empty()) {
                         wereValues.pop();
                         wereValues.push(true);
                     }
@@ -209,7 +220,7 @@ public class ShuntingYard {
                     break;
                 case FUNCTION:
                     operatorStack.push(token);
-                    if (!wereValues.empty()){
+                    if (!wereValues.empty()) {
                         wereValues.pop();
                         wereValues.push(true);
                     }
@@ -244,11 +255,11 @@ public class ShuntingYard {
 //                            }
 //                        }
                     }
-                    
+
                     boolean w = wereValues.pop();
-                    if (w){
+                    if (w) {
                         int a = argCount.pop();
-                        argCount.push(a+1);
+                        argCount.push(a + 1);
                     }
                     wereValues.push(false);
                     lastWasOperationOrFunction = false;
@@ -294,7 +305,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-sqrt-".contains(token)) {
+            } else if ("-ln-Ln-sqrt-Sqrt-".contains(token)) {
                 retVal = FUNCTION;
             } else {
                 if (isNumber(token)) {

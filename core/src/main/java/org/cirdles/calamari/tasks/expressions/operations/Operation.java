@@ -35,6 +35,7 @@ public abstract class Operation
         XMLSerializerInterface {
 
     protected String name;
+    protected int argumentCount;
     protected int precedence;
 
     public abstract double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
@@ -102,11 +103,11 @@ public abstract class Operation
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
 
-        String retVal = "Not a valid expression";
+        String retVal = "<mtext>\nNot a valid expression</mtext>\n";
 
         if (expression != null) {
             retVal = expression.toStringMathML();
-            
+
             if (expression.isRootExpressionTree()) {
                 retVal
                         = "<mtext>\n"
@@ -132,6 +133,22 @@ public abstract class Operation
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the argumentCount
+     */
+    @Override
+    public int getArgumentCount() {
+        return argumentCount;
+    }
+
+    /**
+     * @param argumentCount the argumentCount to set
+     */
+    @Override
+    public void setArgumentCount(int argumentCount) {
+        this.argumentCount = argumentCount;
     }
 
     /**

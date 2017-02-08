@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import org.antlr.v4.runtime.atn.SemanticContext.Operator;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
@@ -191,17 +192,24 @@ public class ExpressionTree
     public boolean isTypeFunction() {
         return (operation instanceof Function);
     }
-    
+
     @Override
-    public int argumentCount(){
+    public boolean isTypeFunctionOrOperator() {
+        return (operation instanceof Function) || (operation instanceof Operator);
+    }
+
+    @Override
+    public int argumentCount() {
         int retVal = -1;
-        if (isTypeFunction()){
-            retVal = ((Function)operation).getArgumentCount();
+        if (isTypeFunction()) {
+            retVal = ((Function) operation).getArgumentCount();
+        } else {
+            retVal = ((Operation) operation).getArgumentCount();
         }
-        
+
         return retVal;
     }
-    
+
     @Override
     public String toStringMathML() {
         String retVal = "";
@@ -298,10 +306,10 @@ public class ExpressionTree
 
         addChild(rightET);
     }
-    
+
     @Override
-    public int getCountOfChildren(){
-        return childrenET.size();
+    public int getCountOfChildren() {
+        return childrenET.size() - (int) ((leftET == null) ? 1 : 0);
     }
 
     /**

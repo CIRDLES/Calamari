@@ -5,16 +5,11 @@
  */
 package org.cirdles.calamari;
 
-import java.awt.Color;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javax.swing.border.LineBorder;
-import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 
 /**
  *

@@ -119,6 +119,11 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     }
 
     @Override
+    public boolean isTypeFunctionOrOperator() {
+       return false;
+    }
+
+    @Override
     public int argumentCount() {
         return 0;
     }

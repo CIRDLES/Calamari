@@ -28,6 +28,7 @@ public class Add extends Operation {
 
     public Add() {
         name = "add";
+        argumentCount = 2;
         precedence = 2;
     }
 
@@ -82,6 +83,7 @@ public class Add extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
+     * @return 
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {

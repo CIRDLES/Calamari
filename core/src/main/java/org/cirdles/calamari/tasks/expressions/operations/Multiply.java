@@ -29,6 +29,7 @@ public class Multiply extends Operation {
 
     public Multiply() {
         name = "multiply";
+        argumentCount = 2;
         precedence = 3;
     }
 

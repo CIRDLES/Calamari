@@ -35,6 +35,7 @@ stat:   block
     ;
 
 expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
+    |   '(' expr ')'
     |   ID '[' expr ']'         // array index like a[i], a[i][j]
     |   '-' expr                // unary minus
     |   '!' expr                // boolean not
@@ -45,14 +46,15 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   ID                      // variable reference
     |   INT
     |   FLOAT
-    |   '(' expr ')'
+    
     ;
 exprList : expr (',' expr)* ;   // arg list
 
-FUNCTION : 'ln' | 'sqrt';
+FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt';
+
 ID  :   LETTER (LETTER | [0-9])* ;
 fragment
-LETTER : [a-zA-Z] ;
+LETTER : [a-zA-Z_] ;
 
 
 INT :   [0-9]+ ;

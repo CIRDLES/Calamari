@@ -28,6 +28,7 @@ public class Pow extends Operation {
 
     public Pow() {
         name = "pow";
+        argumentCount = 2;
         precedence = 4;
     }
 

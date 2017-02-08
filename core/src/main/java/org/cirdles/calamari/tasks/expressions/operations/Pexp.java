@@ -28,6 +28,7 @@ public class Pexp extends Operation {
 
     public Pexp() {
         name = "exp";
+        argumentCount = 1;
         precedence = 4;//todo: rethink
     }
 

@@ -52,6 +52,7 @@ public interface ExpressionTreeInterface {
     public String toStringMathML();
     
     public boolean isTypeFunction();
+    public boolean isTypeFunctionOrOperator();
     
     public int argumentCount();
 

@@ -32,6 +32,7 @@ public class Divide extends Operation {
 
     public Divide() {
         name = "divide";
+        argumentCount = 2;
         precedence = 3;
     }
 

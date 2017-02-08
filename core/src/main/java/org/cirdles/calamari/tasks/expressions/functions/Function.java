@@ -102,6 +102,7 @@ public abstract class Function
     /**
      * @return the argumentCount
      */
+    @Override
     public int getArgumentCount() {
         return argumentCount;
     }
@@ -109,6 +110,7 @@ public abstract class Function
     /**
      * @param argumentCount the argumentCount to set
      */
+    @Override
     public void setArgumentCount(int argumentCount) {
         this.argumentCount = argumentCount;
     }

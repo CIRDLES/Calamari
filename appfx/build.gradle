@@ -22,12 +22,12 @@ repositories {
     mavenCentral()
 }
 
-task fatJar(type: Jar) {
+task fatFxJar(type: Jar) {
     manifest {
         attributes 'Main-Class': mainClassName
     }
 
-    baseName = 'Calamari'
+    baseName = 'CalamariTask'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

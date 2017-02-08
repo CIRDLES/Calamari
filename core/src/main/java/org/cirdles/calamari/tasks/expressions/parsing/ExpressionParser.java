@@ -91,7 +91,9 @@ public class ExpressionParser {
     static {
 
         FUNCTIONS_MAP.put("ln", "ln");
+        FUNCTIONS_MAP.put("Ln", "ln");
         FUNCTIONS_MAP.put("sqrt", "sqrt");
+        FUNCTIONS_MAP.put("Sqrt", "sqrt");
     }
 
     private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {
@@ -152,8 +154,8 @@ public class ExpressionParser {
         ExpressionTreeInterface exp = myExp;
 
         if (exp != null) {
-            if (exp.isTypeFunction()) {
-                if (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
+            if (exp.isTypeFunctionOrOperator()) {
+                while (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
                         && !exp.isRootExpressionTree()) {
                     exp = exp.getParentET();
                 }
