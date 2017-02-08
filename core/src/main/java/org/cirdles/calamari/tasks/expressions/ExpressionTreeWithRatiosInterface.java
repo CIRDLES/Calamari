@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,11 @@
  */
 package org.cirdles.calamari.tasks.expressions;
 
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import java.util.List;
 import java.util.Set;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import static org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1.EXPRESSION;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
@@ -34,10 +36,14 @@ public interface ExpressionTreeWithRatiosInterface {
     public Set extractUniqueSpeciesNumbers();
 
     public static ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
-        return new ExpressionTree(
-                ratio.getDisplayNameNoSpaces(),
-                new ShrimpSpeciesNode(ratio.getNumerator()),
-                new ShrimpSpeciesNode(ratio.getDenominator()),
-                Operation.divide());
+        ExpressionTreeInterface ratioExpression
+                = new ExpressionTree(
+                        ratio.getDisplayNameNoSpaces(),
+                        new ShrimpSpeciesNode(ratio.getNumerator()),
+                        new ShrimpSpeciesNode(ratio.getDenominator()),
+                        Operation.divide());
+        
+        ((ExpressionTreeWithRatiosInterface) ratioExpression).getRatiosOfInterest().add(ratio);
+        return ratioExpression;
     }
 }

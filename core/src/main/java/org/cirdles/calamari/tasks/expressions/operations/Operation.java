@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,20 +18,31 @@ package org.cirdles.calamari.tasks.expressions.operations;
 import com.thoughtworks.xstream.XStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public abstract class Operation implements XMLSerializerInterface {
+public abstract class Operation
+        implements
+        OperationOrFunctionInterface,
+        XMLSerializerInterface {
 
     protected String name;
+    protected int precedence;
 
     public abstract double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+
+    @Override
+    public double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        return eval(childrenET.get(0), childrenET.get(1), pkInterpScan, isotopeToIndexMap);
+    }
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -40,23 +51,23 @@ public abstract class Operation implements XMLSerializerInterface {
         xstream.alias("operation", this.getClass());
     }
 
-    public static Operation add() {
+    public static OperationOrFunctionInterface add() {
         return new Add();
     }
 
-    public static Operation subtract() {
+    public static OperationOrFunctionInterface subtract() {
         return new Subtract();
     }
 
-    public static Operation divide() {
+    public static OperationOrFunctionInterface divide() {
         return new Divide();
     }
 
-    public static Operation multiply() {
+    public static OperationOrFunctionInterface multiply() {
         return new Multiply();
     }
 
-    public static Operation pow() {
+    public static OperationOrFunctionInterface pow() {
         return new Pow();
     }
 
@@ -64,8 +75,8 @@ public abstract class Operation implements XMLSerializerInterface {
      *
      * @return
      */
-    public static Operation log() {
-        return new Log();
+    public static OperationOrFunctionInterface pExp() {
+        return new Pexp();
     }
 
     /**
@@ -73,7 +84,7 @@ public abstract class Operation implements XMLSerializerInterface {
      * @param operationName
      * @return
      */
-    public static Operation operationFactory(String operationName) {
+    public static OperationOrFunctionInterface operationFactory(String operationName) {
         Operation retVal = null;
         Method method;
         if (operationName != null) {
@@ -89,6 +100,26 @@ public abstract class Operation implements XMLSerializerInterface {
         return retVal;
     }
 
+    protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
+
+        String retVal = "Not a valid expression";
+
+        if (expression != null) {
+            retVal = expression.toStringMathML();
+            
+            if (expression.isRootExpressionTree()) {
+                retVal
+                        = "<mtext>\n"
+                        + "[Expression "
+                        + expression.getName()
+                        + "]\n"
+                        + "</mtext>\n";
+            }
+        }
+
+        return retVal;
+    }
+
     /**
      * @return the name
      */
@@ -101,5 +132,13 @@ public abstract class Operation implements XMLSerializerInterface {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the precedence
+     */
+    @Override
+    public int getPrecedence() {
+        return precedence;
     }
 }

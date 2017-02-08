@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="933.0" styleClass="background" stylesheets="@newcss.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cirdles.calamari.FXMLDocumentController">
+    <children>
+        <Button fx:id="button" alignment="CENTER" layoutX="434.0" layoutY="42.0" onAction="#handleButtonAction" text="Click Me! Calamari" textAlignment="CENTER" />
+        <Label fx:id="label" alignment="CENTER" layoutX="438.0" layoutY="87.0" minHeight="16" minWidth="69" prefHeight="17.0" prefWidth="170.0" stylesheets="@newcss.css" text="xxxx" textAlignment="CENTER" />
+      <SplitPane dividerPositions="0.3816216216216216" layoutX="5.0" layoutY="112.0" prefHeight="592.0" prefWidth="925.0" stylesheets="@newcss.css">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="563.0">
+               <children>
+                  <SplitPane dividerPositions="0.488135593220339" layoutY="-3.0" orientation="VERTICAL" prefHeight="591.0" prefWidth="348.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="357.0" prefWidth="348.0">
+                           <children>
+                              <ListView id="browser" fx:id="listView" layoutX="74.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0">
+                                 <opaqueInsets>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </opaqueInsets>
+                                 <effect>
+                                    <Lighting>
+                                       <bumpInput>
+                                          <Shadow />
+                                       </bumpInput>
+                                       <light>
+                                          <Light.Distant />
+                                       </light>
+                                    </Lighting>
+                                 </effect>
+                              </ListView>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="95.0" prefWidth="193.0" />
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="433.0" prefWidth="567.0">
+               <children>
+                  <WebView id="browser" fx:id="browser" blendMode="GREEN" layoutX="1.0" layoutY="72.0" prefHeight="395.0" prefWidth="565.0" stylesheets="@newcss.css" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+    </children>
+   <opaqueInsets>
+      <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+   </opaqueInsets>
+</AnchorPane>

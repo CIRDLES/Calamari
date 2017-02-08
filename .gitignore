@@ -38,3 +38,4 @@ core/private
 
 # MACOS
 .DS_Store
+/JavaFXApplication3/dist/

@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -27,6 +28,7 @@ public class Subtract extends Operation {
 
     public Subtract() {
         name = "subtract";
+        precedence = 2;
     }
 
     /**
@@ -49,6 +51,24 @@ public class Subtract extends Operation {
         } catch (Exception e) {
             retVal = 0.0;
         }
+
+        return retVal;
+    }
+
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     */
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+        String retVal
+                = "<mrow>\n"
+                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
+                + "<mo>-</mo>\n"
+                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
+                + "</mrow>\n";
 
         return retVal;
     }

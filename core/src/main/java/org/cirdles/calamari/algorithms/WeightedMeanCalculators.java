@@ -51,7 +51,9 @@ public final class WeightedMeanCalculators {
         double[] mswdRatList = new double[]{0.0, 0.1, 0.15, 0.2, 0.2, 0.25};
 
         double mswdRatToler = (n > 7) ? 0.3 : mswdRatList[n - avg1LinRegr2 - 1];
-        int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8.0);
+//        int maxRej = (int) StrictMath.ceil((n - avg1LinRegr2) / 8.0);
+        // incorrect statement found by Griffin Hiers Feb 2017
+        int maxRej = 1 + (int) StrictMath.floor((n - avg1LinRegr2) / 8.0);
 //        boolean[] rej = new boolean[n]; // not used
 
         double minProb = 0.1;

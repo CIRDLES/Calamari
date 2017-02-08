@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,10 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -27,6 +29,7 @@ public class Multiply extends Operation {
 
     public Multiply() {
         name = "multiply";
+        precedence = 3;
     }
 
     /**
@@ -49,6 +52,40 @@ public class Multiply extends Operation {
         } catch (Exception e) {
             retVal = 0.0;
         }
+
+        return retVal;
+    }
+
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     * @return 
+     */
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+        boolean leftChildHasLowerPrecedence = false;
+        try {
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+        boolean rightChildHasLowerPrecedence = false;
+        try {
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+        
+        String retVal
+                = "<mrow>\n"
+                + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
+                + toStringAnotherExpression(leftET)
+                + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
+                + "<mo>&times;</mo>\n"
+                + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
+                + toStringAnotherExpression(rightET)
+                + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
+                + "</mrow>\n";
 
         return retVal;
     }

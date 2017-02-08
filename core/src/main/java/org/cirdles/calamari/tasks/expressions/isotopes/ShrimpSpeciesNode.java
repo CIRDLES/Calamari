@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.isotopes;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
@@ -27,6 +28,7 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializerInterface {
 
     private IsotopeNames name;
+    private ExpressionTreeInterface parentET;
 
     public ShrimpSpeciesNode() {
         this.name = null;
@@ -58,6 +60,24 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
+    public String toStringMathML() {
+        String retVal
+                = "<msubsup>\n"
+                + "<mstyle mathsize='90%'>\n"
+                + "<mtext>\n"
+                + name.getAtomicMass()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "<mstyle  mathsize='150%'>\n"
+                + "<mtext>\n"
+                + name.getElementName()
+                + "\n</mtext>\n"
+                + "</mstyle>\n"
+                + "</msubsup>\n";
+
+        return retVal;
+    }
+
     @Override
     public String getName() {
         return name.getName();
@@ -68,5 +88,40 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      */
     public void setName(IsotopeNames name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean isRootExpressionTree() {
+        return false;
+    }
+
+    /**
+     * @return the parentET
+     */
+    @Override
+    public ExpressionTreeInterface getParentET() {
+        return parentET;
+    }
+
+    /**
+     * @param parentET the parentET to set
+     */
+    @Override
+    public void setParentET(ExpressionTreeInterface parentET) {
+        this.parentET = parentET;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isTypeFunction() {
+        return false;
+    }
+
+    @Override
+    public int argumentCount() {
+        return 0;
     }
 }

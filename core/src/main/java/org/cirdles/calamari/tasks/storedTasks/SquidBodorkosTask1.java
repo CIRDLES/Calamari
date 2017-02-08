@@ -16,14 +16,11 @@
 package org.cirdles.calamari.tasks.storedTasks;
 
 import org.cirdles.calamari.tasks.Task;
-import org.cirdles.calamari.tasks.expressions.ExpressionTree;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
-import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
  *
@@ -34,17 +31,21 @@ public class SquidBodorkosTask1 extends Task {
     public SquidBodorkosTask1() {
         super("SquidBodorkosTask1");
         taskExpressionsOrdered.add(CustomExpression1.EXPRESSION);
+
         taskExpressionsOrdered.add(CustomExpression2.EXPRESSION);
+
         taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
+
         taskExpressionsOrdered.add(SquidExpressionMinus4.EXPRESSION);
+
         taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
 
         // experiment
-        ((XMLSerializerInterface) SquidExpressionMinus3.EXPRESSION).serializeXMLObject(SquidExpressionMinus3.EXPRESSION, "SquidExpressionMinus3.xml");
-        ExpressionTreeInterface test = new ExpressionTree();
-        test = (ExpressionTreeInterface)((XMLSerializerInterface) test).readXMLObject("SquidExpressionMinus3.xml", false);
-        ((ExpressionTree) test).setName("TESTSquidExpressionMinus3");
-        ((ExpressionTree) test).setRootExpressionTree(true);
-        taskExpressionsOrdered.add(test);
+//        ((XMLSerializerInterface) SquidExpressionMinus3.EXPRESSION).serializeXMLObject(SquidExpressionMinus3.EXPRESSION, "SquidExpressionMinus3.xml");
+//        ExpressionTreeInterface test = new ExpressionTree();
+//        test = (ExpressionTreeInterface)((XMLSerializerInterface) test).readXMLObject("SquidExpressionMinus3.xml", false);
+//        ((ExpressionTree) test).setName("TESTSquidExpressionMinus3");
+//        ((ExpressionTree) test).setRootExpressionTree(true);
+//        taskExpressionsOrdered.add(test);
     }
 }

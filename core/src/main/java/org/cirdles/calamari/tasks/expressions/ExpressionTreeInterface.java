@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,5 +33,26 @@ public interface ExpressionTreeInterface {
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
     public String getName();
+
+    /**
+     * @return the parentET
+     */
+    public ExpressionTreeInterface getParentET();
+
+    /**
+     * @param parentET the parentET to set
+     */
+    public void setParentET(ExpressionTreeInterface parentET);
+
+    /**
+     * @return the rootExpressionTree
+     */
+    public boolean isRootExpressionTree();
+
+    public String toStringMathML();
+    
+    public boolean isTypeFunction();
+    
+    public int argumentCount();
 
 }

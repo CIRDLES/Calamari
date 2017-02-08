@@ -30,17 +30,17 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import org.cirdles.calamari.tasks.expressions.ConstantNode;
-import org.cirdles.calamari.tasks.expressions.ConstantNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNode;
-import org.cirdles.calamari.tasks.expressions.ShrimpSpeciesNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.functions.Ln;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Add;
 import org.cirdles.calamari.tasks.expressions.operations.Divide;
-import org.cirdles.calamari.tasks.expressions.operations.Log;
 import org.cirdles.calamari.tasks.expressions.operations.Multiply;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
@@ -83,14 +83,15 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
         xstream.alias("operation", Pow.class);
-        xstream.alias("operation", Log.class);
+        
+        xstream.alias("function", Ln.class);
 
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
         xstream.alias("ratio", RawRatioNamesSHRIMP.class);
 
         xstream.registerConverter(new ExpressionTreeXMLConverter());
         xstream.alias("ExpressionTree", ExpressionTree.class);
-        
+
         xstream.registerConverter(new TaskXMLConverter());
         xstream.alias("Task", Task.class);
         xstream.alias("Task", this.getClass());
@@ -202,12 +203,14 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                             double fVar = 0.0;
                             while (species.hasNext()) {
-                                int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
+                                IsotopeNames specie = species.next();
+                                int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(specie);
 
                                 // clone pkInterp[scanNum] for use in pertubation
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
                                 double pertVal = expression.eval(perturbed, isotopeToIndexMap);
+
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
                                 double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
@@ -238,7 +241,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 }
                                 eqTimeList.add(totRatTime / numPksInclDupes);
                             }
-                        }
+                        } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
 
                     } // end scanNum loop
 
@@ -263,23 +266,34 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     double meanEq;
                     double meanEqSig;
 
-//                if (userLinFits && rct > 3) {
-                    wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
+                    if (shrimpFraction.isUserLinFits() && eqVal.length > 3) {
+                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
 
-                    double midTime = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1] + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
-                    meanEq = (wtdLinCorrResults.getSlope() * midTime) + wtdLinCorrResults.getIntercept();
-                    meanEqSig = StrictMath.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
-                            + wtdLinCorrResults.getSigmaIntercept() * wtdLinCorrResults.getSigmaIntercept() //
-                            + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
+                        double midTime
+                                = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1]
+                                + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
+                        double slope = wtdLinCorrResults.getSlope();
+                        double sigmaSlope = wtdLinCorrResults.getSigmaSlope();
+                        double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
 
-                    double eqValFerr = StrictMath.abs(meanEqSig / meanEq);
+                        meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
+                        meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
+                                + sigmaIntercept * sigmaIntercept //
+                                + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
 
-//                } else {
-//                    wtdLinCorrResults = wtdLinCorr(interpRatVal, sigRho, new double[0]);
-//                    ratioMean = wtdLinCorrResults.getIntercept();
-//                    ratioMeanSig = wtdLinCorrResults.getSigmaIntercept();
-//                }
-//                System.out.println(shrimpFraction.getFractionID() + "  " + expression.getPrettyName() + "   " + " = " + meanEq + "   " + eqTime[0] + "   " + eqVal[0] + "   " + eqVal[0] * fractErr[0]);
+                    } else {
+                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, new double[0]);
+                        meanEq = wtdLinCorrResults.getIntercept();
+                        meanEqSig = wtdLinCorrResults.getSigmaIntercept();
+                    }
+
+                    double eqValFerr;
+                    if (meanEq == 0.0) {
+                        eqValFerr = 1.0;
+                    } else {
+                        eqValFerr = StrictMath.abs(meanEqSig / meanEq);
+                    }
+
                     // for consistency with Bodorkos documentation
                     double[] ratEqVal = eqVal.clone();
                     double[] ratEqTime = eqTime.clone();
@@ -288,7 +302,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
                     }
 
-                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(expression, ratEqVal, ratEqTime, ratEqErr));
+                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
+                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr));
                 }// end of entry test
             }); // end of visiting each expression
             shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);

@@ -26,6 +26,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
+import org.cirdles.calamari.userInterface.CalamariUI;
 import org.cirdles.calamari.utilities.FileUtilities;
 import org.cirdles.commons.util.ResourceExtractor;
 import org.xml.sax.SAXException;
@@ -145,8 +146,10 @@ public class Calamari {
             }
         } else {
             /* Create and display the form */
+            CalamariUI calamariUI = new org.cirdles.calamari.userInterface.CalamariUI(prawnFileHandler);
+            
             java.awt.EventQueue.invokeLater(() -> {
-                new org.cirdles.calamari.userInterface.CalamariUI(prawnFileHandler).setVisible(true);
+               calamariUI.setVisible(true);                
             });
         }
     }
