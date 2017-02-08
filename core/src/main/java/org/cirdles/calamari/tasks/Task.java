@@ -107,6 +107,9 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         this.taskExpressionsEvaluated = new ArrayList<>();
         if (shrimpFraction != null) {
             // first have to build pkInterp etc per expression and then evaluate by scan
+            
+            System.out.println();
+            System.out.println("FRACTION:   " + shrimpFraction.getFractionID());
             taskExpressionsOrdered.forEach((expression) -> {
                 List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
 
@@ -192,7 +195,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         // The next step is to evaluate the equation ('FormulaEval', 
                         // documented separately), and approximate the uncertainties:
                         System.out.println();
-                        System.out.println("SCAN # " + scanNum);
+                        
+                        String ratName = ((ExpressionTreeWithRatiosInterface)expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
+                        System.out.println("SCAN # " 
+                                + (scanNum + 1) + ", " 
+                                + ratName + "-double," + ratName + "-14dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar" );
+                        
                         System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         System.out.println("\t" + eqValTmp);
@@ -240,7 +248,11 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             } // end of visiting each isotope and perturbing equation
 
                             eqFerr = StrictMath.sqrt(fVar);
+                            double testAbsErr = StrictMath.abs(eqFerr * eqValTmp);
 
+                            System.out.println("eqferr:, " + eqFerr);
+                            System.out.println("testAbsErr:, " + testAbsErr);
+                            
                             // now that expression and its error are calculated
                             if (eqFerr != 0.0) {
                                 eqValList.add(eqValTmp);

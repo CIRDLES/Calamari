@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import static java.nio.file.attribute.PosixFilePermission.GROUP_READ;
 import static java.nio.file.attribute.PosixFilePermission.OWNER_EXECUTE;
@@ -131,22 +130,24 @@ public class PrawnFileHandler {
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            if (runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1")==0){
-            ShrimpFraction shrimpFraction
-                    = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
-            if (shrimpFraction != null) {
-                shrimpFraction.setSpotNumber(f + 1);
-                shrimpFraction.setNameOfMount(nameOfMount);
-                shrimpFractions.add(shrimpFraction);
-            }
+            if ((runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.3.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.10.1.1") == 0)){
+                ShrimpFraction shrimpFraction
+                        = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
+                if (shrimpFraction != null) {
+                    shrimpFraction.setSpotNumber(f + 1);
+                    shrimpFraction.setNameOfMount(nameOfMount);
+                    shrimpFractions.add(shrimpFraction);
+                }
 
-            if (progressSubscriber != null) {
-                int progress = (f + 1) * 100 / prawnFile.getRun().size();
-                progressSubscriber.accept(progress);
-            }
+                if (progressSubscriber != null) {
+                    int progress = (f + 1) * 100 / prawnFile.getRun().size();
+                    progressSubscriber.accept(progress);
+                }
             }
         }
-         
+
         return shrimpFractions;
     }
 
