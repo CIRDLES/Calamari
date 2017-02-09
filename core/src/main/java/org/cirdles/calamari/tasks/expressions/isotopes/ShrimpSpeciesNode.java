@@ -122,7 +122,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     }
 
     @Override
-    public boolean isTypeFunctionOrOperator() {
+    public boolean isTypeFunctionOrOperation() {
         return false;
     }
 

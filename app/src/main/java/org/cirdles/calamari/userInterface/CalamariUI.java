@@ -597,9 +597,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ExpressionParser dr = new ExpressionParser();
         ExpressionTreeInterface result = dr.parseExpression(jTextField1.getText());
-        if (result instanceof ExpressionTree) {
-            ((ExpressionTree)result).setName("User expression");
-        }
+
         initExpressionsFX(expressionsFX, result);
     }//GEN-LAST:event_jButton1ActionPerformed
 

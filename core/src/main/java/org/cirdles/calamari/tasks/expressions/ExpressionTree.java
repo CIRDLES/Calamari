@@ -194,8 +194,8 @@ public class ExpressionTree
     }
 
     @Override
-    public boolean isTypeFunctionOrOperator() {
-        return (operation instanceof Function) || (operation instanceof Operator);
+    public boolean isTypeFunctionOrOperation() {
+        return (operation instanceof Function) || (operation instanceof Operation);
     }
 
     @Override

@@ -27,6 +27,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 public class Add extends Operation {
 
     public Add() {
+        super();
         name = "add";
         argumentCount = 2;
         precedence = 2;

@@ -31,6 +31,10 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
@@ -99,6 +103,18 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("Exp", "exp");
     }
 
+    public final static Map<String, ExpressionTreeInterface> EXPRESSIONS_MAP = new HashMap<>();
+
+    static {
+
+        EXPRESSIONS_MAP.put("Ln254/238", CustomExpression1.EXPRESSION);
+        EXPRESSIONS_MAP.put("Ln206/238", CustomExpression2.EXPRESSION);
+        EXPRESSIONS_MAP.put("206/238 Calib Const", SquidExpressionMinus1.EXPRESSION);
+        EXPRESSIONS_MAP.put("232/238", SquidExpressionMinus3.EXPRESSION);
+        EXPRESSIONS_MAP.put("U Conc Const", SquidExpressionMinus4.EXPRESSION);
+
+    }
+
     private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {
         Iterator<String> parsedRPNreversedIterator = parsedRPNreversed.iterator();
 
@@ -144,6 +160,9 @@ public class ExpressionParser {
             } else if (savedExp instanceof ShrimpSpeciesNode) {
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
+            } else if (savedExp.isRootExpressionTree()) {// when referrring to stgored expression
+                expParent = savedExp.getParentET();
+                savedExp = expParent;
             } else {
                 didAscend = false;
             }
@@ -157,7 +176,7 @@ public class ExpressionParser {
         ExpressionTreeInterface exp = myExp;
 
         if (exp != null) {
-            if (exp.isTypeFunctionOrOperator()) {
+            if (exp.isTypeFunctionOrOperation()) {
                 while (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
                         && !exp.isRootExpressionTree()) {
                     exp = exp.getParentET();
@@ -233,7 +252,10 @@ public class ExpressionParser {
                 break;
 
             case NAMED_EXPRESSION:
-                retExpTree = CustomExpression1.EXPRESSION;
+                retExpTree = EXPRESSIONS_MAP.get(token);
+                if (retExpTree == null){
+                    new ConstantNode("Bad Name", 0.0);
+                }
 
                 if (exp == null) {
                     // do nothing

@@ -53,9 +53,9 @@ exprList : expr (',' expr)* ;   // arg list
 
 FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp';
 
-NAMED_EXPRESSION : '[' '"' ID '"' ']' ;
+NAMED_EXPRESSION : '[' '"' ID (ID | '/' | ' ')* '"' ']' ;
 
-ID  :   LETTER (LETTER | [0-9])* ;
+ID  :   LETTER | [0-9] (LETTER | [0-9])* ;
 fragment
 LETTER : [a-zA-Z_] ;
 

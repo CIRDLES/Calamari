@@ -74,7 +74,7 @@ public class ShuntingYard {
         infixList.add("]");
 //        infixList.add("q");
         System.out.println("Shunt " + infixToPostfix(infixList));
-        
+
         //1+(ln(3) +4)
         //ln  (  ln(3) + ln(4)  )  
         // ln(1)/(ln(3) + 1)
@@ -216,6 +216,10 @@ public class ShuntingYard {
                     break;
                 case VARIABLE:
                     outputQueue.add(token);
+                    if (!wereValues.empty()) {
+                        wereValues.pop();
+                        wereValues.push(true);
+                    }
                     lastWasOperationOrFunction = false;
                     break;
                 case FUNCTION:
@@ -252,9 +256,13 @@ public class ShuntingYard {
                     wereValues.push(false);
                     lastWasOperationOrFunction = false;
                     break;
-                    
+
                 case NAMED_EXPRESSION:
                     outputQueue.add(token);
+                    if (!wereValues.empty()) {
+                        wereValues.pop();
+                        wereValues.push(true);
+                    }
                     lastWasOperationOrFunction = false;
                     break;
                 default:
@@ -301,7 +309,7 @@ public class ShuntingYard {
                 retVal = COMMA;
             } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-".contains("-" + token + "-")) {
                 retVal = FUNCTION;
-            } else if (token.matches("\\[\"(.*?)\"\\]")){
+            } else if (token.matches("\\[\"(.*?)\"\\]")) {
                 retVal = NAMED_EXPRESSION;
             } else {
                 if (isNumber(token)) {

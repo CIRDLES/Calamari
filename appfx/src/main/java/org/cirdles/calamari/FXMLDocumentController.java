@@ -72,12 +72,7 @@ public class FXMLDocumentController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
         ExpressionParser dr = new ExpressionParser();
         ExpressionTreeInterface result = dr.parseExpression(expressionText.getText());
-        if (result instanceof ExpressionTree) {
-            ((ExpressionTree) result).setName("User expression");
-        } 
-//        else if (result instanceof ConstantNode) {
-//            ((ConstantNode) result).setName("User constant");
-//        }
+
         webEngine.loadContent(
                 ExpressionWriterMathML.toStringBuilderMathML(result).toString());
     }

@@ -119,7 +119,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     }
 
     @Override
-    public boolean isTypeFunctionOrOperator() {
+    public boolean isTypeFunctionOrOperation() {
        return false;
     }
 
