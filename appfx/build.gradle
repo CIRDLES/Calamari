@@ -4,7 +4,7 @@ import org.apache.tools.ant.filters.*
 
 apply plugin: "application"
 
-mainClassName = "org.cirdles.calamari.Calamari"
+mainClassName = "org.cirdles.calamari.CalamariUI"
 
 dependencies {
     compile project(":core")
