@@ -199,7 +199,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         String ratName = ((ExpressionTreeWithRatiosInterface)expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
                         System.out.println("SCAN # " 
                                 + (scanNum + 1) + ", " 
-                                + ratName + "-double," + ratName + "-14dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar" );
+                                + ratName + "-double," + ratName + "-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar" );
                         
                         System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
