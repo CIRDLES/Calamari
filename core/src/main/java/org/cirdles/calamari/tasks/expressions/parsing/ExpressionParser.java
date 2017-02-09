@@ -30,6 +30,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
@@ -229,6 +230,20 @@ public class ExpressionParser {
                     ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
                 }
 
+                break;
+
+            case NAMED_EXPRESSION:
+                retExpTree = CustomExpression1.EXPRESSION;
+
+                if (exp == null) {
+                    // do nothing
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
+                } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
+                    ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
+                } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
+                }
                 break;
 
         }

@@ -46,11 +46,14 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   ID                      // variable reference
     |   INT
     |   FLOAT
+    |   NAMED_EXPRESSION
     
     ;
 exprList : expr (',' expr)* ;   // arg list
 
 FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp';
+
+NAMED_EXPRESSION : '[' '"' ID '"' ']' ;
 
 ID  :   LETTER (LETTER | [0-9])* ;
 fragment

@@ -65,14 +65,14 @@ public class ShuntingYard {
 //        infixList.add("1");
 //        infixList.add(")");
 //        infixList.add("/");
-//        infixList.add("(");
-//        infixList.add("ln");
-//        infixList.add("(");
-//        infixList.add("3");
-//        infixList.add(")");
-//        infixList.add("+");
-//        infixList.add("1");
-        infixList.add("q");
+        infixList.add("[");
+        infixList.add("\"");
+        infixList.add("a");
+        infixList.add("b");
+        infixList.add("c");
+        infixList.add("\"");
+        infixList.add("]");
+//        infixList.add("q");
         System.out.println("Shunt " + infixToPostfix(infixList));
         
         //1+(ln(3) +4)
@@ -242,18 +242,6 @@ public class ShuntingYard {
                         } else {
                             outputQueue.add(operatorStack.pop());
                         }
-////                        
-//                        if ((peek.compareTo(TokenTypes.OPERATOR_A) == 0)
-//                                || (peek.compareTo(TokenTypes.OPERATOR_M) == 0)
-//                                || (peek.compareTo(TokenTypes.OPERATOR_E) == 0)
-//                                || (peek.compareTo(TokenTypes.FUNCTION) == 0)) {
-//                            outputQueue.add(operatorStack.pop());
-//                        } else {
-//                            keepLooking = false;
-//                            if (peek.compareTo(TokenTypes.LEFT_PAREN) == 0) {
-//                                operatorStack.pop();
-//                            }
-//                        }
                     }
 
                     boolean w = wereValues.pop();
@@ -262,6 +250,11 @@ public class ShuntingYard {
                         argCount.push(a + 1);
                     }
                     wereValues.push(false);
+                    lastWasOperationOrFunction = false;
+                    break;
+                    
+                case NAMED_EXPRESSION:
+                    outputQueue.add(token);
                     lastWasOperationOrFunction = false;
                     break;
                 default:
@@ -285,6 +278,7 @@ public class ShuntingYard {
         CONSTANT,
         VARIABLE,
         FUNCTION,
+        NAMED_EXPRESSION,
         COMMA;
 
         private TokenTypes() {
@@ -299,14 +293,16 @@ public class ShuntingYard {
                 retVal = OPERATOR_M;
             } else if ("^".contains(token)) {
                 retVal = OPERATOR_E;
-            } else if ("([".contains(token)) {
+            } else if ("(".contains(token)) {
                 retVal = LEFT_PAREN;
-            } else if (")]".contains(token)) {
+            } else if (")".contains(token)) {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
             } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-".contains("-" + token + "-")) {
                 retVal = FUNCTION;
+            } else if (token.matches("\\[\"(.*?)\"\\]")){
+                retVal = NAMED_EXPRESSION;
             } else {
                 if (isNumber(token)) {
                     retVal = CONSTANT;
