@@ -50,6 +50,10 @@ public abstract class Function
         return new Sqrt();
     }
 
+    public static OperationOrFunctionInterface exp() {
+        return new Exp();
+    }
+
     /**
      *
      * @param operationName

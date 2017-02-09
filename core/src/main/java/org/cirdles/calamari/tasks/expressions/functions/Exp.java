@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import java.util.Map;
@@ -24,31 +24,29 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Pow extends Operation {
+public class Exp extends Function {
 
-    public Pow() {
-        name = "pow";
-        argumentCount = 2;
+    public Exp() {
+        name = "exp";
+        argumentCount = 1;
         precedence = 4;
     }
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
+     * @param childrenET
      * @param pkInterpScan the value of pkInterpScan
      * @param isotopeToIndexMap the value of isotopeToIndexMap
      * @return the double
      */
     @Override
     public double eval(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
+            List<ExpressionTreeInterface> childrenET,
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = Math.pow(leftET.eval(pkInterpScan, isotopeToIndexMap), rightET.eval(pkInterpScan, isotopeToIndexMap));
+            retVal = StrictMath.exp(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -61,21 +59,27 @@ public class Pow extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mrow>\n"
-                + "<msup>\n"
-                + "<mfenced>\n"
-                + "<mrow>\n"
-                + toStringAnotherExpression(leftET)
-                + "</mrow>\n"
-                + "</mfenced>\n"
-                + rightET.toStringMathML()
-                + "</msup>\n"
-                + "</mrow>\n";
+                = "<mrow>"
+                + "<msup>"
+                + "<mi>"
+                + "&ExponentialE;"
+                + "</mi>"
+                // + "<msup>\n";
+                + "<mfenced>\n";
+        // + "<mrow>\n";
+
+        retVal += toStringAnotherExpression(childrenET.get(0));
+
+        retVal
+                += //"</mrow>\n";
+                "</mfenced>"
+                + "</msup>"
+                + "</mrow>";
 
         return retVal;
     }

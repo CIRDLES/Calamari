@@ -7,7 +7,6 @@ package org.cirdles.calamari;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,9 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
@@ -28,7 +27,6 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpressio
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
-import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
 
 /**
@@ -47,6 +45,8 @@ public class FXMLDocumentController implements Initializable {
     WebEngine webEngine;
     @FXML
     private Button parseExpressionButton;
+    @FXML
+    private AnchorPane ExpressionsPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

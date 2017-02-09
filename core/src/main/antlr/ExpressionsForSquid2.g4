@@ -50,7 +50,7 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     ;
 exprList : expr (',' expr)* ;   // arg list
 
-FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt';
+FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp';
 
 ID  :   LETTER (LETTER | [0-9])* ;
 fragment
