@@ -107,15 +107,6 @@ public abstract class Operation
 
         if (expression != null) {
             retVal = expression.toStringMathML();
-
-            if (expression.isRootExpressionTree()) {
-                retVal
-                        = "<mtext>\n"
-                        + "[Expression "
-                        + expression.getName()
-                        + "]\n"
-                        + "</mtext>\n";
-            }
         }
 
         return retVal;

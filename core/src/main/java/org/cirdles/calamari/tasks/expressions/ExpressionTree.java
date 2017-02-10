@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import org.antlr.v4.runtime.atn.SemanticContext.Operator;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
@@ -200,14 +199,7 @@ public class ExpressionTree
 
     @Override
     public int argumentCount() {
-        int retVal = -1;
-        if (isTypeFunction()) {
-            retVal = ((Function) operation).getArgumentCount();
-        } else {
-            retVal = ((Operation) operation).getArgumentCount();
-        }
-
-        return retVal;
+        return operation.getArgumentCount();
     }
 
     @Override

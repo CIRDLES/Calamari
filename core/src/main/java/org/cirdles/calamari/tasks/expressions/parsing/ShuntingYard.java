@@ -315,11 +315,7 @@ public class ShuntingYard {
                 if (isNumber(token)) {
                     retVal = CONSTANT;
                 }
-//                try {
-//                    Double number = Double.parseDouble(token);
-//                    retVal = CONSTANT;
-//                } catch (NumberFormatException numberFormatException) {
-//                }
+
             }
 
             return retVal;

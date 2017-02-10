@@ -107,11 +107,11 @@ public class ExpressionParser {
 
     static {
 
-        EXPRESSIONS_MAP.put("Ln254/238", CustomExpression1.EXPRESSION);
-        EXPRESSIONS_MAP.put("Ln206/238", CustomExpression2.EXPRESSION);
-        EXPRESSIONS_MAP.put("206/238 Calib Const", SquidExpressionMinus1.EXPRESSION);
-        EXPRESSIONS_MAP.put("232/238", SquidExpressionMinus3.EXPRESSION);
-        EXPRESSIONS_MAP.put("U Conc Const", SquidExpressionMinus4.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"Ln254/238\"]", CustomExpression1.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"Ln206/238\"]", CustomExpression2.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"206/238 Calib Const\"]", SquidExpressionMinus1.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"232/238\"]", SquidExpressionMinus3.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"U Conc Const\"]", SquidExpressionMinus4.EXPRESSION);
 
     }
 
@@ -160,7 +160,7 @@ public class ExpressionParser {
             } else if (savedExp instanceof ShrimpSpeciesNode) {
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
-            } else if (savedExp.isRootExpressionTree()) {// when referrring to stgored expression
+            } else if (savedExp.isRootExpressionTree()) {// when referrring to stored expression
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
             } else {
@@ -180,6 +180,9 @@ public class ExpressionParser {
                 while (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
                         && !exp.isRootExpressionTree()) {
                     exp = exp.getParentET();
+                    if (exp == null) {
+                        break;
+                    }
                 }
             }
         }
@@ -253,10 +256,11 @@ public class ExpressionParser {
 
             case NAMED_EXPRESSION:
                 retExpTree = EXPRESSIONS_MAP.get(token);
-                if (retExpTree == null){
-                    new ConstantNode("Bad Name", 0.0);
+                if (retExpTree == null) {
+                    retExpTree = new ConstantNode("Bad Name", 0.0);
                 }
 
+//                retExpTree = CustomExpression1.EXPRESSION;
                 if (exp == null) {
                     // do nothing
                 } else if (exp.isTypeFunction()) {

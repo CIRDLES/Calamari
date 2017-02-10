@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
  *
  * @author bowring
  */
-public class CalamariUI extends Application {
+public class Calamari extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {

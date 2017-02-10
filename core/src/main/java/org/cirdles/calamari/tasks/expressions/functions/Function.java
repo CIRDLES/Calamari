@@ -76,14 +76,11 @@ public abstract class Function
     }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
-        String retVal = expression.toStringMathML();
-        if (expression.isRootExpressionTree()) {
-            retVal
-                    = "<mtext>\n"
-                    + "[Expression "
-                    + expression.getName()
-                    + "]\n"
-                    + "</mtext>\n";
+
+        String retVal = "<mtext>\nNot a valid expression</mtext>\n";
+
+        if (expression != null) {
+            retVal = expression.toStringMathML();
         }
 
         return retVal;
