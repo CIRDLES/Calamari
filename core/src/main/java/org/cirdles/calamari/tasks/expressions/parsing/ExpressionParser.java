@@ -145,7 +145,7 @@ public class ExpressionParser {
         ExpressionTreeInterface expParent = exp;
 
         boolean didAscend = true;
-        while (didAscend) {
+        while (didAscend && (savedExp !=null)) {
             if ((savedExp instanceof ExpressionTreeBuilderInterface)
                     && (!savedExp.isTypeFunction())) {
                 if (((ExpressionTreeBuilderInterface) savedExp).getLeftET() != null) {

@@ -5,7 +5,8 @@
  */
 package org.cirdles.calamari;
 
-import java.net.URL;
+import com.google.common.io.Files;
+import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 import javafx.stage.Stage;
-import javax.swing.ImageIcon;
+import org.cirdles.commons.util.ResourceExtractor;
 
 /**
  *
@@ -24,13 +25,7 @@ public class Calamari extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-
-        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("./images/topSoilModern32.png")));
-
-        URL iconURL = this.getClass().getResource("./images/topSoilModern32.png");
-        java.awt.Image image = new ImageIcon(iconURL).getImage();
-        com.apple.eawt.Application.getApplication().setDockIconImage(image);
-
+  
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
