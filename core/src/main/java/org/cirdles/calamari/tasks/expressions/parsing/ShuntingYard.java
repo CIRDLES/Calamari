@@ -65,14 +65,14 @@ public class ShuntingYard {
 //        infixList.add("1");
 //        infixList.add(")");
 //        infixList.add("/");
-        infixList.add("[");
-        infixList.add("\"");
-        infixList.add("a");
-        infixList.add("b");
-        infixList.add("c");
-        infixList.add("\"");
-        infixList.add("]");
-//        infixList.add("q");
+//        infixList.add("[");
+//        infixList.add("\"");
+//        infixList.add("a");
+//        infixList.add("b");
+//        infixList.add("c");
+//        infixList.add("\"");
+        infixList.add("w");
+        infixList.add("w");
         System.out.println("Shunt " + infixToPostfix(infixList));
 
         //1+(ln(3) +4)

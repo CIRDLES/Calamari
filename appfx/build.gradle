@@ -27,7 +27,7 @@ task fatFxJar(type: Jar) {
         attributes 'Main-Class': mainClassName
     }
 
-    baseName = 'CalamariTask'
+    baseName = 'SquidTask'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

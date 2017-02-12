@@ -79,7 +79,7 @@ public class ExpressionParser {
         return buildTree(parsedRPN);
 
     }
-
+    
     public final static Map<String, String> OPERATIONS_MAP = new HashMap<>();
 
     static {

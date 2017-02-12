@@ -393,7 +393,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Data", prawnDataPane);
 
-        expressionsPane.setBackground(new java.awt.Color(204, 255, 255));
+        expressionsPane.setBackground(new java.awt.Color(234, 253, 255));
         expressionsPane.setOpaque(true);
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
