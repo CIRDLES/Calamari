@@ -107,7 +107,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         this.taskExpressionsEvaluated = new ArrayList<>();
         if (shrimpFraction != null) {
             // first have to build pkInterp etc per expression and then evaluate by scan
-            
+
             System.out.println();
             System.out.println("FRACTION:   " + shrimpFraction.getFractionID());
             taskExpressionsOrdered.forEach((expression) -> {
@@ -195,12 +195,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         // The next step is to evaluate the equation ('FormulaEval', 
                         // documented separately), and approximate the uncertainties:
                         System.out.println();
-                        
-                        String ratName = ((ExpressionTreeWithRatiosInterface)expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
-                        System.out.println("SCAN # " 
-                                + (scanNum + 1) + ", " 
-                                + ratName + "-double," + ratName + "-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar" );
-                        
+
+                        String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
+                        System.out.println("SCAN # "
+                                + (scanNum + 1) + ", "
+                                + "254/238-double," + "254/238-13dig," + "248/254-double," + "248/254-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+
                         System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         System.out.println("\t" + eqValTmp);
@@ -236,7 +236,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
 //                                testOutput.append(specie.getName() + ">>, ");
 //                                testOutput.append(pertVal + ", ");
-                                double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
+                                //double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
+                                double fDelt = (pertVal / eqValTmp) - 1.0;
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
                                 double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
                                 double tC = fDelt * fDelt;
@@ -252,7 +253,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                             System.out.println("eqferr:, " + eqFerr);
                             System.out.println("testAbsErr:, " + testAbsErr);
-                            
+
                             // now that expression and its error are calculated
                             if (eqFerr != 0.0) {
                                 eqValList.add(eqValTmp);

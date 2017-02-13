@@ -16,7 +16,7 @@
 package org.cirdles.calamari.tasks.storedTasks;
 
 import org.cirdles.calamari.tasks.Task;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 
 /**
  *
@@ -29,7 +29,7 @@ public class SquidBodorkosTask1 extends Task {
 //        taskExpressionsOrdered.add(CustomExpression1.EXPRESSION);
 ////        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface) CustomExpression1.EXPRESSION).getLeftET());
 //
-        taskExpressionsOrdered.add(CustomExpression2.EXPRESSION);
+//        taskExpressionsOrdered.add(CustomExpression2.EXPRESSION);
 ////        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface) CustomExpression2.EXPRESSION).getLeftET());
 //
 //        taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
@@ -40,7 +40,7 @@ public class SquidBodorkosTask1 extends Task {
 ////        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface) SquidExpressionMinus4.EXPRESSION).getLeftET());
 ////        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface) ((ExpressionTreeBuilderInterface) SquidExpressionMinus4.EXPRESSION).getRightET()).getLeftET());
 
-//        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
+        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
 //        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface)((ExpressionTreeBuilderInterface) ((ExpressionTreeBuilderInterface) SquidExpressionMinus3.EXPRESSION).getLeftET()).getLeftET()).getRightET());
 //        taskExpressionsOrdered.add(((ExpressionTreeBuilderInterface) SquidExpressionMinus3.EXPRESSION).getRightET());
 
