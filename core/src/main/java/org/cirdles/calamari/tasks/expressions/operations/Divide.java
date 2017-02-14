@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,14 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 
 /**
  *
@@ -27,6 +32,7 @@ public class Divide extends Operation {
 
     public Divide() {
         name = "divide";
+        precedence = 3;
     }
 
     /**
@@ -44,11 +50,57 @@ public class Divide extends Operation {
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
+
         try {
             retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) / rightET.eval(pkInterpScan, isotopeToIndexMap);
         } catch (Exception e) {
             retVal = 0.0;
         }
+
+        // Jan 2017 constrain quotient to mimic VBA results for isotopic ratios
+        if (leftET instanceof ShrimpSpeciesNode) {
+            BigDecimal ratio = new BigDecimal(retVal);
+            // calculate scale for 14 significant digits
+            int newScale = 14 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_EVEN);
+            retVal = ratio2.doubleValue();
+        }
+
+        return retVal;
+    }
+
+    /**
+     *
+     * @param leftET the value of leftET
+     * @param rightET the value of rightET
+     * @param childrenET the value of childrenET
+     */
+    @Override
+    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+        boolean leftChildHasLowerPrecedence = false;
+        try {
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+        boolean rightChildHasLowerPrecedence = false;
+        try {
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+        } catch (Exception e) {
+        }
+
+        String retVal
+                = "<mfrac>\n"
+                + "<mrow>\n"
+                + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
+                + toStringAnotherExpression(leftET)
+                + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
+                + "\n</mrow>\n"
+                + "<mrow>\n"
+                + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
+                + toStringAnotherExpression(rightET)
+                + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
+                + "\n</mrow>\n"
+                + "</mfrac>\n";
 
         return retVal;
     }

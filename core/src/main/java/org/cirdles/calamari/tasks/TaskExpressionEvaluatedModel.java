@@ -27,15 +27,20 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     private double[] ratEqVal;
     private double[] ratEqTime;
     private double[] ratEqErr;
+    private double ratioVal;
+    private double ratioFractErr;
 
     private TaskExpressionEvaluatedModel() {
     }
 
-    public TaskExpressionEvaluatedModel(ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr) {
+    public TaskExpressionEvaluatedModel(
+            ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
         this.expression = expression;
         this.ratEqVal = ratEqVal.clone();
         this.ratEqTime = ratEqTime.clone();
         this.ratEqErr = ratEqErr.clone();
+        this.ratioVal = ratioVal;
+        this.ratioFractErr = ratioFractErr;
     }
 
     /**
@@ -68,6 +73,20 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     @Override
     public double[] getRatEqErr() {
         return ratEqErr.clone();
+    }
+
+    /**
+     * @return the ratioVal
+     */
+    public double getRatioVal() {
+        return ratioVal;
+    }
+
+    /**
+     * @return the ratioFractErr
+     */
+    public double getRatioFractErr() {
+        return ratioFractErr;
     }
 
 }

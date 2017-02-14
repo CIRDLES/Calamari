@@ -42,8 +42,13 @@ public interface ShrimpFractionExpressionInterface {
      * @return the timeStampSec
      */
     public double[][] getTimeStampSec();
-    
-        /**
+
+    /**
+     * @return the userLinFits
+     */
+    public boolean isUserLinFits();
+
+    /**
      * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
      */
     public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated);

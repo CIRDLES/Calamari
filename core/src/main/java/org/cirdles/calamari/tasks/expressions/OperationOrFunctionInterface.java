@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,44 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions;
 
+import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class Log extends Operation {
+public interface OperationOrFunctionInterface {
 
-    public Log() {
-        name = "log";
-    }
+    public abstract double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+
+    /**
+     * @return the precedence
+     */
+    public int getPrecedence();
 
     /**
      *
      * @param leftET the value of leftET
      * @param rightET the value of rightET
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @param childrenET the value of childrenET
+     * @return 
      */
-    @Override
-    public double eval(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
-            double[] pkInterpScan,
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal;
-        try {
-            retVal = Math.log(leftET.eval(pkInterpScan, isotopeToIndexMap));
-        } catch (Exception e) {
-            retVal = 0.0;
-        }
-
-        return retVal;
-    }
-
+    public abstract String toStringMathML(
+            ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET);
 }

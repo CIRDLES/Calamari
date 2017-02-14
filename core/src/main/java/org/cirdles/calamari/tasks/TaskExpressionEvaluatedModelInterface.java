@@ -43,4 +43,14 @@ public interface TaskExpressionEvaluatedModelInterface {
      */
     public double[] getRatEqErr();
 
+    /**
+     * @return the ratioVal
+     */
+    public double getRatioVal();
+
+    /**
+     * @return the ratioFractErr
+     */
+    public double getRatioFractErr();
+
 }

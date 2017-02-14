@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.isotopes;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

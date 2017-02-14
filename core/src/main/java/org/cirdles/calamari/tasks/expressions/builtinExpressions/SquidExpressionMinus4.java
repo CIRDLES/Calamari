@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,11 @@
 package org.cirdles.calamari.tasks.expressions.builtinExpressions;
 
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
-import org.cirdles.calamari.tasks.expressions.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
@@ -42,9 +43,9 @@ public class SquidExpressionMinus4 {
 
         ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", r254_238w, new ConstantNode("0.66", 0.66), Operation.pow());
 
-        ((ExpressionTree) EXPRESSION).setLeftET(r238_196w);
-        ((ExpressionTree) EXPRESSION).setRightET(r254_238wPow);
-        ((ExpressionTree) EXPRESSION).setOperation(Operation.divide());
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(r238_196w);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(r254_238wPow);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.divide());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
     }

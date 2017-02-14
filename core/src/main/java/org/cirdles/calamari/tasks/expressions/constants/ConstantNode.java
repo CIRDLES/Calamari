@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2006-2017 CIRDLES.org.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions;
+package org.cirdles.calamari.tasks.expressions.constants;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
 /**
@@ -28,6 +29,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
 
     private String name;
     private double value;
+    private ExpressionTreeInterface parentET;
 
     public ConstantNode() {
         this("", 0.0);
@@ -81,4 +83,41 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
         this.value = value;
     }
 
+    @Override
+    public String toStringMathML() {
+        return "<mn>" + name + "</mn>\n";
+    }
+
+    @Override
+    public boolean isRootExpressionTree() {
+        return false;
+    }
+
+    /**
+     * @return the parentET
+     */
+    public ExpressionTreeInterface getParentET() {
+        return parentET;
+    }
+
+    /**
+     * @param parentET the parentET to set
+     */
+    public void setParentET(ExpressionTreeInterface parentET) {
+        this.parentET = parentET;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean isTypeFunction() {
+        return false;
+    }
+
+    @Override
+    public int argumentCount() {
+        return 0;
+    }
 }
