@@ -14,7 +14,7 @@ and open the template in the editor.
  3  "Helvetica Neue", sans-serif;*/
 
 .background {
-    -fx-background-color: #FFE7E4;
+    -fx-background-color: #EAFDFF;
 }
 
 .label {
@@ -75,10 +75,15 @@ and open the template in the editor.
     -fx-background-color: -fx-focus-color;
 }
 
-.split-pane:horizontal > .split-pane-divider {
+/*.split-pane:horizontal > .split-pane-divider {
     -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
     -fx-background-color: transparent, derive(#1d1d1d,20%);
-}
+}*/
+
+/*.split-pane:vertical > .split-pane-divider {
+    -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
+    -fx-background-color: transparent, derive(#1d1d1d,20%);
+}*/
 
 .split-pane {
     -fx-padding: 1 0 0 0;

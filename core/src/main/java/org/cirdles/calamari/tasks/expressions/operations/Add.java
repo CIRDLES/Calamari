@@ -27,40 +27,18 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 public class Add extends Operation {
 
     public Add() {
+        super();
         name = "add";
+        argumentCount = 2;
         precedence = 2;
     }
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
-     */
-    @Override
-    public double eval(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
-            double[] pkInterpScan,
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal;
-        try {
-            retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) + rightET.eval(pkInterpScan, isotopeToIndexMap);
-        } catch (Exception e) {
-            retVal = 0.0;
-        }
-
-        return retVal;
-    }
-
-    /**
-     * 
      * @param childrenET
      * @param pkInterpScan
      * @param isotopeToIndexMap
-     * @return 
+     * @return
      */
     @Override
     public double eval(
@@ -82,6 +60,7 @@ public class Add extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
+     * @return
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {

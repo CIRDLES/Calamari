@@ -7,7 +7,6 @@ package org.cirdles.calamari;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,10 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
@@ -26,6 +27,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpressio
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
+import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
 
 /**
  *
@@ -34,20 +36,17 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpression
 public class FXMLDocumentController implements Initializable {
 
     @FXML
-    private Label label;
-    @FXML
-    private Button button;
-    @FXML
     private ListView<ExpressionTreeInterface> listView;
     @FXML
     public WebView browser;
-
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private TextField expressionText;
 
-    }
+    WebEngine webEngine;
+    @FXML
+    private Button parseExpressionButton;
+    @FXML
+    private AnchorPane ExpressionsPane;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,9 +58,9 @@ public class FXMLDocumentController implements Initializable {
                 SquidExpressionMinus4.EXPRESSION);
 
         listView.setItems(items);
-
-        final WebEngine webEngine = browser.getEngine();
-
+        
+        webEngine = browser.getEngine();
+        
         listView.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends ExpressionTreeInterface> ov, ExpressionTreeInterface old_val, ExpressionTreeInterface new_val) -> {
             webEngine.loadContent(
                     ExpressionWriterMathML.toStringBuilderMathML(new_val).toString());
@@ -69,4 +68,12 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+        ExpressionParser dr = new ExpressionParser();
+        ExpressionTreeInterface result = dr.parseExpression(expressionText.getText());
+
+        webEngine.loadContent(
+                ExpressionWriterMathML.toStringBuilderMathML(result).toString());
+    }
 }
