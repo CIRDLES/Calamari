@@ -46,7 +46,9 @@ public class Ln extends Function {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+//            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            // Feb 2017 test for VBA replication
+            retVal = Math.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }

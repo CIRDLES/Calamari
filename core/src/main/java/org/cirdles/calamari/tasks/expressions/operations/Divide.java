@@ -57,15 +57,20 @@ public class Divide extends Operation {
             retVal = 0.0;
         }
 
-        // Experiment to mimic VBA results
+        // Experiment to mimic VBA results - double rounding
         if (leftET instanceof ShrimpSpeciesNode) {
             BigDecimal ratio = new BigDecimal(retVal);
-            int newScale = 13 - (ratio.precision() - ratio.scale());
+            int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+            double sigFig15 = ratio2.doubleValue();
+            
+            ratio = new BigDecimal(sigFig15);
+            newScale = 13 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
 
-            System.out.print("\t" + String.valueOf(retVal) + ",\t" + ratio2.toPlainString() + ",");
+            System.out.print("\t" + String.valueOf(retVal) + ",\t" + ratio3.toPlainString() + ",");
 
-            retVal = ratio2.doubleValue();
+            retVal = ratio3.doubleValue();
 
         }
 

@@ -131,8 +131,11 @@ public class PrawnFileHandler {
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
             if ((runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.13.1.1") == 0)
-                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("1000.Z.1.1.1") == 0)
-                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.11.1.1") == 0)){
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("100.Z.1.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.11.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.3.1.1") == 0)
+                    || (runFraction.getPar().get(0).getValue().compareToIgnoreCase("099.Z.10.1.1") == 0)){
                 ShrimpFraction shrimpFraction
                         = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
                 if (shrimpFraction != null) {

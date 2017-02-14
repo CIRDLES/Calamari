@@ -109,13 +109,15 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             // first have to build pkInterp etc per expression and then evaluate by scan
 
             System.out.println();
-            System.out.println("FRACTION:   " + shrimpFraction.getFractionID());
+            System.out.println("\n\nFRACTION:   " + shrimpFraction.getFractionID() + "  *************************************************************************************");
             taskExpressionsOrdered.forEach((expression) -> {
                 List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
 
                 // entry test
                 if (ratiosOfInterest.size() > 0) {
 
+                    System.out.println("\n>>>EXPRESSION:   " + expression.getName() + "  ************");
+                    
                     int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
                     Map<IsotopeNames, Integer> isotopeToIndexMap = new HashMap<>();
                     for (int i = 0; i < ratiosOfInterest.size(); i++) {
@@ -197,9 +199,16 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         System.out.println();
 
                         String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
-                        System.out.println("SCAN # "
-                                + (scanNum + 1) + ", "
-                                + "254/238-double," + "254/238-13dig," + "248/254-double," + "248/254-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+
+                        if (ratName.compareToIgnoreCase("206/238") == 0) {
+                           System.out.println("SCAN # "
+                                    + (scanNum + 1) + ", "
+                                    + "206/238-double," + "206/238-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+                        } else {
+                            System.out.println("SCAN # "
+                                    + (scanNum + 1) + ", "
+                                    + "254/238-double," + "254/238-13dig," + "248/254-double," + "248/254-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+                        }
 
                         System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
@@ -236,7 +245,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
 //                                testOutput.append(specie.getName() + ">>, ");
 //                                testOutput.append(pertVal + ", ");
-                                //double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
+//                                double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double fDelt = (pertVal / eqValTmp) - 1.0;
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
                                 double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
