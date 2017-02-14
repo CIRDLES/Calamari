@@ -38,13 +38,6 @@ public abstract class Operation
     protected int argumentCount;
     protected int precedence;
 
-    public abstract double eval(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
-
-    @Override
-    public double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return eval(childrenET.get(0), childrenET.get(1), pkInterpScan, isotopeToIndexMap);
-    }
-
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new OperationXMLConverter());

@@ -33,22 +33,22 @@ public class Pexp extends Operation {
     }
 
     /**
-     * Denotes an expression to be wrapped in parentheses using only the leftChild
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * Denotes an expression to be wrapped in parentheses using only the
+     * leftChild
+     *
+     * @param childrenET
+     * @param pkInterpScan
+     * @param isotopeToIndexMap
+     * @return
      */
     @Override
     public double eval(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
+            List<ExpressionTreeInterface> childrenET,
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = leftET.eval(pkInterpScan, isotopeToIndexMap);
+            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap);
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -61,6 +61,7 @@ public class Pexp extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
+     * @return 
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {

@@ -34,21 +34,19 @@ public class Subtract extends Operation {
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @param childrenET
+     * @param pkInterpScan
+     * @param isotopeToIndexMap
+     * @return
      */
     @Override
     public double eval(
-            ExpressionTreeInterface leftET,
-            ExpressionTreeInterface rightET,
+            List<ExpressionTreeInterface> childrenET,
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = leftET.eval(pkInterpScan, isotopeToIndexMap) - rightET.eval(pkInterpScan, isotopeToIndexMap);
+            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap) - childrenET.get(1).eval(pkInterpScan, isotopeToIndexMap);
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -61,6 +59,7 @@ public class Subtract extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
+     * @return 
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
