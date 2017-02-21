@@ -191,17 +191,17 @@ public class ExpressionTree
     public boolean isTypeFunction() {
         return (operation instanceof Function);
     }
-    
+
     @Override
-    public int argumentCount(){
-        int retVal = -1;
-        if (isTypeFunction()){
-            retVal = ((Function)operation).getArgumentCount();
-        }
-        
-        return retVal;
+    public boolean isTypeFunctionOrOperation() {
+        return (operation instanceof Function) || (operation instanceof Operation);
     }
-    
+
+    @Override
+    public int argumentCount() {
+        return operation.getArgumentCount();
+    }
+
     @Override
     public String toStringMathML() {
         String retVal = "";
@@ -298,10 +298,10 @@ public class ExpressionTree
 
         addChild(rightET);
     }
-    
+
     @Override
-    public int getCountOfChildren(){
-        return childrenET.size();
+    public int getCountOfChildren() {
+        return childrenET.size() - (int) ((leftET == null) ? 1 : 0);
     }
 
     /**

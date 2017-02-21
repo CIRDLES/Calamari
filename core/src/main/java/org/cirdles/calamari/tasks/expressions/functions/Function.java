@@ -45,7 +45,15 @@ public abstract class Function
     public static OperationOrFunctionInterface ln() {
         return new Ln();
     }
-    
+
+    public static OperationOrFunctionInterface sqrt() {
+        return new Sqrt();
+    }
+
+    public static OperationOrFunctionInterface exp() {
+        return new Exp();
+    }
+
     /**
      *
      * @param operationName
@@ -68,14 +76,11 @@ public abstract class Function
     }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
-        String retVal = expression.toStringMathML();
-        if (expression.isRootExpressionTree()) {
-            retVal
-                    = "<mtext>\n"
-                    + "[Expression "
-                    + expression.getName()
-                    + "]\n"
-                    + "</mtext>\n";
+
+        String retVal = "<mtext>\nNot a valid expression</mtext>\n";
+
+        if (expression != null) {
+            retVal = expression.toStringMathML();
         }
 
         return retVal;
@@ -98,6 +103,7 @@ public abstract class Function
     /**
      * @return the argumentCount
      */
+    @Override
     public int getArgumentCount() {
         return argumentCount;
     }
@@ -105,6 +111,7 @@ public abstract class Function
     /**
      * @param argumentCount the argumentCount to set
      */
+    @Override
     public void setArgumentCount(int argumentCount) {
         this.argumentCount = argumentCount;
     }

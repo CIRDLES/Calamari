@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import java.util.Map;
@@ -24,20 +24,20 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Subtract extends Operation {
+public class Sqrt extends Function {
 
-    public Subtract() {
-        name = "subtract";
-        argumentCount = 2;
-        precedence = 2;
+    public Sqrt() {
+        name = "sqrt";
+        argumentCount = 1;
+        precedence = 4;
     }
 
     /**
      *
      * @param childrenET
-     * @param pkInterpScan
-     * @param isotopeToIndexMap
-     * @return
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double
      */
     @Override
     public double eval(
@@ -46,7 +46,7 @@ public class Subtract extends Operation {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap) - childrenET.get(1).eval(pkInterpScan, isotopeToIndexMap);
+            retVal = StrictMath.sqrt(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -59,16 +59,16 @@ public class Subtract extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mrow>\n"
-                + toStringAnotherExpression(leftET)//   leftET.toStringMathML()
-                + "<mo>-</mo>\n"
-                + toStringAnotherExpression(rightET)//   rightET.toStringMathML()
-                + "</mrow>\n";
+                = "<mrow>"
+                + "<msqrt>";
+            retVal += toStringAnotherExpression(childrenET.get(0));
+
+        retVal += "</msqrt></mrow>\n";
 
         return retVal;
     }

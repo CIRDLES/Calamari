@@ -60,6 +60,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
+    @Override
     public String toStringMathML() {
         String retVal
                 = "<msubsup>\n"
@@ -117,6 +118,11 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      */
     @Override
     public boolean isTypeFunction() {
+        return false;
+    }
+
+    @Override
+    public boolean isTypeFunctionOrOperation() {
         return false;
     }
 

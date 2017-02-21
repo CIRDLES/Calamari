@@ -192,7 +192,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         // The next step is to evaluate the equation ('FormulaEval', 
                         // documented separately), and approximate the uncertainties:
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
-                        double eqFerr = 0.0;
+                        double eqFerr;
 
                         if (eqValTmp != 0.0) {
                             // numerical pertubation procedure

@@ -33,11 +33,21 @@ public interface OperationOrFunctionInterface {
     public int getPrecedence();
 
     /**
+     * @return the argumentCount
+     */
+    public int getArgumentCount();
+
+    /**
+     * @param argumentCount the argumentCount to set
+     */
+    public void setArgumentCount(int argumentCount);
+
+    /**
      *
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     public abstract String toStringMathML(
             ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET);

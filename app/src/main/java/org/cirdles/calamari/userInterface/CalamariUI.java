@@ -393,7 +393,7 @@ public class CalamariUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Data", prawnDataPane);
 
-        expressionsPane.setBackground(new java.awt.Color(204, 255, 255));
+        expressionsPane.setBackground(new java.awt.Color(234, 253, 255));
         expressionsPane.setOpaque(true);
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -597,9 +597,7 @@ public class CalamariUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ExpressionParser dr = new ExpressionParser();
         ExpressionTreeInterface result = dr.parseExpression(jTextField1.getText());
-        if (result instanceof ExpressionTree) {
-            ((ExpressionTree)result).setName("User expression");
-        }
+
         initExpressionsFX(expressionsFX, result);
     }//GEN-LAST:event_jButton1ActionPerformed
 

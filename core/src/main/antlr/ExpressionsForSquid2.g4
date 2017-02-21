@@ -1,7 +1,24 @@
-/** Simple statically-typed programming language with functions and variables
- *  taken from "Language Implementation Patterns" book.
+/* 
+ * Copyright 2006-2017 CIRDLES.org.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/** Simple statically-typed language with functions and variables
+ *  based on  "Language Implementation Patterns" book.
  * https://media.pragprog.com/titles/tpantlr2/code/examples/Cymbol.g4
  */
+
 grammar ExpressionsForSquid2;
 
 @header {
@@ -35,6 +52,7 @@ stat:   block
     ;
 
 expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
+    |   '(' expr ')'
     |   ID '[' expr ']'         // array index like a[i], a[i][j]
     |   '-' expr                // unary minus
     |   '!' expr                // boolean not
@@ -42,17 +60,21 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   expr ('+'|'-') expr
     |   expr ('^') expr
     |   expr '==' expr          // equality comparison (lowest priority op)
+    |   NAMED_EXPRESSION
     |   ID                      // variable reference
     |   INT
     |   FLOAT
-    |   '(' expr ')'
+    
     ;
 exprList : expr (',' expr)* ;   // arg list
 
-FUNCTION : 'ln' ;
-ID  :   LETTER (LETTER | [0-9])* ;
+FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp';
+
+NAMED_EXPRESSION : '[' '"' ID (ID | '/' | ' ')* '"' ']' ;
+
+ID  :   (LETTER | [0-9]) (LETTER | [0-9])* ;
 fragment
-LETTER : [a-zA-Z] ;
+LETTER : [a-zA-Z_] ;
 
 
 INT :   [0-9]+ ;

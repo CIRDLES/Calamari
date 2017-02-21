@@ -30,6 +30,11 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
+import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
@@ -74,7 +79,7 @@ public class ExpressionParser {
         return buildTree(parsedRPN);
 
     }
-
+    
     public final static Map<String, String> OPERATIONS_MAP = new HashMap<>();
 
     static {
@@ -91,6 +96,23 @@ public class ExpressionParser {
     static {
 
         FUNCTIONS_MAP.put("ln", "ln");
+        FUNCTIONS_MAP.put("Ln", "ln");
+        FUNCTIONS_MAP.put("sqrt", "sqrt");
+        FUNCTIONS_MAP.put("Sqrt", "sqrt");
+        FUNCTIONS_MAP.put("exp", "exp");
+        FUNCTIONS_MAP.put("Exp", "exp");
+    }
+
+    public final static Map<String, ExpressionTreeInterface> EXPRESSIONS_MAP = new HashMap<>();
+
+    static {
+
+        EXPRESSIONS_MAP.put("[\"Ln254/238\"]", CustomExpression1.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"Ln206/238\"]", CustomExpression2.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"206/238 Calib Const\"]", SquidExpressionMinus1.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"232/238\"]", SquidExpressionMinus3.EXPRESSION);
+        EXPRESSIONS_MAP.put("[\"U Conc Const\"]", SquidExpressionMinus4.EXPRESSION);
+
     }
 
     private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {
@@ -123,7 +145,7 @@ public class ExpressionParser {
         ExpressionTreeInterface expParent = exp;
 
         boolean didAscend = true;
-        while (didAscend) {
+        while (didAscend && (savedExp !=null)) {
             if ((savedExp instanceof ExpressionTreeBuilderInterface)
                     && (!savedExp.isTypeFunction())) {
                 if (((ExpressionTreeBuilderInterface) savedExp).getLeftET() != null) {
@@ -136,6 +158,9 @@ public class ExpressionParser {
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
             } else if (savedExp instanceof ShrimpSpeciesNode) {
+                expParent = savedExp.getParentET();
+                savedExp = expParent;
+            } else if (savedExp.isRootExpressionTree()) {// when referrring to stored expression
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
             } else {
@@ -151,10 +176,13 @@ public class ExpressionParser {
         ExpressionTreeInterface exp = myExp;
 
         if (exp != null) {
-            if (exp.isTypeFunction()) {
-                if (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
+            if (exp.isTypeFunctionOrOperation()) {
+                while (exp.argumentCount() == ((ExpressionTreeBuilderInterface) exp).getCountOfChildren()
                         && !exp.isRootExpressionTree()) {
                     exp = exp.getParentET();
+                    if (exp == null) {
+                        break;
+                    }
                 }
             }
         }
@@ -224,6 +252,24 @@ public class ExpressionParser {
                     ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
                 }
 
+                break;
+
+            case NAMED_EXPRESSION:
+                retExpTree = EXPRESSIONS_MAP.get(token);
+                if (retExpTree == null) {
+                    retExpTree = new ConstantNode("Bad Name", 0.0);
+                }
+
+//                retExpTree = CustomExpression1.EXPRESSION;
+                if (exp == null) {
+                    // do nothing
+                } else if (exp.isTypeFunction()) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
+                } else if (((ExpressionTreeBuilderInterface) exp).getRightET() == null) {
+                    ((ExpressionTreeBuilderInterface) exp).setRightET(retExpTree);
+                } else if (((ExpressionTreeBuilderInterface) exp).getLeftET() == null) {
+                    ((ExpressionTreeBuilderInterface) exp).setLeftET(retExpTree);
+                }
                 break;
 
         }

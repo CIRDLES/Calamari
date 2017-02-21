@@ -5,16 +5,16 @@
  */
 package org.cirdles.calamari;
 
-import java.awt.Color;
+import com.google.common.io.Files;
+import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.image.Image;
+
 import javafx.stage.Stage;
-import javax.swing.border.LineBorder;
-import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
+import org.cirdles.commons.util.ResourceExtractor;
 
 /**
  *
@@ -25,12 +25,11 @@ public class Calamari extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-
+  
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.show();
-        
 
     }
 

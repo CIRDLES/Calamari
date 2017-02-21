@@ -28,7 +28,7 @@ public class Ln extends Function {
 
     public Ln() {
         name = "ln";
-        argumentCount = 3; // for testing
+        argumentCount = 1;
         precedence = 4;
     }
 
