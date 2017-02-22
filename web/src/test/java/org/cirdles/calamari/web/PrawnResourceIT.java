@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.web;
 
 import java.io.File;
@@ -64,33 +63,38 @@ public class PrawnResourceIT extends JerseyTest {
 
     @Test
     public void testGenerateReports() throws IOException {
-        Path prawnFilePath = RESOURCE_EXTRACTOR
-                .extractResourceAsPath(PRAWN_FILE_RESOURCE);
+        // detect Operating System ... only test web app for unix - it is used on unix server
+        String OS = System.getProperty("os.name").toLowerCase();
 
-        FormDataMultiPart multiPart = new FormDataMultiPart()
-                .field("prawnFile", prawnFilePath.toFile(), MediaType.APPLICATION_XML_TYPE);
+        if (!OS.toLowerCase().contains("win")) {
+            Path prawnFilePath = RESOURCE_EXTRACTOR
+                    .extractResourceAsPath(PRAWN_FILE_RESOURCE);
 
-        Path reportsZip = target("prawn")
-                .request("application/zip")
-                .accept(MediaType.MULTIPART_FORM_DATA)
-                .post(Entity.entity(multiPart, multiPart.getMediaType()))
-                .readEntity(File.class)
-                .toPath();
+            FormDataMultiPart multiPart = new FormDataMultiPart()
+                    .field("prawnFile", prawnFilePath.toFile(), MediaType.APPLICATION_XML_TYPE);
 
-        String newFileName = reportsZip.getFileName().toString() + ".zip";
-        Path newReportsZip = reportsZip.resolveSibling(newFileName);
-        Files.move(reportsZip, newReportsZip);
+            Path reportsZip = target("prawn")
+                    .request("application/zip")
+                    .accept(MediaType.MULTIPART_FORM_DATA)
+                    .post(Entity.entity(multiPart, multiPart.getMediaType()))
+                    .readEntity(File.class)
+                    .toPath();
 
-        Path reportsZipRoot = FileSystems
-                .newFileSystem(newReportsZip, null)
-                .getPath("/");
+            String newFileName = reportsZip.getFileName().toString() + ".zip";
+            Path newReportsZip = reportsZip.resolveSibling(newFileName);
+            Files.move(reportsZip, newReportsZip);
 
-        Files.list(reportsZipRoot).forEach(report -> {
-            Path expectedReport = RESOURCE_EXTRACTOR.extractResourceAsPath(
-                    "/org/cirdles/calamari/core/" + report.getFileName());
+            Path reportsZipRoot = FileSystems
+                    .newFileSystem(newReportsZip, null)
+                    .getPath(File.separator);
 
-            assertThat(report).hasSameContentAs(expectedReport);
-        });
+            Files.list(reportsZipRoot).forEach(report -> {
+                Path expectedReport = RESOURCE_EXTRACTOR.extractResourceAsPath(
+                        "/org/cirdles/calamari/core/" + report.getFileName());
+
+                assertThat(report).hasSameContentAs(expectedReport);
+            });
+        }
     }
 
 }
