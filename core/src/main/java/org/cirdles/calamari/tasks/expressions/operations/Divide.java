@@ -58,10 +58,15 @@ public class Divide extends Operation {
         // Feb 2017 constrain quotient to mimic VBA results for isotopic ratios
         if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
             BigDecimal ratio = new BigDecimal(retVal);
-            // calculate scale for 13 significant digits
-            int newScale = 13 - (ratio.precision() - ratio.scale());
+            int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
-            retVal = ratio2.doubleValue();
+            double sigFig15 = ratio2.doubleValue();
+            
+            ratio = new BigDecimal(sigFig15);
+            newScale = 13 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+
+            retVal = ratio3.doubleValue();
         }
 
         return retVal;

@@ -131,7 +131,7 @@ public class CalamariReportsEngine {
     }
 
     /**
-     * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step “0a” – Total ion
+     * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step "0a" – Total ion
      * counts at mass We’ve touched on this one once before, informally. It is a
      * direct extract from the XML, with one row per scan, and one column per
      * ‘integration-value’. For the demo XML, the array will have 684 rows of
@@ -143,20 +143,20 @@ public class CalamariReportsEngine {
      * sorted: Title = analysis-specific text-string read from XML Date =
      * analysis-specific date read from XML, to be expressed as YYYY-MM-DD
      * HH24:MI:SS Scan = integer, starting at 1 within each analysis Type =
-     * “standard” or “unknown”; analyses with prefix “T.” to be labelled
-     * “standard”, all others “unknown” Dead_time_ns = analysis-specific integer
+     * "standard" or "unknown"; analyses with prefix "T." to be labelled
+     * "standard", all others "unknown" Dead_time_ns = analysis-specific integer
      * read from XML
      * <p>
      * These are to be followed by 11 columns for each species (i.e. 110 columns
      * for the demo XML): [entry-label].count_time_sec = analysis-specific
      * integer read from XML [entry-label].1 = integer value corresponding to
-     * the first of 10 ‘integrations’ within tags “<data name = [entry-label]>
-     * </data>” for the specified combination of analysis, scan and species
+     * the first of 10 ‘integrations’ within tags "<data name = [entry-label]>
+     * </data>" for the specified combination of analysis, scan and species
      * [entry-label].2 = integer value corresponding to the second of 10
-     * ‘integrations’ within tags “<data name = [entry-label]> </data>” for the
+     * ‘integrations’ within tags "<data name = [entry-label]> </data>" for the
      * specified combination of analysis, scan and species … [entry-label].10 =
      * integer value corresponding to the tenth of 10 ‘integrations’ within tags
-     * “<data name = [entry-label]> </data>” for the specified combination of
+     * "<data name = [entry-label]> </data>" for the specified combination of
      * analysis, scan and species
      * <p>
      * Sorting: Primary criterion = Date, secondary criterion = Scan
@@ -190,20 +190,20 @@ public class CalamariReportsEngine {
     }
 
     /**
-     * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step “0b” – Total SBM
-     * counts at mass As for step “0a” in all respects , except that in the
+     * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step "0b" – Total SBM
+     * counts at mass As for step "0a" in all respects , except that in the
      * fifth ‘left-hand’ column, dead_time_ns should be discarded and replaced
      * by SBM_zero_cps = analysis-specific integer read from XML
      * <p>
      * And the 11 columns for each species are: [entry-label].count_time_sec =
      * analysis-specific integer read from XML [entry-label].SBM.1 = integer
-     * value corresponding to the first of 10 ‘integrations’ within tags “<data
-     * name = SBM > </data>” for the specified combination of analysis, scan and
+     * value corresponding to the first of 10 ‘integrations’ within tags "<data
+     * name = SBM > </data>" for the specified combination of analysis, scan and
      * species [entry-label].SBM.2 = integer value corresponding to the second
-     * of 10 ‘integrations’ within tags “<data name = SBM > </data>” for the
+     * of 10 ‘integrations’ within tags "<data name = SBM > </data>" for the
      * specified combination of analysis, scan and species …
      * [entry-label].SBM.10 = integer value corresponding to the tenth of 10
-     * ‘integrations’ within tags “<data name = SBM> </data>” for the specified
+     * ‘integrations’ within tags "<data name = SBM> </data>" for the specified
      * combination of analysis, scan and species
      * <p>
      * Sorting: Primary criterion = Date (ascending), secondary criterion = Scan
@@ -241,7 +241,7 @@ public class CalamariReportsEngine {
      * 2016.May.3 email from Simon Bodorkos to Jim Bowring Step 1 – Total counts
      * at time-stamp and trim-mass This is intended to replicate the current
      * Step 1 sanity-check, with one row per scan, and one column per key
-     * attribute of “total counts at peak”. For the demo XML, the array will
+     * attribute of "total counts at peak". For the demo XML, the array will
      * have 684 rows of data (114 analyses x 6 scans), and 54 columns (4 for row
      * identifiers, then for each of the 10 measured species, 5 columns as
      * specified below).
@@ -250,19 +250,19 @@ public class CalamariReportsEngine {
      * sorted: Title = analysis-specific text-string read from XML Date =
      * analysis-specific date read from XML, to be expressed as YYYY-MM-DD
      * HH24:MI:SS Scan = integer, starting at 1 within each analysis Type =
-     * “standard” or “unknown”; analyses with prefix “T.” to be labelled
-     * “standard”, all others “unknown”
+     * "standard" or "unknown"; analyses with prefix "T." to be labelled
+     * "standard", all others "unknown"
      * <p>
      * These are to be followed by 5 columns for each species (i.e. 50 columns
-     * for the demo XML): [entry-label].Time = integer “time_stamp_sec” read
+     * for the demo XML): [entry-label].Time = integer "time_stamp_sec" read
      * from XML for the specified combination of analysis, scan and species
-     * [entry-label].TotalCounts = calculated decimal value for “total counts at
-     * mass” from Step 1, for the specified combination of analysis, scan and
-     * species [entry-label].1SigmaAbs = calculated decimal value for “+/-1sigma
-     * at mass” from Step 1, for the specified combination of analysis, scan and
-     * species [entry-label].TotalSBM = calculated decimal value for “total SBM
-     * counts” from Step 1, for the specified combination of analysis, scan and
-     * species [entry-label].TrimMass = decimal “trim_mass_amu” read from XML
+     * [entry-label].TotalCounts = calculated decimal value for "total counts at
+     * mass" from Step 1, for the specified combination of analysis, scan and
+     * species [entry-label].1SigmaAbs = calculated decimal value for "+/-1sigma
+     * at mass" from Step 1, for the specified combination of analysis, scan and
+     * species [entry-label].TotalSBM = calculated decimal value for "total SBM
+     * counts" from Step 1, for the specified combination of analysis, scan and
+     * species [entry-label].TrimMass = decimal "trim_mass_amu" read from XML
      * for the specified combination of analysis, scan and species
      * <p>
      * Sorting: Primary criterion = Date (ascending), secondary criterion = Scan
@@ -308,15 +308,15 @@ public class CalamariReportsEngine {
      * It needs three ‘left-hand’ columns to allow the rows to be identified and
      * sorted: Title = analysis-specific text-string read from XML Date =
      * analysis-specific date read from XML, to be expressed as YYYY-MM-DD
-     * HH24:MI:SS Type = “standard” or “unknown”; analyses with prefix “T.” to
-     * be labelled “standard”, all others “unknown”
+     * HH24:MI:SS Type = "standard" or "unknown"; analyses with prefix "T." to
+     * be labelled "standard", all others "unknown"
      * <p>
      * These are to be followed by 1 column for each species (i.e. 10 columns
      * for the demo XML): [entry-label].TotalCps = calculated decimal value for
-     * “total counts per second” from Step 2, for the specified combination of
+     * "total counts per second" from Step 2, for the specified combination of
      * analysis and species
      * <p>
-     * Sorting: Primary criterion = Type (ascending; “standard” before unknown,
+     * Sorting: Primary criterion = Type (ascending; "standard" before unknown,
      * so alphabetical would do), secondary criterion = Date (ascending)
      *
      * @param shrimpFraction the value of shrimpFraction

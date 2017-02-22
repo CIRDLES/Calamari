@@ -144,7 +144,7 @@ public class PrawnFileHandler {
                 progressSubscriber.accept(progress);
             }
         }
-         
+
         return shrimpFractions;
     }
 
@@ -244,17 +244,33 @@ public class PrawnFileHandler {
             lines.add(i, headerArray[i]);
         }
 
-        // Posix attributes added to support web service on Linux
-        Set<PosixFilePermission> perms = EnumSet.of(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE, GROUP_READ);
-        Path config = Files.createTempFile("tempPrawnXMLFileName", "xml", PosixFilePermissions.asFileAttribute(perms));
-        try (BufferedWriter writer = Files.newBufferedWriter(config, StandardCharsets.UTF_8)) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.newLine();
+        String tempPrawnXMLFileName = "tempPrawnXMLFileName.xml";
+        File prawnDataFile;
+
+        // detect Operating System ... we need POSIX code for use on Ubuntu Server
+        String OS = System.getProperty("os.name").toLowerCase();
+        if (OS.toLowerCase().contains("win")) {
+            Path pathTempXML = Paths.get(tempPrawnXMLFileName).toAbsolutePath();
+            try (BufferedWriter writer = Files.newBufferedWriter(pathTempXML, StandardCharsets.UTF_8)) {
+                for (String line : lines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
             }
+            prawnDataFile = new File(tempPrawnXMLFileName);
+        } else {
+            // Posix attributes added to support web service on Linux
+            Set<PosixFilePermission> perms = EnumSet.of(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE, GROUP_READ);
+            Path config = Files.createTempFile("tempPrawnXMLFileName", "xml", PosixFilePermissions.asFileAttribute(perms));
+            try (BufferedWriter writer = Files.newBufferedWriter(config, StandardCharsets.UTF_8)) {
+                for (String line : lines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            prawnDataFile = config.toFile();
         }
 
-        File prawnDataFile = config.toFile();
         myPrawnFile = readRawDataFile(prawnDataFile);
 
         prawnDataFile.delete();
