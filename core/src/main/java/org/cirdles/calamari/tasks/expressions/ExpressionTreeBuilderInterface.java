@@ -37,19 +37,17 @@ public interface ExpressionTreeBuilderInterface {
     public ExpressionTreeInterface getLeftET();
 
     /**
-     * @param leftET the leftET to set
-     */
-    public void setLeftET(ExpressionTreeInterface leftET);
-
-    /**
      * @return the rightET
      */
     public ExpressionTreeInterface getRightET();
-
+    
     /**
-     * @param rightET the rightET to set
+     *
+     * @param childET
      */
-    public void setRightET(ExpressionTreeInterface rightET);
+    public void addChild(ExpressionTreeInterface childET);
+    
+    public void addChild(int index, ExpressionTreeInterface childET);
     
     public int getCountOfChildren();
 

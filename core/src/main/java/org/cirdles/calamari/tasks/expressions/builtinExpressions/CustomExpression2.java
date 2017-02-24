@@ -37,8 +37,7 @@ public class CustomExpression2 {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
         ExpressionTreeInterface r206_238w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r206_238w);
 
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(r206_238w);
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(null);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, r206_238w);
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);

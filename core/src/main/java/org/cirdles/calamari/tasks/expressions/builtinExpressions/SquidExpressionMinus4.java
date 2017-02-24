@@ -43,8 +43,8 @@ public class SquidExpressionMinus4 {
 
         ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", r254_238w, new ConstantNode("0.66", 0.66), Operation.pow());
 
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(r238_196w);
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(r254_238wPow);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, r238_196w);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(r254_238wPow);
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.divide());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);

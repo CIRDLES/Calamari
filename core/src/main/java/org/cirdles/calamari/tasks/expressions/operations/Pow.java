@@ -56,22 +56,20 @@ public class Pow extends Operation {
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>\n"
                 + "<msup>\n"
                 + "<mfenced>\n"
                 + "<mrow>\n"
-                + toStringAnotherExpression(leftET)
+                + toStringAnotherExpression(childrenET.get(0))
                 + "</mrow>\n"
                 + "</mfenced>\n"
-                + rightET.toStringMathML()
+                + childrenET.get(1).toStringMathML()
                 + "</msup>\n"
                 + "</mrow>\n";
 

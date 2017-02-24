@@ -51,8 +51,6 @@ public class ExpressionTree
 
     protected String name;
     private ExpressionTreeInterface parentET;
-    protected ExpressionTreeInterface leftET;
-    protected ExpressionTreeInterface rightET;
     protected List<ExpressionTreeInterface> childrenET;
     protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
@@ -96,8 +94,6 @@ public class ExpressionTree
      */
     public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationOrFunctionInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
         this.name = prettyName;
-        this.leftET = leftET;
-        this.rightET = rightET;
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
         this.rootExpressionTree = false;
@@ -208,7 +204,7 @@ public class ExpressionTree
         if (operation == null) {
             retVal = "<mtext>No expression selected.</mtext>\n";
         } else {
-            retVal = operation.toStringMathML(leftET, rightET, childrenET);
+            retVal = operation.toStringMathML(childrenET);
         }
         return retVal;
     }
@@ -258,21 +254,6 @@ public class ExpressionTree
     }
 
     /**
-     * @param leftET the leftET to set
-     */
-    @Override
-    public void setLeftET(ExpressionTreeInterface leftET) {
-        this.leftET = leftET;
-        try {
-            if (childrenET.get(0) == null) {
-                childrenET.remove(0);
-            }
-        } catch (Exception e) {
-        }
-        addChild(0, leftET);
-    }
-
-    /**
      * @return the rightET
      */
     @Override
@@ -285,29 +266,16 @@ public class ExpressionTree
         return retVal;
     }
 
-    /**
-     * @param rightET the rightET to set
-     */
-    @Override
-    public void setRightET(ExpressionTreeInterface rightET) {
-        this.rightET = rightET;
-        if (childrenET.isEmpty()) {
-            // add in null left for logic
-            childrenET.add(null);
-        }
-
-        addChild(rightET);
-    }
-
     @Override
     public int getCountOfChildren() {
-        return childrenET.size() - (int) ((leftET == null) ? 1 : 0);
+        return childrenET.size();// - (int) ((leftET == null) ? 1 : 0);
     }
 
     /**
      *
      * @param childET
      */
+    @Override
     public void addChild(ExpressionTreeInterface childET) {
         if (childET != null) {
             childrenET.add(childET);
@@ -315,6 +283,7 @@ public class ExpressionTree
         }
     }
 
+    @Override
     public void addChild(int index, ExpressionTreeInterface childET) {
         if (childET != null) {
             childrenET.add(index, childET);

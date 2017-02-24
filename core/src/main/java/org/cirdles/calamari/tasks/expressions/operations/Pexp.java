@@ -58,17 +58,15 @@ public class Pexp extends Operation {
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return 
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>\n"
                 + "<mo>(</mo>\n"
-                + toStringAnotherExpression(leftET)
+                + toStringAnotherExpression(childrenET.get(0))
                 + "<mo>)</mo>\n"
                 + "</mrow>\n";
 

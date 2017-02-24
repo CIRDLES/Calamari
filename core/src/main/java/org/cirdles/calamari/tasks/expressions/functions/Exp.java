@@ -56,28 +56,23 @@ public class Exp extends Function {
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
                 + "<msup>"
                 + "<mi>"
                 + "&ExponentialE;"
                 + "</mi>"
-                // + "<msup>\n";
                 + "<mfenced>\n";
-        // + "<mrow>\n";
 
         retVal += toStringAnotherExpression(childrenET.get(0));
 
         retVal
-                += //"</mrow>\n";
-                "</mfenced>"
+                += "</mfenced>"
                 + "</msup>"
                 + "</mrow>";
 
