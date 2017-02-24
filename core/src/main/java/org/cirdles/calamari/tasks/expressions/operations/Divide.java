@@ -57,11 +57,29 @@ public class Divide extends Operation {
 
         // Feb 2017 constrain quotient to mimic VBA results for isotopic ratios
         if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
+            BigDecimal ratio11 = new BigDecimal(retVal);
+            int newScale11 = 15 - (ratio11.precision() - ratio11.scale());
+            BigDecimal ratio12 = ratio11.setScale(newScale11, RoundingMode.HALF_UP);
+            
+            String retValToString =  ratio12.toPlainString();//                     String.valueOf(retVal);
+            long retValToBin = Double.doubleToLongBits(retVal);
+            String retValToBinToHex = Long.toHexString(retValToBin).toUpperCase();
+
+            double retValToStringToDouble = Double.parseDouble(retValToString);
+            long retValToStringToDoubleToBin = Double.doubleToLongBits(retValToStringToDouble);
+            String retValToStringToDoubleToBinToHex = Long.toHexString(retValToStringToDoubleToBin).toUpperCase();
+
+            System.out.println(retVal + ", \t "
+                    + retValToString + ",  \t"
+                    + retValToBinToHex + ",  \t"
+                    + retValToStringToDoubleToBinToHex
+            );
+
             BigDecimal ratio = new BigDecimal(retVal);
             int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
             double sigFig15 = ratio2.doubleValue();
-            
+
             ratio = new BigDecimal(sigFig15);
             newScale = 13 - (ratio.precision() - ratio.scale());
             BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
@@ -77,7 +95,7 @@ public class Divide extends Operation {
      * @param leftET the value of leftET
      * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
     public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
