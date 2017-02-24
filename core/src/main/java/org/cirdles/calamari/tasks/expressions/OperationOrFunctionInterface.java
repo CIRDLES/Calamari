@@ -26,6 +26,8 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 public interface OperationOrFunctionInterface {
 
     public abstract double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+    
+    public abstract double[][] eval2Array(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
     /**
      * @return the precedence

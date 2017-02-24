@@ -61,6 +61,17 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     }
 
     @Override
+    public double[][] eval2Array(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        double retVal = 0.0;
+        Integer index = isotopeToIndexMap.get(name);
+        if (index != null) {
+            retVal = pkInterpScan[isotopeToIndexMap.get(name)];
+        }
+        
+        return new double[][]{{retVal}};
+    }
+
+    @Override
     public String toStringMathML() {
         String retVal
                 = "<msubsup>\n"

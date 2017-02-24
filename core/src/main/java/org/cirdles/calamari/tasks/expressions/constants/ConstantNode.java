@@ -58,6 +58,11 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     }
 
     @Override
+    public double[][] eval2Array(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        return new double[][]{{value}};
+    }
+
+    @Override
     public String getName() {
         return name;
     }

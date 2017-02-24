@@ -54,6 +54,12 @@ public class Pow extends Operation {
         return retVal;
     }
 
+    @Override
+    public double[][] eval2Array(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     /**
      *
      * @param childrenET the value of childrenET

@@ -162,6 +162,12 @@ public class ExpressionTree
     }
 
     @Override
+    public double[][] eval2Array(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        return operation == null ? new double[][]{{0.0}} : operation.eval2Array(childrenET, pkInterpScan, isotopeToIndexMap);
+    }
+
+    
+    @Override
     public Set extractUniqueSpeciesNumbers() {
         // assume acquisition order is atomic weight order
         Set<IsotopeNames> eqPkUndupeOrd = new TreeSet<>();
