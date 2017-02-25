@@ -13,13 +13,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
@@ -41,13 +40,13 @@ public class FXMLDocumentController implements Initializable {
     public WebView browser;
     @FXML
     private TextField expressionText;
-
-    WebEngine webEngine;
-    @FXML
-    private Button parseExpressionButton;
     @FXML
     private AnchorPane ExpressionsPane;
-
+ 
+    WebEngine webEngine;   
+    @FXML
+    private TitledPane titlePane;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<ExpressionTreeInterface> items = FXCollections.observableArrayList(

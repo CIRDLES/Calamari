@@ -56,17 +56,13 @@ public class Add extends Operation {
     }
 
     @Override
-    public double[][] eval2Array(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-                double retVal;
-        try {
-            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap) + childrenET.get(1).eval(pkInterpScan, isotopeToIndexMap);
-        } catch (Exception e) {
-            retVal = 0.0;
-        }
-        return new double[][]{{retVal}};
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET, 
+            double[] pkInterpScan, 
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+
+        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
     }
-    
-    
 
     /**
      *

@@ -56,8 +56,12 @@ public class Multiply extends Operation {
     }
 
     @Override
-    public double[][] eval2Array(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET, 
+            double[] pkInterpScan, 
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        
+        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
     }
 
     

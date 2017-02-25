@@ -160,7 +160,8 @@ public class ExpressionParser {
             } else if (savedExp instanceof ShrimpSpeciesNode) {
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
-            } else if (savedExp.isRootExpressionTree()) {// when referrring to stored expression
+            } else if (savedExp.isRootExpressionTree()) {
+                // when referrring to stored expression
                 expParent = savedExp.getParentET();
                 savedExp = expParent;
             } else {

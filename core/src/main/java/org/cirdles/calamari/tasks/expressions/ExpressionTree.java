@@ -50,14 +50,14 @@ public class ExpressionTree
         XMLSerializerInterface {
 
     protected String name;
-    private ExpressionTreeInterface parentET;
     protected List<ExpressionTreeInterface> childrenET;
+    protected ExpressionTreeInterface parentET;
     protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
     protected boolean rootExpressionTree;
 
     public ExpressionTree() {
-        this("No Name");
+        this("Anonymous");
     }
 
     /**
@@ -92,12 +92,17 @@ public class ExpressionTree
      * @param operation the value of operation
      * @param ratiosOfInterest the value of ratiosOfInterest
      */
-    public ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationOrFunctionInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
+    private ExpressionTree(String prettyName, ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, OperationOrFunctionInterface operation, List<RawRatioNamesSHRIMP> ratiosOfInterest) {
         this.name = prettyName;
+        this.childrenET = new ArrayList<>();
+        populateChildrenET(leftET, rightET);
+        this.parentET = null;
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
         this.rootExpressionTree = false;
-        this.childrenET = new ArrayList<>();
+    }
+
+    private void populateChildrenET(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
         addChild(leftET);
         addChild(rightET);
     }
@@ -166,7 +171,6 @@ public class ExpressionTree
         return operation == null ? new double[][]{{0.0}} : operation.eval2Array(childrenET, pkInterpScan, isotopeToIndexMap);
     }
 
-    
     @Override
     public Set extractUniqueSpeciesNumbers() {
         // assume acquisition order is atomic weight order

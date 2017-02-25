@@ -189,7 +189,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             }
                         }
 
-                        // The next step is to evaluate the equation ('FormulaEval', 
+                        // The next step is to evaluate the equation 'FormulaEval', 
                         // documented separately), and approximate the uncertainties:
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         double eqFerr;
@@ -233,6 +233,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 species = eqPkUndupeOrd.iterator();
                                 while (species.hasNext()) {
                                     int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
+                                    
                                     totRatTime += shrimpFraction.getTimeStampSec()[scanNum][unDupPkOrd];
                                     numPksInclDupes++;
 

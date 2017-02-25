@@ -311,10 +311,8 @@ public class ShuntingYard {
                 retVal = FUNCTION;
             } else if (token.matches("\\[\"(.*?)\"\\]")) {
                 retVal = NAMED_EXPRESSION;
-            } else {
-                if (isNumber(token)) {
-                    retVal = CONSTANT;
-                }
+            } else if (isNumber(token)) {
+                retVal = CONSTANT;
 
             }
 
