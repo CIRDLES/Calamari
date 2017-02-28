@@ -63,7 +63,7 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <SplitPane dividerPositions="0.48185483870967744" layoutX="1.0" layoutY="-4.0" prefHeight="210.0" prefWidth="992.0">
+                                          <SplitPane dividerPositions="0.48286290322580644" layoutX="1.0" layoutY="-4.0" prefHeight="210.0" prefWidth="992.0">
                                             <items>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                    <children>
@@ -87,8 +87,8 @@
                                                       <TextField fx:id="expressionText" layoutX="33.0" layoutY="121.0" prefHeight="32.0" prefWidth="452.0" promptText="enter expression" />
                                                         <Button alignment="CENTER" layoutX="145.0" layoutY="164.0" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="229.0" text="Parse Expression" textAlignment="CENTER" />
                                                       <Label layoutX="13.0" layoutY="6.0" prefHeight="17.0" prefWidth="205.0" text="Try your own expression:" />
-                                                      <Label layoutX="33.0" layoutY="35.0" prefHeight="17.0" prefWidth="452.0" text="Supported: +, -, *, /, ^, Ln(x), ln(x), Sqrt(x), sqrt(x), Exp(x), exp(x)" />
-                                                      <Label layoutX="33.0" layoutY="63.0" prefHeight="17.0" prefWidth="452.0" text="Supported: named expressions from list at left using [&quot;...&quot;]" />
+                                                      <Label layoutX="33.0" layoutY="23.0" prefHeight="44.0" prefWidth="452.0" text="Supported: +, -, *, /, ^, Ln(x), ln(x), Sqrt(x), sqrt(x), Exp(x), exp(x), RobReg(x,y,a,b)" wrapText="true" />
+                                                      <Label layoutX="33.0" layoutY="73.0" prefHeight="17.0" prefWidth="452.0" text="Supported: named expressions from list at left using [&quot;...&quot;]" />
                                                       <Label layoutX="33.0" layoutY="90.0" prefHeight="17.0" prefWidth="452.0" text="Supported: 2D array references such as A[0][0]" />
                                                    </children>
                                                 </AnchorPane>

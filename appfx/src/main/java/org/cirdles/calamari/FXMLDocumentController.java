@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
@@ -30,6 +31,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpression
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
+import static org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser.NAMED_EXPRESSIONS_MAP;
 
 /**
  *
@@ -74,6 +76,10 @@ public class FXMLDocumentController implements Initializable {
                 SquidExpressionMinus1.EXPRESSION,
                 SquidExpressionMinus3.EXPRESSION,
                 SquidExpressionMinus4.EXPRESSION);
+        
+        for (RawRatioNamesSHRIMP ratioName : RawRatioNamesSHRIMP.values()) {
+            items.add(ratioName.getExpression());
+        }
         
         listView.setItems(items);
         

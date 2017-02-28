@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.cirdles.calamari.ExpressionsForSquid2Lexer;
 import org.cirdles.calamari.ExpressionsForSquid2Parser;
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -104,16 +105,19 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("RobReg", "robReg");
     }
 
-    public final static Map<String, ExpressionTreeInterface> EXPRESSIONS_MAP = new HashMap<>();
+    public final static Map<String, ExpressionTreeInterface> NAMED_EXPRESSIONS_MAP = new HashMap<>();
 
     static {
 
-        EXPRESSIONS_MAP.put("[\"Ln254/238\"]", CustomExpression1.EXPRESSION);
-        EXPRESSIONS_MAP.put("[\"Ln206/238\"]", CustomExpression2.EXPRESSION);
-        EXPRESSIONS_MAP.put("[\"206/238 Calib Const\"]", SquidExpressionMinus1.EXPRESSION);
-        EXPRESSIONS_MAP.put("[\"232/238\"]", SquidExpressionMinus3.EXPRESSION);
-        EXPRESSIONS_MAP.put("[\"U Conc Const\"]", SquidExpressionMinus4.EXPRESSION);
+        NAMED_EXPRESSIONS_MAP.put("[\"Ln254/238\"]", CustomExpression1.EXPRESSION);
+        NAMED_EXPRESSIONS_MAP.put("[\"Ln206/238\"]", CustomExpression2.EXPRESSION);
+        NAMED_EXPRESSIONS_MAP.put("[\"206/238 Calib Const\"]", SquidExpressionMinus1.EXPRESSION);
+        NAMED_EXPRESSIONS_MAP.put("[\"232/238\"]", SquidExpressionMinus3.EXPRESSION);
+        NAMED_EXPRESSIONS_MAP.put("[\"U Conc Const\"]", SquidExpressionMinus4.EXPRESSION);
 
+        for (RawRatioNamesSHRIMP ratioName : RawRatioNamesSHRIMP.values()) {
+            NAMED_EXPRESSIONS_MAP.put("[\"" + ratioName.getDisplayNameNoSpaces() + "\"]", ratioName.getExpression());
+        }
     }
 
     private ExpressionTreeInterface buildTree(List<String> parsedRPNreversed) {
@@ -213,7 +217,7 @@ public class ExpressionParser {
                 break;
 
             case NAMED_EXPRESSION:
-                retExpTree = EXPRESSIONS_MAP.get(token);
+                retExpTree = NAMED_EXPRESSIONS_MAP.get(token);
                 if (retExpTree == null) {
                     retExpTree = new ConstantNode("Bad Name", 0.0);
                 }
