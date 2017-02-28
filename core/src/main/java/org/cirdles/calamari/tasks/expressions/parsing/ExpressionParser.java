@@ -101,6 +101,7 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("Sqrt", "sqrt");
         FUNCTIONS_MAP.put("exp", "exp");
         FUNCTIONS_MAP.put("Exp", "exp");
+        FUNCTIONS_MAP.put("RobReg", "robReg");
     }
 
     public final static Map<String, ExpressionTreeInterface> EXPRESSIONS_MAP = new HashMap<>();

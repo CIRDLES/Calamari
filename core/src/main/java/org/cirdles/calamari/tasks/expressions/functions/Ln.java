@@ -30,6 +30,8 @@ public class Ln extends Function {
         name = "ln";
         argumentCount = 1;
         precedence = 4;
+        rowCount = 1;
+        colCount = 1;
     }
 
     /**
@@ -58,14 +60,22 @@ public class Ln extends Function {
 
     @Override
     public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, 
-            double[] pkInterpScan, 
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        
-        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
+
+        double retVal;
+        try {
+//            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            // Feb 2017 to cause replication of Squid2.5 results            
+            retVal = Math.log(childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]);
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+
+        return new double[][]{{retVal}};
     }
 
-    
     /**
      *
      * @param childrenET the value of childrenET

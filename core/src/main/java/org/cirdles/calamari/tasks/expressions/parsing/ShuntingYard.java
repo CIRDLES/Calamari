@@ -248,9 +248,17 @@ public class ShuntingYard {
                         }
                     }
 
-                    boolean w = wereValues.pop();
+                    boolean w = false;
+                    try {
+                        w = wereValues.pop();
+                    } catch (Exception e) {
+                    }
                     if (w) {
-                        int a = argCount.pop();
+                        int a = 0;
+                        try {
+                            a = argCount.pop();
+                        } catch (Exception e) {
+                        }
                         argCount.push(a + 1);
                     }
                     wereValues.push(false);
@@ -307,7 +315,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-".contains("-" + token + "-")) {
+            } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-RobReg-".contains("-" + token + "-")) {
                 retVal = FUNCTION;
             } else if (token.matches("\\[\"(.*?)\"\\]")) {
                 retVal = NAMED_EXPRESSION;

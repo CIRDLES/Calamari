@@ -61,7 +61,7 @@ public class Divide extends Operation {
             int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
             double sigFig15 = ratio2.doubleValue();
-            
+
             ratio = new BigDecimal(sigFig15);
             newScale = 13 - (ratio.precision() - ratio.scale());
             BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
@@ -74,18 +74,39 @@ public class Divide extends Operation {
 
     @Override
     public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, 
-            double[] pkInterpScan, 
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        
-        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
+
+        double retVal;
+        try {
+            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]
+                    / childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+
+        // Feb 2017 constrain quotient to mimic VBA results for isotopic ratios
+        if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
+            BigDecimal ratio = new BigDecimal(retVal);
+            int newScale = 15 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+            double sigFig15 = ratio2.doubleValue();
+
+            ratio = new BigDecimal(sigFig15);
+            newScale = 13 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+
+            retVal = ratio3.doubleValue();
+        }
+
+        return new double[][]{{retVal}};
     }
 
-    
     /**
      *
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {

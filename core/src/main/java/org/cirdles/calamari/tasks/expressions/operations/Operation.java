@@ -34,7 +34,18 @@ public abstract class Operation
     protected String name;
     protected int argumentCount;
     protected int precedence;
+    // establish size of array resullting from evaluation
+    protected int rowCount;
+    protected int colCount;
 
+    public Operation() {
+        this.name = "no-op";
+        this.argumentCount = 1;
+        this.precedence = 1;
+        this.rowCount = 1;
+        this.colCount = 1;
+    }
+    
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new OperationXMLConverter());
@@ -138,5 +149,33 @@ public abstract class Operation
     @Override
     public int getPrecedence() {
         return precedence;
+    }
+
+    /**
+     * @return the rowCount
+     */
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    /**
+     * @param rowCount the rowCount to set
+     */
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    /**
+     * @return the colCount
+     */
+    public int getColCount() {
+        return colCount;
+    }
+
+    /**
+     * @param colCount the colCount to set
+     */
+    public void setColCount(int colCount) {
+        this.colCount = colCount;
     }
 }

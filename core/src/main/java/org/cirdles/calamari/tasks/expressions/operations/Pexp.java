@@ -58,18 +58,23 @@ public class Pexp extends Operation {
 
     @Override
     public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, 
-            double[] pkInterpScan, 
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        
-        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
+
+        double retVal;
+        try {
+            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+        return new double[][]{{retVal}};
     }
 
-    
     /**
      *
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {

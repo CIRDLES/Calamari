@@ -122,5 +122,4 @@ public class FXMLDocumentController implements Initializable {
         stage.close();
     }
     
-    
 }

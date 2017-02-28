@@ -31,6 +31,8 @@ public class Multiply extends Operation {
         name = "multiply";
         argumentCount = 2;
         precedence = 3;
+        rowCount = 1;
+        colCount = 1;
     }
 
     /**
@@ -57,14 +59,20 @@ public class Multiply extends Operation {
 
     @Override
     public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, 
-            double[] pkInterpScan, 
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        
-        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
+
+        double retVal;
+        try {
+            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]
+                    * childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+        return new double[][]{{retVal}};
     }
 
-    
     /**
      *
      * @param childrenET the value of childrenET
