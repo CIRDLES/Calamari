@@ -14,12 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.cirdles.calamari.core.CalamariReportsEngine;
 import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFile;
@@ -34,6 +36,7 @@ public class Calamari extends Application {
 
     public static final String VERSION;
     public static final String RELEASE_DATE;
+
     private static PrawnFileHandler prawnFileHandler;
 
     static {
@@ -68,7 +71,7 @@ public class Calamari extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        
         initCalamari();
 
         primaryStage.setTitle("Squid 3.0 Explorations");
@@ -79,6 +82,12 @@ public class Calamari extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        //primaryStage.setOnCloseRequest(e -> Platform.exit());
+        primaryStage.setOnCloseRequest((WindowEvent e) -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
     }
 
@@ -155,7 +164,7 @@ public class Calamari extends Application {
             } catch (IOException iOException) {
             }
         }
-        
+
         return prawnFile;
     }
 
@@ -173,5 +182,4 @@ public class Calamari extends Application {
 
         return reportFolder;
     }
-
 }

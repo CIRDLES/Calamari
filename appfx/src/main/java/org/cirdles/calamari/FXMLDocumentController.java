@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
@@ -54,6 +55,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem fileMenuSelectCalamariReportsLocation;
     @FXML
     private TextField calamariReportsFolderText;
+    @FXML
+    private MenuItem menuExit;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -112,4 +115,12 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
+
+    @FXML
+    private void menuExitAction(ActionEvent event) {
+        Stage stage = (Stage) browser.getScene().getWindow();
+        stage.close();
+    }
+    
+    
 }

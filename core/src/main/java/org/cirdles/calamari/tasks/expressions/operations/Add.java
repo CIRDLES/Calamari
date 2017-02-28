@@ -60,8 +60,12 @@ public class Add extends Operation {
             List<ExpressionTreeInterface> childrenET, 
             double[] pkInterpScan, 
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        
+        double retVal;
+        retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0] 
+                + childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
 
-        return new double[][]{{eval(childrenET, pkInterpScan, isotopeToIndexMap)}};
+        return new double[][]{{retVal}};
     }
 
     /**
