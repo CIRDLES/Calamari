@@ -71,10 +71,27 @@ public class Calamari extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
+
         initCalamari();
 
         primaryStage.setTitle("Squid 3.0 Explorations");
+
+//        ResourceExtractor prawnFileResourceExtractor
+//                = new ResourceExtractor(getClass());
+//        Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("./images/SquidLogo.png");
+//        String newFileName = listOfPrawnFiles.getFileName().toString().replace(".tmp", ".png");
+//        Path newReportsZip = listOfPrawnFiles.resolveSibling(newFileName);
+//        Files.move(listOfPrawnFiles, newReportsZip);
+//        Image applicationIcon = new Image(newReportsZip.toString());//    new Image(getClass().getResourceAsStream("./images/SquidLogo.png"));
+//        primaryStage.getIcons().add(applicationIcon);
+////
+//        try {
+//            URL iconURL = getClass().getResource("./images/SquidLogo.png");
+//            java.awt.Image image = new ImageIcon(iconURL).getImage();
+//            com.apple.eawt.Application.getApplication().setDockIconImage(image);
+//        } catch (Exception e) {
+//            // Won't work on Windows or Linux.
+//        }
 
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
 
