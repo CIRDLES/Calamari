@@ -40,13 +40,29 @@ public class FXMLDocumentTestController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL urlw, ResourceBundle rb) {
         // TODO
 
         ResourceExtractor prawnFileResourceExtractor
                 = new ResourceExtractor(Calamari.class);
 
         File exampleFolder = new File("imagesFX");
+        
+        
+        BufferedImage image = null;
+        try {
+
+            URL url = new URL("http://www.libpng.org/pub/png/img_png/pnglogo-blk.jpg");
+            image = ImageIO.read(url);
+
+            ImageIO.write(image, "jpg",new File("out.jpg"));
+            ImageIO.write(image, "gif",new File("out.gif"));
+            ImageIO.write(image, "png",new File("out.png"));
+
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+        System.out.println("Done");
 
 //        try {this works +++++++++++++++++++
 //            File image = new File(exampleFolder.getCanonicalPath() + File.separator + "SquidLogo.png");
