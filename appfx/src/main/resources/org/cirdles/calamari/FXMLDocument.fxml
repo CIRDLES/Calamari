@@ -161,7 +161,7 @@
          <right>
             <ImageView fitHeight="68.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true" translateX="-50.0" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="file:/Development/DEVELOPMENT_CALIMARI/Calamari/appfx/src/main/resources/org/cirdles/calamari/images/SquidLogo.png" />
+                  <Image url="@images/SquidLogo.png" />
                </image>
             </ImageView>
          </right>
