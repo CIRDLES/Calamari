@@ -32,6 +32,8 @@ public interface ExpressionTreeInterface {
      */
     public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
+    public double[][] eval2Array(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+
     public String getName();
 
     /**
@@ -50,10 +52,11 @@ public interface ExpressionTreeInterface {
     public boolean isRootExpressionTree();
 
     public String toStringMathML();
-    
+
     public boolean isTypeFunction();
+
     public boolean isTypeFunctionOrOperation();
-    
+
     public int argumentCount();
 
 }

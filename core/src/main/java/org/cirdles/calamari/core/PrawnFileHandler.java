@@ -309,6 +309,15 @@ public class PrawnFileHandler {
     public String getCurrentPrawnFileLocation() {
         return currentPrawnFileLocation;
     }
+    
+    public File currentPrawnFileLocationFolder(){
+        File retVal= new File(currentPrawnFileLocation);
+        if (currentPrawnFileLocationIsFile()){
+            retVal = retVal.getParentFile();
+        } 
+        
+        return retVal;
+    }
 
     /**
      * @param aCurrentPrawnFileLocation the currentPrawnFileLocation to set

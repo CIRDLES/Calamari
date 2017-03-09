@@ -52,13 +52,13 @@ public class Driver {
 
         ExpressionTreeInterface r254_238wPow = new ExpressionTree("254/238^0.66", r254_238w, new ConstantNode("0.66", 0.66), Operation.pow());
 
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(r238_196w);
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(r254_238wPow);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, r238_196w);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(r254_238wPow);
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.divide());
 
         ExpressionTreeInterface EXPRESSION2 = new ExpressionTree("test");
-        ((ExpressionTreeBuilderInterface) EXPRESSION2).setLeftET(EXPRESSION);
-        ((ExpressionTreeBuilderInterface) EXPRESSION2).setRightET(SquidExpressionMinus3.EXPRESSION);
+        ((ExpressionTreeBuilderInterface) EXPRESSION2).addChild(0, EXPRESSION);
+        ((ExpressionTreeBuilderInterface) EXPRESSION2).addChild(SquidExpressionMinus3.EXPRESSION);
         ((ExpressionTreeBuilderInterface) EXPRESSION2).setOperation(Operation.pExp());
 
         ((ExpressionTree) EXPRESSION2).setRootExpressionTree(true);

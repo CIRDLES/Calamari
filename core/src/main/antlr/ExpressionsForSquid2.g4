@@ -25,7 +25,7 @@ grammar ExpressionsForSquid2;
     package org.cirdles.calamari;
 } 
 
-file:   (functionDecl | varDecl)+ ;
+/*file:   (functionDecl | varDecl)+ ;
 
 varDecl
     :   type ID ('=' expr)? ';'
@@ -50,16 +50,18 @@ stat:   block
     |   expr '=' expr ';' // assignment
     |   expr ';'          // func call
     ;
+*/
 
 expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   '(' expr ')'
-    |   ID '[' expr ']'         // array index like a[i], a[i][j]
+//    |   ID '[' expr ']'         // array index like a[i], a[i][j]
     |   '-' expr                // unary minus
     |   '!' expr                // boolean not
     |   expr ('*'|'/') expr
     |   expr ('+'|'-') expr
     |   expr ('^') expr
     |   expr '==' expr          // equality comparison (lowest priority op)
+    |   ARRAY_CALL
     |   NAMED_EXPRESSION
     |   ID                      // variable reference
     |   INT
@@ -68,7 +70,9 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     ;
 exprList : expr (',' expr)* ;   // arg list
 
-FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp';
+FUNCTION : 'ln' | 'Ln' | 'sqrt' | 'Sqrt' | 'exp' | 'Exp' | 'RobReg';
+
+ARRAY_CALL : (ID | NAMED_EXPRESSION) ('[' INT '][' INT ']');       // array index like a[i], a[i][j]
 
 NAMED_EXPRESSION : '[' '"' ID (ID | '/' | ' ')* '"' ']' ;
 

@@ -61,7 +61,7 @@ public class Divide extends Operation {
             int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
             double sigFig15 = ratio2.doubleValue();
-            
+
             ratio = new BigDecimal(sigFig15);
             newScale = 13 - (ratio.precision() - ratio.scale());
             BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
@@ -72,23 +72,52 @@ public class Divide extends Operation {
         return retVal;
     }
 
+    @Override
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+
+        double retVal;
+        try {
+            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]
+                    / childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+
+        // Feb 2017 constrain quotient to mimic VBA results for isotopic ratios
+        if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
+            BigDecimal ratio = new BigDecimal(retVal);
+            int newScale = 15 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+            double sigFig15 = ratio2.doubleValue();
+
+            ratio = new BigDecimal(sigFig15);
+            newScale = 13 - (ratio.precision() - ratio.scale());
+            BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+
+            retVal = ratio3.doubleValue();
+        }
+
+        return new double[][]{{retVal}};
+    }
+
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         boolean leftChildHasLowerPrecedence = false;
         try {
-            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(0)).getOperationPrecedence();
         } catch (Exception e) {
         }
         boolean rightChildHasLowerPrecedence = false;
         try {
-            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(1)).getOperationPrecedence();
         } catch (Exception e) {
         }
 
@@ -96,12 +125,12 @@ public class Divide extends Operation {
                 = "<mfrac>\n"
                 + "<mrow>\n"
                 + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(leftET)
+                + toStringAnotherExpression(childrenET.get(0))
                 + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "\n</mrow>\n"
                 + "<mrow>\n"
                 + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(rightET)
+                + toStringAnotherExpression(childrenET.get(1))
                 + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "\n</mrow>\n"
                 + "</mfrac>\n";

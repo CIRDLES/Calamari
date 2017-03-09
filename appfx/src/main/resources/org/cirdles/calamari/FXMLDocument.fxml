@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.media.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.web.*?>
@@ -9,57 +13,165 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="ExpressionsPane" prefHeight="691.0" prefWidth="1021.0" styleClass="background" stylesheets="@newcss.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cirdles.calamari.FXMLDocumentController">
-    <children>
-      <SplitPane dividerPositions="0.3683304647160069" layoutX="14.0" layoutY="96.0" orientation="VERTICAL" prefHeight="582.0" prefWidth="992.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <SplitPane dividerPositions="0.48185483870967744" layoutX="1.0" layoutY="-4.0" prefHeight="210.0" prefWidth="992.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+<AnchorPane prefHeight="690.0" prefWidth="1018.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cirdles.calamari.FXMLDocumentController">
+   <children>
+      <BorderPane prefHeight="704.0" prefWidth="1018.0">
+         <bottom>
+            <TabPane prefHeight="592.0" prefWidth="1018.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+               <tabs>
+                  <Tab text="Calamari Prawn data processing">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="594.0" prefWidth="1001.0" styleClass="backgroundCalamari" stylesheets="@newcss.css">
                            <children>
-                              <ListView id="browser" fx:id="listView" layoutX="30.0" layoutY="31.0" prefHeight="164.0" prefWidth="216.0">
-                                 <opaqueInsets>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </opaqueInsets>
-                                 <effect>
-                                    <Glow />
-                                 </effect>
-                              </ListView>
-                              <Label layoutX="13.0" layoutY="6.0" prefHeight="17.0" prefWidth="216.0" text="Select an expression:">
-                                 <effect>
-                                    <InnerShadow />
-                                 </effect></Label>
+                              <Label layoutX="21.0" layoutY="44.0" prefHeight="17.0" prefWidth="174.0" stylesheets="@newcss.css" text="Selected Prawn XML file:" />
+                              <TextField fx:id="prawnFilePathText" editable="false" layoutX="200.0" layoutY="37.0" prefHeight="32.0" prefWidth="804.0" promptText="none selected" style="-fx-font-size: 12;">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="21.0" layoutY="81.0" prefHeight="17.0" prefWidth="174.0" stylesheets="@newcss.css" text="Selected Reports Folder:" />
+                              <TextField fx:id="calamariReportsFolderText" editable="false" layoutX="200.0" layoutY="74.0" prefHeight="32.0" prefWidth="804.0" promptText="none selected" style="-fx-font-size: 12;" styleClass="text-field">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </TextField>
+                              <MenuBar id="calamariMenuBar" prefHeight="30.0" prefWidth="63.0" stylesheets="@newcss.css">
+                                <menus>
+                                  <Menu mnemonicParsing="false" text="File">
+                                    <items>
+                                          <MenuItem id="fileMenuSelectPrawnFile" fx:id="fileMenuSelectPrawnFile" mnemonicParsing="false" onAction="#fileMenuSelectPrawnFileAction" text="Select Prawn XML file" />
+                                          <SeparatorMenuItem mnemonicParsing="false" />
+                                          <MenuItem fx:id="fileMenuSelectCalamariReportsLocation" mnemonicParsing="false" onAction="#fileMenuSelectCalamariReportsLocationAction" text="Select location for CalamariReports Folder" />
+                                    </items>
+                                  </Menu>
+                                </menus>
+                              </MenuBar>
+                              <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="133.0" prefHeight="17.0" prefWidth="250.0" stylesheets="@newcss.css" text="Normalise Ion Counts for SBM?" />
+                              <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="174.0" prefHeight="17.0" prefWidth="250.0" stylesheets="@newcss.css" text="Select Ratio Calculation Method:" />
+                              <Label alignment="CENTER_RIGHT" layoutX="200.0" layoutY="206.0" prefHeight="41.0" prefWidth="250.0" stylesheets="@newcss.css" text="Select Case-Insensitive First Letter of Reference Material Name:" wrapText="true" />
+                              <HBox layoutX="477.0" layoutY="131.0" prefHeight="22.0" prefWidth="110.0">
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" prefWidth="50.0" selected="true" text="Yes">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggleGroupSMB" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" prefHeight="12.0" prefWidth="50.0" text="No" toggleGroup="$toggleGroupSMB" />
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="477.0" layoutY="172.0" prefHeight="22.0" prefWidth="468.0">
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="249.0" selected="true" text="Linear regression to burn mid-time">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="toggleGroupRatioCalcMethod" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton mnemonicParsing="false" prefHeight="18.0" prefWidth="212.0" selected="true" text="Spot Average (time-invariant)" toggleGroup="$toggleGroupRatioCalcMethod" />
+                                 </children>
+                              </HBox>
+                              <ChoiceBox fx:id="referenceMaterialFistLetterChoiceBox" layoutX="477.0" layoutY="213.0" prefHeight="27.0" prefWidth="62.0" />
+                              <Button fx:id="reduceDataButton" layoutX="200.0" layoutY="264.0" mnemonicParsing="false" onAction="#handleReducDataButtonAction" prefHeight="31.0" prefWidth="522.0" text="Reduce Data and Produce Reports" />
+                              <ProgressIndicator fx:id="reduceDataProgressIndicator" layoutX="746.0" layoutY="257.0" progress="0.0" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <TextField fx:id="expressionText" layoutX="33.0" layoutY="105.0" prefHeight="32.0" prefWidth="452.0" promptText="enter expression" />
-                                <Button fx:id="parseExpressionButton" alignment="CENTER" layoutX="144.0" layoutY="146.0" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="229.0" text="Parse Expression" textAlignment="CENTER" />
-                              <Label layoutX="13.0" layoutY="6.0" prefHeight="17.0" prefWidth="205.0" text="Try your own expression:" />
-                              <Label layoutX="33.0" layoutY="35.0" prefHeight="17.0" prefWidth="452.0" text="Supported: +, -, *, /, ^, Ln(x), ln(x), Sqrt(x), sqrt(x), Exp(x), exp(x)" />
-                              <Label layoutX="33.0" layoutY="63.0" prefHeight="17.0" prefWidth="452.0" text="Supported: named expressions from list at left using [&quot;...&quot;]" />
-                           </children>
+                    </content>
+                  </Tab>
+                  <Tab text="Expressions">
+                     <content>
+                        <AnchorPane id="AnchorPane" fx:id="ExpressionsPane" prefHeight="599.0" prefWidth="1018.0" styleClass="background" stylesheets="@newcss.css">
+                            <children>
+                              <SplitPane dividerPositions="0.4209486166007905" layoutX="14.0" layoutY="45.0" orientation="VERTICAL" prefHeight="507.0" prefWidth="992.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="204.0" prefWidth="992.0">
+                                       <children>
+                                          <SplitPane dividerPositions="0.48286290322580644" layoutX="1.0" layoutY="-4.0" prefHeight="210.0" prefWidth="992.0">
+                                            <items>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                   <children>
+                                                      <ListView id="browser" fx:id="expressionListView" layoutX="30.0" layoutY="31.0" prefHeight="164.0" prefWidth="216.0">
+                                                         <opaqueInsets>
+                                                            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                                         </opaqueInsets>
+                                                         <effect>
+                                                            <Glow />
+                                                         </effect>
+                                                      </ListView>
+                                                      <Label layoutX="13.0" layoutY="6.0" prefHeight="17.0" prefWidth="216.0" text="Select an expression:">
+                                                         <effect>
+                                                            <InnerShadow />
+                                                         </effect>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="226.0" prefWidth="509.0">
+                                                   <children>
+                                                      <TextField fx:id="expressionText" layoutX="33.0" layoutY="121.0" prefHeight="32.0" prefWidth="452.0" promptText="enter expression" />
+                                                        <Button alignment="CENTER" layoutX="145.0" layoutY="164.0" onAction="#handleParseButtonAction" prefHeight="31.0" prefWidth="229.0" text="Parse Expression" textAlignment="CENTER" />
+                                                      <Label layoutX="13.0" layoutY="6.0" prefHeight="17.0" prefWidth="205.0" text="Try your own expression:" />
+                                                      <Label layoutX="33.0" layoutY="23.0" prefHeight="44.0" prefWidth="452.0" text="Supported: +, -, *, /, ^, Ln(x), ln(x), Sqrt(x), sqrt(x), Exp(x), exp(x), RobReg(x,y,a,b)" wrapText="true" />
+                                                      <Label layoutX="33.0" layoutY="73.0" prefHeight="17.0" prefWidth="452.0" text="Supported: named expressions from list at left using [&quot;...&quot;]" />
+                                                      <Label layoutX="33.0" layoutY="90.0" prefHeight="17.0" prefWidth="452.0" text="Supported: 2D array references such as A[0][0]" />
+                                                   </children>
+                                                </AnchorPane>
+                                            </items>
+                                          </SplitPane>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="298.0" prefWidth="992.0">
+                                       <children>
+                                          <WebView id="browser" fx:id="browser" layoutX="14.0" layoutY="14.0" prefHeight="267.0" prefWidth="969.0" stylesheets="@newcss.css">
+                                             <effect>
+                                                <InnerShadow />
+                                             </effect>
+                                          </WebView>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                              <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="351.0" text="Explore Squid3 Expression Parsing" />
+                            </children>
+                           <opaqueInsets>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </opaqueInsets>
                         </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     </content>
+                  </Tab>
+               </tabs>
+               <opaqueInsets>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </opaqueInsets>
+            </TabPane>
+         </bottom>
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="App">
+                  <items>
+                    <MenuItem id="menuExit" fx:id="menuExit" mnemonicParsing="false" onAction="#menuExitAction" text="Exit" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <right>
+            <ImageView fitHeight="68.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true" translateX="-50.0" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="file:/Development/DEVELOPMENT_CALIMARI/Calamari/appfx/src/main/resources/org/cirdles/calamari/images/SquidLogo.png" />
+               </image>
+            </ImageView>
+         </right>
+         <left>
+            <VBox prefHeight="83.0" prefWidth="740.0" BorderPane.alignment="CENTER">
                <children>
-                  <WebView id="browser" fx:id="browser" layoutX="14.0" layoutY="14.0" prefHeight="336.0" prefWidth="969.0" stylesheets="@newcss.css">
-                     <effect>
-                        <InnerShadow />
-                     </effect>
-                  </WebView>
+                  <Label fx:id="versionAndDateLabel" prefHeight="29.0" prefWidth="746.0" style="-fx-font-size: 24;" text="Label" textFill="#e80303" translateX="10.0" translateY="10.0" />
                </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-      <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="351.0" text="Explore Squid3 Expression Parsing" />
-    </children>
-   <opaqueInsets>
-      <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-   </opaqueInsets>
+            </VBox>
+         </left>
+      </BorderPane>
+   </children>
 </AnchorPane>

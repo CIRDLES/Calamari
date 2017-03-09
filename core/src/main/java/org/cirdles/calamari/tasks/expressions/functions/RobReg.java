@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import java.util.Map;
@@ -24,23 +24,22 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Add extends Operation {
+public class RobReg extends Function {
 
-    public Add() {
-        super();
-        name = "add";
-        argumentCount = 2;
-        precedence = 2;
-        rowCount = 1;
+    public RobReg() {
+        name = "RobReg";
+        argumentCount = 4;
+        precedence = 4;
+        rowCount = 4;
         colCount = 1;
     }
 
     /**
      *
      * @param childrenET
-     * @param pkInterpScan
-     * @param isotopeToIndexMap
-     * @return
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double
      */
     @Override
     public double eval(
@@ -48,8 +47,8 @@ public class Add extends Operation {
             double[] pkInterpScan,
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
-        try {
-            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap) + childrenET.get(1).eval(pkInterpScan, isotopeToIndexMap);
+        try {      
+            retVal = 0.0;
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -65,28 +64,31 @@ public class Add extends Operation {
 
         double retVal;
         try {
-            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]
-                    + childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+            retVal = 0.0;
         } catch (Exception e) {
             retVal = 0.0;
         }
+
         return new double[][]{{retVal}};
     }
 
     /**
      *
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mrow>\n"
-                + toStringAnotherExpression(childrenET.get(0))
-                + "<mo>+</mo>\n"
-                + toStringAnotherExpression(childrenET.get(1))
-                + "</mrow>\n";
+                = "<mrow>"
+                + "<mi>RobReg</mi>"
+                + "<mfenced>";
+
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
+        }
+
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

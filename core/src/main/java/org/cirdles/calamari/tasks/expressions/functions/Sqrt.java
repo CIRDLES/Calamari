@@ -30,6 +30,8 @@ public class Sqrt extends Function {
         name = "sqrt";
         argumentCount = 1;
         precedence = 4;
+        rowCount = 1;
+        colCount = 1;
     }
 
     /**
@@ -54,19 +56,33 @@ public class Sqrt extends Function {
         return retVal;
     }
 
+    @Override
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+
+        double retVal;
+        try {
+            retVal = StrictMath.sqrt(childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]);
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+
+        return new double[][]{{retVal}};
+    }
+
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
                 + "<msqrt>";
-            retVal += toStringAnotherExpression(childrenET.get(0));
+        retVal += toStringAnotherExpression(childrenET.get(0));
 
         retVal += "</msqrt></mrow>\n";
 

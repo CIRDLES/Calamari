@@ -31,6 +31,8 @@ public class Multiply extends Operation {
         name = "multiply";
         argumentCount = 2;
         precedence = 3;
+        rowCount = 1;
+        colCount = 1;
     }
 
     /**
@@ -55,34 +57,48 @@ public class Multiply extends Operation {
         return retVal;
     }
 
+    @Override
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET,
+            double[] pkInterpScan,
+            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+
+        double retVal;
+        try {
+            retVal = childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]
+                    * childrenET.get(1).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0];
+        } catch (Exception e) {
+            retVal = 0.0;
+        }
+        return new double[][]{{retVal}};
+    }
+
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         boolean leftChildHasLowerPrecedence = false;
         try {
-            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(0)).getOperationPrecedence();
         } catch (Exception e) {
         }
         boolean rightChildHasLowerPrecedence = false;
         try {
-            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(1)).getOperationPrecedence();
         } catch (Exception e) {
         }
 
         String retVal
                 = "<mrow>\n"
                 + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(leftET)
+                + toStringAnotherExpression(childrenET.get(0))
                 + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "<mo>&times;</mo>\n"
                 + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(rightET)
+                + toStringAnotherExpression(childrenET.get(1))
                 + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "</mrow>\n";
 

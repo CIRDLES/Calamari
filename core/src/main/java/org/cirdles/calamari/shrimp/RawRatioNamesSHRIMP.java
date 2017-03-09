@@ -18,6 +18,9 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
+
 /**
  *
  * @author James F. Bowring
@@ -48,6 +51,10 @@ public enum RawRatioNamesSHRIMP {
         this.denominator = den;
     }
 
+    public ExpressionTreeInterface getExpression(){
+        return ExpressionTreeWithRatiosInterface.buildRatioExpression(this);
+    }
+    
     /**
      *
      * @return
