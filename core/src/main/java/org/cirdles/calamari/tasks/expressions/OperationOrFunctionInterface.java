@@ -18,6 +18,7 @@ package org.cirdles.calamari.tasks.expressions;
 import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 
 /**
  *
@@ -27,7 +28,15 @@ public interface OperationOrFunctionInterface {
 
     public abstract double eval(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
     
-    public abstract double[][] eval2Array(List<ExpressionTreeInterface> childrenET, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
+    /**
+     *
+     * @param childrenET the value of childrenET
+     * @param shrimpFractions the value of shrimpFraction
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double[][]
+     */
+    public abstract double[][] eval2Array(List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap);
 
     /**
      * @return the precedence

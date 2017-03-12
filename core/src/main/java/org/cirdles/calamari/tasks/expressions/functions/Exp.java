@@ -18,6 +18,7 @@ package org.cirdles.calamari.tasks.expressions.functions;
 import java.util.List;
 import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -56,15 +57,21 @@ public class Exp extends Function {
         return retVal;
     }
 
+    /**
+     *
+     * @param childrenET the value of childrenET
+     * @param shrimpFractions the value of shrimpFraction
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double[][]
+     */
     @Override
     public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET,
-            double[] pkInterpScan,
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
 
         double retVal;
         try {
-            retVal = StrictMath.exp(childrenET.get(0).eval2Array(pkInterpScan, isotopeToIndexMap)[0][0]);
+            retVal = StrictMath.exp(childrenET.get(0).eval2Array(shrimpFractions, pkInterpScan, isotopeToIndexMap)[0][0]);
         } catch (Exception e) {
             retVal = 0.0;
         }

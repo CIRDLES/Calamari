@@ -193,9 +193,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         // documented separately), and approximate the uncertainties:
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
                         // sanity test on array output
-//                        double [][] eqValTmpA = expression.eval2Array(pkInterp[scanNum], isotopeToIndexMap);
-//                        double diff = eqValTmp - eqValTmpA[0][0];
-//                        System.out.println("proof =  " + diff);
+                        List<ShrimpFractionExpressionInterface>shrimpFractions = new ArrayList<>();
+                        shrimpFractions.add(shrimpFraction);
+                        shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
+                        double [][] eqValTmpA = expression.eval2Array(shrimpFractions, pkInterp[scanNum], isotopeToIndexMap);
+                        double diff = eqValTmp - eqValTmpA[0][0];
+                        System.out.println("proof =  " + diff);
                         
                         double eqFerr;
 

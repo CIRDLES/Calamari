@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
@@ -166,9 +167,16 @@ public class ExpressionTree
         return operation == null ? 0.0 : operation.eval(childrenET, pkInterpScan, isotopeToIndexMap);
     }
 
+    /**
+     *
+     * @param shrimpFractions the value of shrimpFraction
+     * @param pkInterpScan the value of pkInterpScan
+     * @param isotopeToIndexMap the value of isotopeToIndexMap
+     * @return the double[][] 
+     */
     @Override
-    public double[][] eval2Array(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return operation == null ? new double[][]{{0.0}} : operation.eval2Array(childrenET, pkInterpScan, isotopeToIndexMap);
+    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+        return operation == null ? new double[][]{{0.0}} : operation.eval2Array(childrenET, shrimpFractions, pkInterpScan, isotopeToIndexMap);
     }
 
     @Override
