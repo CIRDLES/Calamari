@@ -58,39 +58,14 @@ public class BigDecimalCustomAlgorithms {
         MathContext precisionMC = new MathContext(precision, RoundingMode.HALF_EVEN);
 
         //obtain an initial guess for the root
-        BigDecimal guess;
-        //compareTo() is used instead of equals() because equals() requires the numbers to have the same scale
-        if (S.compareTo(BigDecimal.ZERO)==0) {
-            guess = BigDecimal.ZERO;
-        }
-        //ensure that we don't sqrt an infinite and that guess won't be zero
-        else if (Double.isInfinite(S.doubleValue())) {
-            //Really rough estimate for huge numbers.
-            int digitsLeftOfDecimalPlace = S.toPlainString().concat(".").indexOf(".") - 1;
-            System.out.println("scale of " + S.toString() + ": " + digitsLeftOfDecimalPlace);
-            guess = BigDecimal.ONE.scaleByPowerOfTen(digitsLeftOfDecimalPlace/2);
-            System.out.println("initial guess of " + S.toString() + ": " + guess);
-        } else if (S.doubleValue() == 0){
-            /*
-            Really rough estimate for tiny numbers. If S.doubleValue() returned zero at this point, that means S
-            is very small.
-             */
-            System.out.println("scale of " + S.toString() + ": " + S.scale());
-            guess = BigDecimal.ONE.scaleByPowerOfTen((S.scale()*-1)/2);
-            System.out.println("initial guess of " + S.toString() + ": " + guess);
-
-        } else {
-            guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
-        }
+        BigDecimal guess = obtainInitialGuess(S);
 
         //check to see if the initial guess is already exact
         if (S.compareTo(guess.pow(2)) != 0) {
 
-            //iterate until the amount between guesses is zero, meaning more precision would be needed to store the next estimate
+            //iterate until the amount between guesses is zero, meaning more precision would be needed to store the next estimation
             BigDecimal theError = BigDecimal.ONE;
-            int iterations = 0;
             while (theError.compareTo(new BigDecimal(0)) != 0) {
-                iterations++;
                 BigDecimal nextGuess = BigDecimal.ZERO;
                 try {
                     nextGuess = guess.add(S.divide(guess, precisionMC)).divide(new BigDecimal(2.0), precisionMC);
@@ -104,10 +79,32 @@ public class BigDecimalCustomAlgorithms {
                 theError = guess.subtract(nextGuess, precisionMC).abs();
                 guess = nextGuess;
             }
-            System.out.println("iterations for " + S.toString() + ": " + iterations);
         }
-        System.out.println();
-        //remove trailing zeroes to ensure nothing such as 3.0000000000000 is returned
-        return guess.stripTrailingZeros();
+        return guess;
+    }
+
+    /**
+     * Obtains an initial guess for the square root of a BigDecimal number. If the number is too small/too large to be
+     * represented as a double, 10^(n/2), where n is the number of digits left of the decimal place of S, is used.
+     * Otherwise, the square root of the double value is used.
+     * @param S
+     * @return A number that, hopefully, is close to the square root of S
+     */
+    private static BigDecimal obtainInitialGuess(BigDecimal S) {
+        BigDecimal guess;
+        //compareTo() is used instead of equals() because equals() requires the numbers to have the same scale
+        if (S.compareTo(BigDecimal.ZERO)==0) {
+            guess = BigDecimal.ZERO;
+        }
+        //ensure that we don't sqrt an infinite and that guess won't be zero
+        else if (Double.isInfinite(S.doubleValue())||S.doubleValue() == 0.0) {
+            /*Really rough estimate for huge/tiny numbers. If S.doubleValue() returned zero at this point, that means S
+            is very small.*/
+            int digitsLeftOfDecimalPlace = S.precision() - S.scale();
+            guess = BigDecimal.ONE.scaleByPowerOfTen(digitsLeftOfDecimalPlace/2);
+        } else {
+            guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
+        }
+        return guess;
     }
 }

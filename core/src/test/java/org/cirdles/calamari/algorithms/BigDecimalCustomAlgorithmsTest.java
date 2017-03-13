@@ -51,35 +51,26 @@ public class BigDecimalCustomAlgorithmsTest
         S = new BigDecimal("0.467987649584799564673356876567446");
         expResult = new BigDecimal("0.6840962283076844772331409047304488");
         result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S);
-        assertEquals("failed on sqrt(0.467987649584799564673356876567446)",expResult, result);
+        assertEquals("failed on sqrt(0.467987649584799564673356876567446)", expResult, result);
 
         //test sqrt(9999999999.9999999999)
         S = new BigDecimal("9999999999.9999999999");
-        expResult = new BigDecimal("99999.9999999999999995");
+        expResult = new BigDecimal("99999.99999999999999950000000000000");
         result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S);
-        assertEquals("failed on sqrt(9999999999.9999999999) Ensure rounding mode is HALF_EVEN",expResult, result);
+        assertEquals("failed on sqrt(9999999999.9999999999) Ensure rounding mode is HALF_EVEN", expResult, result);
 
-        //test with non-default precision
+        //test with numbers outside of double's range
 
         //test sqrt(1E-1000) maybe too robust?
         S = new BigDecimal("1E-1000");
         expResult = new BigDecimal("1E-500");
-        result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S, 1000);
-        assertEquals("failed on sqrt(1E-1000)",expResult, result);
+        result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S, 1);
+        assertEquals("failed on sqrt(1E-1000)", expResult, result);
 
         //test sqrt(1E1000) maybe too robust?
         S = new BigDecimal("1E1000");
         expResult = new BigDecimal("1E500");
-        result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S, 1000);
-        //assertEquals("failed on sqrt(1E1000)",expResult, result);
-
-        /* Can't find a calculator that can calculate this
-        //test sqrt(1E1000 + 1E-1000) maybe too robust?
-        S = new BigDecimal("1E1000").add(new BigDecimal("1E-1000"));
-        expResult = new BigDecimal("???");
-        result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S, 1000);
-        //System.out.println(result);
-        assertEquals("failed on sqrt(1E1000)",expResult, result);
-        */
+        result = BigDecimalCustomAlgorithms.bigDecimalSqrtBabylonian(S, 1);
+        assertEquals("failed on sqrt(1E1000)", expResult, result);
     }
 }
