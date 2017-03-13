@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.builtinExpressions;
+package org.cirdles.calamari.tasks.expressions.customExpressions;
 
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
+import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
-import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression1 {
+public class CustomExpression_Net204cts_sec {
 
     /**
-     * Squid Excel format is ln(["254/238"]) has EqNum = 1
+     * Squid Excel format is ["Total204cts/sec"] - ["Bkrdcts/sec"]
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Ln254/238");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Net204cts/sec");
 
     static {
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
-
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r254_238w.getExpression());
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, new ShrimpSpeciesNode(IsotopeNames.Pb204, "getTotalCps"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ShrimpSpeciesNode(IsotopeNames.BKGND, "getTotalCps"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.subtract());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
     }

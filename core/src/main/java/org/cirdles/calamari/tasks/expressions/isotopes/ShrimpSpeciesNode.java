@@ -19,7 +19,6 @@ import com.thoughtworks.xstream.XStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -55,32 +54,14 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     }
 
     /**
-     *
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
-     */
-    @Override
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        double retVal = 0.0;
-        Integer index = isotopeToIndexMap.get(name);
-        if (index != null) {
-            retVal = pkInterpScan[index];
-        }
-        return retVal;
-    }
-
-    /**
-     *
+     * Assumes a one-element list of shrimpFractions
      * @param shrimpFractions the value of shrimpFraction
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
      * @return the double[][]
      */
     @Override
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface>  shrimpFractions, double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
+    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
         double retVal = 0.0;
-        Integer index = isotopeToIndexMap.get(name);
+        Integer index = shrimpFractions.get(0).getIndexOfSpeciesByName(name);
         if (index != null) {
             double[] isotopeValues = 
                     methodFactory(shrimpFractions.get(0), methodNameForShrimpFraction);

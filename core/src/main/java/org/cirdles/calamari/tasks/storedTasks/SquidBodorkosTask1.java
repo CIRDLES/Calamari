@@ -16,8 +16,8 @@
 package org.cirdles.calamari.tasks.storedTasks;
 
 import org.cirdles.calamari.tasks.Task;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
@@ -30,9 +30,9 @@ public class SquidBodorkosTask1 extends Task {
 
     public SquidBodorkosTask1() {
         super("SquidBodorkosTask1");
-        taskExpressionsOrdered.add(CustomExpression1.EXPRESSION);
+        taskExpressionsOrdered.add(CustomExpression_LnUO_U.EXPRESSION);
 
-        taskExpressionsOrdered.add(CustomExpression2.EXPRESSION);
+        taskExpressionsOrdered.add(CustomExpression_LnPbR_U.EXPRESSION);
 
         taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
 

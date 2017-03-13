@@ -54,12 +54,24 @@ public interface ShrimpFractionExpressionInterface {
     public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated);
 
     // getters used by reflection - change names carefully
-        /**
+    /**
      * @return the pkInterpScanArray
      */
     public double[] getPkInterpScanArray();
-        /**
+
+    /**
      * @param pkInterpScanArray the pkInterpScanArray to set
      */
     public void setPkInterpScanArray(double[] pkInterpScanArray);
+
+    /**
+     * @return the totalCps
+     */
+    public double[] getTotalCps();
+
+    /**
+     * @param totalCps the totalCps to set
+     */
+    public void setTotalCps(double[] totalCps);
+
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.builtinExpressions;
+package org.cirdles.calamari.tasks.expressions.customExpressions;
 
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
@@ -26,17 +26,17 @@ import org.cirdles.calamari.tasks.expressions.functions.Function;
  *
  * @author James F. Bowring
  */
-public class CustomExpression2 {
+public class CustomExpression_LnUO_U {
 
     /**
-     * Squid Excel format is ln(["206/238"]) has EqNum = 1
+     * Squid Excel format is ln(["254/238"])
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Ln206/238");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("LnUO/U");
 
     static {
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
+        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
 
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r206_238w.getExpression());
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r254_238w.getExpression());
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
