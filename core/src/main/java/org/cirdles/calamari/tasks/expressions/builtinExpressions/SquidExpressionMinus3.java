@@ -36,16 +36,21 @@ public class SquidExpressionMinus3 {
 
     static {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
-        ExpressionTreeInterface r254_238w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r254_238w);
-
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r248_254w);
-        ExpressionTreeInterface r248_254w = ExpressionTreeWithRatiosInterface.buildRatioExpression(RawRatioNamesSHRIMP.r248_254w);
 
-        ExpressionTreeInterface term1 = new ExpressionTree("0.03446 * 254/238", new ConstantNode("0.03446", 0.03446), r254_238w, Operation.multiply());
-        ExpressionTreeInterface term2 = new ExpressionTree("0.03446 * 254/238 + 0.868", term1, new ConstantNode("0.868", 0.868), Operation.add());
+        ExpressionTreeInterface term1 = new ExpressionTree(
+                "0.03446 * 254/238", 
+                new ConstantNode("0.03446", 0.03446), 
+                RawRatioNamesSHRIMP.r254_238w.getExpression(), 
+                Operation.multiply());
+        ExpressionTreeInterface term2 = new ExpressionTree(
+                "0.03446 * 254/238 + 0.868", 
+                term1, 
+                new ConstantNode("0.868", 0.868), 
+                Operation.add());
 
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setLeftET(term2);
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setRightET(r248_254w);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, term2);
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(RawRatioNamesSHRIMP.r248_254w.getExpression());
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.multiply());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);

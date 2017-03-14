@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public class Multiply extends Operation {
+public class RobReg extends Function {
 
-    public Multiply() {
-        name = "multiply";
-        argumentCount = 2;
-        precedence = 3;
-        rowCount = 1;
+    public RobReg() {
+        name = "RobReg";
+        argumentCount = 4;
+        precedence = 4;
+        rowCount = 4;
         colCount = 1;
     }
 
@@ -46,11 +45,11 @@ public class Multiply extends Operation {
 
         double retVal;
         try {
-            retVal = childrenET.get(0).eval2Array(shrimpFractions)[0][0]
-                    * childrenET.get(1).eval2Array(shrimpFractions)[0][0];
+            retVal = 0.0;
         } catch (Exception e) {
             retVal = 0.0;
         }
+
         return new double[][]{{retVal}};
     }
 
@@ -61,27 +60,16 @@ public class Multiply extends Operation {
      */
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
-        boolean leftChildHasLowerPrecedence = false;
-        try {
-            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(0)).getOperationPrecedence();
-        } catch (Exception e) {
-        }
-        boolean rightChildHasLowerPrecedence = false;
-        try {
-            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(1)).getOperationPrecedence();
-        } catch (Exception e) {
+        String retVal
+                = "<mrow>"
+                + "<mi>RobReg</mi>"
+                + "<mfenced>";
+
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
         }
 
-        String retVal
-                = "<mrow>\n"
-                + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(childrenET.get(0))
-                + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
-                + "<mo>&times;</mo>\n"
-                + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(childrenET.get(1))
-                + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
-                + "</mrow>\n";
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

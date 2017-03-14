@@ -164,7 +164,7 @@ public class ExpressionTreeXMLConverter implements Converter {
         }
         reader.moveUp();
         reader.moveUp();
-        expressionTree.setLeftET(leftET);
+        expressionTree.addChild(0, leftET);
 
         // rightET
         ExpressionTreeInterface rightET = null;
@@ -185,7 +185,7 @@ public class ExpressionTreeXMLConverter implements Converter {
             reader.moveUp();
         }
         reader.moveUp();
-        expressionTree.setRightET(rightET);
+        expressionTree.addChild(rightET);
 
         // operation
         reader.moveDown();

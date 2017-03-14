@@ -13,38 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.builtinExpressions;
+package org.cirdles.calamari.tasks.expressions.customExpressions;
 
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
-import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
-import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.functions.Function;
 
 /**
  *
  * @author James F. Bowring
  */
-public class SquidExpressionMinus1 {
+public class CustomExpression_LnPbR_U {
 
     /**
-     * Squid Excel format is ["206/238"]/["254/238"]^2 has EqNum = -1
+     * Squid Excel format is ln(["206/238"])
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("206/238 Calib Const");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Ln206/238");
 
     static {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r254_238w);
-
-        ExpressionTreeInterface r254_238wSquared = new ExpressionTree("254/238^2", RawRatioNamesSHRIMP.r254_238w.getExpression(), new ConstantNode("2", 2.0), Operation.pow());
 
         ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r206_238w.getExpression());
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(r254_238wSquared);
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.divide());
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
     }
-
 }

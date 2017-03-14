@@ -16,8 +16,8 @@
 package org.cirdles.calamari.tasks.expressions.constants;
 
 import com.thoughtworks.xstream.XStream;
-import java.util.Map;
-import org.cirdles.calamari.shrimp.IsotopeNames;
+import java.util.List;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
@@ -48,13 +48,12 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
 
     /**
      *
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @param shrimpFractions the value of shrimpFraction
+     * @return the double[][]
      */
     @Override
-    public double eval(double[] pkInterpScan, Map<IsotopeNames, Integer> isotopeToIndexMap) {
-        return value;
+    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+        return new double[][]{{value}};
     }
 
     @Override

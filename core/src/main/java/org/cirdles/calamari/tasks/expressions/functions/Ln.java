@@ -16,8 +16,7 @@
 package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
-import java.util.Map;
-import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -30,41 +29,39 @@ public class Ln extends Function {
         name = "ln";
         argumentCount = 1;
         precedence = 4;
+        rowCount = 1;
+        colCount = 1;
     }
 
     /**
      *
-     * @param childrenET
-     * @param pkInterpScan the value of pkInterpScan
-     * @param isotopeToIndexMap the value of isotopeToIndexMap
-     * @return the double
+     * @param childrenET the value of childrenET
+     * @param shrimpFractions the value of shrimpFraction
+     * @return the double[][]
      */
     @Override
-    public double eval(
-            List<ExpressionTreeInterface> childrenET,
-            double[] pkInterpScan,
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+
         double retVal;
         try {
 //            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
             // Feb 2017 to cause replication of Squid2.5 results            
-            retVal = Math.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            retVal = Math.log(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
         } catch (Exception e) {
             retVal = 0.0;
         }
 
-        return retVal;
+        return new double[][]{{retVal}};
     }
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
                 + "<mi>ln</mi>"

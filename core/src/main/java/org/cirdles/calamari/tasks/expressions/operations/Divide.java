@@ -18,8 +18,7 @@ package org.cirdles.calamari.tasks.expressions.operations;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
-import org.cirdles.calamari.shrimp.IsotopeNames;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
@@ -38,19 +37,18 @@ public class Divide extends Operation {
 
     /**
      *
-     * @param childrenET
-     * @param pkInterpScan
-     * @param isotopeToIndexMap
-     * @return
+     * @param childrenET the value of childrenET
+     * @param shrimpFractions the value of shrimpFraction
+     * @return the double[][]
      */
     @Override
-    public double eval(
-            List<ExpressionTreeInterface> childrenET,
-            double[] pkInterpScan,
-            Map<IsotopeNames, Integer> isotopeToIndexMap) {
+    public double[][] eval2Array(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+
         double retVal;
         try {
-            retVal = childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap) / childrenET.get(1).eval(pkInterpScan, isotopeToIndexMap);
+            retVal = childrenET.get(0).eval2Array(shrimpFractions)[0][0]
+                    / childrenET.get(1).eval2Array(shrimpFractions)[0][0];
         } catch (Exception e) {
             retVal = 0.0;
         }
@@ -61,7 +59,7 @@ public class Divide extends Operation {
             int newScale = 15 - (ratio.precision() - ratio.scale());
             BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
             double sigFig15 = ratio2.doubleValue();
-            
+
             ratio = new BigDecimal(sigFig15);
             newScale = 13 - (ratio.precision() - ratio.scale());
             BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
@@ -69,26 +67,24 @@ public class Divide extends Operation {
             retVal = ratio3.doubleValue();
         }
 
-        return retVal;
+        return new double[][]{{retVal}};
     }
 
     /**
      *
-     * @param leftET the value of leftET
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
-     * @return 
+     * @return
      */
     @Override
-    public String toStringMathML(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET, List<ExpressionTreeInterface> childrenET) {
+    public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         boolean leftChildHasLowerPrecedence = false;
         try {
-            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) leftET).getOperationPrecedence();
+            leftChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(0)).getOperationPrecedence();
         } catch (Exception e) {
         }
         boolean rightChildHasLowerPrecedence = false;
         try {
-            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) rightET).getOperationPrecedence();
+            rightChildHasLowerPrecedence = precedence > ((ExpressionTreeBuilderInterface) childrenET.get(1)).getOperationPrecedence();
         } catch (Exception e) {
         }
 
@@ -96,12 +92,12 @@ public class Divide extends Operation {
                 = "<mfrac>\n"
                 + "<mrow>\n"
                 + (leftChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(leftET)
+                + toStringAnotherExpression(childrenET.get(0))
                 + (leftChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "\n</mrow>\n"
                 + "<mrow>\n"
                 + (rightChildHasLowerPrecedence ? "<mo>(</mo>\n" : "")
-                + toStringAnotherExpression(rightET)
+                + toStringAnotherExpression(childrenET.get(1))
                 + (rightChildHasLowerPrecedence ? "<mo>)</mo>\n" : "")
                 + "\n</mrow>\n"
                 + "</mfrac>\n";

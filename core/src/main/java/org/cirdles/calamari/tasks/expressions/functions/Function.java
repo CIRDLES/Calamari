@@ -34,6 +34,9 @@ public abstract class Function
     protected String name;
     protected int argumentCount;
     protected int precedence;
+    // establish size of array resullting from evaluation
+    protected int rowCount;
+    protected int colCount;
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -52,6 +55,10 @@ public abstract class Function
 
     public static OperationOrFunctionInterface exp() {
         return new Exp();
+    }
+
+    public static OperationOrFunctionInterface robReg() {
+        return new RobReg();
     }
 
     /**
@@ -122,5 +129,33 @@ public abstract class Function
     @Override
     public int getPrecedence() {
         return precedence;
+    }
+
+    /**
+     * @return the rowCount
+     */
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    /**
+     * @param rowCount the rowCount to set
+     */
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    /**
+     * @return the colCount
+     */
+    public int getColCount() {
+        return colCount;
+    }
+
+    /**
+     * @param colCount the colCount to set
+     */
+    public void setColCount(int colCount) {
+        this.colCount = colCount;
     }
 }

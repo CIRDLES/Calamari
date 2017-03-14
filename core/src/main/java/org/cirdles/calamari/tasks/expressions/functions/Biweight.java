@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.tasks.expressions.functions;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -23,14 +24,14 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Exp extends Function {
+public class Biweight extends Function {
 
-    public Exp() {
-        name = "exp";
-        argumentCount = 1;
+    public Biweight() {
+        name = "Biweight";
+        argumentCount = 2;
         precedence = 4;
         rowCount = 1;
-        colCount = 1;
+        colCount = 2;
     }
 
     /**
@@ -43,14 +44,16 @@ public class Exp extends Function {
     public double[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double retVal;
+        double[][] retVal;
         try {
-            retVal = StrictMath.exp(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
+            // need to assemble array of doubles fromlist of fractions ...
+            BigDecimal[] retValBD = org.cirdles.ludwig.TukeyBiweight.biweightMean(null, 9);
+            retVal = new double[][]{{retValBD[0].doubleValue()}, {retValBD[1].doubleValue()}};
         } catch (Exception e) {
-            retVal = 0.0;
+            retVal = new double[][]{{0.0}, {0.0}};
         }
 
-        return new double[][]{{retVal}};
+        return retVal;
     }
 
     /**
@@ -62,18 +65,14 @@ public class Exp extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<msup>"
-                + "<mi>"
-                + "&ExponentialE;"
-                + "</mi>"
-                + "<mfenced>\n";
+                + "<mi>RobReg</mi>"
+                + "<mfenced>";
 
-        retVal += toStringAnotherExpression(childrenET.get(0));
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
+        }
 
-        retVal
-                += "</mfenced>"
-                + "</msup>"
-                + "</mrow>";
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

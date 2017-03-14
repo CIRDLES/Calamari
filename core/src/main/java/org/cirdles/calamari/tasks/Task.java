@@ -18,10 +18,8 @@ package org.cirdles.calamari.tasks;
 import com.google.common.primitives.Doubles;
 import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
@@ -83,7 +81,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         xstream.alias("operation", Multiply.class);
         xstream.alias("operation", Divide.class);
         xstream.alias("operation", Pow.class);
-        
+
         xstream.alias("function", Ln.class);
 
         xstream.registerConverter(new RawRatioNamesSHRIMPXMLConverter());
@@ -106,21 +104,19 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     public void evaluateTaskExpressions(ShrimpFractionExpressionInterface shrimpFraction) {
         this.taskExpressionsEvaluated = new ArrayList<>();
         if (shrimpFraction != null) {
+            List<ShrimpFractionExpressionInterface> shrimpFractions = new ArrayList<>();
+            shrimpFractions.add(shrimpFraction);
             // first have to build pkInterp etc per expression and then evaluate by scan
             taskExpressionsOrdered.forEach((expression) -> {
                 List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
 
-                // entry test
+                // entry test for special processing of ratios of interest
                 if (ratiosOfInterest.size() > 0) {
 
                     int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
-                    Map<IsotopeNames, Integer> isotopeToIndexMap = new HashMap<>();
                     for (int i = 0; i < ratiosOfInterest.size(); i++) {
                         isotopeIndices[2 * i] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getNumerator());
-                        isotopeToIndexMap.put(ratiosOfInterest.get(i).getNumerator(), isotopeIndices[2 * i]);
-
                         isotopeIndices[2 * i + 1] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getDenominator());
-                        isotopeToIndexMap.put(ratiosOfInterest.get(i).getDenominator(), isotopeIndices[2 * i + 1]);
                     }
 
                     int sIndx = shrimpFraction.getReducedPkHt().length - 1;
@@ -189,9 +185,11 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             }
                         }
 
-                        // The next step is to evaluate the equation ('FormulaEval', 
-                        // documented separately), and approximate the uncertainties:
-                        double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
+                        // The next step is to evaluate the equation 'FormulaEval', 
+                        // documented separately, and approximate the uncertainties:
+                        shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
+                        double eqValTmp = expression.eval2Array(shrimpFractions)[0][0];
+
                         double eqFerr;
 
                         if (eqValTmp != 0.0) {
@@ -209,7 +207,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 // clone pkInterp[scanNum] for use in pertubation
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
-                                double pertVal = expression.eval(perturbed, isotopeToIndexMap);
+                                shrimpFraction.setPkInterpScanArray(perturbed);
+                                double pertVal = expression.eval2Array(shrimpFractions)[0][0];
 
                                 double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                                 double tA = pkInterpFerr[scanNum][unDupPkOrd];
@@ -233,6 +232,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 species = eqPkUndupeOrd.iterator();
                                 while (species.hasNext()) {
                                     int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
+
                                     totRatTime += shrimpFraction.getTimeStampSec()[scanNum][unDupPkOrd];
                                     numPksInclDupes++;
 
@@ -304,7 +304,14 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                     taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
                             expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr));
-                }// end of entry test
+                } else { // end of entry test for special handling of ratios of interest
+
+                    // more logic needed here to parse expression output
+                    double value = expression.eval2Array(shrimpFractions)[0][0];
+
+                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
+                            expression, new double[0], new double[0], new double[0], value, 0));
+                }
             }); // end of visiting each expression
             shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);
 

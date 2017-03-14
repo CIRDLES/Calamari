@@ -13,8 +13,13 @@ and open the template in the editor.
  2  "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
  3  "Helvetica Neue", sans-serif;*/
 
+
 .background {
     -fx-background-color: #EAFDFF;
+}
+
+.backgroundCalamari {
+    -fx-background-color:    #FFF5F5;
 }
 
 .label {
@@ -89,24 +94,42 @@ and open the template in the editor.
     -fx-padding: 1 0 0 0;
 }
 
+/* Show nothing for background of normal menu button in a menu bar caspian.css */
+.menu-bar > .container > .menu-button {
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0; 
+}
+.menu-bar > .container > .menu-button:hover {
+    -fx-background: #FFE7E4;
+    -fx-background-color: whitesmoke;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+
 .menu-bar {
-    -fx-background-color: derive(#1d1d1d,20%);
+    -fx-background-color:  #FFE7E4;/*  derive(#1d1d1d,20%);*/
 }
 
 .context-menu {
-    -fx-background-color: derive(#1d1d1d,50%);
+    -fx-background-color: whitesmoke;/*  derive(#1d1d1d,50%);*/
 }
 
 .menu-bar .label {
-    -fx-font-size: 14pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 0.9;
 }
 
 .menu .left-container {
-    -fx-background-color: black;
+    -fx-background-color: whitesmoke;
 }
+
+.menu-item:focused {
+     -fx-background-color: #FFE7E4;
+}
+
 
 .text-field {
     -fx-font-size: 12pt;
@@ -123,10 +146,10 @@ and open the template in the editor.
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: #ff6961; /*#1d1d1d;*/
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: whitesmoke;/*  #d8d8d8;*/
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 

@@ -54,6 +54,8 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     private double[][] reducedPkHt;
     private double[][] reducedPkHtFerr;
     
+    private double[] pkInterpScanArray;
+    
     private List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated;
 
     public ShrimpFraction() {
@@ -80,6 +82,9 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
         reducedPkHt = new double[0][0];
         reducedPkHtFerr = new double[0][0];
+        
+        pkInterpScanArray = new double[0];
+        
         taskExpressionsEvaluated = new ArrayList<>();
 
     }
@@ -447,6 +452,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the reducedPkHtFerr
      */
+    @Override
     public double[][] getReducedPkHtFerr() {
         return reducedPkHtFerr.clone();
     }
@@ -456,6 +462,20 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
      */
     public void setReducedPkHtFerr(double[][] reducedPkHtFerr) {
         this.reducedPkHtFerr = reducedPkHtFerr.clone();
+    }
+
+    /**
+     * @return the pkInterpScanArray
+     */
+    public double[] getPkInterpScanArray() {
+        return pkInterpScanArray.clone();
+    }
+
+    /**
+     * @param pkInterpScanArray the pkInterpScanArray to set
+     */
+    public void setPkInterpScanArray(double[] pkInterpScanArray) {
+        this.pkInterpScanArray = pkInterpScanArray.clone();
     }
 
     /**
