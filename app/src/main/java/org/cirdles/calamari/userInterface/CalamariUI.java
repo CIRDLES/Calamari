@@ -32,13 +32,13 @@ import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFileFilter;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
-import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
+import org.cirdles.calamari.tasks.storedTasks.ILC_Zircon_10Pk_expFloat_Task;
 import org.cirdles.calamari.utilities.FileHelper;
 
 /**
@@ -93,8 +93,8 @@ public class CalamariUI extends javax.swing.JFrame {
         AbstractListModel<ExpressionTreeInterface> expressionList
                 = new AbstractListModel() {
             ExpressionTreeInterface[] expressions
-                    = {CustomExpression1.EXPRESSION,
-                        CustomExpression2.EXPRESSION,
+                    = {CustomExpression_LnUO_U.EXPRESSION,
+                        CustomExpression_LnPbR_U.EXPRESSION,
                         SquidExpressionMinus1.EXPRESSION,
                         SquidExpressionMinus3.EXPRESSION,
                         SquidExpressionMinus4.EXPRESSION};
@@ -512,7 +512,7 @@ public class CalamariUI extends javax.swing.JFrame {
                     normalizeIonCountsToSBM,
                     useLinearRegressionToCalculateRatios,
                     (String) referenceMaterialFirstLetterComboBox.getSelectedItem(),
-                    new SquidBodorkosTask1(), // temporarily hard-wired
+                    new ILC_Zircon_10Pk_expFloat_Task(), // temporarily hard-wired
                     reduceDataProgressBar).execute();
         } else {
             JOptionPane.showMessageDialog(

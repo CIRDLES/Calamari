@@ -5,12 +5,19 @@ dependencies {
     
     compile "com.google.guava:guava:20.0"
     
+    compile "com.github.cirdles:LudwigLibrary:-SNAPSHOT"
+    
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
     
     antlr "org.antlr:antlr4:4.6"
     compile 'org.antlr:antlr4-runtime:4.6'
    
     testCompile "com.github.cirdles:Commons:-SNAPSHOT"   
+}
+
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 sourceSets {

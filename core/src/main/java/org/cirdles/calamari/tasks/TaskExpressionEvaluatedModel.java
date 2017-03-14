@@ -78,6 +78,7 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     /**
      * @return the ratioVal
      */
+    @Override
     public double getRatioVal() {
         return ratioVal;
     }
@@ -85,6 +86,7 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     /**
      * @return the ratioFractErr
      */
+    @Override
     public double getRatioFractErr() {
         return ratioFractErr;
     }

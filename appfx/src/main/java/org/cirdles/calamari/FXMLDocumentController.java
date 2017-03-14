@@ -18,11 +18,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
@@ -33,11 +31,12 @@ import javax.swing.JOptionPane;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression1;
-import org.cirdles.calamari.tasks.expressions.builtinExpressions.CustomExpression2;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 
@@ -98,8 +97,9 @@ public class FXMLDocumentController implements Initializable {
 
         // initialize expressions tab
         ObservableList<ExpressionTreeInterface> items = FXCollections.observableArrayList(
-                CustomExpression1.EXPRESSION,
-                CustomExpression2.EXPRESSION,
+                CustomExpression_LnPbR_U.EXPRESSION,
+                CustomExpression_LnUO_U.EXPRESSION,
+                CustomExpression_Net204cts_sec.EXPRESSION,
                 SquidExpressionMinus1.EXPRESSION,
                 SquidExpressionMinus3.EXPRESSION,
                 SquidExpressionMinus4.EXPRESSION);
