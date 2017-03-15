@@ -29,6 +29,7 @@ import static org.cirdles.calamari.constants.SquidConstants.SQUID_ERROR_VALUE;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
+import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -117,7 +118,9 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 if (ratiosOfInterest.size() > 0) {
 
                     System.out.println("\n>>>EXPRESSION:   " + expression.getName() + "  ************");
-                    
+
+                    System.out.println("Scan \tSpecies      " + "\tPkInterp           " + "\tPkInterpFerr  ");
+
                     int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
                     Map<IsotopeNames, Integer> isotopeToIndexMap = new HashMap<>();
                     for (int i = 0; i < ratiosOfInterest.size(); i++) {
@@ -190,6 +193,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                         pkInterpFerr[scanNum][isotopeIndices[i]] = StrictMath.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
                                                 + (fractInterpTime * pkF2) * (fractInterpTime * pkF2));
                                     }
+
+                                    System.out.println((scanNum + 1) 
+                                            + "\t" + ((ShrimpFraction) shrimpFraction).getNamesOfSpecies()[isotopeIndices[i]]  
+                                            + "\t     " +   pkInterp[scanNum][isotopeIndices[i]] 
+                                            + "\t     " + pkInterpFerr[scanNum][isotopeIndices[i]] );
+
                                 }
                             }
                         }
@@ -200,19 +209,19 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                         String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
 
-                        if (ratName.compareToIgnoreCase("206/238") == 0) {
-                           System.out.println("SCAN # "
-                                    + (scanNum + 1) + ", "
-                                    + "206/238-double," + "206/238-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
-                        } else {
-                            System.out.println("SCAN # "
-                                    + (scanNum + 1) + ", "
-                                    + "254/238-double," + "254/238-13dig," + "248/254-double," + "248/254-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
-                        }
-
-                        System.out.print(" no perturb:,\t");
+//                        if (ratName.compareToIgnoreCase("206/238") == 0) {
+//                           System.out.println("SCAN # "
+//                                    + (scanNum + 1) + ", "
+//                                    + "206/238-double," + "206/238-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+//                        } else {
+//                            System.out.println("SCAN # "
+//                                    + (scanNum + 1) + ", "
+//                                    + "254/238-double," + "254/238-13dig," + "248/254-double," + "248/254-13dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+//                        }
+//
+//                        System.out.print(" no perturb:,\t");
                         double eqValTmp = expression.eval(pkInterp[scanNum], isotopeToIndexMap);
-                        System.out.println("\t" + eqValTmp);
+//                        System.out.println("\t" + eqValTmp);
 
                         double eqFerr = 0.0;
 
@@ -239,9 +248,9 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 double[] perturbed = pkInterp[scanNum].clone();
                                 perturbed[unDupPkOrd] *= 1.0001;
 
-                                System.out.print(" pert " + specie.getName() + ":,\t");
+//                                System.out.print(" pert " + specie.getName() + ":,\t");
                                 double pertVal = expression.eval(perturbed, isotopeToIndexMap);
-                                System.out.print("\t" + pertVal);
+//                                System.out.print("\t" + pertVal);
 
 //                                testOutput.append(specie.getName() + ">>, ");
 //                                testOutput.append(pertVal + ", ");
@@ -253,16 +262,14 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 double tD = (tA / tB) * (tA / tB) * tC;
                                 fVar += tD;// --fractional internal variance
 
-                                System.out.println(", " + String.valueOf(fDelt) + ", " + tA + ", " + tB + ", " + tC + ", " + tD + ", " + fVar);
-
+//                                System.out.println(", " + String.valueOf(fDelt) + ", " + tA + ", " + tB + ", " + tC + ", " + tD + ", " + fVar);
                             } // end of visiting each isotope and perturbing equation
 
                             eqFerr = StrictMath.sqrt(fVar);
                             double testAbsErr = StrictMath.abs(eqFerr * eqValTmp);
 
-                            System.out.println("eqferr:, " + eqFerr);
-                            System.out.println("testAbsErr:, " + testAbsErr);
-
+//                            System.out.println("eqferr:, " + eqFerr);
+//                            System.out.println("testAbsErr:, " + testAbsErr);
                             // now that expression and its error are calculated
                             if (eqFerr != 0.0) {
                                 eqValList.add(eqValTmp);

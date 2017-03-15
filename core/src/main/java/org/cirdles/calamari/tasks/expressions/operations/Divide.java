@@ -68,7 +68,7 @@ public class Divide extends Operation {
             newScale = 13 - (ratio.precision() - ratio.scale());
             BigDecimal ratio3 = ratio.setScale(newScale, RoundingMode.HALF_UP);
 
-            System.out.print("\t" + String.valueOf(retVal) + ",\t" + ratio3.toPlainString() + ",");
+//            System.out.print("\t" + String.valueOf(retVal) + ",\t" + ratio3.toPlainString() + ",");
 
             retVal = ratio3.doubleValue();
 

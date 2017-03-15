@@ -115,9 +115,9 @@ public class PrawnFileRunFractionParser {
             shrimpFraction.setUserLinFits(userLinFits);
             shrimpFraction.setReducedPkHt(reducedPkHt);
             shrimpFraction.setReducedPkHtFerr(reducedPkHtFerr);
-            
+
             // handle task
-            if (task!=null){
+            if (task != null) {
                 task.evaluateTaskExpressions(shrimpFraction);
             }
 
@@ -679,6 +679,8 @@ public class PrawnFileRunFractionParser {
         //and assign 'working' peak-heights ("ReducedPkHt") values to both SBM-normalised 
         //data and data not normalised to SBM.
         for (int scanNum = 0; scanNum < nScans; scanNum++) {
+            System.out.println("\n\nScanNum = " + (scanNum + 1));
+            System.out.println("Species" + "\tNetPkCps       " + "\tScanPkCts  " + "\tReducedPkHt" + "\tReducedPkHtFerr");
             for (int speciesIndex = 0; speciesIndex < nSpecies; speciesIndex++) {
                 int pkOrder = speciesIndex;
                 double scanPkCts;
@@ -708,13 +710,16 @@ public class PrawnFileRunFractionParser {
                             pkFractErr = SQUID_ERROR_VALUE;
                         }
                     }
-                    
+
                     try {
                         reducedPkHt[scanNum][pkOrder] = scanPkCts / countTimeSec[pkOrder];
                     } catch (Exception e) {
                         reducedPkHt[scanNum][pkOrder] = SQUID_ERROR_VALUE;
                     }
                     reducedPkHtFerr[scanNum][pkOrder] = pkFractErr;
+
+                    System.out.println(namesOfSpecies[pkOrder] + "\t" + netPkCps + "\t" + scanPkCts + "\t" + reducedPkHt[scanNum][pkOrder] + "\t" + reducedPkHtFerr[scanNum][pkOrder]);
+
                 }
             }
         } // end of scans loop
