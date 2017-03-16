@@ -27,7 +27,7 @@ public class BigDecimalCustomAlgorithms {
 
     public static BigDecimal bigDecimalSqrtBabylonian(BigDecimal S) {
         
-        BigDecimal guess = new BigDecimal(StrictMath.sqrt(S.doubleValue()));
+        BigDecimal guess = new BigDecimal(Math.sqrt(S.doubleValue()));
         
         if (guess.compareTo(BigDecimal.ZERO) > 0) {
             
