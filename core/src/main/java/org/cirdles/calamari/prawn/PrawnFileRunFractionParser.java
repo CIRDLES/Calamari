@@ -238,8 +238,8 @@ public class PrawnFileRunFractionParser {
                     double bVcpsDeadTime = bVcps / (1.0 - bVcps * deadTimeNanoseconds / 1E9);
 
                     totalCountsPeak = bVcpsDeadTime * countTimeSec[speciesMeasurementIndex];
-                    double countsSigmaCandidate = StrictMath.max(peakTukeyMean.getOneSigmaAbs().doubleValue(), StrictMath.sqrt(bV));
-                    totalCountsSigma = countsSigmaCandidate / StrictMath.sqrt(peakMeasurementsCount) * bVcps * countTimeSec[speciesMeasurementIndex] / bV;
+                    double countsSigmaCandidate = Math.max(peakTukeyMean.getOneSigmaAbs().doubleValue(), Math.sqrt(bV));
+                    totalCountsSigma = countsSigmaCandidate / Math.sqrt(peakMeasurementsCount) * bVcps * countTimeSec[speciesMeasurementIndex] / bV;
 
                 } else if (median >= 0.0) {
 
@@ -256,8 +256,8 @@ public class PrawnFileRunFractionParser {
 
                     int countIncludedIntegrations = (maxResidualIndex == -1) ? peakMeasurementsCount : peakMeasurementsCount - 1;
                     double peakMeanCounts = sumX / countIncludedIntegrations;
-                    double poissonSigma = StrictMath.sqrt(peakMeanCounts);
-                    double sigmaPeakCounts = StrictMath.sqrt((sumXsquared - (sumX * sumX / countIncludedIntegrations)) / (countIncludedIntegrations - 1));
+                    double poissonSigma = Math.sqrt(peakMeanCounts);
+                    double sigmaPeakCounts = Math.sqrt((sumXsquared - (sumX * sumX / countIncludedIntegrations)) / (countIncludedIntegrations - 1));
 
                     double peakCountsPerSecond = peakMeanCounts * peakMeasurementsCount / countTimeSec[speciesMeasurementIndex];
                     double peakCountsPerSecondDeadTime = peakCountsPerSecond / (1.0 - peakCountsPerSecond * deadTimeNanoseconds / 1E9);
@@ -267,7 +267,7 @@ public class PrawnFileRunFractionParser {
                     totalCountsSigma = 0.0;
                     if (peakMeanCounts > 0.0) {
                         totalCountsSigma
-                                = StrictMath.max(sigmaPeakCounts, poissonSigma) / StrictMath.sqrt(countIncludedIntegrations) * peakCountsPerSecond * countTimeSec[speciesMeasurementIndex] / peakMeanCounts;
+                                = Math.max(sigmaPeakCounts, poissonSigma) / Math.sqrt(countIncludedIntegrations) * peakCountsPerSecond * countTimeSec[speciesMeasurementIndex] / peakMeanCounts;
                     }
 
                 } else {
@@ -340,9 +340,9 @@ public class PrawnFileRunFractionParser {
                     if (absNetPeakCps > 1.0e-6) {
                         double calcVariance
                                 = totalCounts[scanNum][speciesMeasurementIndex]//
-                                + (StrictMath.abs(backgroundCps) * StrictMath.pow(countTimeSec[speciesMeasurementIndex] / countTimeSec[HARD_WIRED_INDEX_OF_BACKGROUND], 2));
+                                + (Math.abs(backgroundCps) * Math.pow(countTimeSec[speciesMeasurementIndex] / countTimeSec[HARD_WIRED_INDEX_OF_BACKGROUND], 2));
                         pkFerr[scanNum][speciesMeasurementIndex]
-                                = StrictMath.sqrt(calcVariance) / absNetPeakCps / countTimeSec[speciesMeasurementIndex];
+                                = Math.sqrt(calcVariance) / absNetPeakCps / countTimeSec[speciesMeasurementIndex];
                     } else {
                         pkFerr[scanNum][speciesMeasurementIndex] = 1.0;
                     }
@@ -407,11 +407,11 @@ public class PrawnFileRunFractionParser {
                         ratioVal = 1e16;
                     } else {
                         ratioVal = (totCtsNUM / countTimeSec[NUM]) / (totCtsDEN / countTimeSec[DEN]);
-                        ratioFractErr = StrictMath.sqrt((1.0 / StrictMath.abs(totCtsNUM)) + (1.0 / StrictMath.abs(totCtsDEN)));
+                        ratioFractErr = Math.sqrt((1.0 / Math.abs(totCtsNUM)) + (1.0 / Math.abs(totCtsDEN)));
                     }
 
                     ratioInterpTime = new double[]{//
-                        0.5 * (StrictMath.min(timeStampSec[0][NUM], timeStampSec[0][DEN]) + StrictMath.max(timeStampSec[nScans - 1][NUM], timeStampSec[nScans - 1][DEN]))
+                        0.5 * (Math.min(timeStampSec[0][NUM], timeStampSec[0][DEN]) + Math.max(timeStampSec[nScans - 1][NUM], timeStampSec[nScans - 1][DEN]))
                     };
 
                     isotopicRatioModel.setRatioVal(ratioVal);
@@ -419,7 +419,7 @@ public class PrawnFileRunFractionParser {
 
                     ratEqTime.add(ratioInterpTime[0]);
                     ratEqVal.add(ratioVal);
-                    ratEqErr.add(StrictMath.abs(ratioFractErr * ratioVal));
+                    ratEqErr.add(Math.abs(ratioFractErr * ratioVal));
 
                     // flush out for reports to handle empty entries
                     for (int i = 0; i < (nDod - 1); i++) {
@@ -543,13 +543,13 @@ public class PrawnFileRunFractionParser {
                                     double b2PkSig = pkFerr[sn1][bOrd] * bPk2;
 
                                     if (useSBM) {
-                                        a1PkSig = StrictMath.sqrt(a1PkSig * a1PkSig
+                                        a1PkSig = Math.sqrt(a1PkSig * a1PkSig
                                                 + (aPk1 * aPk1 / sbmCps[sNum][aOrd] / countTimeSec[aOrd]));
-                                        a2PkSig = StrictMath.sqrt(a2PkSig * a2PkSig
+                                        a2PkSig = Math.sqrt(a2PkSig * a2PkSig
                                                 + (aPk2 * aPk2 / sbmCps[sn1][aOrd] / countTimeSec[aOrd]));
-                                        b1PkSig = StrictMath.sqrt(b1PkSig * b1PkSig
+                                        b1PkSig = Math.sqrt(b1PkSig * b1PkSig
                                                 + (bPk1 * bPk1 / sbmCps[sNum][bOrd] / countTimeSec[bOrd]));
-                                        b2PkSig = StrictMath.sqrt(b2PkSig * b2PkSig
+                                        b2PkSig = Math.sqrt(b2PkSig * b2PkSig
                                                 + (bPk2 * bPk2 / sbmCps[sn1][bOrd] / countTimeSec[bOrd]));
                                     }
 
@@ -562,8 +562,8 @@ public class PrawnFileRunFractionParser {
                                         double term2 = ((f2 * b1PkSig) * (f2 * b1PkSig) + (f1 * b2PkSig) * (f1 * b2PkSig));
                                         double ratValFvar = (term1 / (aInterp * aInterp)) + (term2 / (bInterp * bInterp));
                                         double ratValVar = ratValFvar * (interpRatVal[rct] * interpRatVal[rct]);
-                                        ratValFerr[rct] = StrictMath.sqrt(ratValFvar);
-                                        ratValSig[rct] = StrictMath.max(1E-10, StrictMath.sqrt(ratValVar));
+                                        ratValFerr[rct] = Math.sqrt(ratValFvar);
+                                        ratValSig[rct] = Math.max(1E-10, Math.sqrt(ratValVar));
                                         sigRho[rct][rct] = ratValSig[rct];
 
                                         if (rct > 0) {
@@ -614,7 +614,7 @@ public class PrawnFileRunFractionParser {
                             for (int j = 0; j < (rct + 1); j++) {
                                 ratEqTime.add(ratioInterpTime[j]);
                                 ratEqVal.add(interpRatVal[j]);
-                                ratEqErr.add(StrictMath.abs(ratValFerr[j] * interpRatVal[j]));
+                                ratEqErr.add(Math.abs(ratValFerr[j] * interpRatVal[j]));
                             }
 
                             // step 4
@@ -627,7 +627,7 @@ public class PrawnFileRunFractionParser {
 
                                 double midTime = (timeStampSec[nScans - 1][nSpecies - 1] + timeStampSec[0][0]) / 2.0;
                                 ratioMean = (wtdLinCorrResults.getSlope() * midTime) + wtdLinCorrResults.getIntercept();
-                                ratioMeanSig = StrictMath.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
+                                ratioMeanSig = Math.sqrt((midTime * wtdLinCorrResults.getSigmaSlope() * midTime * wtdLinCorrResults.getSigmaSlope())//
                                         + wtdLinCorrResults.getSigmaIntercept() * wtdLinCorrResults.getSigmaIntercept() //
                                         + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
 
@@ -645,7 +645,7 @@ public class PrawnFileRunFractionParser {
                                 isotopicRatioModel.setRatioFractErr(1.0);
                             } else {
                                 isotopicRatioModel.setRatioVal(ratioMean);
-                                isotopicRatioModel.setRatioFractErr(StrictMath.max(SQUID_TINY_VALUE, ratioMeanSig) / StrictMath.abs(ratioMean));
+                                isotopicRatioModel.setRatioFractErr(Math.max(SQUID_TINY_VALUE, ratioMeanSig) / Math.abs(ratioMean));
                             }
 
                             isotopicRatioModel.setMinIndex(wtdLinCorrResults.getMinIndex());
@@ -702,7 +702,7 @@ public class PrawnFileRunFractionParser {
                             scanPkCts = SQUID_ERROR_VALUE;
                         }
                         try {
-                            pkFractErr = StrictMath.sqrt(pkFractErr * pkFractErr
+                            pkFractErr = Math.sqrt(pkFractErr * pkFractErr
                                     + 1.0 / sbmCps[scanNum][pkOrder] / countTimeSec[pkOrder]);
                         } catch (Exception e) {
                             pkFractErr = SQUID_ERROR_VALUE;

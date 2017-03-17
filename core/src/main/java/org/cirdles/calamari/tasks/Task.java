@@ -182,7 +182,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                     } else {
                                         pkInterp[scanNum][isotopeIndices[i]] = (fractLessInterpTime * redPk1Ht) + (fractInterpTime * redPk2Ht);
                                         double pkF2 = shrimpFraction.getReducedPkHtFerr()[scanNum + 1][isotopeIndices[i]];
-                                        pkInterpFerr[scanNum][isotopeIndices[i]] = StrictMath.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
+                                        pkInterpFerr[scanNum][isotopeIndices[i]] = Math.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
                                                 + (fractInterpTime * pkF2) * (fractInterpTime * pkF2));
                                     }
                                 }
@@ -219,12 +219,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                                 fVar += tD;// --fractional internal variance
                             } // end of visiting each isotope and perturbing equation
 
-                            eqFerr = StrictMath.sqrt(fVar);
+                            eqFerr = Math.sqrt(fVar);
 
                             // now that expression and its error are calculated
                             if (eqFerr != 0.0) {
                                 eqValList.add(eqValTmp);
-                                absErrList.add(StrictMath.abs(eqFerr * eqValTmp));
+                                absErrList.add(Math.abs(eqFerr * eqValTmp));
                                 fractErrList.add(eqFerr);
                                 double totRatTime = 0.0;
                                 int numPksInclDupes = 0;
@@ -277,7 +277,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
 
                         meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
-                        meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
+                        meanEqSig = Math.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
                                 + sigmaIntercept * sigmaIntercept //
                                 + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
 
@@ -291,7 +291,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     if (meanEq == 0.0) {
                         eqValFerr = 1.0;
                     } else {
-                        eqValFerr = StrictMath.abs(meanEqSig / meanEq);
+                        eqValFerr = Math.abs(meanEqSig / meanEq);
                     }
 
                     // for consistency with Bodorkos documentation
@@ -299,7 +299,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     double[] ratEqTime = eqTime.clone();
                     double[] ratEqErr = new double[eqVal.length];
                     for (int i = 0; i < ratEqErr.length; i++) {
-                        ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
+                        ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
                     }
 
                     taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(

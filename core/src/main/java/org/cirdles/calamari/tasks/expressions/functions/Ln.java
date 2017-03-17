@@ -46,7 +46,7 @@ public class Ln extends Function {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-//            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+//            retVal = Math.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
             // Feb 2017 to cause replication of Squid2.5 results            
             retVal = Math.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {

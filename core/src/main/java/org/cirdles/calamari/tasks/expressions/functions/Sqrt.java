@@ -46,7 +46,7 @@ public class Sqrt extends Function {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = StrictMath.sqrt(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            retVal = Math.sqrt(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }

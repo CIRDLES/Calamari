@@ -46,7 +46,7 @@ public class Exp extends Function {
             Map<IsotopeNames, Integer> isotopeToIndexMap) {
         double retVal;
         try {
-            retVal = StrictMath.exp(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
+            retVal = Math.exp(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
         } catch (Exception e) {
             retVal = 0.0;
         }
