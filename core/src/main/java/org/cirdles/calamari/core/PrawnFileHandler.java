@@ -62,6 +62,7 @@ import org.xml.sax.SAXException;
 public class PrawnFileHandler {
 
     private transient Unmarshaller jaxbUnmarshaller;
+//    private transient Marshaller jaxbMarshaller;
     private String currentPrawnFileLocation;
     private transient Consumer<Integer> progressSubscriber;
     private transient CalamariReportsEngine reportsEngine;
@@ -293,6 +294,14 @@ public class PrawnFileHandler {
     private PrawnFile readRawDataFile(File prawnDataFile) throws JAXBException {
 
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataFile);
+
+//        // test writing it back out WORKS!
+//        JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
+//        jaxbMarshaller = jaxbContext.createMarshaller();
+//        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        jaxbMarshaller.marshal(myPrawnFile, new File("myPrawnFile.xml"));
+//       // jaxbMarshaller.marshal(myPrawnFile, System.out);
+
         return myPrawnFile;
     }
 

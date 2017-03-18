@@ -20,7 +20,9 @@ import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import static org.cirdles.calamari.constants.SquidConstants.SQUID_ERROR_VALUE;
@@ -54,6 +56,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
     protected String name;
     protected List<ExpressionTreeInterface> taskExpressionsOrdered;
+    protected Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet;
 
     public Task() {
         this("NoName");
@@ -62,6 +65,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     public Task(String name) {
         this.name = name;
         this.taskExpressionsOrdered = new ArrayList<>();
+        this.taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
     }
 
     @Override
@@ -100,6 +104,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     @Override
     public void evaluateTaskExpressions(List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
+        taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
+        
         // setup spots
         shrimpFractions.forEach((spot) -> {
             List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated = new ArrayList<>();
@@ -124,7 +130,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
                 // assume ref mat only for now
                 double[][] value = expression.eval2Array(referenceMaterialSpots);
-                // TODO: need to save this somewhere in Task - use map i think
+                taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
             } else {
                 shrimpFractions.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
@@ -378,5 +384,19 @@ public class Task implements TaskInterface, XMLSerializerInterface {
      */
     public void setTaskExpressionsOrdered(List<ExpressionTreeInterface> taskExpressionsOrdered) {
         this.taskExpressionsOrdered = taskExpressionsOrdered;
+    }
+
+    /**
+     * @return the taskExpressionsEvaluationsPerSpotSet
+     */
+    public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpotSet() {
+        return taskExpressionsEvaluationsPerSpotSet;
+    }
+
+    /**
+     * @param taskExpressionsEvaluationsPerSpotSet the taskExpressionsEvaluationsPerSpotSet to set
+     */
+    public void setTaskExpressionsEvaluationsPerSpotSet(Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet) {
+        this.taskExpressionsEvaluationsPerSpotSet = taskExpressionsEvaluationsPerSpotSet;
     }
 }

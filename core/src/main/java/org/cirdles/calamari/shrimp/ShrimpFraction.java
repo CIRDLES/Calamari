@@ -57,7 +57,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private double[] pkInterpScanArray;
 
-    protected List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated;
+    private List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated;
     private Map<String, double[][]> taskExpressionsEvaluationsPerSpot;
 
     public ShrimpFraction() {

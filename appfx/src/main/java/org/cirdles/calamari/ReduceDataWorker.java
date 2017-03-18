@@ -76,7 +76,8 @@ public class ReduceDataWorker extends SwingWorker<Void, Integer> {
                     prawnFileHandler.getCurrentPrawnFileLocation(),
                     useSBM,
                     userLinFits,
-                    referenceMaterialLetter);
+                    referenceMaterialLetter,
+                    task);
         } catch (IOException | JAXBException | SAXException exception) {
             System.out.println("Exception extracting data: "
                     + exception.getStackTrace()[0].toString());
