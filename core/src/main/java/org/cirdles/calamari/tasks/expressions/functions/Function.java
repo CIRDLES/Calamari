@@ -61,6 +61,10 @@ public abstract class Function
         return new RobReg();
     }
 
+    public static OperationOrFunctionInterface biWeight() {
+        return new Biweight();
+    }
+
     /**
      *
      * @param operationName

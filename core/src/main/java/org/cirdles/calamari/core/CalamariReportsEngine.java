@@ -30,6 +30,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.DEFAULT_PRAWNFILE
 import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
@@ -69,11 +70,11 @@ public class CalamariReportsEngine {
      * @param shrimpFractions the value of shrimpFractions
      * @throws java.io.IOException
      */
-    protected void produceReports(List<ShrimpFraction> shrimpFractions) throws IOException {
+    protected void produceReports(List<ShrimpFractionExpressionInterface> shrimpFractions) throws IOException {
 
         if (shrimpFractions.size() > 0) {
             // gather general info for all runs  from first fraction
-            ShrimpFraction firstShrimpFraction = shrimpFractions.get(0);
+            ShrimpFraction firstShrimpFraction = (ShrimpFraction)shrimpFractions.get(0);
 
             SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
@@ -96,7 +97,7 @@ public class CalamariReportsEngine {
             prepRatiosReportFiles(firstShrimpFraction);
 
             for (int f = 0; f < shrimpFractions.size(); f++) {
-                ShrimpFraction shrimpFraction = shrimpFractions.get(f);
+                ShrimpFraction shrimpFraction = (ShrimpFraction)shrimpFractions.get(f);
                 shrimpFraction.setSpotNumber(f + 1);
                 reportTotalIonCountsAtMass(shrimpFraction);
                 reportTotalSBMCountsAtMass(shrimpFraction);
@@ -373,7 +374,7 @@ public class CalamariReportsEngine {
             }
 
             // Handle any task expressions
-            List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+            List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
             for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
@@ -413,7 +414,7 @@ public class CalamariReportsEngine {
         }
 
         // Handle any task expressions
-        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal()));
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0));
@@ -503,7 +504,7 @@ public class CalamariReportsEngine {
         }
 
         // prepare headers for any task expressions
-        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsEvaluated();
+        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             String expressionName = taskExpressionEval.getExpression().getName();
             header.append(", ").append(expressionName).append(".Time");

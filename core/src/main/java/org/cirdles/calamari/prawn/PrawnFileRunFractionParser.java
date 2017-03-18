@@ -115,11 +115,6 @@ public class PrawnFileRunFractionParser {
             shrimpFraction.setUserLinFits(userLinFits);
             shrimpFraction.setReducedPkHt(reducedPkHt);
             shrimpFraction.setReducedPkHtFerr(reducedPkHtFerr);
-            
-            // handle task
-            if (task!=null){
-                task.evaluateTaskExpressions(shrimpFraction);
-            }
 
             // determine reference material status
             // hard coded for now

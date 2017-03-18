@@ -54,6 +54,7 @@ public class ExpressionTree
     protected ExpressionTreeInterface parentET;
     protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
+    protected boolean squidSwitchSCSummaryCalculation;
     protected boolean rootExpressionTree;
 
     public ExpressionTree() {
@@ -100,6 +101,7 @@ public class ExpressionTree
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
         this.rootExpressionTree = false;
+        this.squidSwitchSCSummaryCalculation = false;
     }
 
     private void populateChildrenET(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
@@ -162,7 +164,7 @@ public class ExpressionTree
      */
     @Override
     public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        return operation == null ? new double[][]{{0.0}} : operation.eval2Array(childrenET, shrimpFractions);
+        return operation == null ? new double[][]{{0.0, 0.0}} : operation.eval2Array(childrenET, shrimpFractions);
     }
 
     @Override
@@ -326,6 +328,9 @@ public class ExpressionTree
         this.ratiosOfInterest = ratiosOfInterest;
     }
 
+    public boolean hasRatiosOfInterest(){
+        return ratiosOfInterest.size() > 0;
+    }
     /**
      * @return the rootExpressionTree
      */
@@ -344,5 +349,19 @@ public class ExpressionTree
     @Override
     public String toString() {
         return name;
+    }
+
+    /**
+     * @return the squidSwitchSCSummaryCalculation
+     */
+    public boolean isSquidSwitchSCSummaryCalculation() {
+        return squidSwitchSCSummaryCalculation;
+    }
+
+    /**
+     * @param squidSwitchSCSummaryCalculation the squidSwitchSCSummaryCalculation to set
+     */
+    public void setSquidSwitchSCSummaryCalculation(boolean squidSwitchSCSummaryCalculation) {
+        this.squidSwitchSCSummaryCalculation = squidSwitchSCSummaryCalculation;
     }
 }

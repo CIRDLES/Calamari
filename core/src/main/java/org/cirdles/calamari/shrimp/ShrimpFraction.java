@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 
 /**
@@ -53,10 +54,11 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private double[][] reducedPkHt;
     private double[][] reducedPkHtFerr;
-    
+
     private double[] pkInterpScanArray;
-    
-    private List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated;
+
+    protected List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated;
+    private Map<String, double[][]> taskExpressionsEvaluationsPerSpot;
 
     public ShrimpFraction() {
         fractionID = "NONE";
@@ -82,10 +84,12 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
         reducedPkHt = new double[0][0];
         reducedPkHtFerr = new double[0][0];
-        
+
         pkInterpScanArray = new double[0];
-        
-        taskExpressionsEvaluated = new ArrayList<>();
+
+        taskExpressionsForScansEvaluated = new ArrayList<>();
+
+        taskExpressionsEvaluationsPerSpot = new TreeMap<>();
 
     }
 
@@ -96,9 +100,9 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     }
 
     /**
-     * 
+     *
      * @param speciesName
-     * @return 
+     * @return
      */
     @Override
     public int getIndexOfSpeciesByName(IsotopeNames speciesName) {
@@ -115,6 +119,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the fractionID
      */
+    @Override
     public String getFractionID() {
         return fractionID;
     }
@@ -325,6 +330,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the timeStampSec
      */
+    @Override
     public double[][] getTimeStampSec() {
         return timeStampSec.clone();
     }
@@ -353,6 +359,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the totalCps
      */
+    @Override
     public double[] getTotalCps() {
         return totalCps.clone();
     }
@@ -360,6 +367,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @param totalCps the totalCps to set
      */
+    @Override
     public void setTotalCps(double[] totalCps) {
         this.totalCps = totalCps.clone();
     }
@@ -438,6 +446,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the reducedPkHt
      */
+    @Override
     public double[][] getReducedPkHt() {
         return reducedPkHt.clone();
     }
@@ -467,6 +476,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the pkInterpScanArray
      */
+    @Override
     public double[] getPkInterpScanArray() {
         return pkInterpScanArray.clone();
     }
@@ -474,23 +484,51 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @param pkInterpScanArray the pkInterpScanArray to set
      */
+    @Override
     public void setPkInterpScanArray(double[] pkInterpScanArray) {
         this.pkInterpScanArray = pkInterpScanArray.clone();
     }
 
     /**
-     * @return the taskExpressionsEvaluated
+     * @return the taskExpressionsForScansEvaluated
      */
-    public List<TaskExpressionEvaluatedModelInterface> getTaskExpressionsEvaluated() {
-        return taskExpressionsEvaluated;
+    public List<TaskExpressionEvaluatedModelInterface> getTaskExpressionsForScansEvaluated() {
+        return taskExpressionsForScansEvaluated;
     }
 
     /**
-     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
+     * @param taskExpressionsForScansEvaluated the
+     * taskExpressionsForScansEvaluated to set
      */
     @Override
-    public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated) {
-        this.taskExpressionsEvaluated = taskExpressionsEvaluated;
+    public void setTaskExpressionsForScansEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated) {
+        this.taskExpressionsForScansEvaluated = taskExpressionsForScansEvaluated;
+    }
+
+    /**
+     * @param fieldName
+     * @return the taskExpressionsEvaluationsPerSpot
+     */
+    @Override
+    public double[][] getTaskExpressionsEvaluationsPerSpotByField(String fieldName) {
+        return taskExpressionsEvaluationsPerSpot.get(fieldName);
+    }
+
+    /**
+     * @return the taskExpressionsEvaluationsPerSpot
+     */
+    @Override
+    public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpot() {
+        return taskExpressionsEvaluationsPerSpot;
+    }
+
+    /**
+     * @param taskExpressionsEvaluationsPerSpot the
+     * taskExpressionsEvaluationsPerSpot to set
+     */
+    @Override
+    public void setTaskExpressionsEvaluationsPerSpot(Map<String, double[][]> taskExpressionsEvaluationsPerSpot) {
+        this.taskExpressionsEvaluationsPerSpot = taskExpressionsEvaluationsPerSpot;
     }
 
 }

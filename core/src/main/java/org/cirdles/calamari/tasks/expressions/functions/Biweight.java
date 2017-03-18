@@ -46,11 +46,14 @@ public class Biweight extends Function {
 
         double[][] retVal;
         try {
-            // need to assemble array of doubles fromlist of fractions ...
-            BigDecimal[] retValBD = org.cirdles.ludwig.TukeyBiweight.biweightMean(null, 9);
-            retVal = new double[][]{{retValBD[0].doubleValue()}, {retValBD[1].doubleValue()}};
+            // assume child 0 is a VariableNode
+            // assume child 1 is a number
+            double[][] variableValues = childrenET.get(0).eval2Array(shrimpFractions);
+            double [][] tuning = childrenET.get(1).eval2Array(shrimpFractions);
+            BigDecimal[] retValBD = org.cirdles.ludwig.TukeyBiweight.biweightMean(variableValues[0], tuning[0][0]);
+            retVal = new double[][]{{retValBD[0].doubleValue(), retValBD[1].doubleValue()}};
         } catch (Exception e) {
-            retVal = new double[][]{{0.0}, {0.0}};
+            retVal = new double[][]{{0.0, 0.0}};
         }
 
         return retVal;
