@@ -36,6 +36,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpression
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204BiWt;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
 import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
@@ -100,6 +101,7 @@ public class FXMLDocumentController implements Initializable {
                 CustomExpression_LnPbR_U.EXPRESSION,
                 CustomExpression_LnUO_U.EXPRESSION,
                 CustomExpression_Net204cts_sec.EXPRESSION,
+                CustomExpression_Net204BiWt.EXPRESSION,
                 SquidExpressionMinus1.EXPRESSION,
                 SquidExpressionMinus3.EXPRESSION,
                 SquidExpressionMinus4.EXPRESSION);

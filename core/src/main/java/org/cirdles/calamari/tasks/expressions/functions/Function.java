@@ -34,9 +34,10 @@ public abstract class Function
     protected String name;
     protected int argumentCount;
     protected int precedence;
-    // establish size of array resullting from evaluation
+    // establish size of array resulting from evaluation
     protected int rowCount;
     protected int colCount;
+    protected String[][] labelsForValues;
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -61,8 +62,8 @@ public abstract class Function
         return new RobReg();
     }
 
-    public static OperationOrFunctionInterface biWeight() {
-        return new Biweight();
+    public static OperationOrFunctionInterface sqBiweight() {
+        return new SqBiweight();
     }
 
     /**
@@ -161,5 +162,19 @@ public abstract class Function
      */
     public void setColCount(int colCount) {
         this.colCount = colCount;
+    }
+
+    /**
+     * @return the labelsForValues
+     */
+    public String[][] getLabelsForValues() {
+        return labelsForValues;
+    }
+
+    /**
+     * @param labelsForValues the labelsForValues to set
+     */
+    public void setLabelsForValues(String[][] labelsForValues) {
+        this.labelsForValues = labelsForValues;
     }
 }

@@ -15,7 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions.functions;
 
-import java.math.BigDecimal;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -24,21 +23,35 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Biweight extends Function {
+public class SqBiweight extends Function {
 
-    public Biweight() {
-        name = "Biweight";
+    /**
+     * Provides the functionality of Squid's sqBiweight and biWt by calculating
+     * TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
+     * the labels for each cell of the values array produced by eval2Array.
+     *
+     * @see
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
+     * @see
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/StringUtils.bas
+     */
+    public SqBiweight() {
+        name = "sqBiweight";
         argumentCount = 2;
         precedence = 4;
         rowCount = 1;
-        colCount = 2;
+        colCount = 3;
+        labelsForValues = new String[][]{{"Biwt Mean", "Biwt Sigma", "\u00B195%conf"}};
     }
 
     /**
+     * Requires that child 0 is a VariableNode that evaluates to a double array
+     * with one row and a column for each member of shrimpFractions and that
+     * child 1 is a ConstantNode that evaluates to an integer.
      *
-     * @param childrenET the value of childrenET
-     * @param shrimpFractions the value of shrimpFraction
-     * @return the double[][]
+     * @param childrenET list containing child 0 and child 1
+     * @param shrimpFractions a list of shrimpFractions
+     * @return the double[1][3] array of mean, sigma, 95% confidence
      */
     @Override
     public double[][] eval2Array(
@@ -46,14 +59,12 @@ public class Biweight extends Function {
 
         double[][] retVal;
         try {
-            // assume child 0 is a VariableNode
-            // assume child 1 is a number
             double[][] variableValues = childrenET.get(0).eval2Array(shrimpFractions);
-            double [][] tuning = childrenET.get(1).eval2Array(shrimpFractions);
-            BigDecimal[] retValBD = org.cirdles.ludwig.TukeyBiweight.biweightMean(variableValues[0], tuning[0][0]);
-            retVal = new double[][]{{retValBD[0].doubleValue(), retValBD[1].doubleValue()}};
-        } catch (Exception e) {
-            retVal = new double[][]{{0.0, 0.0}};
+            double[][] tuning = childrenET.get(1).eval2Array(shrimpFractions);
+            double[][] tukeysBiweight = org.cirdles.ludwig.SquidMathUtils.tukeysBiweight(variableValues[0], tuning[0][0]);
+            retVal = new double[][]{{tukeysBiweight[0][0], tukeysBiweight[0][1], tukeysBiweight[0][2]}};
+        } catch (ArithmeticException e) {
+            retVal = new double[][]{{0.0, 0.0, 0.0}};
         }
 
         return retVal;
@@ -68,7 +79,7 @@ public class Biweight extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>RobReg</mi>"
+                + "<mi>" + name + "</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {
