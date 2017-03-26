@@ -21,7 +21,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedModelInterface {
+public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressionEvaluatedPerSpotPerScanModelInterface {
 
     private ExpressionTreeInterface expression;
     private double[] ratEqVal;
@@ -30,10 +30,10 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     private double ratioVal;
     private double ratioFractErr;
 
-    private TaskExpressionEvaluatedModel() {
+    private TaskExpressionEvaluatedPerSpotPerScanModel() {
     }
 
-    public TaskExpressionEvaluatedModel(
+    public TaskExpressionEvaluatedPerSpotPerScanModel(
             ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
         this.expression = expression;
         this.ratEqVal = ratEqVal.clone();

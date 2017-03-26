@@ -25,32 +25,51 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class RobReg extends Function {
 
+    /**
+     * Provides the functionality of Squid's robReg by calling robustReg2 and
+     * returning "Slope", "SlopeErr", "Y-Intercept", "Y-IntErr" and encoding the
+     * labels for each cell of the values array produced by eval2Array.
+     *
+     * @see
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
+     */
     public RobReg() {
-        name = "RobReg";
+        name = "robReg";
         argumentCount = 4;
         precedence = 4;
-        rowCount = 4;
-        colCount = 1;
+        rowCount = 1;
+        colCount = 4;
+        labelsForValues = new String[][]{{"Slope", "SlopeErr", "Y-Intercept", "Y-IntErr"}};
     }
 
     /**
+     * Requires that child 0 and child 1 are each a VariableNode that evaluates
+     * to a double array with one row and a column for each member of
+     * shrimpFractions. Child 2 and child 3 are each a BooleanNode that
+     * evaluates to true or false. Child 2 and 3 are currently ignored but exist
+     * for compatibility with Squid2.5.
      *
-     * @param childrenET the value of childrenET
-     * @param shrimpFractions the value of shrimpFraction
-     * @return the double[][]
+     * @param childrenET list containing child 0 through 3
+     * @param shrimpFractions a list of shrimpFractions
+     * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
      */
     @Override
     public double[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double retVal;
+        double[][] retVal;
         try {
-            retVal = 0.0;
-        } catch (Exception e) {
-            retVal = 0.0;
+            double[] xValues = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] yValues = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] robustReg2 = org.cirdles.ludwig.IsoplotPub.robustReg2(xValues, yValues)[0];
+            double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
+            double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;
+            retVal = new double[][]{{robustReg2[0], slopeErr, robustReg2[3], yIntErr}};
+        } catch (ArithmeticException e) {
+            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0}};
         }
 
-        return new double[][]{{retVal}};
+        return retVal;
     }
 
     /**

@@ -31,7 +31,7 @@ import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInterface;
 
 /**
  * Calamari's reports engine.
@@ -374,8 +374,8 @@ public class CalamariReportsEngine {
             }
 
             // Handle any task expressions
-            List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
-            for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+            List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
+            for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
                     dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqVal()[nDodNum]));
@@ -414,8 +414,8 @@ public class CalamariReportsEngine {
         }
 
         // Handle any task expressions
-        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
-        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+        List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
+        for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal()));
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0));
         }
@@ -504,8 +504,8 @@ public class CalamariReportsEngine {
         }
 
         // prepare headers for any task expressions
-        List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
-        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+        List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
+        for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             String expressionName = taskExpressionEval.getExpression().getName();
             header.append(", ").append(expressionName).append(".Time");
             header.append(", ").append(expressionName).append(".Value");
@@ -532,7 +532,7 @@ public class CalamariReportsEngine {
         }
 
         // prepare headers for any task expressions
-        for (TaskExpressionEvaluatedModelInterface taskExpressionEval : taskExpressionsEvaluated) {
+        for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             String expressionName = taskExpressionEval.getExpression().getName();
             header.append(", ").append(expressionName).append(".Value");
             header.append(", ").append(expressionName).append(".1SigmaPct");

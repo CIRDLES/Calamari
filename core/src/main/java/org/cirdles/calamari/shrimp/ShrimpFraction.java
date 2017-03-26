@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInterface;
 
 /**
  *
@@ -57,7 +57,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     private double[] pkInterpScanArray;
 
-    private List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated;
+    private List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsForScansEvaluated;
     private Map<String, double[][]> taskExpressionsEvaluationsPerSpot;
 
     public ShrimpFraction() {
@@ -492,7 +492,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the taskExpressionsForScansEvaluated
      */
-    public List<TaskExpressionEvaluatedModelInterface> getTaskExpressionsForScansEvaluated() {
+    public List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> getTaskExpressionsForScansEvaluated() {
         return taskExpressionsForScansEvaluated;
     }
 
@@ -501,7 +501,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
      * taskExpressionsForScansEvaluated to set
      */
     @Override
-    public void setTaskExpressionsForScansEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated) {
+    public void setTaskExpressionsForScansEvaluated(List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsForScansEvaluated) {
         this.taskExpressionsForScansEvaluated = taskExpressionsForScansEvaluated;
     }
 

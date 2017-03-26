@@ -105,10 +105,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     public void evaluateTaskExpressions(List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
         taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
-        
+
         // setup spots
         shrimpFractions.forEach((spot) -> {
-            List<TaskExpressionEvaluatedModelInterface> taskExpressionsForScansEvaluated = new ArrayList<>();
+            List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsForScansEvaluated = new ArrayList<>();
             spot.setTaskExpressionsForScansEvaluated(taskExpressionsForScansEvaluated);
         });
 
@@ -116,7 +116,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         List<ShrimpFractionExpressionInterface> referenceMaterialSpots = new ArrayList<>();
         List<ShrimpFractionExpressionInterface> unknownSpots = new ArrayList<>();
         shrimpFractions.forEach((spot) -> {
-            if (spot.isReferenceMaterial()){
+            if (spot.isReferenceMaterial()) {
                 referenceMaterialSpots.add(spot);
             } else {
                 unknownSpots.add(spot);
@@ -134,7 +134,14 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             } else {
                 shrimpFractions.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
-                        evaluateTaskExpressionsPerSpotPerScan(expression, spot);
+                        TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
+                                = evaluateTaskExpressionsPerSpotPerScan(expression, spot);
+                        // save scan-specific results
+                        spot.getTaskExpressionsForScansEvaluated().add(taskExpressionEvaluatedPerSpotPerScanModel);
+                        // save spot-specific results
+                        double[][] value = new double[][]{{taskExpressionEvaluatedPerSpotPerScanModel.getRatioVal(),
+                            taskExpressionEvaluatedPerSpotPerScanModel.getRatioFractErr()}};
+                        spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
                     } else {
                         List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
                         singleSpot.add(spot);
@@ -154,7 +161,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
      * @param expression
      * @param shrimpFraction
      */
-    private void evaluateTaskExpressionsPerSpotPerScan(ExpressionTreeInterface expression, ShrimpFractionExpressionInterface shrimpFraction) {
+    private TaskExpressionEvaluatedPerSpotPerScanModelInterface
+            evaluateTaskExpressionsPerSpotPerScan(ExpressionTreeInterface expression, ShrimpFractionExpressionInterface shrimpFraction) {
+
+        TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel = null;
         if (shrimpFraction != null) {
             // construct argument list of one spot
             List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
@@ -228,7 +238,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                             } else {
                                 pkInterp[scanNum][isotopeIndices[i]] = (fractLessInterpTime * redPk1Ht) + (fractInterpTime * redPk2Ht);
                                 double pkF2 = shrimpFraction.getReducedPkHtFerr()[scanNum + 1][isotopeIndices[i]];
-                                pkInterpFerr[scanNum][isotopeIndices[i]] = StrictMath.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
+                                pkInterpFerr[scanNum][isotopeIndices[i]] = Math.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
                                         + (fractInterpTime * pkF2) * (fractInterpTime * pkF2));
                             }
                         }
@@ -268,12 +278,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         fVar += tD;// --fractional internal variance
                     } // end of visiting each isotope and perturbing equation
 
-                    eqFerr = StrictMath.sqrt(fVar);
+                    eqFerr = Math.sqrt(fVar);
 
                     // now that expression and its error are calculated
                     if (eqFerr != 0.0) {
                         eqValList.add(eqValTmp);
-                        absErrList.add(StrictMath.abs(eqFerr * eqValTmp));
+                        absErrList.add(Math.abs(eqFerr * eqValTmp));
                         fractErrList.add(eqFerr);
                         double totRatTime = 0.0;
                         int numPksInclDupes = 0;
@@ -327,7 +337,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
 
                 meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
-                meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
+                meanEqSig = Math.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
                         + sigmaIntercept * sigmaIntercept //
                         + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
 
@@ -341,7 +351,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             if (meanEq == 0.0) {
                 eqValFerr = 1.0;
             } else {
-                eqValFerr = StrictMath.abs(meanEqSig / meanEq);
+                eqValFerr = Math.abs(meanEqSig / meanEq);
             }
 
             // for consistency with Bodorkos documentation
@@ -349,13 +359,15 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             double[] ratEqTime = eqTime.clone();
             double[] ratEqErr = new double[eqVal.length];
             for (int i = 0; i < ratEqErr.length; i++) {
-                ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
+                ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
             }
 
-            shrimpFraction.getTaskExpressionsForScansEvaluated().add(
-                    new TaskExpressionEvaluatedModel(
-                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr));
+            taskExpressionEvaluatedPerSpotPerScanModel
+                    = new TaskExpressionEvaluatedPerSpotPerScanModel(
+                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr);
         }
+
+        return taskExpressionEvaluatedPerSpotPerScanModel;
     }
 
     /**
@@ -394,7 +406,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     }
 
     /**
-     * @param taskExpressionsEvaluationsPerSpotSet the taskExpressionsEvaluationsPerSpotSet to set
+     * @param taskExpressionsEvaluationsPerSpotSet the
+     * taskExpressionsEvaluationsPerSpotSet to set
      */
     public void setTaskExpressionsEvaluationsPerSpotSet(Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet) {
         this.taskExpressionsEvaluationsPerSpotSet = taskExpressionsEvaluationsPerSpotSet;

@@ -45,7 +45,7 @@ public class Sqrt extends Function {
 
         double retVal;
         try {
-            retVal = StrictMath.sqrt(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
+            retVal = Math.sqrt(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
         } catch (Exception e) {
             retVal = 0.0;
         }
