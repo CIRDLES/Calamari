@@ -17,6 +17,8 @@ package org.cirdles.calamari.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -114,21 +116,19 @@ public class CalamariReportsEngine {
     }
 
     /**
-     * Requested by Simon Bodorkos 6 Feb 2017 to help audit of Squid Excel
-     * Later canceled
+     * Requested by Simon Bodorkos 27 March 2017 to help audit of Squid Excel
+     * 
+     * @see https://docs.oracle.com/javase/8/docs/api/java/math/RoundingMode.html
      * @param value
-     * @return 
+     * @return String representation of double rounded to 15 significant digits
      */
     private String rounded(double value) {
-        
-        // Bodorkos reversed request ... left method for future use
-//        BigDecimal ratio = new BigDecimal(value);
-//        // calculate scale for 15 significant digits
-//        int newScale = 15 - (ratio.precision() - ratio.scale());
-//        BigDecimal ratio15 = ratio.setScale(newScale, RoundingMode.HALF_UP);
-//        return ratio15.toPlainString();
-        
-        return String.valueOf(value);
+
+        BigDecimal ratio = new BigDecimal(value);
+        // calculate scale for 15 significant digits
+        int newScale = 15 - (ratio.precision() - ratio.scale());
+        BigDecimal ratio15 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+        return ratio15.toPlainString();
     }
 
     /**
