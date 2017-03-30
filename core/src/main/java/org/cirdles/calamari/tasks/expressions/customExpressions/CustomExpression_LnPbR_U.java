@@ -31,7 +31,7 @@ public class CustomExpression_LnPbR_U {
     /**
      * Squid Excel format is ln(["206/238"])
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Ln206/238");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("LnPbR_U");
 
     static {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
