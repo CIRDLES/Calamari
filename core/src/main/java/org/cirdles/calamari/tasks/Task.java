@@ -316,7 +316,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
             for (int i = 0; i < sigRho.length; i++) {
                 sigRho[i][i] = absErr[i];
-                if (i > 1) {
+                if (i > 0) {
                     sigRho[i][i - 1] = 0.25;
                     sigRho[i - 1][i] = 0.25;
                 }
