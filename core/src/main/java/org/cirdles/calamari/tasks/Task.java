@@ -134,6 +134,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             } else {
                 shrimpFractions.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
+                        
+                        System.out.println();
+                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
+                       
                         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
                                 = evaluateTaskExpressionsPerSpotPerScan(expression, spot);
                         // save scan-specific results
@@ -166,6 +170,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel = null;
         if (shrimpFraction != null) {
+            System.out.println("\n>>>EXPRESSION:   " + expression.getName() + "  ************");
+
             // construct argument list of one spot
             List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
             singleSpot.add(shrimpFraction);
@@ -247,8 +253,26 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                 // The next step is to evaluate the equation 'FormulaEval', 
                 // documented separately, and approximate the uncertainties:
+                System.out.println();
+
+                String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
+
+                if (ratName.compareToIgnoreCase("206/238") == 0) {
+                    System.out.println("SCAN # "
+                            + (scanNum + 1) + ", "
+                            + "206/238-double," + "206/238-float," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+                } else {
+                    System.out.println("SCAN # "
+                            + (scanNum + 1) + ", "
+                            + "254/238-double," + "254/238-float," + "248/254-double," + "248/254-float," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+                }
+
+                System.out.print(" no perturb:,\t");
+
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
                 double eqValTmp = expression.eval2Array(singleSpot)[0][0];
+
+                System.out.println("\t" + eqValTmp);
 
                 double eqFerr;
 
@@ -268,7 +292,12 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double[] perturbed = pkInterp[scanNum].clone();
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
+
+                        System.out.print(" pert " + specie.getName() + ":,\t");
+
                         double pertVal = expression.eval2Array(singleSpot)[0][0];
+
+                        System.out.print("\t" + pertVal);
 
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
@@ -279,6 +308,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     } // end of visiting each isotope and perturbing equation
 
                     eqFerr = Math.sqrt(fVar);
+                    double testAbsErr = Math.abs(eqFerr * eqValTmp);
+
+                    System.out.println("eqferr:, " + eqFerr);
+                    System.out.println("testAbsErr:, " + testAbsErr);
 
                     // now that expression and its error are calculated
                     if (eqFerr != 0.0) {
@@ -303,7 +336,11 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     }
                 } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
 
+                System.out.println();
+
             } // end scanNum loop
+
+            System.out.println();
 
             // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
             // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 

@@ -19,11 +19,8 @@ import org.cirdles.calamari.tasks.Task;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
-import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Expo;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
-import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204BiWt;
-import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
 
 /**
  *
@@ -43,11 +40,11 @@ public class SquidBodorkosTask1 extends Task {
 
         taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
         
-        taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);
-        
-        taskExpressionsOrdered.add(CustomExpression_Net204BiWt.EXPRESSION);
-        
-        taskExpressionsOrdered.add(CustomExpression_Expo.EXPRESSION);
+//        taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);
+//        
+//        taskExpressionsOrdered.add(CustomExpression_Net204BiWt.EXPRESSION);
+//        
+//        taskExpressionsOrdered.add(CustomExpression_Expo.EXPRESSION);
 
         // experiment
 //        ((XMLSerializerInterface) SquidExpressionMinus3.EXPRESSION).serializeXMLObject(SquidExpressionMinus3.EXPRESSION, "SquidExpressionMinus3.xml");
