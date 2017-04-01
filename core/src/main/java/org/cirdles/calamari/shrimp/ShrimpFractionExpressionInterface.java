@@ -101,5 +101,7 @@ public interface ShrimpFractionExpressionInterface {
      * taskExpressionsEvaluationsPerSpot to set
      */
     public void setTaskExpressionsEvaluationsPerSpot(Map<String, double[][]> taskExpressionsEvaluationsPerSpot);
+    
+    public double[][] getIsotopicRatioValuesByStringName(String name);
 
 }

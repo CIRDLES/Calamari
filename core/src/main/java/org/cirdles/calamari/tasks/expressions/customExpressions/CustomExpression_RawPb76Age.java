@@ -19,7 +19,6 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
 
@@ -27,7 +26,7 @@ import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
  *
  * @author James F. Bowring
  */
-public class CustomExpression_AgePb76 {
+public class CustomExpression_RawPb76Age {
 
     /**
      * Squid Excel format is AgePb76(["207/206"])
@@ -36,10 +35,9 @@ public class CustomExpression_AgePb76 {
 
     static {
          ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(RawRatioNamesSHRIMP.r207_206w.getDisplayNameNoSpaces(),
-                        "getTaskExpressionsEvaluationsPerSpotByField"));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("9", 9));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqBiweight());
+                .addChild(0, new VariableNode(RawRatioNamesSHRIMP.r207_206w.getName(),
+                        "getIsotopicRatioValuesByStringName"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.agePb76());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);

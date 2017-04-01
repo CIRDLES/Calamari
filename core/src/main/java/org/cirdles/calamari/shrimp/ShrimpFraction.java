@@ -249,6 +249,12 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     public Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> getIsotopicRatios() {
         return isotopicRatios;
     }
+    
+    public double[][] getIsotopicRatioValuesByStringName(String name){
+        IsotopeRatioModelSHRIMP ratio = isotopicRatios.get(RawRatioNamesSHRIMP.valueOf(name));
+        double [][] ratioAndUnct = new double[][]{{ratio.getRatioVal(), ratio.getRatioFractErr()}};
+        return ratioAndUnct;
+    }
 
     /**
      * @param isotopicRatios the isotopicRatios to set

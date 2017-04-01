@@ -135,8 +135,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 shrimpFractions.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
 
-                        System.out.println();
-                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
+//                        System.out.println();
+//                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
 
                         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
                                 = evaluateTaskExpressionsPerSpotPerScan(expression, spot);

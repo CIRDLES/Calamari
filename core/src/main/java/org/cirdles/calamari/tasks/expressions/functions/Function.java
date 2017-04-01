@@ -66,6 +66,10 @@ public abstract class Function
         return new SqBiweight();
     }
 
+    public static OperationOrFunctionInterface agePb76() {
+        return new AgePb76();
+    }
+
     /**
      *
      * @param operationName
