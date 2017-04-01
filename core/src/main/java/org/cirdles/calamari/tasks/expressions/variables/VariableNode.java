@@ -63,7 +63,7 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
      */
     @Override
     public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        double [][] retVal = new double[1][shrimpFractions.size()];
+        double [][] retVal = new double[shrimpFractions.size()][];
 
         if (lookupMethodNameForShrimpFraction != null) {
             try {
@@ -71,7 +71,7 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
                         lookupMethodNameForShrimpFraction,
                         new Class[]{String.class});
                 for (int i = 0; i < shrimpFractions.size(); i ++){
-                    retVal[0][i] = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0][0];
+                    retVal[i] = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0];
                 }
                 
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException methodException) {

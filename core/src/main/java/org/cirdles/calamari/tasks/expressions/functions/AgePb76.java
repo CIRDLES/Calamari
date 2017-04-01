@@ -27,8 +27,8 @@ public class AgePb76 extends Function {
 
     /**
      * Provides the functionality of Squid's agePb76 by calling pbPbAge and
-     * returning "Age" and "AgeErr" and encoding the
-     * labels for each cell of the values array produced by eval2Array.
+     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
+     * values array produced by eval2Array.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -45,9 +45,8 @@ public class AgePb76 extends Function {
     }
 
     /**
-     * Requires that child 0 is a VariableNode that evaluates
-     * to a double array with one row and a column for each member of
-     * shrimpFractions. 
+     * Requires that child 0 is a VariableNode that evaluates to a double array
+     * with one column and a row for each member of shrimpFractions.
      *
      * @param childrenET list containing child 0 through 3
      * @param shrimpFractions a list of shrimpFractions
@@ -59,8 +58,8 @@ public class AgePb76 extends Function {
 
         double[][] retVal;
         try {
-            double []pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
-            double[] agePb76 = org.cirdles.ludwig.IsoplotUPb.pbPbAge(pb207_206RatioAndUnct[0])[0];          
+            double[] pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] agePb76 = org.cirdles.ludwig.IsoplotUPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1])[0];
             retVal = new double[][]{{agePb76[0], agePb76[1]}};
         } catch (ArithmeticException e) {
             retVal = new double[][]{{0.0, 0.0}};

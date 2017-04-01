@@ -46,7 +46,7 @@ public class SqBiweight extends Function {
 
     /**
      * Requires that child 0 is a VariableNode that evaluates to a double array
-     * with one row and a column for each member of shrimpFractions and that
+     * with one column and a row for each member of shrimpFractions and that
      * child 1 is a ConstantNode that evaluates to an integer.
      *
      * @param childrenET list containing child 0 and child 1
@@ -59,7 +59,7 @@ public class SqBiweight extends Function {
 
         double[][] retVal;
         try {
-            double[] variableValues = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions));
             double[] tuning = childrenET.get(1).eval2Array(shrimpFractions)[0];
             double[] tukeysBiweight = org.cirdles.ludwig.SquidMathUtils.tukeysBiweight(variableValues, tuning[0])[0];
             retVal = new double[][]{{tukeysBiweight[0], tukeysBiweight[1], tukeysBiweight[2]}};

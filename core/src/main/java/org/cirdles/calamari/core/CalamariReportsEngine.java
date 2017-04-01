@@ -76,7 +76,7 @@ public class CalamariReportsEngine {
 
         if (shrimpFractions.size() > 0) {
             // gather general info for all runs  from first fraction
-            ShrimpFraction firstShrimpFraction = (ShrimpFraction)shrimpFractions.get(0);
+            ShrimpFraction firstShrimpFraction = (ShrimpFraction) shrimpFractions.get(0);
 
             SimpleDateFormat sdfTime = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
@@ -99,7 +99,7 @@ public class CalamariReportsEngine {
             prepRatiosReportFiles(firstShrimpFraction);
 
             for (int f = 0; f < shrimpFractions.size(); f++) {
-                ShrimpFraction shrimpFraction = (ShrimpFraction)shrimpFractions.get(f);
+                ShrimpFraction shrimpFraction = (ShrimpFraction) shrimpFractions.get(f);
                 shrimpFraction.setSpotNumber(f + 1);
                 reportTotalIonCountsAtMass(shrimpFraction);
                 reportTotalSBMCountsAtMass(shrimpFraction);
@@ -117,8 +117,9 @@ public class CalamariReportsEngine {
 
     /**
      * Requested by Simon Bodorkos 27 March 2017 to help audit of Squid Excel
-     * 
-     * @see https://docs.oracle.com/javase/8/docs/api/java/math/RoundingMode.html
+     *
+     * @see
+     * https://docs.oracle.com/javase/8/docs/api/java/math/RoundingMode.html
      * @param value
      * @return String representation of double rounded to 15 significant digits
      */
@@ -418,6 +419,18 @@ public class CalamariReportsEngine {
         for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal()));
             dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0));
+        }
+
+        System.out.println("\n" + shrimpFraction.getFractionID() + "********************");
+        for (Map.Entry<String, double[][]> entry : shrimpFraction.getTaskExpressionsEvaluationsPerSpot().entrySet()) {
+            String expressionName = entry.getKey();
+            double[] expressionResults = entry.getValue()[0];
+
+            System.out.print(expressionName + "\t");
+            for (int i = 0; i < expressionResults.length; i++) {
+                System.out.print("\t" + rounded(expressionResults[i]));
+            }
+            System.out.println();
         }
 
         dataLine.append("\n");

@@ -46,5 +46,7 @@ public class CustomExpression_Expo {
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }

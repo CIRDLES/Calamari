@@ -40,5 +40,8 @@ public class CustomExpression_LnPbR_U {
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(true);
     }
 }

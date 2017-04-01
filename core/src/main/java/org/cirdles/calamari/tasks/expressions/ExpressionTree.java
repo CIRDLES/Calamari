@@ -55,6 +55,8 @@ public class ExpressionTree
     protected OperationOrFunctionInterface operation;
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
     protected boolean squidSwitchSCSummaryCalculation;
+    protected boolean squidSwitchSTReferenceMaterialCalculation;
+    protected boolean squidSwitchSAUnknownCalculation;
     protected boolean rootExpressionTree;
 
     public ExpressionTree() {
@@ -100,8 +102,10 @@ public class ExpressionTree
         this.parentET = null;
         this.operation = operation;
         this.ratiosOfInterest = ratiosOfInterest;
-        this.rootExpressionTree = false;
         this.squidSwitchSCSummaryCalculation = false;
+        this.squidSwitchSTReferenceMaterialCalculation = false;
+        this.squidSwitchSAUnknownCalculation = false;
+        this.rootExpressionTree = false;
     }
 
     private void populateChildrenET(ExpressionTreeInterface leftET, ExpressionTreeInterface rightET) {
@@ -328,9 +332,10 @@ public class ExpressionTree
         this.ratiosOfInterest = ratiosOfInterest;
     }
 
-    public boolean hasRatiosOfInterest(){
+    public boolean hasRatiosOfInterest() {
         return ratiosOfInterest.size() > 0;
     }
+
     /**
      * @return the rootExpressionTree
      */
@@ -359,9 +364,38 @@ public class ExpressionTree
     }
 
     /**
-     * @param squidSwitchSCSummaryCalculation the squidSwitchSCSummaryCalculation to set
+     * @param squidSwitchSCSummaryCalculation the
+     * squidSwitchSCSummaryCalculation to set
      */
     public void setSquidSwitchSCSummaryCalculation(boolean squidSwitchSCSummaryCalculation) {
         this.squidSwitchSCSummaryCalculation = squidSwitchSCSummaryCalculation;
+    }
+
+    /**
+     * @return the squidSwitchSTReferenceMaterialCalculation
+     */
+    public boolean isSquidSwitchSTReferenceMaterialCalculation() {
+        return squidSwitchSTReferenceMaterialCalculation;
+    }
+
+    /**
+     * @param squidSwitchSTReferenceMaterialCalculation the squidSwitchSTReferenceMaterialCalculation to set
+     */
+    public void setSquidSwitchSTReferenceMaterialCalculation(boolean squidSwitchSTReferenceMaterialCalculation) {
+        this.squidSwitchSTReferenceMaterialCalculation = squidSwitchSTReferenceMaterialCalculation;
+    }
+
+    /**
+     * @return the squidSwitchSAUnknownCalculation
+     */
+    public boolean isSquidSwitchSAUnknownCalculation() {
+        return squidSwitchSAUnknownCalculation;
+    }
+
+    /**
+     * @param squidSwitchSAUnknownCalculation the squidSwitchSAUnknownCalculation to set
+     */
+    public void setSquidSwitchSAUnknownCalculation(boolean squidSwitchSAUnknownCalculation) {
+        this.squidSwitchSAUnknownCalculation = squidSwitchSAUnknownCalculation;
     }
 }

@@ -39,5 +39,8 @@ public class CustomExpression_Net204cts_sec {
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.subtract());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }

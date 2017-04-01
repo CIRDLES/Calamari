@@ -34,12 +34,14 @@ public class CustomExpression_RawPb76Age {
     public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Raw7/6Age");
 
     static {
-         ((ExpressionTreeBuilderInterface) EXPRESSION)
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
                 .addChild(0, new VariableNode(RawRatioNamesSHRIMP.r207_206w.getName(),
                         "getIsotopicRatioValuesByStringName"));
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.agePb76());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }

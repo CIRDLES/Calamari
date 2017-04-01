@@ -42,5 +42,7 @@ public class CustomExpression_Net204BiWt {
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }

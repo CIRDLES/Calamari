@@ -90,6 +90,15 @@ public abstract class Function
         }
         return retVal;
     }
+    
+    protected double[] transposeColumnVector(double [][] columnVector){
+        double [] rowVector = new double[columnVector.length];
+        for (int i = 0; i < rowVector.length; i ++){
+            rowVector[i] = columnVector[i][0];
+        }
+        
+        return rowVector;
+    }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
 

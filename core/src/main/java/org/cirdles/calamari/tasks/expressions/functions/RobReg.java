@@ -44,7 +44,7 @@ public class RobReg extends Function {
 
     /**
      * Requires that child 0 and child 1 are each a VariableNode that evaluates
-     * to a double array with one row and a column for each member of
+     * to a double array with one column and a row for each member of
      * shrimpFractions. Child 2 and child 3 are each a BooleanNode that
      * evaluates to true or false. Child 2 and 3 are currently ignored but exist
      * for compatibility with Squid2.5.
@@ -59,8 +59,8 @@ public class RobReg extends Function {
 
         double[][] retVal;
         try {
-            double[] xValues = childrenET.get(0).eval2Array(shrimpFractions)[0];
-            double[] yValues = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] xValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions));
+            double[] yValues = transposeColumnVector(childrenET.get(1).eval2Array(shrimpFractions));
             double[] robustReg2 = org.cirdles.ludwig.IsoplotPub.robustReg2(xValues, yValues)[0];
             double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
             double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;

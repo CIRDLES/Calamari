@@ -164,6 +164,10 @@ public class IsotopeRatioModelSHRIMP {
     public double getRatioFractErr() {
         return ratioFractErr;
     }
+    
+    public double getRatioFractErrAs1SigmaAbs(){
+        return ratioVal * ratioFractErr / 100.0;
+    }
 
     /**
      * @param ratioFractErr the ratioFractErr to set

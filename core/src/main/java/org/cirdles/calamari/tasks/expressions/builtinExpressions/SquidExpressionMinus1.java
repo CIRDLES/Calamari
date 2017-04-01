@@ -45,6 +45,9 @@ public class SquidExpressionMinus1 {
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.divide());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(true);
     }
 
 }

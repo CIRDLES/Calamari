@@ -250,9 +250,15 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
         return isotopicRatios;
     }
     
+    /**
+     * Used by reflection in expression evaluations by VariableNode, for example
+     * @param name
+     * @return double [1][2] containing ratio value and 1-sigma abs uncertainty
+     */
+    @Override
     public double[][] getIsotopicRatioValuesByStringName(String name){
         IsotopeRatioModelSHRIMP ratio = isotopicRatios.get(RawRatioNamesSHRIMP.valueOf(name));
-        double [][] ratioAndUnct = new double[][]{{ratio.getRatioVal(), ratio.getRatioFractErr()}};
+        double [][] ratioAndUnct = new double[][]{{ratio.getRatioVal(), ratio.getRatioFractErrAs1SigmaAbs()}};
         return ratioAndUnct;
     }
 

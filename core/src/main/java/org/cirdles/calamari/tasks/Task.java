@@ -124,20 +124,25 @@ public class Task implements TaskInterface, XMLSerializerInterface {
         });
 
         taskExpressionsOrdered.forEach((expression) -> {
-            // determine subset of spots to be evaluated
-            // TODO: for now, all spots
+            // determine subset of spots to be evaluated - default = all
+            List<ShrimpFractionExpressionInterface> spotsForExpression = shrimpFractions;
+            if (!((ExpressionTree) expression).isSquidSwitchSTReferenceMaterialCalculation()) {
+                spotsForExpression = unknownSpots;
+            }
+            if (!((ExpressionTree) expression).isSquidSwitchSAUnknownCalculation()) {
+                spotsForExpression = referenceMaterialSpots;
+            }
             // determine type of expression
             if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
-                // assume ref mat only for now
-                double[][] value = expression.eval2Array(referenceMaterialSpots);
+                double[][] value = expression.eval2Array(spotsForExpression);
                 taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
             } else {
-                shrimpFractions.forEach((spot) -> {
+                // perform expression on each spot
+                spotsForExpression.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
-
+                        // case of Squid switch "NU"
 //                        System.out.println();
 //                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
-
                         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
                                 = evaluateTaskExpressionsPerSpotPerScan(expression, spot);
                         // save scan-specific results
@@ -262,12 +267,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 //                        + "238/196-double," + "238/196-8dig," + "254/238-double," + "254/238-8dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
 //
 //                System.out.print(" no perturb:,\t");
-
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
                 double eqValTmp = expression.eval2Array(singleSpot)[0][0];
 
 //                System.out.println("\t" + eqValTmp);
-
                 double eqFerr;
 
                 if (eqValTmp != 0.0) {
@@ -288,18 +291,16 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
 //                        System.out.print(" pert " + specie.getName() + ":,\t");
-
                         double pertVal = expression.eval2Array(singleSpot)[0][0];
 
 //                        System.out.print("\t" + pertVal + ",\t");
-
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
                         double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
                         double tC = fDelt * fDelt;
                         double tD = (tA / tB) * (tA / tB) * tC;
                         fVar += tD;// --fractional internal variance
-                        
+
 //                        System.out.println(fDelt + ",\t" + tA + ",\t" + tB + ",\t" + tC + ",\t" + tD + ",\t" + fVar);
                     } // end of visiting each isotope and perturbing equation
 
@@ -308,7 +309,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
 //                    System.out.println("eqferr:, " + eqFerr);
 //                    System.out.println("testAbsErr:, " + testAbsErr);
-
                     // now that expression and its error are calculated
                     if (eqFerr != 0.0) {
                         eqValList.add(eqValTmp);
@@ -333,11 +333,9 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
 
 //                System.out.println();
-
             } // end scanNum loop
 
 //            System.out.println();
-
             // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
             // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
             // convert to arrays
