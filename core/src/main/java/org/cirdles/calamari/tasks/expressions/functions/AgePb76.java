@@ -59,7 +59,7 @@ public class AgePb76 extends Function {
         double[][] retVal;
         try {
             double[] pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
-            double[] agePb76 = org.cirdles.ludwig.IsoplotUPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1])[0];
+            double[] agePb76 = org.cirdles.ludwig.isoplot3.UPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1]);
             retVal = new double[][]{{agePb76[0], agePb76[1]}};
         } catch (ArithmeticException e) {
             retVal = new double[][]{{0.0, 0.0}};

@@ -35,7 +35,7 @@ import org.cirdles.calamari.shrimp.IsotopeRatioModelSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.tasks.TaskInterface;
-import org.cirdles.ludwig.SquidMathUtils;
+import org.cirdles.ludwig.squid25.SquidMathUtils;
 
 /**
  * Parses run fractions from Prawn files into
