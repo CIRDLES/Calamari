@@ -123,13 +123,13 @@ public class CalamariReportsEngine {
      * @param value
      * @return String representation of double rounded to 15 significant digits
      */
-    private String rounded(double value) {
+    private String rounded(double value, int sigDigs) {
 
         BigDecimal ratio = new BigDecimal(value);
         // calculate scale for 15 significant digits
-        int newScale = 15 - (ratio.precision() - ratio.scale());
-        BigDecimal ratio15 = ratio.setScale(newScale, RoundingMode.HALF_UP);
-        return ratio15.toPlainString();
+        int newScale = sigDigs - (ratio.precision() - ratio.scale());
+        BigDecimal ratiosigDigs = ratio.setScale(newScale, RoundingMode.HALF_UP);
+        return ratiosigDigs.toPlainString();
     }
 
     /**
@@ -289,9 +289,9 @@ public class CalamariReportsEngine {
 
             for (int i = 0; i < timeStampSec[scanNum].length; i++) {
                 dataLine.append(", ").append(timeStampSec[scanNum][i]);
-                dataLine.append(", ").append(rounded(totalCounts[scanNum][i]));
-                dataLine.append(", ").append(rounded(totalCountsOneSigmaAbs[scanNum][i]));
-                dataLine.append(", ").append(rounded(totalCountsSBM[scanNum][i]));
+                dataLine.append(", ").append(rounded(totalCounts[scanNum][i], 15));
+                dataLine.append(", ").append(rounded(totalCountsOneSigmaAbs[scanNum][i], 15));
+                dataLine.append(", ").append(rounded(totalCountsSBM[scanNum][i], 15));
                 dataLine.append(", ").append(trimMass[scanNum][i]);
             }
 
@@ -334,7 +334,8 @@ public class CalamariReportsEngine {
         double[] totalCps = shrimpFraction.getTotalCps();
 
         for (int i = 0; i < totalCps.length; i++) {
-            dataLine.append(", ").append(rounded(totalCps[i]));
+            //no rounding here as rounding was done to saved values per Bodorkos April 2017
+            dataLine.append(", ").append(totalCps[i]);
         }
 
         dataLine.append("\n");
@@ -363,9 +364,9 @@ public class CalamariReportsEngine {
                 if (isotopeRatioModel.isActive()) {
                     // July 2016 case of less than nDodCount = rare
                     if (nDodNum < isotopeRatioModel.getRatEqTime().size()) {
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqTime().get(nDodNum)));
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqVal().get(nDodNum)));
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqErr().get(nDodNum)));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqTime().get(nDodNum), 15));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqVal().get(nDodNum), 15));
+                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqErr().get(nDodNum), 15));
                     } else {
                         dataLine.append(", ").append("n/a");
                         dataLine.append(", ").append("n/a");
@@ -379,8 +380,8 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqVal()[nDodNum]));
-                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqErr()[nDodNum]));
+                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqVal()[nDodNum], 15));
+                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqErr()[nDodNum], 15));
                 } else {
                     dataLine.append(", ").append("n/a");
                     dataLine.append(", ").append("n/a");
@@ -409,29 +410,29 @@ public class CalamariReportsEngine {
             IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
             if (isotopeRatioModel.isActive()) {
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
-                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioVal()));
-                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioFractErr() * 100.0));
+                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioVal(), 15));
+                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioFractErr() * 100.0, 15));
             }
         }
 
         // Handle any task expressions
         List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal()));
-            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0));
+            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal(), 15));
+            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0, 15));
         }
 
-        System.out.println("\n" + shrimpFraction.getFractionID() + "********************");
-        for (Map.Entry<String, double[][]> entry : shrimpFraction.getTaskExpressionsEvaluationsPerSpot().entrySet()) {
-            String expressionName = entry.getKey();
-            double[] expressionResults = entry.getValue()[0];
-
-            System.out.print(expressionName + "\t");
-            for (int i = 0; i < expressionResults.length; i++) {
-                System.out.print("\t" + rounded(expressionResults[i]));
-            }
-            System.out.println();
-        }
+//        System.out.println("\n" + shrimpFraction.getFractionID() + "********************");
+//        for (Map.Entry<String, double[][]> entry : shrimpFraction.getTaskExpressionsEvaluationsPerSpot().entrySet()) {
+//            String expressionName = entry.getKey();
+//            double[] expressionResults = entry.getValue()[0];
+//
+//            System.out.print(expressionName + "\t");
+//            for (int i = 0; i < expressionResults.length; i++) {
+//                System.out.print("\t" + rounded(expressionResults[i]));
+//            }
+//            System.out.println();
+//        }
 
         dataLine.append("\n");
         if (shrimpFraction.isReferenceMaterial()) {

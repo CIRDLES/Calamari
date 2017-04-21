@@ -348,7 +348,9 @@ public class PrawnFileRunFractionParser {
         for (int speciesMeasurementIndex = 0; speciesMeasurementIndex < nSpecies; speciesMeasurementIndex++) {
             // calculate total cps
             // this has the effect of setting totalCps[backgroundIndex] to backgroundCps
-            totalCps[speciesMeasurementIndex] = (sumOfCorrectedPeaks[speciesMeasurementIndex] / nScans) + backgroundCps;
+            //modified April 2017 to round to 12 sig digits using half-up            
+            double originalTotalCPS = (sumOfCorrectedPeaks[speciesMeasurementIndex] / nScans) + backgroundCps;
+            totalCps[speciesMeasurementIndex] = org.cirdles.utilities.Utilities.roundedToSize(originalTotalCPS, 12);
         }
     }
 

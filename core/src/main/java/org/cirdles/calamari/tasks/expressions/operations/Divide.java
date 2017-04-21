@@ -56,14 +56,16 @@ public class Divide extends Operation {
         // March 2017 constrain quotient to mimic VBA results for isotopic ratios
         // by providing only 8 significant digits per Simon Bodorkos
         if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
-            
-//            System.out.print(String.valueOf(retVal) + ",\t");
-            BigDecimal ratio = new BigDecimal(retVal);
-            int newScale = 8 - (ratio.precision() - ratio.scale());
-            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
-            double sigFig8 = ratio2.doubleValue();
+//            
+////            System.out.print(String.valueOf(retVal) + ",\t");
+//            BigDecimal ratio = new BigDecimal(retVal);
+//            int newScale = 8 - (ratio.precision() - ratio.scale());
+//            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
+//            double sigFig8 = ratio2.doubleValue();
+//
+//            retVal = sigFig8;
 
-            retVal = sigFig8;
+            retVal = org.cirdles.utilities.Utilities.roundedToSize(retVal, 8);
 //            System.out.print(String.valueOf(retVal) + ",\t");
         }
 
