@@ -16,6 +16,8 @@
 package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
+import org.apache.commons.math3.distribution.FDistribution;
+import org.apache.commons.math3.distribution.TDistribution;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
@@ -23,34 +25,37 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class AgePb76 extends Function {
+public class SqWtdAv extends Function {
 
     /**
-     * Provides the functionality of Squid's agePb76 by calling pbPbAge and
-     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
+     * Provides the basic functionality of Squid's sqWtdAv by calculating
+     * WeightedAverage and returning intMean, intSigmaMean, MSWD, probability,
+     * intErr68, intMeanErr95 and encoding the labels for each cell of the
      * values array produced by eval2Array.
      *
      * @see
-     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+     * https://github.com/CIRDLES/LudwigLibrary/blob/master/vbaCode/squid2.5Basic/MathUtils.bas
      * @see
-     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
+     * https://github.com/CIRDLES/LudwigLibrary/blob/master/vbaCode/isoplot3Basic/Means.bas
      */
-    public AgePb76() {
-        name = "agePb76";
+    public SqWtdAv() {
+        name = "sqWtdAv";
         argumentCount = 1;
         precedence = 4;
         rowCount = 1;
-        colCount = 2;
-        labelsForValues = new String[][]{{"Age", "AgeErr"}};
+        colCount = 6;
+        labelsForValues = new String[][]{{"intMean", "intSigmaMean", "MSWD", "probability", "intErr68", "intMeanErr95"}};
     }
 
     /**
      * Requires that child 0 is a VariableNode that evaluates to a double array
-     * with one column and a row for each member of shrimpFractions.
+     * with one column and a row for each member of shrimpFractions and that
+     * child 1 is a ConstantNode that evaluates to an integer.
      *
-     * @param childrenET list containing child 0 through 3
+     * @param childrenET list containing child 0 and child 1
      * @param shrimpFractions a list of shrimpFractions
-     * @return the double[1][2] array of age, ageErr
+     * @return the double[1][6] array of intMean, intSigmaMean, MSWD,
+     * probability, intErr68, intMeanErr95
      */
     @Override
     public double[][] eval2Array(
@@ -58,11 +63,13 @@ public class AgePb76 extends Function {
 
         double[][] retVal;
         try {
-            double[] pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
-            double[] agePb76 = org.cirdles.ludwig.isoplot3.UPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1]);
-            retVal = new double[][]{{agePb76[0], agePb76[1]}};
+            double[][] valuesAndUncertainties = childrenET.get(0).eval2Array(shrimpFractions);
+            double[] variableValues = transposeColumnVector(valuesAndUncertainties, 0);
+            double[] uncertaintyValues = transposeColumnVector(valuesAndUncertainties, 1);
+            double[] weightedAverage = org.cirdles.ludwig.isoplot3.Means.weightedAverage(variableValues, uncertaintyValues);
+            retVal = new double[][]{weightedAverage};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0}};
+            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
         }
 
         return retVal;
@@ -77,7 +84,7 @@ public class AgePb76 extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>AgePb76</mi>"
+                + "<mi>" + name + "</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {
@@ -88,5 +95,4 @@ public class AgePb76 extends Function {
 
         return retVal;
     }
-
 }

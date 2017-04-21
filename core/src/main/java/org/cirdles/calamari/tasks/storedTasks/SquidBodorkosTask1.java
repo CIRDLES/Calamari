@@ -22,6 +22,7 @@ import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpression
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Expo;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Mean7_6;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204BiWt;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_RawPb76Age;
@@ -34,23 +35,25 @@ public class SquidBodorkosTask1 extends Task {
 
     public SquidBodorkosTask1() {
         super("SquidBodorkosTask1");
-        taskExpressionsOrdered.add(CustomExpression_LnUO_U.EXPRESSION);
-
-        taskExpressionsOrdered.add(CustomExpression_LnPbR_U.EXPRESSION);
-
-        taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
-
-        taskExpressionsOrdered.add(SquidExpressionMinus4.EXPRESSION);
-
-        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
-        
-        taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);
-        
-        taskExpressionsOrdered.add(CustomExpression_Net204BiWt.EXPRESSION);
-        
-        taskExpressionsOrdered.add(CustomExpression_Expo.EXPRESSION);
+//        taskExpressionsOrdered.add(CustomExpression_LnUO_U.EXPRESSION);
+//
+//        taskExpressionsOrdered.add(CustomExpression_LnPbR_U.EXPRESSION);
+//
+//        taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
+//
+//        taskExpressionsOrdered.add(SquidExpressionMinus4.EXPRESSION);
+//
+//        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
+//        
+//        taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);
+//        
+//        taskExpressionsOrdered.add(CustomExpression_Net204BiWt.EXPRESSION);
+//        
+//        taskExpressionsOrdered.add(CustomExpression_Expo.EXPRESSION);
         
         taskExpressionsOrdered.add(CustomExpression_RawPb76Age.EXPRESSION);
+        
+        taskExpressionsOrdered.add(CustomExpression_Mean7_6.EXPRESSION);
 
         // experiment
 //        ((XMLSerializerInterface) SquidExpressionMinus3.EXPRESSION).serializeXMLObject(SquidExpressionMinus3.EXPRESSION, "SquidExpressionMinus3.xml");

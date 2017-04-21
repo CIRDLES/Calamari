@@ -97,12 +97,6 @@ public interface ShrimpFractionExpressionInterface {
     public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpot();
 
     /**
-     * @param taskExpressionsEvaluationsPerSpot the
-     * taskExpressionsEvaluationsPerSpot to set
-     */
-    public void setTaskExpressionsEvaluationsPerSpot(Map<String, double[][]> taskExpressionsEvaluationsPerSpot);
-    
-    /**
      * Used by reflection in expression evaluations by VariableNode, for example
      * @param name
      * @return double [1][2] containing ratio value and 1-sigma abs uncertainty

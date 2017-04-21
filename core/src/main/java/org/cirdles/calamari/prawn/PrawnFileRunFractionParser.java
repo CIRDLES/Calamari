@@ -223,17 +223,15 @@ public class PrawnFileRunFractionParser {
                 double totalCountsSigma;
 
                 if (median > 100.0) {
-//                    ValueModel peakTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("PEAK", 9.0, peakMeasurements);
-                    double[] peakTukeysMeanAndUnct = SquidMathUtils.tukeysBiweight(peakMeasurements, 9.0)[0];
+                    double[] peakTukeysMeanAndUnct = SquidMathUtils.tukeysBiweight(peakMeasurements, 9.0);
 
                     // BV is variable used by Ludwig for Tukey Mean fo peak measurements
-//                    double bV = peakTukeyMean.getValue().doubleValue();
                     double bV = peakTukeysMeanAndUnct[0];
                     double bVcps = bV * peakMeasurementsCount / countTimeSec[speciesMeasurementIndex];
                     double bVcpsDeadTime = bVcps / (1.0 - bVcps * deadTimeNanoseconds / 1E9);
 
                     totalCountsPeak = bVcpsDeadTime * countTimeSec[speciesMeasurementIndex];
-//                    double countsSigmaCandidate = Math.max(peakTukeyMean.getOneSigmaAbs().doubleValue(), Math.sqrt(bV));
+
                     double countsSigmaCandidate = Math.max(peakTukeysMeanAndUnct[1], Math.sqrt(bV));
                     totalCountsSigma = countsSigmaCandidate / Math.sqrt(peakMeasurementsCount) * bVcps * countTimeSec[speciesMeasurementIndex] / bV;
 
@@ -283,8 +281,7 @@ public class PrawnFileRunFractionParser {
                     sbm[i] = Double.parseDouble(sbmMeasurementsRaw[i]);
                     rawSBMData[scanNum][speciesMeasurementIndex + speciesMeasurementIndex * (sbmMeasurementsCount - 1) + i] = (int) sbm[i];
                 }
-//                ValueModel sbmTukeyMean = TukeyBiweight.calculateTukeyBiweightMean("SBM", 6.0, sbm);
-                double[] sbmTukeysMeanAndUnct = SquidMathUtils.tukeysBiweight(sbm, 6.0)[0];
+                double[] sbmTukeysMeanAndUnct = SquidMathUtils.tukeysBiweight(sbm, 6.0);
                 double totalCountsSpeciesSBM = sbmMeasurementsCount * sbmTukeysMeanAndUnct[0];//  sbmTukeyMean.getValue().doubleValue();
                 totalCountsSBM[scanNum][speciesMeasurementIndex] = totalCountsSpeciesSBM;
             }
@@ -320,8 +317,7 @@ public class PrawnFileRunFractionParser {
 
             if (backgroundCps >= 10.0) {
                 // recalculate
-//                backgroundCps = TukeyBiweight.calculateTukeyBiweightMean("BACK", 9.0, backgroundCpsArray).getValue().doubleValue();
-                backgroundCps = SquidMathUtils.tukeysBiweight(backgroundCpsArray, 9.0)[0][0];
+                backgroundCps = SquidMathUtils.tukeysBiweight(backgroundCpsArray, 9.0)[0];
             }
         }
 

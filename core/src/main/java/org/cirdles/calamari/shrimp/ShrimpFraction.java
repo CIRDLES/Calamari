@@ -504,6 +504,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the taskExpressionsForScansEvaluated
      */
+    @Override
     public List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> getTaskExpressionsForScansEvaluated() {
         return taskExpressionsForScansEvaluated;
     }
@@ -532,15 +533,6 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     @Override
     public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpot() {
         return taskExpressionsEvaluationsPerSpot;
-    }
-
-    /**
-     * @param taskExpressionsEvaluationsPerSpot the
-     * taskExpressionsEvaluationsPerSpot to set
-     */
-    @Override
-    public void setTaskExpressionsEvaluationsPerSpot(Map<String, double[][]> taskExpressionsEvaluationsPerSpot) {
-        this.taskExpressionsEvaluationsPerSpot = taskExpressionsEvaluationsPerSpot;
     }
 
 }

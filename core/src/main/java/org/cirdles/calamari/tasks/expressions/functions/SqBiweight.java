@@ -59,10 +59,10 @@ public class SqBiweight extends Function {
 
         double[][] retVal;
         try {
-            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions));
+            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
             double[] tuning = childrenET.get(1).eval2Array(shrimpFractions)[0];
-            double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0])[0];
-            retVal = new double[][]{{tukeysBiweight[0], tukeysBiweight[1], tukeysBiweight[2]}};
+            double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0]);
+            retVal = new double[][]{tukeysBiweight};
         } catch (ArithmeticException e) {
             retVal = new double[][]{{0.0, 0.0, 0.0}};
         }

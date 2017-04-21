@@ -70,6 +70,10 @@ public abstract class Function
         return new AgePb76();
     }
 
+    public static OperationOrFunctionInterface sqWtdAvg() {
+        return new SqWtdAv();
+    }
+
     /**
      *
      * @param operationName
@@ -90,13 +94,13 @@ public abstract class Function
         }
         return retVal;
     }
-    
-    protected double[] transposeColumnVector(double [][] columnVector){
-        double [] rowVector = new double[columnVector.length];
-        for (int i = 0; i < rowVector.length; i ++){
-            rowVector[i] = columnVector[i][0];
+
+    protected double[] transposeColumnVector(double[][] columnVector, int colIndex) {
+        double[] rowVector = new double[columnVector.length];
+        for (int i = 0; i < rowVector.length; i++) {
+            rowVector[i] = columnVector[i][colIndex];
         }
-        
+
         return rowVector;
     }
 
