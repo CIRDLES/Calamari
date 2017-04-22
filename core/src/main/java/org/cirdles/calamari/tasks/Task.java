@@ -305,7 +305,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     } // end of visiting each isotope and perturbing equation
 
                     eqFerr = Math.sqrt(fVar);
-                    double testAbsErr = Math.abs(eqFerr * eqValTmp);
+//                    double testAbsErr = Math.abs(eqFerr * eqValTmp);
 
 //                    System.out.println("eqferr:, " + eqFerr);
 //                    System.out.println("testAbsErr:, " + testAbsErr);
@@ -344,6 +344,13 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             double[] fractErr = Doubles.toArray(fractErrList);
             double[] eqTime = Doubles.toArray(eqTimeList);
             double[][] sigRho = new double[eqVal.length][eqVal.length];
+
+//            // April 2017 Simon Bodorkos wants all rounded to 12 sig dig
+//            double[] eqVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(eqValList), 12);
+//            double[] absErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(absErrList), 12);
+//            double[] fractErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(fractErrList), 12);
+//            double[] eqTime = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(eqTimeList), 12);
+//            double[][] sigRho = new double[eqVal.length][eqVal.length];
 
             for (int i = 0; i < sigRho.length; i++) {
                 sigRho[i][i] = absErr[i];
@@ -392,7 +399,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             for (int i = 0; i < ratEqErr.length; i++) {
                 ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
             }
-
+            
+            // April 20178 rounding occurs within this constructor
             taskExpressionEvaluatedPerSpotPerScanModel
                     = new TaskExpressionEvaluatedPerSpotPerScanModel(
                             expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr);

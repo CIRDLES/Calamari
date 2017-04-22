@@ -33,14 +33,27 @@ public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressio
     private TaskExpressionEvaluatedPerSpotPerScanModel() {
     }
 
+    /**
+     * Structure to store results of Squid Sqitch NU expression evaluation using
+     * ratios of interest and per SImon Bodorkos, rounded to 12 sig digits to
+     * comply with VBA comparisons.
+     *
+     * @param expression
+     * @param ratEqVal
+     * @param ratEqTime
+     * @param ratEqErr
+     * @param ratioVal
+     * @param ratioFractErr
+     */
     public TaskExpressionEvaluatedPerSpotPerScanModel(
             ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
+        int sigDigs = 12;
         this.expression = expression;
-        this.ratEqVal = ratEqVal.clone();
-        this.ratEqTime = ratEqTime.clone();
-        this.ratEqErr = ratEqErr.clone();
-        this.ratioVal = ratioVal;
-        this.ratioFractErr = ratioFractErr;
+        this.ratEqVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqVal.clone(), sigDigs);
+        this.ratEqTime = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqTime.clone(), sigDigs);
+        this.ratEqErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqErr.clone(), sigDigs);
+        this.ratioVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratioVal, sigDigs);
+        this.ratioFractErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratioFractErr, sigDigs);
     }
 
     /**

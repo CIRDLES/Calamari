@@ -36,6 +36,7 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.ludwig.squid25.SquidMathUtils;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  * Parses run fractions from Prawn files into
@@ -350,7 +351,7 @@ public class PrawnFileRunFractionParser {
             // this has the effect of setting totalCps[backgroundIndex] to backgroundCps
             //modified April 2017 to round to 12 sig digits using half-up            
             double originalTotalCPS = (sumOfCorrectedPeaks[speciesMeasurementIndex] / nScans) + backgroundCps;
-            totalCps[speciesMeasurementIndex] = org.cirdles.utilities.Utilities.roundedToSize(originalTotalCPS, 12);
+            totalCps[speciesMeasurementIndex] = org.cirdles.ludwig.squid25.Utilities.roundedToSize(originalTotalCPS, 12);
         }
     }
 
@@ -363,6 +364,9 @@ public class PrawnFileRunFractionParser {
         // Step 3 of Development for SHRIMP
         // (see wiki: https://github.com/CIRDLES/ET_Redux/wiki/Development-for-SHRIMP:-Step-3)
         // walk the ratios
+        // April 2017 per Bodorkos
+        int sigFigs = 12;
+
         isotopicRatios.forEach((rawRatioName, isotopicRatioModel) -> {
             int nDod = nScans - 1;
             int NUM = indexToSpeciesMap.get(isotopicRatioModel.getNumerator());
@@ -410,8 +414,8 @@ public class PrawnFileRunFractionParser {
                         0.5 * (Math.min(timeStampSec[0][NUM], timeStampSec[0][DEN]) + Math.max(timeStampSec[nScans - 1][NUM], timeStampSec[nScans - 1][DEN]))
                     };
 
-                    isotopicRatioModel.setRatioVal(ratioVal);
-                    isotopicRatioModel.setRatioFractErr(ratioFractErr);
+                    isotopicRatioModel.setRatioVal(Utilities.roundedToSize(ratioVal, sigFigs));
+                    isotopicRatioModel.setRatioFractErr(Utilities.roundedToSize(ratioFractErr, sigFigs));
 
                     ratEqTime.add(ratioInterpTime[0]);
                     ratEqVal.add(ratioVal);
@@ -585,8 +589,8 @@ public class PrawnFileRunFractionParser {
                             ratEqVal.add(ratioVal);
                             ratEqErr.add(ratioFractErr);
 
-                            isotopicRatioModel.setRatioVal(ratioVal);
-                            isotopicRatioModel.setRatioFractErr(ratioFractErr);
+                            isotopicRatioModel.setRatioVal(Utilities.roundedToSize(ratioVal, sigFigs));
+                            isotopicRatioModel.setRatioFractErr(Utilities.roundedToSize(ratioFractErr, sigFigs));
 
                             break;
                         case 0:
@@ -602,8 +606,8 @@ public class PrawnFileRunFractionParser {
                             ratEqVal.add(ratioVal);
                             ratEqErr.add(ratioFractErr);
 
-                            isotopicRatioModel.setRatioVal(ratioVal);
-                            isotopicRatioModel.setRatioFractErr(ratioFractErr);
+                            isotopicRatioModel.setRatioVal(Utilities.roundedToSize(ratioVal, sigFigs));
+                            isotopicRatioModel.setRatioFractErr(Utilities.roundedToSize(ratioFractErr, sigFigs));
 
                             break;
                         default:
@@ -640,8 +644,9 @@ public class PrawnFileRunFractionParser {
                                 isotopicRatioModel.setRatioVal(SQUID_TINY_VALUE);
                                 isotopicRatioModel.setRatioFractErr(1.0);
                             } else {
-                                isotopicRatioModel.setRatioVal(ratioMean);
-                                isotopicRatioModel.setRatioFractErr(Math.max(SQUID_TINY_VALUE, ratioMeanSig) / Math.abs(ratioMean));
+                                isotopicRatioModel.setRatioVal(Utilities.roundedToSize(ratioMean, sigFigs));
+                                isotopicRatioModel.setRatioFractErr(Math.max(SQUID_TINY_VALUE,
+                                        Utilities.roundedToSize(ratioMeanSig, sigFigs)) / Math.abs(Utilities.roundedToSize(ratioMean, sigFigs)));
                             }
 
                             isotopicRatioModel.setMinIndex(wtdLinCorrResults.getMinIndex());

@@ -15,8 +15,6 @@
  */
 package org.cirdles.calamari.tasks.expressions.operations;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
@@ -53,20 +51,10 @@ public class Divide extends Operation {
             retVal = 0.0;
         }
 
-        // March 2017 constrain quotient to mimic VBA results for isotopic ratios
-        // by providing only 8 significant digits per Simon Bodorkos
+        // April 2017 constrain quotient to mimic VBA results for isotopic ratios
+        // by providing only 12 significant digits per Simon Bodorkos
         if (childrenET.get(0) instanceof ShrimpSpeciesNode) {
-//            
-////            System.out.print(String.valueOf(retVal) + ",\t");
-//            BigDecimal ratio = new BigDecimal(retVal);
-//            int newScale = 8 - (ratio.precision() - ratio.scale());
-//            BigDecimal ratio2 = ratio.setScale(newScale, RoundingMode.HALF_UP);
-//            double sigFig8 = ratio2.doubleValue();
-//
-//            retVal = sigFig8;
-
-            retVal = org.cirdles.utilities.Utilities.roundedToSize(retVal, 8);
-//            System.out.print(String.valueOf(retVal) + ",\t");
+            retVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(retVal, 12);
         }
 
         return new double[][]{{retVal}};

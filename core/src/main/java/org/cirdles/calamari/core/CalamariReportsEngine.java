@@ -347,6 +347,11 @@ public class CalamariReportsEngine {
 
     }
 
+    /**
+     * Produces Squid_03 report
+     *
+     * @param shrimpFraction
+     */
     private void reportWithinSpotRatiosAtInterpolatedTimes(ShrimpFraction shrimpFraction) {
 
         int nDodCount = shrimpFraction.getIsotopicRatios().entrySet().iterator().next().getValue().getRatEqTime().size();
@@ -380,8 +385,9 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqVal()[nDodNum], 15));
-                    dataLine.append(", ").append(rounded(taskExpressionEval.getRatEqErr()[nDodNum], 15));
+                    // rounding already performed at expression evaluation
+                    dataLine.append(", ").append(taskExpressionEval.getRatEqVal()[nDodNum]);
+                    dataLine.append(", ").append(taskExpressionEval.getRatEqErr()[nDodNum]);
                 } else {
                     dataLine.append(", ").append("n/a");
                     dataLine.append(", ").append("n/a");
@@ -398,6 +404,11 @@ public class CalamariReportsEngine {
         }
     }
 
+    /**
+     * Produces Squid_04 report
+     *
+     * @param shrimpFraction
+     */
     private void reportMeanRatiosPerSpot(ShrimpFraction shrimpFraction) {
 
         // need to sort by reference material vs unknown
@@ -409,17 +420,19 @@ public class CalamariReportsEngine {
         for (Map.Entry<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> entry : shrimpFraction.getIsotopicRatios().entrySet()) {
             IsotopeRatioModelSHRIMP isotopeRatioModel = entry.getValue();
             if (isotopeRatioModel.isActive()) {
+                // April 2017 rounding was performed on calculated numbers
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
-                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioVal(), 15));
-                dataLine.append(", ").append(rounded(isotopeRatioModel.getRatioFractErr() * 100.0, 15));
+                dataLine.append(", ").append(isotopeRatioModel.getRatioVal());
+                // showing 1-sigma percent
+                dataLine.append(", ").append(isotopeRatioModel.getRatioFractErr() * 100.0);
             }
         }
 
-        // Handle any task expressions
+        // Handle any task expressions that we calculated per scan with a summary value per spot = Squid Switch "NU"
         List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioVal(), 15));
-            dataLine.append(", ").append(rounded(taskExpressionEval.getRatioFractErr() * 100.0, 15));
+            dataLine.append(", ").append(taskExpressionEval.getRatioVal());
+            dataLine.append(", ").append(taskExpressionEval.getRatioFractErr() * 100.0);
         }
 
 //        System.out.println("\n" + shrimpFraction.getFractionID() + "********************");
@@ -433,7 +446,6 @@ public class CalamariReportsEngine {
 //            }
 //            System.out.println();
 //        }
-
         dataLine.append("\n");
         if (shrimpFraction.isReferenceMaterial()) {
             refMatMeanRatios_PerSpot.append(dataLine);
