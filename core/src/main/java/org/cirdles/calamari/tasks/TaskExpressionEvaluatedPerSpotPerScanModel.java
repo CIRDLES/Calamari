@@ -16,6 +16,7 @@
 package org.cirdles.calamari.tasks;
 
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  *
@@ -47,13 +48,16 @@ public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressio
      */
     public TaskExpressionEvaluatedPerSpotPerScanModel(
             ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
-        int sigDigs = 12;
+        
         this.expression = expression;
-        this.ratEqVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqVal.clone(), sigDigs);
-        this.ratEqTime = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqTime.clone(), sigDigs);
-        this.ratEqErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratEqErr.clone(), sigDigs);
-        this.ratioVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratioVal, sigDigs);
-        this.ratioFractErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(ratioFractErr, sigDigs);
+        this.ratEqVal = ratEqVal.clone();
+        this.ratEqTime = ratEqTime.clone();
+        this.ratEqErr = ratEqErr.clone();
+        
+        // April 2017 Rounding per Bodorkos
+        int sigDigs = 12;
+        this.ratioVal = Utilities.roundedToSize(ratioVal, sigDigs);
+        this.ratioFractErr = Utilities.roundedToSize(ratioFractErr, sigDigs);
     }
 
     /**

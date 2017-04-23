@@ -351,7 +351,7 @@ public class PrawnFileRunFractionParser {
             // this has the effect of setting totalCps[backgroundIndex] to backgroundCps
             //modified April 2017 to round to 12 sig digits using half-up            
             double originalTotalCPS = (sumOfCorrectedPeaks[speciesMeasurementIndex] / nScans) + backgroundCps;
-            totalCps[speciesMeasurementIndex] = org.cirdles.ludwig.squid25.Utilities.roundedToSize(originalTotalCPS, 12);
+            totalCps[speciesMeasurementIndex] = Utilities.roundedToSize(originalTotalCPS, 12);
         }
     }
 
@@ -617,7 +617,7 @@ public class PrawnFileRunFractionParser {
                                 ratEqErr.add(Math.abs(ratValFerr[j] * interpRatVal[j]));
                             }
 
-                            // step 4
+                            // step 4 **************************************************************************
                             WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
                             double ratioMean;
                             double ratioMeanSig;
@@ -645,8 +645,8 @@ public class PrawnFileRunFractionParser {
                                 isotopicRatioModel.setRatioFractErr(1.0);
                             } else {
                                 isotopicRatioModel.setRatioVal(Utilities.roundedToSize(ratioMean, sigFigs));
-                                isotopicRatioModel.setRatioFractErr(Math.max(SQUID_TINY_VALUE,
-                                        Utilities.roundedToSize(ratioMeanSig, sigFigs)) / Math.abs(Utilities.roundedToSize(ratioMean, sigFigs)));
+                                isotopicRatioModel.setRatioFractErr(Utilities.roundedToSize(Math.max(SQUID_TINY_VALUE,
+                                        ratioMeanSig) / Math.abs(ratioMean), sigFigs));
                             }
 
                             isotopicRatioModel.setMinIndex(wtdLinCorrResults.getMinIndex());

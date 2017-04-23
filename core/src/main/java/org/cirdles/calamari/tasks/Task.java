@@ -297,8 +297,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
                         double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
-                        double tC = fDelt * fDelt;
-                        double tD = (tA / tB) * (tA / tB) * tC;
+                        double tC = fDelt * (tA / tB); // Bodorkos rescaled tc and td April 2017    fDelt * fDelt;
+                        double tD = tC * tC;         // Bodorkos rescaled tc and td April 2017(tA / tB) * (tA / tB) * tC;
                         fVar += tD;// --fractional internal variance
 
 //                        System.out.println(fDelt + ",\t" + tA + ",\t" + tB + ",\t" + tC + ",\t" + tD + ",\t" + fVar);
@@ -344,13 +344,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             double[] fractErr = Doubles.toArray(fractErrList);
             double[] eqTime = Doubles.toArray(eqTimeList);
             double[][] sigRho = new double[eqVal.length][eqVal.length];
-
-//            // April 2017 Simon Bodorkos wants all rounded to 12 sig dig
-//            double[] eqVal = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(eqValList), 12);
-//            double[] absErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(absErrList), 12);
-//            double[] fractErr = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(fractErrList), 12);
-//            double[] eqTime = org.cirdles.ludwig.squid25.Utilities.roundedToSize(Doubles.toArray(eqTimeList), 12);
-//            double[][] sigRho = new double[eqVal.length][eqVal.length];
 
             for (int i = 0; i < sigRho.length; i++) {
                 sigRho[i][i] = absErr[i];
@@ -400,7 +393,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
             }
             
-            // April 20178 rounding occurs within this constructor
+            // April 20178 rounding of meanEq and eqValFerr occurs within this constructor
             taskExpressionEvaluatedPerSpotPerScanModel
                     = new TaskExpressionEvaluatedPerSpotPerScanModel(
                             expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr);

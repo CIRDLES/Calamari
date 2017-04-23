@@ -34,6 +34,7 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInterface;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  * Calamari's reports engine.
@@ -113,23 +114,6 @@ public class CalamariReportsEngine {
             finishSpeciesReportFiles();
             finishRatiosReportFiles();
         }
-    }
-
-    /**
-     * Requested by Simon Bodorkos 27 March 2017 to help audit of Squid Excel
-     *
-     * @see
-     * https://docs.oracle.com/javase/8/docs/api/java/math/RoundingMode.html
-     * @param value
-     * @return String representation of double rounded to 15 significant digits
-     */
-    private String rounded(double value, int sigDigs) {
-
-        BigDecimal ratio = new BigDecimal(value);
-        // calculate scale for 15 significant digits
-        int newScale = sigDigs - (ratio.precision() - ratio.scale());
-        BigDecimal ratiosigDigs = ratio.setScale(newScale, RoundingMode.HALF_UP);
-        return ratiosigDigs.toPlainString();
     }
 
     /**
@@ -289,9 +273,9 @@ public class CalamariReportsEngine {
 
             for (int i = 0; i < timeStampSec[scanNum].length; i++) {
                 dataLine.append(", ").append(timeStampSec[scanNum][i]);
-                dataLine.append(", ").append(rounded(totalCounts[scanNum][i], 15));
-                dataLine.append(", ").append(rounded(totalCountsOneSigmaAbs[scanNum][i], 15));
-                dataLine.append(", ").append(rounded(totalCountsSBM[scanNum][i], 15));
+                dataLine.append(", ").append(Utilities.roundedToSize(totalCounts[scanNum][i], 15));
+                dataLine.append(", ").append(Utilities.roundedToSize(totalCountsOneSigmaAbs[scanNum][i], 15));
+                dataLine.append(", ").append(Utilities.roundedToSize(totalCountsSBM[scanNum][i], 15));
                 dataLine.append(", ").append(trimMass[scanNum][i]);
             }
 
@@ -334,7 +318,7 @@ public class CalamariReportsEngine {
         double[] totalCps = shrimpFraction.getTotalCps();
 
         for (int i = 0; i < totalCps.length; i++) {
-            //no rounding here as rounding was done to saved values per Bodorkos April 2017
+            //rounding was done to saved values per Bodorkos April 2017
             dataLine.append(", ").append(totalCps[i]);
         }
 
@@ -369,9 +353,9 @@ public class CalamariReportsEngine {
                 if (isotopeRatioModel.isActive()) {
                     // July 2016 case of less than nDodCount = rare
                     if (nDodNum < isotopeRatioModel.getRatEqTime().size()) {
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqTime().get(nDodNum), 15));
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqVal().get(nDodNum), 15));
-                        dataLine.append(", ").append(rounded(isotopeRatioModel.getRatEqErr().get(nDodNum), 15));
+                        dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatEqTime().get(nDodNum), 15));
+                        dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatEqVal().get(nDodNum), 15));
+                        dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatEqErr().get(nDodNum), 15));
                     } else {
                         dataLine.append(", ").append("n/a");
                         dataLine.append(", ").append("n/a");
@@ -385,9 +369,8 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    // rounding already performed at expression evaluation
-                    dataLine.append(", ").append(taskExpressionEval.getRatEqVal()[nDodNum]);
-                    dataLine.append(", ").append(taskExpressionEval.getRatEqErr()[nDodNum]);
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],15));
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqErr()[nDodNum],15));
                 } else {
                     dataLine.append(", ").append("n/a");
                     dataLine.append(", ").append("n/a");
@@ -422,17 +405,17 @@ public class CalamariReportsEngine {
             if (isotopeRatioModel.isActive()) {
                 // April 2017 rounding was performed on calculated numbers
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
-                dataLine.append(", ").append(isotopeRatioModel.getRatioVal());
+                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioVal(), 12));
                 // showing 1-sigma percent
-                dataLine.append(", ").append(isotopeRatioModel.getRatioFractErr() * 100.0);
+                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioFractErr() * 100.0, 12));
             }
         }
 
         // Handle any task expressions that we calculated per scan with a summary value per spot = Squid Switch "NU"
         List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            dataLine.append(", ").append(taskExpressionEval.getRatioVal());
-            dataLine.append(", ").append(taskExpressionEval.getRatioFractErr() * 100.0);
+            dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatioVal(),12));
+            dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatioFractErr() * 100.0, 12));
         }
 
 //        System.out.println("\n" + shrimpFraction.getFractionID() + "********************");
