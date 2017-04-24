@@ -42,8 +42,8 @@ public class SquidBodorkosTask1 extends Task {
 //        taskExpressionsOrdered.add(SquidExpressionMinus1.EXPRESSION);
 //
 //        taskExpressionsOrdered.add(SquidExpressionMinus4.EXPRESSION);
-
-        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
+//
+//        taskExpressionsOrdered.add(SquidExpressionMinus3.EXPRESSION);
         
 //        taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);
 //        

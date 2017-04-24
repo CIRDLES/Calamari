@@ -24,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.PoissonLimitsCountLessThanEqual100;
-import org.cirdles.calamari.algorithms.TukeyBiweight;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import static org.cirdles.calamari.constants.CalamariConstants.HARD_WIRED_INDEX_OF_BACKGROUND;
@@ -219,7 +218,7 @@ public class PrawnFileRunFractionParser {
                     rawPeakData[scanNum][speciesMeasurementIndex + speciesMeasurementIndex * (peakMeasurementsCount - 1) + i] = (int) peakMeasurements[i];
                 }
 
-                double median = TukeyBiweight.calculateMedian(peakMeasurements);
+                double median = Utilities.median(peakMeasurements);
                 double totalCountsPeak;
                 double totalCountsSigma;
 

@@ -19,6 +19,7 @@ import org.apache.commons.math3.distribution.FDistribution;
 import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  *
@@ -75,7 +76,7 @@ public final class WeightedMeanCalculators {
             sigmaY[i] = sigRho[i][i];
         }
 
-        double f = Math.max(TukeyBiweight.calculateMedian(sigmaY), 1e-10);
+        double f = Math.max(Utilities.median(sigmaY), 1e-10);
         for (int i = 0; i < n; i++) {
             sigRho1[i][i] = Math.max(sigRho1[i][i], f);
             sigRho2[i][i] = sigRho1[i][i];

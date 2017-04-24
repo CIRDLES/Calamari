@@ -32,3 +32,9 @@ generateGrammarSource {
     maxHeapSize = "64m"
     arguments += ["-visitor", "-long-messages"]
 }
+
+task fatJarCore(type: Jar) {
+    baseName = 'CalamariCore'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

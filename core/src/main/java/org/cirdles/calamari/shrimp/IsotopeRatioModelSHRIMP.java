@@ -17,6 +17,7 @@ package org.cirdles.calamari.shrimp;
 
 import java.util.ArrayList;
 import java.util.List;
+import static org.cirdles.calamari.constants.SquidConstants.SQUID_UPPER_LIMIT_1_SIGMA_PERCENT;
 
 /**
  *
@@ -173,7 +174,8 @@ public class IsotopeRatioModelSHRIMP {
      * @param ratioFractErr the ratioFractErr to set
      */
     public void setRatioFractErr(double ratioFractErr) {
-        this.ratioFractErr = ratioFractErr;
+        // april 2017 introduce Squid2.5 upper limit
+        this.ratioFractErr = (ratioFractErr * 100.0 > SQUID_UPPER_LIMIT_1_SIGMA_PERCENT) ? SQUID_UPPER_LIMIT_1_SIGMA_PERCENT / 100.0 : ratioFractErr;
     }
 
     /**
