@@ -20,7 +20,9 @@ import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import org.cirdles.calamari.algorithms.WeightedMeanCalculators;
 import static org.cirdles.calamari.algorithms.WeightedMeanCalculators.wtdLinCorr;
 import static org.cirdles.calamari.constants.SquidConstants.SQUID_ERROR_VALUE;
@@ -54,7 +56,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
     protected String name;
     protected List<ExpressionTreeInterface> taskExpressionsOrdered;
-    protected transient List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated;
+    protected Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet;
 
     public Task() {
         this("NoName");
@@ -63,7 +65,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     public Task(String name) {
         this.name = name;
         this.taskExpressionsOrdered = new ArrayList<>();
-        this.taskExpressionsEvaluated = new ArrayList<>();
+        this.taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
     }
 
     @Override
@@ -96,226 +98,308 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     }
 
     /**
-     * see https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-EqnInterp
      *
-     * @param shrimpFraction
+     * @param shrimpFractions
      */
     @Override
-    public void evaluateTaskExpressions(ShrimpFractionExpressionInterface shrimpFraction) {
-        this.taskExpressionsEvaluated = new ArrayList<>();
+    public void evaluateTaskExpressions(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+
+        taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
+
+        // setup spots
+        shrimpFractions.forEach((spot) -> {
+            List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsForScansEvaluated = new ArrayList<>();
+            spot.setTaskExpressionsForScansEvaluated(taskExpressionsForScansEvaluated);
+        });
+
+        // subdivide spots
+        List<ShrimpFractionExpressionInterface> referenceMaterialSpots = new ArrayList<>();
+        List<ShrimpFractionExpressionInterface> unknownSpots = new ArrayList<>();
+        shrimpFractions.forEach((spot) -> {
+            if (spot.isReferenceMaterial()) {
+                referenceMaterialSpots.add(spot);
+            } else {
+                unknownSpots.add(spot);
+            }
+        });
+
+        taskExpressionsOrdered.forEach((expression) -> {
+            // determine subset of spots to be evaluated - default = all
+            List<ShrimpFractionExpressionInterface> spotsForExpression = shrimpFractions;
+            if (!((ExpressionTree) expression).isSquidSwitchSTReferenceMaterialCalculation()) {
+                spotsForExpression = unknownSpots;
+            }
+            if (!((ExpressionTree) expression).isSquidSwitchSAUnknownCalculation()) {
+                spotsForExpression = referenceMaterialSpots;
+            }
+            // determine type of expression
+            if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
+                double[][] value = expression.eval2Array(spotsForExpression);
+                taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
+            } else {
+                // perform expression on each spot
+                spotsForExpression.forEach((spot) -> {
+                    if (((ExpressionTree) expression).hasRatiosOfInterest()) {
+                        // case of Squid switch "NU"
+//                        System.out.println();
+//                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
+                        TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
+                                = evaluateTaskExpressionsPerSpotPerScan(expression, spot);
+                        // save scan-specific results
+                        spot.getTaskExpressionsForScansEvaluated().add(taskExpressionEvaluatedPerSpotPerScanModel);
+                        // save spot-specific results
+                        double[][] value = new double[][]{{taskExpressionEvaluatedPerSpotPerScanModel.getRatioVal(),
+                            taskExpressionEvaluatedPerSpotPerScanModel.getRatioFractErr()}};
+                        spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
+                    } else {
+                        List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
+                        singleSpot.add(spot);
+                        double[][] value = expression.eval2Array(singleSpot);
+                        spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
+                    }
+                });
+            }
+
+        });
+
+    }
+
+    /**
+     * see https://github.com/CIRDLES/ET_Redux/wiki/SHRIMP:-Sub-EqnInterp
+     *
+     * @param expression
+     * @param shrimpFraction
+     */
+    private TaskExpressionEvaluatedPerSpotPerScanModelInterface
+            evaluateTaskExpressionsPerSpotPerScan(ExpressionTreeInterface expression, ShrimpFractionExpressionInterface shrimpFraction) {
+
+        TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel = null;
         if (shrimpFraction != null) {
-            List<ShrimpFractionExpressionInterface> shrimpFractions = new ArrayList<>();
-            shrimpFractions.add(shrimpFraction);
+//            System.out.println("\n>>>EXPRESSION:   " + expression.getName() + "  ************");
+
+            // construct argument list of one spot
+            List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
+            singleSpot.add(shrimpFraction);
+
             // first have to build pkInterp etc per expression and then evaluate by scan
-            taskExpressionsOrdered.forEach((expression) -> {
-                List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
+            List<RawRatioNamesSHRIMP> ratiosOfInterest = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest();
 
-                // entry test for special processing of ratios of interest
-                if (ratiosOfInterest.size() > 0) {
+            int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
+            for (int i = 0; i < ratiosOfInterest.size(); i++) {
+                isotopeIndices[2 * i] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getNumerator());
+                isotopeIndices[2 * i + 1] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getDenominator());
+            }
 
-                    int[] isotopeIndices = new int[ratiosOfInterest.size() * 2];
-                    for (int i = 0; i < ratiosOfInterest.size(); i++) {
-                        isotopeIndices[2 * i] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getNumerator());
-                        isotopeIndices[2 * i + 1] = shrimpFraction.getIndexOfSpeciesByName(ratiosOfInterest.get(i).getDenominator());
+            int sIndx = shrimpFraction.getReducedPkHt().length - 1;
+            double[][] pkInterp = new double[sIndx][shrimpFraction.getReducedPkHt()[0].length];
+            double[][] pkInterpFerr = new double[sIndx][shrimpFraction.getReducedPkHt()[0].length];
+            boolean singleScan = (sIndx == 1);
+            double interpTime = 0.0;
+
+            List<Double> eqValList = new ArrayList<>();
+            List<Double> fractErrList = new ArrayList<>();
+            List<Double> absErrList = new ArrayList<>();
+            List<Double> eqTimeList = new ArrayList<>();
+
+            for (int scanNum = 0; scanNum < sIndx; scanNum++) {
+                boolean doProceed = true;
+                if (!singleScan) {
+                    double interpTimeSpan = 0.0;
+                    for (int i = 0; i < isotopeIndices.length; i++) {
+                        interpTimeSpan
+                                += shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]]
+                                + shrimpFraction.getTimeStampSec()[scanNum + 1][isotopeIndices[i]];
                     }
+                    interpTime = interpTimeSpan / isotopeIndices.length / 2.0;
+                } // end check singleScan
 
-                    int sIndx = shrimpFraction.getReducedPkHt().length - 1;
-                    double[][] pkInterp = new double[sIndx][shrimpFraction.getReducedPkHt()[0].length];
-                    double[][] pkInterpFerr = new double[sIndx][shrimpFraction.getReducedPkHt()[0].length];
-                    boolean singleScan = (sIndx == 1);
-                    double interpTime = 0.0;
+                for (int i = 0; i < isotopeIndices.length; i++) {
+                    double fractInterpTime = 0.0;
+                    double fractLessInterpTime = 0.0;
+                    double redPk2Ht = 0.0;
 
-                    List<Double> eqValList = new ArrayList<>();
-                    List<Double> fractErrList = new ArrayList<>();
-                    List<Double> absErrList = new ArrayList<>();
-                    List<Double> eqTimeList = new ArrayList<>();
+                    if (!singleScan) {
+                        // default value
+                        pkInterp[scanNum][isotopeIndices[i]] = SQUID_ERROR_VALUE;
+                        double pkTdelt
+                                = shrimpFraction.getTimeStampSec()[scanNum + 1][isotopeIndices[i]]
+                                - shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]];
 
-                    for (int scanNum = 0; scanNum < sIndx; scanNum++) {
-                        boolean doProceed = true;
-                        if (!singleScan) {
-                            double interpTimeSpan = 0.0;
-                            for (int i = 0; i < isotopeIndices.length; i++) {
-                                interpTimeSpan
-                                        += shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]]
-                                        + shrimpFraction.getTimeStampSec()[scanNum + 1][isotopeIndices[i]];
-                            }
-                            interpTime = interpTimeSpan / isotopeIndices.length / 2.0;
-                        } // end check singleScan
+                        doProceed = (pkTdelt > 0.0);
 
-                        for (int i = 0; i < isotopeIndices.length; i++) {
-                            double fractInterpTime = 0.0;
-                            double fractLessInterpTime = 0.0;
-                            double redPk2Ht = 0.0;
+                        if (doProceed) {
+                            fractInterpTime = (interpTime - shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]]) / pkTdelt;
+                            fractLessInterpTime = 1.0 - fractInterpTime;
+                            redPk2Ht = shrimpFraction.getReducedPkHt()[scanNum + 1][isotopeIndices[i]];
+                        }
+                    } // end check singleScan
+                    if (doProceed) {
+                        double redPk1Ht = shrimpFraction.getReducedPkHt()[scanNum][isotopeIndices[i]];
 
-                            if (!singleScan) {
-                                // default value
-                                pkInterp[scanNum][isotopeIndices[i]] = SQUID_ERROR_VALUE;
-                                double pkTdelt
-                                        = shrimpFraction.getTimeStampSec()[scanNum + 1][isotopeIndices[i]]
-                                        - shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]];
-
-                                doProceed = (pkTdelt > 0.0);
-
-                                if (doProceed) {
-                                    fractInterpTime = (interpTime - shrimpFraction.getTimeStampSec()[scanNum][isotopeIndices[i]]) / pkTdelt;
-                                    fractLessInterpTime = 1.0 - fractInterpTime;
-                                    redPk2Ht = shrimpFraction.getReducedPkHt()[scanNum + 1][isotopeIndices[i]];
-                                }
-                            } // end check singleScan
-                            if (doProceed) {
-                                double redPk1Ht = shrimpFraction.getReducedPkHt()[scanNum][isotopeIndices[i]];
-
-                                if (redPk1Ht == SQUID_ERROR_VALUE || redPk2Ht == SQUID_ERROR_VALUE) {
-                                    doProceed = false;
-                                }
-
-                                if (doProceed) {
-                                    double pkF1 = shrimpFraction.getReducedPkHtFerr()[scanNum][isotopeIndices[i]];
-
-                                    if (singleScan) {
-                                        pkInterp[scanNum][isotopeIndices[i]] = redPk1Ht;
-                                        pkInterpFerr[scanNum][isotopeIndices[i]] = pkF1;
-                                    } else {
-                                        pkInterp[scanNum][isotopeIndices[i]] = (fractLessInterpTime * redPk1Ht) + (fractInterpTime * redPk2Ht);
-                                        double pkF2 = shrimpFraction.getReducedPkHtFerr()[scanNum + 1][isotopeIndices[i]];
-                                        pkInterpFerr[scanNum][isotopeIndices[i]] = StrictMath.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
-                                                + (fractInterpTime * pkF2) * (fractInterpTime * pkF2));
-                                    }
-                                }
-                            }
+                        if (redPk1Ht == SQUID_ERROR_VALUE || redPk2Ht == SQUID_ERROR_VALUE) {
+                            doProceed = false;
                         }
 
-                        // The next step is to evaluate the equation 'FormulaEval', 
-                        // documented separately, and approximate the uncertainties:
-                        shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
-                        double eqValTmp = expression.eval2Array(shrimpFractions)[0][0];
+                        if (doProceed) {
+                            double pkF1 = shrimpFraction.getReducedPkHtFerr()[scanNum][isotopeIndices[i]];
 
-                        double eqFerr;
-
-                        if (eqValTmp != 0.0) {
-                            // numerical pertubation procedure
-                            // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
-                            // Not sure the order is critical here ... 
-                            Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
-                            Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
-
-                            double fVar = 0.0;
-                            while (species.hasNext()) {
-                                IsotopeNames specie = species.next();
-                                int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(specie);
-
-                                // clone pkInterp[scanNum] for use in pertubation
-                                double[] perturbed = pkInterp[scanNum].clone();
-                                perturbed[unDupPkOrd] *= 1.0001;
-                                shrimpFraction.setPkInterpScanArray(perturbed);
-                                double pertVal = expression.eval2Array(shrimpFractions)[0][0];
-
-                                double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
-                                double tA = pkInterpFerr[scanNum][unDupPkOrd];
-                                double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
-                                double tC = fDelt * fDelt;
-                                double tD = (tA / tB) * (tA / tB) * tC;
-                                fVar += tD;// --fractional internal variance
-                            } // end of visiting each isotope and perturbing equation
-
-                            eqFerr = StrictMath.sqrt(fVar);
-
-                            // now that expression and its error are calculated
-                            if (eqFerr != 0.0) {
-                                eqValList.add(eqValTmp);
-                                absErrList.add(StrictMath.abs(eqFerr * eqValTmp));
-                                fractErrList.add(eqFerr);
-                                double totRatTime = 0.0;
-                                int numPksInclDupes = 0;
-
-                                // reset iterator
-                                species = eqPkUndupeOrd.iterator();
-                                while (species.hasNext()) {
-                                    int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
-
-                                    totRatTime += shrimpFraction.getTimeStampSec()[scanNum][unDupPkOrd];
-                                    numPksInclDupes++;
-
-                                    totRatTime += shrimpFraction.getTimeStampSec()[scanNum + 1][unDupPkOrd];
-                                    numPksInclDupes++;
-                                }
-                                eqTimeList.add(totRatTime / numPksInclDupes);
+                            if (singleScan) {
+                                pkInterp[scanNum][isotopeIndices[i]] = redPk1Ht;
+                                pkInterpFerr[scanNum][isotopeIndices[i]] = pkF1;
+                            } else {
+                                pkInterp[scanNum][isotopeIndices[i]] = (fractLessInterpTime * redPk1Ht) + (fractInterpTime * redPk2Ht);
+                                double pkF2 = shrimpFraction.getReducedPkHtFerr()[scanNum + 1][isotopeIndices[i]];
+                                pkInterpFerr[scanNum][isotopeIndices[i]] = Math.sqrt((fractLessInterpTime * pkF1) * (fractLessInterpTime * pkF1)
+                                        + (fractInterpTime * pkF2) * (fractInterpTime * pkF2));
                             }
-                        } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
-
-                    } // end scanNum loop
-
-                    // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
-                    // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
-                    // convert to arrays
-                    double[] eqVal = Doubles.toArray(eqValList);
-                    double[] absErr = Doubles.toArray(absErrList);
-                    double[] fractErr = Doubles.toArray(fractErrList);
-                    double[] eqTime = Doubles.toArray(eqTimeList);
-                    double[][] sigRho = new double[eqVal.length][eqVal.length];
-
-                    for (int i = 0; i < sigRho.length; i++) {
-                        sigRho[i][i] = absErr[i];
-                        if (i > 1) {
-                            sigRho[i][i - 1] = 0.25;
-                            sigRho[i - 1][i] = 0.25;
                         }
                     }
-
-                    WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
-                    double meanEq;
-                    double meanEqSig;
-
-                    if (shrimpFraction.isUserLinFits() && eqVal.length > 3) {
-                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
-
-                        double midTime
-                                = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1]
-                                + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
-                        double slope = wtdLinCorrResults.getSlope();
-                        double sigmaSlope = wtdLinCorrResults.getSigmaSlope();
-                        double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
-
-                        meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
-                        meanEqSig = StrictMath.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
-                                + sigmaIntercept * sigmaIntercept //
-                                + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
-
-                    } else {
-                        wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, new double[0]);
-                        meanEq = wtdLinCorrResults.getIntercept();
-                        meanEqSig = wtdLinCorrResults.getSigmaIntercept();
-                    }
-
-                    double eqValFerr;
-                    if (meanEq == 0.0) {
-                        eqValFerr = 1.0;
-                    } else {
-                        eqValFerr = StrictMath.abs(meanEqSig / meanEq);
-                    }
-
-                    // for consistency with Bodorkos documentation
-                    double[] ratEqVal = eqVal.clone();
-                    double[] ratEqTime = eqTime.clone();
-                    double[] ratEqErr = new double[eqVal.length];
-                    for (int i = 0; i < ratEqErr.length; i++) {
-                        ratEqErr[i] = StrictMath.abs(eqVal[i] * fractErr[i]);
-                    }
-
-                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
-                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr));
-                } else { // end of entry test for special handling of ratios of interest
-
-                    // more logic needed here to parse expression output
-                    double value = expression.eval2Array(shrimpFractions)[0][0];
-
-                    taskExpressionsEvaluated.add(new TaskExpressionEvaluatedModel(
-                            expression, new double[0], new double[0], new double[0], value, 0));
                 }
-            }); // end of visiting each expression
-            shrimpFraction.setTaskExpressionsEvaluated(taskExpressionsEvaluated);
 
+                // The next step is to evaluate the equation 'FormulaEval', 
+                // documented separately, and approximate the uncertainties:
+//                System.out.println();
+//
+//                //String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
+//
+//                System.out.println("SCAN # "
+//                        + (scanNum + 1) + ", "
+//                        + "238/196-double," + "238/196-8dig," + "254/238-double," + "254/238-8dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
+//
+//                System.out.print(" no perturb:,\t");
+                shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
+                double eqValTmp = expression.eval2Array(singleSpot)[0][0];
+
+//                System.out.println("\t" + eqValTmp);
+                double eqFerr;
+
+                if (eqValTmp != 0.0) {
+                    // numerical pertubation procedure
+                    // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
+                    // Not sure the order is critical here ... 
+                    Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
+                    Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
+
+                    double fVar = 0.0;
+                    while (species.hasNext()) {
+                        IsotopeNames specie = species.next();
+                        int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(specie);
+
+                        // clone pkInterp[scanNum] for use in pertubation
+                        double[] perturbed = pkInterp[scanNum].clone();
+                        perturbed[unDupPkOrd] *= 1.0001;
+                        shrimpFraction.setPkInterpScanArray(perturbed);
+
+//                        System.out.print(" pert " + specie.getName() + ":,\t");
+                        double pertVal = expression.eval2Array(singleSpot)[0][0];
+
+//                        System.out.print("\t" + pertVal + ",\t");
+                        double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
+                        double tA = pkInterpFerr[scanNum][unDupPkOrd];
+                        double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
+                        double tC = fDelt * (tA / tB); // Bodorkos rescaled tc and td April 2017    fDelt * fDelt;
+                        double tD = tC * tC;         // Bodorkos rescaled tc and td April 2017(tA / tB) * (tA / tB) * tC;
+                        fVar += tD;// --fractional internal variance
+
+//                        System.out.println(fDelt + ",\t" + tA + ",\t" + tB + ",\t" + tC + ",\t" + tD + ",\t" + fVar);
+                    } // end of visiting each isotope and perturbing equation
+
+                    eqFerr = Math.sqrt(fVar);
+//                    double testAbsErr = Math.abs(eqFerr * eqValTmp);
+
+//                    System.out.println("eqferr:, " + eqFerr);
+//                    System.out.println("testAbsErr:, " + testAbsErr);
+                    // now that expression and its error are calculated
+                    if (eqFerr != 0.0) {
+                        eqValList.add(eqValTmp);
+                        absErrList.add(Math.abs(eqFerr * eqValTmp));
+                        fractErrList.add(eqFerr);
+                        double totRatTime = 0.0;
+                        int numPksInclDupes = 0;
+
+                        // reset iterator
+                        species = eqPkUndupeOrd.iterator();
+                        while (species.hasNext()) {
+                            int unDupPkOrd = shrimpFraction.getIndexOfSpeciesByName(species.next());
+
+                            totRatTime += shrimpFraction.getTimeStampSec()[scanNum][unDupPkOrd];
+                            numPksInclDupes++;
+
+                            totRatTime += shrimpFraction.getTimeStampSec()[scanNum + 1][unDupPkOrd];
+                            numPksInclDupes++;
+                        }
+                        eqTimeList.add(totRatTime / numPksInclDupes);
+                    }
+                } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
+
+//                System.out.println();
+            } // end scanNum loop
+
+//            System.out.println();
+            // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
+            // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
+            // convert to arrays
+            double[] eqVal = Doubles.toArray(eqValList);
+            double[] absErr = Doubles.toArray(absErrList);
+            double[] fractErr = Doubles.toArray(fractErrList);
+            double[] eqTime = Doubles.toArray(eqTimeList);
+            double[][] sigRho = new double[eqVal.length][eqVal.length];
+
+            for (int i = 0; i < sigRho.length; i++) {
+                sigRho[i][i] = absErr[i];
+                if (i > 0) {
+                    sigRho[i][i - 1] = 0.25;
+                    sigRho[i - 1][i] = 0.25;
+                }
+            }
+
+            WeightedMeanCalculators.WtdLinCorrResults wtdLinCorrResults;
+            double meanEq;
+            double meanEqSig;
+
+            if (shrimpFraction.isUserLinFits() && eqVal.length > 3) {
+                wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, eqTime);
+
+                double midTime
+                        = (shrimpFraction.getTimeStampSec()[sIndx][shrimpFraction.getReducedPkHt()[0].length - 1]
+                        + shrimpFraction.getTimeStampSec()[0][0]) / 2.0;
+                double slope = wtdLinCorrResults.getSlope();
+                double sigmaSlope = wtdLinCorrResults.getSigmaSlope();
+                double sigmaIntercept = wtdLinCorrResults.getSigmaIntercept();
+
+                meanEq = (slope * midTime) + wtdLinCorrResults.getIntercept();
+                meanEqSig = Math.sqrt((midTime * sigmaSlope * midTime * sigmaSlope)//
+                        + sigmaIntercept * sigmaIntercept //
+                        + 2.0 * midTime * wtdLinCorrResults.getCovSlopeInter());
+
+            } else {
+                wtdLinCorrResults = wtdLinCorr(eqVal, sigRho, new double[0]);
+                meanEq = wtdLinCorrResults.getIntercept();
+                meanEqSig = wtdLinCorrResults.getSigmaIntercept();
+            }
+
+            double eqValFerr;
+            if (meanEq == 0.0) {
+                eqValFerr = 1.0;
+            } else {
+                eqValFerr = Math.abs(meanEqSig / meanEq);
+            }
+
+            // for consistency with Bodorkos documentation
+            double[] ratEqVal = eqVal.clone();
+            double[] ratEqTime = eqTime.clone();
+            double[] ratEqErr = new double[eqVal.length];
+            for (int i = 0; i < ratEqErr.length; i++) {
+                ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
+            }
+            
+            // April 20178 rounding of meanEq and eqValFerr occurs within this constructor
+            taskExpressionEvaluatedPerSpotPerScanModel
+                    = new TaskExpressionEvaluatedPerSpotPerScanModel(
+                            expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr);
         }
+
+        return taskExpressionEvaluatedPerSpotPerScanModel;
     }
 
     /**
@@ -344,5 +428,20 @@ public class Task implements TaskInterface, XMLSerializerInterface {
      */
     public void setTaskExpressionsOrdered(List<ExpressionTreeInterface> taskExpressionsOrdered) {
         this.taskExpressionsOrdered = taskExpressionsOrdered;
+    }
+
+    /**
+     * @return the taskExpressionsEvaluationsPerSpotSet
+     */
+    public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpotSet() {
+        return taskExpressionsEvaluationsPerSpotSet;
+    }
+
+    /**
+     * @param taskExpressionsEvaluationsPerSpotSet the
+     * taskExpressionsEvaluationsPerSpotSet to set
+     */
+    public void setTaskExpressionsEvaluationsPerSpotSet(Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet) {
+        this.taskExpressionsEvaluationsPerSpotSet = taskExpressionsEvaluationsPerSpotSet;
     }
 }

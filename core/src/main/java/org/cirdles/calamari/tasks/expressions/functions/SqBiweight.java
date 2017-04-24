@@ -23,35 +23,35 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class RobReg extends Function {
+public class SqBiweight extends Function {
 
     /**
-     * Provides the functionality of Squid's robReg by calling robustReg2 and
-     * returning "Slope", "SlopeErr", "Y-Intercept", "Y-IntErr" and encoding the
-     * labels for each cell of the values array produced by eval2Array.
+     * Provides the functionality of Squid's sqBiweight and biWt by calculating
+     * TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
+     * the labels for each cell of the values array produced by eval2Array.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
+     * @see
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/StringUtils.bas
      */
-    public RobReg() {
-        name = "robReg";
-        argumentCount = 4;
+    public SqBiweight() {
+        name = "sqBiweight";
+        argumentCount = 2;
         precedence = 4;
         rowCount = 1;
-        colCount = 4;
-        labelsForValues = new String[][]{{"Slope", "SlopeErr", "Y-Intercept", "Y-IntErr"}};
+        colCount = 3;
+        labelsForValues = new String[][]{{"Biwt Mean", "Biwt Sigma", "\u00B195%conf"}};
     }
 
     /**
-     * Requires that child 0 and child 1 are each a VariableNode that evaluates
-     * to a double array with one column and a row for each member of
-     * shrimpFractions. Child 2 and child 3 are each a BooleanNode that
-     * evaluates to true or false. Child 2 and 3 are currently ignored but exist
-     * for compatibility with Squid2.5.
+     * Requires that child 0 is a VariableNode that evaluates to a double array
+     * with one column and a row for each member of shrimpFractions and that
+     * child 1 is a ConstantNode that evaluates to an integer.
      *
-     * @param childrenET list containing child 0 through 3
+     * @param childrenET list containing child 0 and child 1
      * @param shrimpFractions a list of shrimpFractions
-     * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
+     * @return the double[1][3] array of mean, sigma, 95% confidence
      */
     @Override
     public double[][] eval2Array(
@@ -59,14 +59,12 @@ public class RobReg extends Function {
 
         double[][] retVal;
         try {
-            double[] xValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] yValues = transposeColumnVector(childrenET.get(1).eval2Array(shrimpFractions), 0);
-            double[] robustReg2 = org.cirdles.ludwig.isoplot3.Pub.robustReg2(xValues, yValues);
-            double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
-            double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;
-            retVal = new double[][]{{robustReg2[0], slopeErr, robustReg2[3], yIntErr}};
+            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
+            double[] tuning = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0]);
+            retVal = new double[][]{tukeysBiweight};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0}};
+            retVal = new double[][]{{0.0, 0.0, 0.0}};
         }
 
         return retVal;
@@ -81,7 +79,7 @@ public class RobReg extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>RobReg</mi>"
+                + "<mi>" + name + "</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {

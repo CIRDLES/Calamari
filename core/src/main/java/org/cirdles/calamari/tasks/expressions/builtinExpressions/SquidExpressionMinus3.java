@@ -39,14 +39,14 @@ public class SquidExpressionMinus3 {
         ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r248_254w);
 
         ExpressionTreeInterface term1 = new ExpressionTree(
-                "0.03446 * 254/238", 
-                new ConstantNode("0.03446", 0.03446), 
-                RawRatioNamesSHRIMP.r254_238w.getExpression(), 
+                "0.03446 * 254/238",
+                new ConstantNode("0.03446", 0.03446),
+                RawRatioNamesSHRIMP.r254_238w.getExpression(),
                 Operation.multiply());
         ExpressionTreeInterface term2 = new ExpressionTree(
-                "0.03446 * 254/238 + 0.868", 
-                term1, 
-                new ConstantNode("0.868", 0.868), 
+                "0.03446 * 254/238 + 0.868",
+                term1,
+                new ConstantNode("0.868", 0.868),
                 Operation.add());
 
         ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, term2);
@@ -54,5 +54,8 @@ public class SquidExpressionMinus3 {
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.multiply());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(true);
     }
 }

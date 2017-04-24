@@ -15,31 +15,37 @@
  */
 package org.cirdles.calamari.tasks.expressions.customExpressions;
 
-import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
-import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
+import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_Net204cts_sec {
+public class CustomExpression_Expo {
 
     /**
-     * Squid Excel format is ["Total204cts/sec"] - ["Bkrdcts/sec"]
+     * Squid Excel format is robreg(["LnUOU"],["LnPbRU"],false,true)
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Net204cts/sec");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Expo");
 
     static {
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, new ShrimpSpeciesNode(IsotopeNames.Pb204, "getTotalCps"));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ShrimpSpeciesNode(IsotopeNames.BKGND, "getTotalCps"));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Operation.subtract());
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(0, new VariableNode(CustomExpression_LnUO_U.EXPRESSION.getName(),
+                        "getTaskExpressionsEvaluationsPerSpotByField"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(new VariableNode(CustomExpression_LnPbR_U.EXPRESSION.getName(),
+                        "getTaskExpressionsEvaluationsPerSpotByField"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.robReg());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }

@@ -34,9 +34,10 @@ public abstract class Function
     protected String name;
     protected int argumentCount;
     protected int precedence;
-    // establish size of array resullting from evaluation
+    // establish size of array resulting from evaluation
     protected int rowCount;
     protected int colCount;
+    protected String[][] labelsForValues;
 
     @Override
     public void customizeXstream(XStream xstream) {
@@ -61,6 +62,18 @@ public abstract class Function
         return new RobReg();
     }
 
+    public static OperationOrFunctionInterface sqBiweight() {
+        return new SqBiweight();
+    }
+
+    public static OperationOrFunctionInterface agePb76() {
+        return new AgePb76();
+    }
+
+    public static OperationOrFunctionInterface sqWtdAvg() {
+        return new SqWtdAv();
+    }
+
     /**
      *
      * @param operationName
@@ -80,6 +93,15 @@ public abstract class Function
             }
         }
         return retVal;
+    }
+
+    protected double[] transposeColumnVector(double[][] columnVector, int colIndex) {
+        double[] rowVector = new double[columnVector.length];
+        for (int i = 0; i < rowVector.length; i++) {
+            rowVector[i] = columnVector[i][colIndex];
+        }
+
+        return rowVector;
     }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
@@ -157,5 +179,19 @@ public abstract class Function
      */
     public void setColCount(int colCount) {
         this.colCount = colCount;
+    }
+
+    /**
+     * @return the labelsForValues
+     */
+    public String[][] getLabelsForValues() {
+        return labelsForValues;
+    }
+
+    /**
+     * @param labelsForValues the labelsForValues to set
+     */
+    public void setLabelsForValues(String[][] labelsForValues) {
+        this.labelsForValues = labelsForValues;
     }
 }

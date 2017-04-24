@@ -44,9 +44,7 @@ public class Ln extends Function {
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
         double retVal;
-        try {
-//            retVal = StrictMath.log(childrenET.get(0).eval(pkInterpScan, isotopeToIndexMap));
-            // Feb 2017 to cause replication of Squid2.5 results            
+        try {          
             retVal = Math.log(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
         } catch (Exception e) {
             retVal = 0.0;

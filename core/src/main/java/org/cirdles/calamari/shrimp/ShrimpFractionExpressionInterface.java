@@ -16,7 +16,8 @@
 package org.cirdles.calamari.shrimp;
 
 import java.util.List;
-import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
+import java.util.Map;
+import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInterface;
 
 /**
  *
@@ -25,6 +26,11 @@ import org.cirdles.calamari.tasks.TaskExpressionEvaluatedModelInterface;
 public interface ShrimpFractionExpressionInterface {
 
     public int getIndexOfSpeciesByName(IsotopeNames speciesName);
+
+    /**
+     * @return the referenceMaterial
+     */
+    public boolean isReferenceMaterial();
 
     /**
      * @return the pkInterp
@@ -48,11 +54,6 @@ public interface ShrimpFractionExpressionInterface {
      */
     public boolean isUserLinFits();
 
-    /**
-     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
-     */
-    public void setTaskExpressionsEvaluated(List<TaskExpressionEvaluatedModelInterface> taskExpressionsEvaluated);
-
     // getters used by reflection - change names carefully
     /**
      * @return the pkInterpScanArray
@@ -73,5 +74,33 @@ public interface ShrimpFractionExpressionInterface {
      * @param totalCps the totalCps to set
      */
     public void setTotalCps(double[] totalCps);
+
+    /**
+     * @param taskExpressionsEvaluated the taskExpressionsEvaluated to set
+     */
+    public void setTaskExpressionsForScansEvaluated(List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated);
+
+    /**
+     * @return the taskExpressionsForScansEvaluated
+     */
+    public List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> getTaskExpressionsForScansEvaluated();
+
+    /**
+     * @param fieldName
+     * @return the taskExpressionsEvaluationsPerSpot
+     */
+    public double[][] getTaskExpressionsEvaluationsPerSpotByField(String fieldName);
+
+    /**
+     * @return the taskExpressionsEvaluationsPerSpot
+     */
+    public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpot();
+
+    /**
+     * Used by reflection in expression evaluations by VariableNode, for example
+     * @param name
+     * @return double [1][2] containing ratio value and 1-sigma abs uncertainty
+     */
+    public double[][] getIsotopicRatioValuesByStringName(String name);
 
 }

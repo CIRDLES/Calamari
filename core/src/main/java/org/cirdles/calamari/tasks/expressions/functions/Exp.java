@@ -45,7 +45,7 @@ public class Exp extends Function {
 
         double retVal;
         try {
-            retVal = StrictMath.exp(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
+            retVal = Math.exp(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
         } catch (Exception e) {
             retVal = 0.0;
         }

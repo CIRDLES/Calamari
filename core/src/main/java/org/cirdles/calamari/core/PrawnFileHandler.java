@@ -52,6 +52,7 @@ import static org.cirdles.calamari.constants.CalamariConstants.XML_HEADER_FOR_PR
 import org.cirdles.calamari.prawn.PrawnFile;
 import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
+import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskInterface;
 import org.xml.sax.SAXException;
 
@@ -61,6 +62,7 @@ import org.xml.sax.SAXException;
 public class PrawnFileHandler {
 
     private transient Unmarshaller jaxbUnmarshaller;
+//    private transient Marshaller jaxbMarshaller;
     private String currentPrawnFileLocation;
     private transient Consumer<Integer> progressSubscriber;
     private transient CalamariReportsEngine reportsEngine;
@@ -97,7 +99,7 @@ public class PrawnFileHandler {
      * @throws JAXBException
      * @throws SAXException
      */
-    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
+    public List<ShrimpFractionExpressionInterface> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter)
             throws IOException, MalformedURLException, JAXBException, SAXException {
         return extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, null);
     }
@@ -115,7 +117,7 @@ public class PrawnFileHandler {
      * @throws org.xml.sax.SAXException
      * @return the java.util.List<org.cirdles.calamari.shrimp.ShrimpFraction>
      */
-    public List<ShrimpFraction> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task)
+    public List<ShrimpFractionExpressionInterface> extractShrimpFractionsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task)
             throws IOException, MalformedURLException, JAXBException, SAXException {
         currentPrawnFileLocation = prawnFileLocation;
 
@@ -126,23 +128,31 @@ public class PrawnFileHandler {
             nameOfMount = "No-Mount-Name";
         }
 
-        List<ShrimpFraction> shrimpFractions = new ArrayList<>();
+        List<ShrimpFractionExpressionInterface> shrimpFractions = new ArrayList<>();
 
         // July 2016 prawnFile.getRuns() is not reliable
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
-            ShrimpFraction shrimpFraction
-                    = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, task);
-            if (shrimpFraction != null) {
-                shrimpFraction.setSpotNumber(f + 1);
-                shrimpFraction.setNameOfMount(nameOfMount);
-                shrimpFractions.add(shrimpFraction);
-            }
+//            if ((runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1") == 0)) {
+                ShrimpFraction shrimpFraction
+                        = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, null);
+                if (shrimpFraction != null) {
+                    shrimpFraction.setSpotNumber(f + 1);
+                    shrimpFraction.setNameOfMount(nameOfMount);
+                    shrimpFractions.add(shrimpFraction);
+                }
 
-            if (progressSubscriber != null) {
-                int progress = (f + 1) * 100 / prawnFile.getRun().size();
-                progressSubscriber.accept(progress);
-            }
+                if (progressSubscriber != null) {
+                    int progress = (f + 1) * 100 / prawnFile.getRun().size();
+                    progressSubscriber.accept(progress);
+                }
+//            }
+        }
+
+        //March 2017 move task evaluation to here as part of evolution
+        // handle task
+        if (task != null) {
+            task.evaluateTaskExpressions(shrimpFractions);
         }
 
         return shrimpFractions;
@@ -180,7 +190,7 @@ public class PrawnFileHandler {
      */
     public void writeReportsFromPrawnFile(String prawnFileLocation, boolean useSBM, boolean userLinFits, String referenceMaterialLetter, TaskInterface task)
             throws IOException, MalformedURLException, JAXBException, SAXException {
-        List<ShrimpFraction> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, task);
+        List<ShrimpFractionExpressionInterface> shrimpFractions = extractShrimpFractionsFromPrawnFile(prawnFileLocation, useSBM, userLinFits, referenceMaterialLetter, task);
         reportsEngine.produceReports(shrimpFractions);
     }
 
@@ -286,6 +296,13 @@ public class PrawnFileHandler {
     private PrawnFile readRawDataFile(File prawnDataFile) throws JAXBException {
 
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataFile);
+
+//        // test writing it back out WORKS!
+//        JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
+//        jaxbMarshaller = jaxbContext.createMarshaller();
+//        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        jaxbMarshaller.marshal(myPrawnFile, new File("myPrawnFile.xml"));
+//       // jaxbMarshaller.marshal(myPrawnFile, System.out);
         return myPrawnFile;
     }
 
@@ -309,13 +326,13 @@ public class PrawnFileHandler {
     public String getCurrentPrawnFileLocation() {
         return currentPrawnFileLocation;
     }
-    
-    public File currentPrawnFileLocationFolder(){
-        File retVal= new File(currentPrawnFileLocation);
-        if (currentPrawnFileLocationIsFile()){
+
+    public File currentPrawnFileLocationFolder() {
+        File retVal = new File(currentPrawnFileLocation);
+        if (currentPrawnFileLocationIsFile()) {
             retVal = retVal.getParentFile();
-        } 
-        
+        }
+
         return retVal;
     }
 

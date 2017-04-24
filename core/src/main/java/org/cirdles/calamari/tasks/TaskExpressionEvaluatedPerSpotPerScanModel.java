@@ -16,12 +16,13 @@
 package org.cirdles.calamari.tasks;
 
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  *
  * @author James F. Bowring
  */
-public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedModelInterface {
+public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressionEvaluatedPerSpotPerScanModelInterface {
 
     private ExpressionTreeInterface expression;
     private double[] ratEqVal;
@@ -30,17 +31,33 @@ public class TaskExpressionEvaluatedModel implements TaskExpressionEvaluatedMode
     private double ratioVal;
     private double ratioFractErr;
 
-    private TaskExpressionEvaluatedModel() {
+    private TaskExpressionEvaluatedPerSpotPerScanModel() {
     }
 
-    public TaskExpressionEvaluatedModel(
+    /**
+     * Structure to store results of Squid Sqitch NU expression evaluation using
+     * ratios of interest and per SImon Bodorkos, rounded to 12 sig digits to
+     * comply with VBA comparisons.
+     *
+     * @param expression
+     * @param ratEqVal
+     * @param ratEqTime
+     * @param ratEqErr
+     * @param ratioVal
+     * @param ratioFractErr
+     */
+    public TaskExpressionEvaluatedPerSpotPerScanModel(
             ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
+        
         this.expression = expression;
         this.ratEqVal = ratEqVal.clone();
         this.ratEqTime = ratEqTime.clone();
         this.ratEqErr = ratEqErr.clone();
-        this.ratioVal = ratioVal;
-        this.ratioFractErr = ratioFractErr;
+        
+        // April 2017 Rounding per Bodorkos
+        int sigDigs = 12;
+        this.ratioVal = Utilities.roundedToSize(ratioVal, sigDigs);
+        this.ratioFractErr = Utilities.roundedToSize(ratioFractErr, sigDigs);
     }
 
     /**

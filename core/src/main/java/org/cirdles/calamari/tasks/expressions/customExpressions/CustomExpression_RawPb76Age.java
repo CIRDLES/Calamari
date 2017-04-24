@@ -19,29 +19,29 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_LnPbR_U {
+public class CustomExpression_RawPb76Age {
 
     /**
-     * Squid Excel format is ln(["206/238"])
+     * Squid Excel format is AgePb76(["207/206"])
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("LnPbR_U");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Raw7/6Age");
 
     static {
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
-
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r206_238w.getExpression());
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(0, new VariableNode(RawRatioNamesSHRIMP.r207_206w.getName(),
+                        "getIsotopicRatioValuesByStringName"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.agePb76());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }

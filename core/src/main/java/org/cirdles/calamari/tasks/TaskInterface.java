@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.cirdles.calamari.tasks;
 
+import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 
 /**
@@ -24,6 +24,10 @@ import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
  */
 public interface TaskInterface {
 
-    public void evaluateTaskExpressions(ShrimpFractionExpressionInterface shrimpFraction);
-    
+    /**
+     *
+     * @param shrimpFractions
+     */
+    public void evaluateTaskExpressions(List<ShrimpFractionExpressionInterface> shrimpFractions);
+
 }

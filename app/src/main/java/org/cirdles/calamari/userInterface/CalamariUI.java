@@ -32,13 +32,13 @@ import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.prawn.PrawnFileFilter;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
-import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus1;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus3;
 import org.cirdles.calamari.tasks.expressions.builtinExpressions.SquidExpressionMinus4;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnPbR_U;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_LnUO_U;
 import org.cirdles.calamari.tasks.expressions.parsing.ExpressionParser;
-import org.cirdles.calamari.tasks.storedTasks.ILC_Zircon_10Pk_expFloat_Task;
+import org.cirdles.calamari.tasks.storedTasks.SquidBodorkosTask1;
 import org.cirdles.calamari.utilities.FileHelper;
 
 /**
@@ -512,7 +512,7 @@ public class CalamariUI extends javax.swing.JFrame {
                     normalizeIonCountsToSBM,
                     useLinearRegressionToCalculateRatios,
                     (String) referenceMaterialFirstLetterComboBox.getSelectedItem(),
-                    new ILC_Zircon_10Pk_expFloat_Task(), // temporarily hard-wired
+                    new SquidBodorkosTask1(),//    new ILC_Zircon_10Pk_expFloat_Task(), // temporarily hard-wired
                     reduceDataProgressBar).execute();
         } else {
             JOptionPane.showMessageDialog(

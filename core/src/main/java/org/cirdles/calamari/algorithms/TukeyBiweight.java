@@ -44,7 +44,7 @@ public final class TukeyBiweight {
         // initial sigma is median absolute deviation from mean = median (MAD)
         double deviations[] = new double[n];
         for (int i = 0; i < values.length; i++) {
-            deviations[i] = StrictMath.abs(values[i] - mean.doubleValue());
+            deviations[i] = Math.abs(values[i] - mean.doubleValue());
         }
         BigDecimal sigma = new BigDecimal(calculateMedian(deviations)).max( BigDecimal.valueOf(SQUID_TINY_VALUE));
 

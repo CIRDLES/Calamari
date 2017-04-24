@@ -15,33 +15,34 @@
  */
 package org.cirdles.calamari.tasks.expressions.customExpressions;
 
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_LnPbR_U {
+public class CustomExpression_Net204BiWt {
 
     /**
-     * Squid Excel format is ln(["206/238"])
+     * Squid Excel format is sqBiweight(["Net204cts/sec"],9)
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("LnPbR_U");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Net204BiWt");
 
     static {
-        ((ExpressionTreeWithRatiosInterface) EXPRESSION).getRatiosOfInterest().add(RawRatioNamesSHRIMP.r206_238w);
-
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(0, RawRatioNamesSHRIMP.r206_238w.getExpression());
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.ln());
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(0, new VariableNode(CustomExpression_Net204cts_sec.EXPRESSION.getName(),
+                        "getTaskExpressionsEvaluationsPerSpotByField"));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("9", 9));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqBiweight());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }
 }
