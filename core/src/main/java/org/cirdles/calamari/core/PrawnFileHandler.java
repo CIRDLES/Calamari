@@ -194,7 +194,7 @@ public class PrawnFileHandler {
         reportsEngine.produceReports(shrimpFractions);
     }
 
-    private PrawnFile unmarshallRawDataXML(String resource)
+    public PrawnFile unmarshallRawDataXML(String resource)
             throws IOException, MalformedURLException, JAXBException, SAXException {
 
         String localPrawnXMLFile = resource;
