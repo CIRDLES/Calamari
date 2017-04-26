@@ -369,7 +369,7 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],15));
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],12));
                     dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqErr()[nDodNum],15));
                 } else {
                     dataLine.append(", ").append("n/a");
