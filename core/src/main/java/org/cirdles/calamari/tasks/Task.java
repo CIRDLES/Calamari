@@ -47,6 +47,7 @@ import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Pow;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
+import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  *
@@ -141,8 +142,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 spotsForExpression.forEach((spot) -> {
                     if (((ExpressionTree) expression).hasRatiosOfInterest()) {
                         // case of Squid switch "NU"
-//                        System.out.println();
-//                        System.out.println("\n\nFRACTION:   " + spot.getFractionID() + "  *************************************************************************************");
                         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel
                                 = evaluateTaskExpressionsPerSpotPerScan(expression, spot);
                         // save scan-specific results
@@ -175,7 +174,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
         TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEvaluatedPerSpotPerScanModel = null;
         if (shrimpFraction != null) {
-//            System.out.println("\n>>>EXPRESSION:   " + expression.getName() + "  ************");
 
             // construct argument list of one spot
             List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
@@ -258,25 +256,16 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
                 // The next step is to evaluate the equation 'FormulaEval', 
                 // documented separately, and approximate the uncertainties:
-//                System.out.println();
-//
-//                //String ratName = ((ExpressionTreeWithRatiosInterface) expression).getRatiosOfInterest().get(0).getDisplayNameNoSpaces();
-//
-//                System.out.println("SCAN # "
-//                        + (scanNum + 1) + ", "
-//                        + "238/196-double," + "238/196-8dig," + "254/238-double," + "254/238-8dig," + expression.getName() + ", fDelt, tA, tB, tC, Td, fVar");
-//
-//                System.out.print(" no perturb:,\t");
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
-                double eqValTmp = expression.eval2Array(singleSpot)[0][0];
+                
+                // April 2017 rounding per Bodorkos
+                double eqValTmp = Utilities.roundedToSize(expression.eval2Array(singleSpot)[0][0], 12);
 
-//                System.out.println("\t" + eqValTmp);
                 double eqFerr;
 
                 if (eqValTmp != 0.0) {
                     // numerical pertubation procedure
                     // EqPkUndupeOrd is here a List of the unique Isotopes in order of acquisition in the expression
-                    // Not sure the order is critical here ... 
                     Set<IsotopeNames> eqPkUndupeOrd = ((ExpressionTreeWithRatiosInterface) expression).extractUniqueSpeciesNumbers();
                     Iterator<IsotopeNames> species = eqPkUndupeOrd.iterator();
 
@@ -290,10 +279,9 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
-//                        System.out.print(" pert " + specie.getName() + ":,\t");
-                        double pertVal = expression.eval2Array(singleSpot)[0][0];
+                        // April 2017 rounding per Bodorkos
+                        double pertVal = Utilities.roundedToSize(expression.eval2Array(singleSpot)[0][0], 12);
 
-//                        System.out.print("\t" + pertVal + ",\t");
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
                         double tB = 1.0001 - 1.0;// --note that Excel 16-bit floating binary gives 9.9999999999989E-05    
@@ -301,14 +289,10 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         double tD = tC * tC;         // Bodorkos rescaled tc and td April 2017(tA / tB) * (tA / tB) * tC;
                         fVar += tD;// --fractional internal variance
 
-//                        System.out.println(fDelt + ",\t" + tA + ",\t" + tB + ",\t" + tC + ",\t" + tD + ",\t" + fVar);
                     } // end of visiting each isotope and perturbing equation
 
                     eqFerr = Math.sqrt(fVar);
-//                    double testAbsErr = Math.abs(eqFerr * eqValTmp);
 
-//                    System.out.println("eqferr:, " + eqFerr);
-//                    System.out.println("testAbsErr:, " + testAbsErr);
                     // now that expression and its error are calculated
                     if (eqFerr != 0.0) {
                         eqValList.add(eqValTmp);
@@ -332,10 +316,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     }
                 } // end test of eqValTmp != 0.0 VBA calls this a bailout and has no logic
 
-//                System.out.println();
             } // end scanNum loop
 
-//            System.out.println();
             // The final step is to assemble outputs EqTime, EqVal and AbsErr, and
             // to define SigRho as input for the use of subroutine WtdLinCorr and its sub-subroutines: 
             // convert to arrays
@@ -392,8 +374,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             for (int i = 0; i < ratEqErr.length; i++) {
                 ratEqErr[i] = Math.abs(eqVal[i] * fractErr[i]);
             }
-            
-            // April 20178 rounding of meanEq and eqValFerr occurs within this constructor
+
+            // April 20178 rounding of ratEqVal, meanEq, and eqValFerr occurs within this constructor
             taskExpressionEvaluatedPerSpotPerScanModel
                     = new TaskExpressionEvaluatedPerSpotPerScanModel(
                             expression, ratEqVal, ratEqTime, ratEqErr, meanEq, eqValFerr);

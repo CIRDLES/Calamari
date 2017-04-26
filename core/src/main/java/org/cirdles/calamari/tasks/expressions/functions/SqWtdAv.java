@@ -16,8 +16,6 @@
 package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
-import org.apache.commons.math3.distribution.FDistribution;
-import org.apache.commons.math3.distribution.TDistribution;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 

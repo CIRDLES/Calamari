@@ -121,7 +121,7 @@ public class PrawnFileHandler {
             throws IOException, MalformedURLException, JAXBException, SAXException {
         currentPrawnFileLocation = prawnFileLocation;
 
-        PrawnFile prawnFile = unmarshallRawDataXML(prawnFileLocation);
+        PrawnFile prawnFile = unmarshallPrawnFileXML(prawnFileLocation);
 
         String nameOfMount = prawnFile.getMount();
         if (nameOfMount == null) {
@@ -194,10 +194,32 @@ public class PrawnFileHandler {
         reportsEngine.produceReports(shrimpFractions);
     }
 
-    public PrawnFile unmarshallRawDataXML(String resource)
+    /**
+     * Unmarshalls currentPrawn file xml to object of class PrawnFile.
+     * @return object of class PrawnFile
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws JAXBException
+     * @throws SAXException 
+     */
+    public PrawnFile unmarshallCurrentPrawnFileXML()
+            throws IOException, MalformedURLException, JAXBException, SAXException {
+        return unmarshallPrawnFileXML(currentPrawnFileLocation);
+    }
+    
+    /**
+     * Unmarshalls prawn file xml to object of class PrawnFile.
+     * @param prawnFileLocation String path to prawn file location
+     * @return object of class PrawnFile
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws JAXBException
+     * @throws SAXException 
+     */
+    public PrawnFile unmarshallPrawnFileXML(String prawnFileLocation)
             throws IOException, MalformedURLException, JAXBException, SAXException {
 
-        String localPrawnXMLFile = resource;
+        String localPrawnXMLFile = prawnFileLocation;
         PrawnFile myPrawnFile;
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
@@ -210,9 +232,9 @@ public class PrawnFileHandler {
 
         // test for URL such as "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/EXAMPLE_100142_G6147_10111109.43_10.33.37%20AM.xml"
         boolean isURL = false;
-        if (resource.toLowerCase(Locale.ENGLISH).startsWith("http")) {
+        if (prawnFileLocation.toLowerCase(Locale.ENGLISH).startsWith("http")) {
             java.net.URL prawnDataURL;
-            prawnDataURL = new URL(resource);
+            prawnDataURL = new URL(prawnFileLocation);
             localPrawnXMLFile = "tempURLtoXML.xml";
             isURL = true;
 

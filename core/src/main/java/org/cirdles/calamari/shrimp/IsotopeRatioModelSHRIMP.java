@@ -30,8 +30,10 @@ public class IsotopeRatioModelSHRIMP {
     private IsotopeNames denominator;
     private List<Double> ratEqTime;
     private List<Double> ratEqVal;
+    // one sigma absolute uncertainties for ratEqVal
     private List<Double> ratEqErr;
     private double ratioVal;
+    // one sigma absolute uncertainty for ratioVal
     private double ratioFractErr;
     private int minIndex;
     private boolean active;
@@ -144,7 +146,7 @@ public class IsotopeRatioModelSHRIMP {
     public void setRatEqErr(List<Double> ratEqErr) {
         this.ratEqErr = ratEqErr;
     }
-    
+
     /**
      * @return the ratioVal
      */
@@ -165,9 +167,12 @@ public class IsotopeRatioModelSHRIMP {
     public double getRatioFractErr() {
         return ratioFractErr;
     }
-    
-    public double getRatioFractErrAs1SigmaAbs(){
-        return ratioVal * ratioFractErr / 100.0;
+
+    /**
+     * @return the ratioFractErr
+     */
+    public double getRatioFractErrAsOneSigmaPercent() {
+        return ratioFractErr / ratioVal * 100.0;
     }
 
     /**
@@ -175,7 +180,13 @@ public class IsotopeRatioModelSHRIMP {
      */
     public void setRatioFractErr(double ratioFractErr) {
         // april 2017 introduce Squid2.5 upper limit
-        this.ratioFractErr = (ratioFractErr * 100.0 > SQUID_UPPER_LIMIT_1_SIGMA_PERCENT) ? SQUID_UPPER_LIMIT_1_SIGMA_PERCENT / 100.0 : ratioFractErr;
+        // the value supplied is the 1 sigma percent uncertainty divided by 100
+        // we choose to store the 1 sigma absolute as ratioFracErr
+
+        // first determin if  above Squid25 limits
+        double ratioFraErrFiltered = (ratioFractErr * 100.0 > SQUID_UPPER_LIMIT_1_SIGMA_PERCENT) ? SQUID_UPPER_LIMIT_1_SIGMA_PERCENT / 100.0 : ratioFractErr;
+
+        this.ratioFractErr = ratioFraErrFiltered * ratioVal;
     }
 
     /**

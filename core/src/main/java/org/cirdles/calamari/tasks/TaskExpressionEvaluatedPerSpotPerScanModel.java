@@ -35,7 +35,7 @@ public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressio
     }
 
     /**
-     * Structure to store results of Squid Sqitch NU expression evaluation using
+     * Structure to store results of Squid Switch NU expression evaluation using
      * ratios of interest and per SImon Bodorkos, rounded to 12 sig digits to
      * comply with VBA comparisons.
      *
@@ -48,14 +48,15 @@ public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressio
      */
     public TaskExpressionEvaluatedPerSpotPerScanModel(
             ExpressionTreeInterface expression, double[] ratEqVal, double[] ratEqTime, double[] ratEqErr, double ratioVal, double ratioFractErr) {
-        
-        this.expression = expression;
-        this.ratEqVal = ratEqVal.clone();
-        this.ratEqTime = ratEqTime.clone();
-        this.ratEqErr = ratEqErr.clone();
-        
+
         // April 2017 Rounding per Bodorkos
         int sigDigs = 12;
+
+        this.expression = expression;
+        this.ratEqVal = Utilities.roundedToSize(ratEqVal.clone(), sigDigs);
+        this.ratEqTime = ratEqTime.clone();
+        this.ratEqErr = ratEqErr.clone();
+
         this.ratioVal = Utilities.roundedToSize(ratioVal, sigDigs);
         this.ratioFractErr = Utilities.roundedToSize(ratioFractErr, sigDigs);
     }

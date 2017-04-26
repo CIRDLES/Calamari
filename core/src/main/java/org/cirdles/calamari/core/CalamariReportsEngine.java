@@ -369,7 +369,7 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],15));
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],12));
                     dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqErr()[nDodNum],15));
                 } else {
                     dataLine.append(", ").append("n/a");
@@ -406,8 +406,7 @@ public class CalamariReportsEngine {
                 // April 2017 rounding was performed on calculated numbers
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
                 dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioVal(), 12));
-                // showing 1-sigma percent
-                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioFractErr() * 100.0, 12));
+                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioFractErrAsOneSigmaPercent(), 12));
             }
         }
 
