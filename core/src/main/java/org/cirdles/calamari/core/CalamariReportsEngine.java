@@ -406,8 +406,7 @@ public class CalamariReportsEngine {
                 // April 2017 rounding was performed on calculated numbers
                 dataLine.append(", ").append(String.valueOf(isotopeRatioModel.getMinIndex()));
                 dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioVal(), 12));
-                // showing 1-sigma percent
-                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioFractErr() * 100.0, 12));
+                dataLine.append(", ").append(Utilities.roundedToSize(isotopeRatioModel.getRatioFractErrAsOneSigmaPercent(), 12));
             }
         }
 
