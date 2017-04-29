@@ -136,8 +136,11 @@ public class PrawnFileRunFractionParser {
         String[] firstIntegrations = runFraction.getSet().getScan().get(0).getMeasurement().get(0).getData().get(0).getValue().split(",");
         peakMeasurementsCount = firstIntegrations.length;
 
-        String dateTime = runFraction.getSet().getPar().get(0).getValue() + " " + runFraction.getSet().getPar().get(1).getValue();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String dateTime = runFraction.getSet().getPar().get(0).getValue() 
+                + " " + runFraction.getSet().getPar().get(1).getValue() 
+                + (Integer.parseInt(runFraction.getSet().getPar().get(1).getValue().substring(0, 2)) < 12 ? " AM" : " PM");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa");
         try {
             dateTimeMilliseconds = dateFormat.parse(dateTime).getTime();
         } catch (ParseException parseException) {

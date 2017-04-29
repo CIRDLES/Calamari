@@ -258,8 +258,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 // documented separately, and approximate the uncertainties:
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
                 
-                // April 2017 rounding per Bodorkos
-                double eqValTmp = Utilities.roundedToSize(expression.eval2Array(singleSpot)[0][0], 12);
+                double eqValTmp = expression.eval2Array(singleSpot)[0][0];
 
                 double eqFerr;
 
@@ -279,8 +278,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
-                        // April 2017 rounding per Bodorkos
-                        double pertVal = Utilities.roundedToSize(expression.eval2Array(singleSpot)[0][0], 12);
+                        double pertVal = expression.eval2Array(singleSpot)[0][0];
 
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
