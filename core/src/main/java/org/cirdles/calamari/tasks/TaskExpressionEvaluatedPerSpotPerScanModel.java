@@ -53,7 +53,8 @@ public class TaskExpressionEvaluatedPerSpotPerScanModel implements TaskExpressio
         int sigDigs = 12;
 
         this.expression = expression;
-        this.ratEqVal = Utilities.roundedToSize(ratEqVal.clone(), sigDigs);
+//        this.ratEqVal = Utilities.roundedToSize(ratEqVal.clone(), sigDigs);
+        this.ratEqVal = ratEqVal.clone();
         this.ratEqTime = ratEqTime.clone();
         this.ratEqErr = ratEqErr.clone();
 

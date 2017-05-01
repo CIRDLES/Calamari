@@ -44,6 +44,8 @@ import java.util.function.Consumer;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -62,7 +64,7 @@ import org.xml.sax.SAXException;
 public class PrawnFileHandler {
 
     private transient Unmarshaller jaxbUnmarshaller;
-//    private transient Marshaller jaxbMarshaller;
+    private transient Marshaller jaxbMarshaller;
     private String currentPrawnFileLocation;
     private transient Consumer<Integer> progressSubscriber;
     private transient CalamariReportsEngine reportsEngine;
@@ -311,21 +313,28 @@ public class PrawnFileHandler {
     }
 
     /**
+     * Deserializes xml file to a PrawnFile object.
      * @param prawnDataFile the value of prawnDataFile
      * @return the PrawnFile
      * @throws javax.xml.bind.JAXBException
      */
     private PrawnFile readRawDataFile(File prawnDataFile) throws JAXBException {
-
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataFile);
-
-//        // test writing it back out WORKS!
-//        JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
-//        jaxbMarshaller = jaxbContext.createMarshaller();
-//        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//        jaxbMarshaller.marshal(myPrawnFile, new File("myPrawnFile.xml"));
-//       // jaxbMarshaller.marshal(myPrawnFile, System.out);
         return myPrawnFile;
+    }
+    
+    /**
+     * Serializes a PrawnFile object to xml and intended for saving edits to original data.
+     * @param prawnFile for serialization
+     * @throws PropertyException
+     * @throws JAXBException 
+     */
+    public void writeRawDataFileAsXML(PrawnFile prawnFile, String fileName)
+        throws PropertyException, JAXBException{
+        JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
+        jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        jaxbMarshaller.marshal(prawnFile, new File(fileName));
     }
 
     public boolean currentPrawnFileLocationIsFile() {
