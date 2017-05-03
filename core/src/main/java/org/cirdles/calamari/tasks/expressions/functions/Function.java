@@ -74,6 +74,10 @@ public abstract class Function
         return new SqWtdAv();
     }
 
+    public static OperationOrFunctionInterface concordiaTW() {
+        return new ConcordiaTW();
+    }
+
     /**
      *
      * @param operationName

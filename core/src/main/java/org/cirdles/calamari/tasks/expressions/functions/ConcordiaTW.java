@@ -16,6 +16,7 @@
 package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
+import org.apache.commons.math3.distribution.FDistribution;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.ludwig.squid25.SquidConstants;
@@ -27,32 +28,32 @@ import org.cirdles.ludwig.squid25.SquidConstants;
 public class ConcordiaTW extends Function {
 
     /**
-     * Provides the functionality of Squid's robReg by calling robustReg2 and
-     * returning "Slope", "SlopeErr", "Y-Intercept", "Y-IntErr" and encoding the
-     * labels for each cell of the values array produced by eval2Array.
+     * Provides the functionality of Squid's agePb76 by calling pbPbAge and
+     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
+     * values array produced by eval2Array.
      *
      * @see
-     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
+     * @see
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
      */
     public ConcordiaTW() {
         name = "concordiaTW";
-        argumentCount = 4;
+        argumentCount = 2;
         precedence = 4;
         rowCount = 1;
         colCount = 4;
-        labelsForValues = new String[][]{{"Slope", "SlopeErr", "Y-Intercept", "Y-IntErr"}};
+        labelsForValues = new String[][]{{"Raw Conc Age", "1-sigma abs", "MSWD Conc", "Prob Conc"}};
     }
 
     /**
-     * Requires that child 0 and child 1 are each a VariableNode that evaluates
-     * to a double array with one column and a row for each member of
-     * shrimpFractions. Child 2 and child 3 are each a BooleanNode that
-     * evaluates to true or false. Child 2 and 3 are currently ignored but exist
-     * for compatibility with Squid2.5.
+     * Requires that child 0 and 1 each is VariableNode that evaluates to a
+     * double array with one column representing an IsotopicRatio and a row for
+     * each member of shrimpFractions.
      *
-     * @param childrenET list containing child 0 through 3
+     * @param childrenET list containing child 0 and 1
      * @param shrimpFractions a list of shrimpFractions
-     * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
+     * @return the double[1][4]{Raw Conc Age, 1-sigma abs, MSWD Conc, Prob Conc}
      */
     @Override
     public double[][] eval2Array(
@@ -60,12 +61,11 @@ public class ConcordiaTW extends Function {
 
         double[][] retVal;
         try {
-            double[] xValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] yValues = transposeColumnVector(childrenET.get(1).eval2Array(shrimpFractions), 0);
-            double[] robustReg2 = org.cirdles.ludwig.isoplot3.Pub.robustReg2(xValues, yValues);
-            double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
-            double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;
-            retVal = new double[][]{{robustReg2[0], slopeErr, robustReg2[3], yIntErr}};
+            double[] ratioXAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] ratioYAndUnct = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] concordiaTW
+                    = concordiaTW(1.0 / ratioXAndUnct[0], ratioXAndUnct[1], ratioYAndUnct[0], ratioYAndUnct[1]);
+            retVal = new double[][]{concordiaTW};
         } catch (ArithmeticException e) {
             retVal = new double[][]{{0.0, 0.0, 0.0, 0.0}};
         }
@@ -82,7 +82,7 @@ public class ConcordiaTW extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>RobReg</mi>"
+                + "<mi>AgePb76</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {
@@ -96,8 +96,10 @@ public class ConcordiaTW extends Function {
 
     public static void main(String[] args) {
         double[] tw = concordiaTW(6.65756816656, 6.65756816656 * 1.87624507122 / 100, 0.0552518706529, 0.0552518706529 * 1.96293438298 / 100);
+        double[] tw2 = concordiaTW(6.91259509041, 6.91259509041 * 1.18363396151 / 100, 0.0610677354475, 0.0610677354475 * 2.93532493394 / 100);
 
-        System.out.println(tw[0] + "    " + tw[1]*2);
+        System.out.println(tw[0] + "    " + tw[1] * 2 + "    " + tw[2] + "    " + tw[3]);
+        System.out.println(tw2[0] + "    " + tw2[1] * 2 + "    " + tw2[2] + "    " + tw2[3]);
     }
 
     /**
@@ -108,7 +110,7 @@ public class ConcordiaTW extends Function {
      * @param r238U_206Pb_1SigmaAbs
      * @param r207Pb_206Pb
      * @param r207Pb_206Pb_1SigmaAbs
-     * @return
+     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaTW(double r238U_206Pb, double r238U_206Pb_1SigmaAbs, double r207Pb_206Pb, double r207Pb_206Pb_1SigmaAbs) {
         double[] retVal = new double[]{0, 0, 0};
@@ -137,7 +139,7 @@ public class ConcordiaTW extends Function {
      * @param r206Pb_238U
      * @param r206Pb_238U_1SigmaAbs
      * @param rho
-     * @return
+     * @return double[4] {age, 1-sigma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordia(double r207Pb_235U, double r207Pb_235U_1SigmaAbs, double r206Pb_238U, double r206Pb_238U_1SigmaAbs, double rho) {
         double[] retVal = new double[]{0, 0, 0};
@@ -165,7 +167,7 @@ public class ConcordiaTW extends Function {
      * lambda errors
      *
      * @param inputData
-     * @return
+     * @return double[4] {age, 1-sgma abs uncert, MSWD, probabilityOfMSWD}
      */
     public static double[] concordiaAges(double[] inputData) {
         // move to const
@@ -173,14 +175,14 @@ public class ConcordiaTW extends Function {
         double MINLOG = 1E-307;
         int MAXEXP = 709;
 
-        double[] retVal = new double[]{0.0, 0.0, 0.0};
+        double[] retVal = new double[]{0.0, 0.0, 0.0, 0.0};
 
         double xBar = inputData[0];
         double errX = inputData[1];
         double yBar = inputData[2];
         double errY = inputData[3];
         double rhoXY = inputData[4];
-        double probEquiv = 1.0;
+
         double[][] vcXY = new double[2][2];
 
         double xConc = xBar;
@@ -201,10 +203,11 @@ public class ConcordiaTW extends Function {
                 double SumsAgeOneNLE = concordiaSums(xConc, yConc, vcXY, tNLE)[0];
                 double MswdAgeOneNLE = SumsAgeOneNLE;
                 double SigmaAgeNLE = varTcalc(vcXY, tNLE)[0];
-//                double SumsAgeManyNLE = SumsXY + SumsAgeOneNLE;
-//                double MswdAgeManyNLE = SumsAgeManyNLE / dfT;
 
-                retVal = new double[]{tNLE, SigmaAgeNLE, MswdAgeOneNLE};
+                FDistribution fdist = new FDistribution(1, 1E9);
+                double probability = 1.0 - fdist.cumulativeProbability(MswdAgeOneNLE);
+
+                retVal = new double[]{tNLE, SigmaAgeNLE, MswdAgeOneNLE, probability};
             }
 
         }
@@ -217,9 +220,9 @@ public class ConcordiaTW extends Function {
      * into account the uranium decay-constant errors). See GCA v62, p665-676,
      * 1998 for explanation.
      *
-     * @param covariance
-     * @param t
-     * @return simaT - uncertainty in age t
+     * @param covariance double[2][2] matrix
+     * @param t age in annum
+     * @return double[1] {sigmaT 1-sigma abs uncertainty in age t}
      */
     public static double[] varTcalc(double[][] covariance, double t) {
 
@@ -265,7 +268,7 @@ public class ConcordiaTW extends Function {
      * @param xConc double Concordia x-axis ratio
      * @param yConc double Concordia y-axis ratio
      * @param t Age in annum
-     * @return double[1] concordiaSums
+     * @return double[1] {concordiaSums}
      */
     public static double[] concordiaSums(double xConc, double yConc, double[][] covariance, double t) {
         // move to const
@@ -327,6 +330,7 @@ public class ConcordiaTW extends Function {
             ct++;
             T = t2;
             double e5 = SquidConstants.lambda235 * T;
+
             if ((ct < maxCT) && (Math.abs(e5) <= MAXEXP)) {
                 e5 = Math.exp(e5);
                 double e8 = Math.exp(SquidConstants.lambda238 * T);
@@ -349,9 +353,12 @@ public class ConcordiaTW extends Function {
                     testToler = Math.abs(Incr / T);
                     t2 = T + Incr;
                     retVal[0] = t2;
+                } else {
+                    // force termination
+                    testToler = 0.0;
                 }
             }
-        } while (testToler < toler);
+        } while (testToler >= toler);
 
         return retVal;
 
@@ -365,7 +372,7 @@ public class ConcordiaTW extends Function {
      * @param xy matrix element 0,1
      * @return double[3] containing inverted iXX, iYY, iXY
      */
-    public static double[] inv2x2(double xx, double yy, double xy) {
+    public static double[] inv2x2(double xx, double yy, double xy) {//isoplot3.U_2.bas
         double[] retVal = new double[]{0.0, 00, 0.0};
 
         double determinant = xx * yy - xy * xy;
@@ -407,10 +414,13 @@ public class ConcordiaTW extends Function {
         double aP = 0.0;
         double bP = 0.0;
         double rAB = 0.0;
-        double test = xP2 + yP * yP - 2 * xP * yP * rhoXY;
 
-        if (test >= 0.0) {
-            abP = Math.sqrt(test);
+        try {
+            abP = Math.sqrt(xP2 + yP * yP - 2 * xP * yP * rhoXY);
+        } catch (Exception e) {
+        }
+        if (abP >= 0.0) {
+
             if (inTW) {
                 a = ratioY / ratioX * SquidConstants.uRatio; // 207/235
                 b = 1.0 / ratioX; // 206/238
@@ -431,6 +441,7 @@ public class ConcordiaTW extends Function {
         }
 
         if (Math.abs(rAB) > 1.0) {
+            // bad uncertainties
             retVal = new double[]{a, 0.0, b, 0.0, rAB};
         } else {
             retVal = new double[]{a, aP * a, b, bP * b, rAB};

@@ -46,9 +46,10 @@ public class AgePb76 extends Function {
 
     /**
      * Requires that child 0 is a VariableNode that evaluates to a double array
-     * with one column and a row for each member of shrimpFractions.
+     * with one column representing the 207/206 IsotopicRatio and a row for each
+     * member of shrimpFractions.
      *
-     * @param childrenET list containing child 0 through 3
+     * @param childrenET list containing child 0
      * @param shrimpFractions a list of shrimpFractions
      * @return the double[1][2] array of age, ageErr
      */

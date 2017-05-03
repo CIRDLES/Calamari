@@ -25,6 +25,7 @@ import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Mean7_6;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204BiWt;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_RawConcAge;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_RawPb76Age;
 
 /**
@@ -54,6 +55,8 @@ public class SquidBodorkosTask1 extends Task {
         taskExpressionsOrdered.add(CustomExpression_RawPb76Age.EXPRESSION);
         
         taskExpressionsOrdered.add(CustomExpression_Mean7_6.EXPRESSION);
+        
+        taskExpressionsOrdered.add(CustomExpression_RawConcAge.EXPRESSION);
 
         // experiment
 //        ((XMLSerializerInterface) SquidExpressionMinus3.EXPRESSION).serializeXMLObject(SquidExpressionMinus3.EXPRESSION, "SquidExpressionMinus3.xml");
