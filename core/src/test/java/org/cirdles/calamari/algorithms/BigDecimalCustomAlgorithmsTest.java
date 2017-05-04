@@ -6,8 +6,7 @@
 package org.cirdles.calamari.algorithms;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
+
 
 import org.junit.Test;
 import static org.junit.Assert.*;

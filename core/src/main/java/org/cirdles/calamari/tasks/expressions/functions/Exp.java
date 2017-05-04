@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -40,17 +41,17 @@ public class Exp extends Function {
      * @return the double[][]
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
         double retVal;
         try {
-            retVal = Math.exp(childrenET.get(0).eval2Array(shrimpFractions)[0][0]);
+            retVal = Math.exp(convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0])[0]);
         } catch (Exception e) {
             retVal = 0.0;
         }
 
-        return new double[][]{{retVal}};
+        return new Object[][]{{retVal}};
     }
 
     /**

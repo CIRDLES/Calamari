@@ -17,6 +17,8 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
+import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -54,17 +56,17 @@ public class SqBiweight extends Function {
      * @return the double[1][3] array of mean, sigma, 95% confidence
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
             double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] tuning = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] tuning = convertObjectArray(childrenET.get(1).eval2Array(shrimpFractions)[0]);
             double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0]);
-            retVal = new double[][]{tukeysBiweight};
+            retVal = new Object[][]{convertDoubleArray(tukeysBiweight)};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0}};
         }
 
         return retVal;

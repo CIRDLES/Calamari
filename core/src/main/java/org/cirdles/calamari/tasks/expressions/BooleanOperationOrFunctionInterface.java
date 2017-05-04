@@ -22,7 +22,7 @@ import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
  *
  * @author James F. Bowring
  */
-public interface OperationOrFunctionInterface {
+public interface BooleanOperationOrFunctionInterface {
 
     /**
      *
@@ -30,7 +30,7 @@ public interface OperationOrFunctionInterface {
      * @param shrimpFractions the value of shrimpFraction
      * @return the double[][]
      */
-    public abstract Object[][] eval2Array(List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions);
+    public abstract boolean[][] eval2Array(List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions);
 
     /**
      * @return the precedence

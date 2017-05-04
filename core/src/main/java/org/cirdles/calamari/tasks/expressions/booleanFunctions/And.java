@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.booleanFunctions;
 
+import org.cirdles.calamari.tasks.expressions.functions.*;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
@@ -23,12 +24,12 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Subtract extends Operation {
+public class And extends BooleanFunction {
 
-    public Subtract() {
-        name = "subtract";
+    public And() {
+        name = "and";
         argumentCount = 2;
-        precedence = 2;
+        precedence = 4;
         rowCount = 1;
         colCount = 1;
     }
@@ -40,17 +41,17 @@ public class Subtract extends Operation {
      * @return the double[][]
      */
     @Override
-    public Object[][] eval2Array(
+    public boolean[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double retVal;
-        try {
-            retVal = (double)childrenET.get(0).eval2Array(shrimpFractions)[0][0]
-                    - (double)childrenET.get(1).eval2Array(shrimpFractions)[0][0];
+        boolean retVal;
+        try {          
+            retVal = (boolean)(childrenET.get(0).eval2Array(shrimpFractions)[0][0]) && (boolean)(childrenET.get(1).eval2Array(shrimpFractions)[0][0]);
         } catch (Exception e) {
-            retVal = 0.0;
+            retVal = false;
         }
-        return new Object[][]{{retVal}};
+
+        return new boolean[][]{{retVal}};
     }
 
     /**
@@ -61,11 +62,15 @@ public class Subtract extends Operation {
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mrow>\n"
-                + toStringAnotherExpression(childrenET.get(0))
-                + "<mo>-</mo>\n"
-                + toStringAnotherExpression(childrenET.get(1))
-                + "</mrow>\n";
+                = "<mrow>"
+                + "<mi>and</mi>"
+                + "<mfenced>";
+
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
+        }
+
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

@@ -36,6 +36,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
+import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.functions.Ln;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
@@ -135,7 +136,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             }
             // determine type of expression
             if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
-                double[][] value = expression.eval2Array(spotsForExpression);
+                double[][] value = convertObjectArray(expression.eval2Array(spotsForExpression));
                 taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
             } else {
                 // perform expression on each spot
@@ -153,7 +154,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     } else {
                         List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
                         singleSpot.add(spot);
-                        double[][] value = expression.eval2Array(singleSpot);
+                        double[][] value = convertObjectArray(expression.eval2Array(singleSpot));
                         spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
                     }
                 });
@@ -161,6 +162,40 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
         });
 
+    }
+
+    public static  double[] convertObjectArray(Object[] objects) {
+        double[] retVal = new double[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            retVal[i] = (double) objects[i];
+        }
+
+        return retVal;
+    }
+
+    public static  Object[] convertDoubleArray(double[] doubles) {
+        Object[] retVal = new Object[doubles.length];
+        for (int i = 0; i < doubles.length; i++) {
+            retVal[i] = (Object) doubles[i];
+        }
+
+        return retVal;
+    }
+
+    public static double[][] convertObjectArray(Object[][] objects) {
+        double[][] retVal = new double[objects.length][];
+        for (int i = 0; i < objects.length; i++) {
+            retVal[i] = convertObjectArray(objects[i]);
+        }
+        return retVal;
+    }
+
+    public static Object[][] convertDoubleArray(double[][] doubles) {
+        Object[][] retVal = new Object[doubles.length][];
+        for (int i = 0; i < doubles.length; i++) {
+            retVal[i] = convertDoubleArray(doubles[i]);  
+        }
+        return retVal;
     }
 
     /**
@@ -257,8 +292,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 // The next step is to evaluate the equation 'FormulaEval', 
                 // documented separately, and approximate the uncertainties:
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
-                
-                double eqValTmp = expression.eval2Array(singleSpot)[0][0];
+
+                double eqValTmp = convertObjectArray(expression.eval2Array(singleSpot))[0][0];
 
                 double eqFerr;
 
@@ -278,7 +313,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
-                        double pertVal = expression.eval2Array(singleSpot)[0][0];
+                        double pertVal = convertObjectArray(expression.eval2Array(singleSpot))[0][0];
 
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];

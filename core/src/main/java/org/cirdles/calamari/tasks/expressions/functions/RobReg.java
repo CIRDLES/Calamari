@@ -54,19 +54,19 @@ public class RobReg extends Function {
      * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
             double[] xValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
             double[] yValues = transposeColumnVector(childrenET.get(1).eval2Array(shrimpFractions), 0);
             double[] robustReg2 = org.cirdles.ludwig.isoplot3.Pub.robustReg2(xValues, yValues);
             double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
             double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;
-            retVal = new double[][]{{robustReg2[0], slopeErr, robustReg2[3], yIntErr}};
+            retVal = new Object[][]{{robustReg2[0], slopeErr, robustReg2[3], yIntErr}};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0}};
         }
 
         return retVal;

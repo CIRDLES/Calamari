@@ -167,8 +167,8 @@ public class ExpressionTree
      * @return the double[][]
      */
     @Override
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        return operation == null ? new double[][]{{0.0, 0.0}} : operation.eval2Array(childrenET, shrimpFractions);
+    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+        return operation == null ? new Object[][]{{0.0, 0.0}} : operation.eval2Array(childrenET, shrimpFractions);
     }
 
     @Override

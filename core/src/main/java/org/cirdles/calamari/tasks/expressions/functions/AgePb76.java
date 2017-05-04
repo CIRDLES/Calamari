@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -54,16 +55,16 @@ public class AgePb76 extends Function {
      * @return the double[1][2] array of age, ageErr
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
-            double[] pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] pb207_206RatioAndUnct = convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0]);
             double[] agePb76 = org.cirdles.ludwig.isoplot3.UPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1]);
-            retVal = new double[][]{{agePb76[0], agePb76[1]}};
+            retVal = new Object[][]{{agePb76[0], agePb76[1]}};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0}};
         }
 
         return retVal;

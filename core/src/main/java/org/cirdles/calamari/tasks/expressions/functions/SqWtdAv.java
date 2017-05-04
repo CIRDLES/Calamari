@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -56,18 +57,18 @@ public class SqWtdAv extends Function {
      * probability, intErr68, intMeanErr95
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
-            double[][] valuesAndUncertainties = childrenET.get(0).eval2Array(shrimpFractions);
+            Object[][] valuesAndUncertainties = childrenET.get(0).eval2Array(shrimpFractions);
             double[] variableValues = transposeColumnVector(valuesAndUncertainties, 0);
             double[] uncertaintyValues = transposeColumnVector(valuesAndUncertainties, 1);
             double[] weightedAverage = org.cirdles.ludwig.isoplot3.Means.weightedAverage(variableValues, uncertaintyValues);
-            retVal = new double[][]{weightedAverage};
+            retVal = new Object[][]{convertDoubleArray(weightedAverage)};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
         }
 
         return retVal;

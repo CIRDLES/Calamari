@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.Task;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
@@ -62,8 +63,8 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
      * @return
      */
     @Override
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        double [][] retVal = new double[shrimpFractions.size()][];
+    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+        Object [][] retVal = new Object[shrimpFractions.size()][];
 
         if (lookupMethodNameForShrimpFraction != null) {
             try {
@@ -71,7 +72,8 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
                         lookupMethodNameForShrimpFraction,
                         new Class[]{String.class});
                 for (int i = 0; i < shrimpFractions.size(); i ++){
-                    retVal[i] = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0];
+                    double [] values = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0];
+                    retVal[i] = Task.convertDoubleArray(values);
                 }
                 
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException methodException) {

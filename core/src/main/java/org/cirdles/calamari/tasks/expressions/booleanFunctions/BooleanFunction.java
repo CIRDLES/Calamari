@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.functions;
+package org.cirdles.calamari.tasks.expressions.booleanFunctions;
 
+import org.cirdles.calamari.tasks.expressions.functions.*;
 import com.thoughtworks.xstream.XStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.cirdles.calamari.tasks.expressions.BooleanOperationOrFunctionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.OperationOrFunctionInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
@@ -26,9 +28,9 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
  *
  * @author James F. Bowring
  */
-public abstract class Function
+public abstract class BooleanFunction
         implements
-        OperationOrFunctionInterface,
+        BooleanOperationOrFunctionInterface,
         XMLSerializerInterface {
 
     protected String name;
@@ -46,66 +48,30 @@ public abstract class Function
 //        xstream.alias("operation", this.getClass());
     }
 
-    public static OperationOrFunctionInterface ln() {
-        return new Ln();
+    public static BooleanOperationOrFunctionInterface and() {
+        return null;
     }
 
-    public static OperationOrFunctionInterface sqrt() {
-        return new Sqrt();
-    }
-
-    public static OperationOrFunctionInterface exp() {
-        return new Exp();
-    }
-
-    public static OperationOrFunctionInterface robReg() {
-        return new RobReg();
-    }
-
-    public static OperationOrFunctionInterface sqBiweight() {
-        return new SqBiweight();
-    }
-
-    public static OperationOrFunctionInterface agePb76() {
-        return new AgePb76();
-    }
-
-    public static OperationOrFunctionInterface sqWtdAvg() {
-        return new SqWtdAv();
-    }
-
-    public static OperationOrFunctionInterface concordiaTW() {
-        return new ConcordiaTW();
-    }
 
     /**
      *
      * @param operationName
      * @return
      */
-    public static OperationOrFunctionInterface operationFactory(String operationName) {
-        Function retVal = null;
+    public static BooleanOperationOrFunctionInterface operationFactory(String operationName) {
+        BooleanFunction retVal = null;
         Method method;
         if (operationName != null) {
             try {
-                method = Function.class.getMethod(//
+                method = BooleanFunction.class.getMethod(//
                         operationName,
                         new Class[0]);
-                retVal = (Function) method.invoke(null, new Object[0]);
+                retVal = (BooleanFunction) method.invoke(null, new Object[0]);
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException noSuchMethodException) {
                 // do nothing for now
             }
         }
         return retVal;
-    }
-
-    protected double[] transposeColumnVector(Object[][] columnVector, int colIndex) {
-        double[] rowVector = new double[columnVector.length];
-        for (int i = 0; i < rowVector.length; i++) {
-            rowVector[i] = (double) columnVector[i][colIndex];
-        }
-
-        return rowVector;
     }
 
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {

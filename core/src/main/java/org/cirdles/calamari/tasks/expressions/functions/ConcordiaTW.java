@@ -17,6 +17,8 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
+import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -54,18 +56,18 @@ public class ConcordiaTW extends Function {
      * @return the double[1][4]{Raw Conc Age, 1-sigma abs, MSWD Conc, Prob Conc}
      */
     @Override
-    public double[][] eval2Array(
+    public Object[][] eval2Array(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
-            double[] ratioXAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
-            double[] ratioYAndUnct = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] ratioXAndUnct = convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0]);
+            double[] ratioYAndUnct = convertObjectArray(childrenET.get(1).eval2Array(shrimpFractions)[0]);
             double[] concordiaTW
                     = org.cirdles.ludwig.isoplot3.Pub.concordiaTW(1.0 / ratioXAndUnct[0], ratioXAndUnct[1], ratioYAndUnct[0], ratioYAndUnct[1]);
-            retVal = new double[][]{concordiaTW};
+            retVal = new Object[][]{convertDoubleArray( concordiaTW)};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0}};
         }
 
         return retVal;

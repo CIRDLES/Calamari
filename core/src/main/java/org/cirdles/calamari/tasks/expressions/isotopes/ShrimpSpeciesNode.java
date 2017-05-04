@@ -59,7 +59,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      * @return the double[][]
      */
     @Override
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
         double retVal = 0.0;
         Integer index = shrimpFractions.get(0).getIndexOfSpeciesByName(name);
         if (index != null) {
@@ -70,7 +70,7 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
             }
         }
 
-        return new double[][]{{retVal}};
+        return new Object[][]{{retVal}};
     }
 
     /**

@@ -29,7 +29,7 @@ public interface ExpressionTreeInterface {
      * @param shrimpFractions the value of shrimpFraction
      * @return the double[][]
      */
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions);
+    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions);
 
     public String getName();
 
