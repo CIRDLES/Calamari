@@ -17,8 +17,10 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import org.cirdles.calamari.tasks.Task;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
+
+
 
 /**
  *
@@ -46,7 +48,7 @@ public class Sqrt extends Function {
 
         double retVal;
         try {
-            retVal = Math.sqrt(Task.convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0])[0]);
+            retVal = Math.sqrt(convertObjectArray(childrenET.get(0).eval(shrimpFractions)[0])[0]);
         } catch (Exception e) {
             retVal = 0.0;
         }

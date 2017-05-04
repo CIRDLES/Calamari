@@ -46,7 +46,7 @@ public class And extends BooleanFunction {
 
         boolean retVal;
         try {          
-            retVal = (boolean)(childrenET.get(0).eval2Array(shrimpFractions)[0][0]) && (boolean)(childrenET.get(1).eval2Array(shrimpFractions)[0][0]);
+            retVal = (boolean)(childrenET.get(0).eval(shrimpFractions)[0][0]) && (boolean)(childrenET.get(1).eval(shrimpFractions)[0][0]);
         } catch (Exception e) {
             retVal = false;
         }

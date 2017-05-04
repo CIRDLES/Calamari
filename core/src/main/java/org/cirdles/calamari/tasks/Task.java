@@ -32,11 +32,11 @@ import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
-import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.functions.Ln;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNodeXMLConverter;
@@ -48,7 +48,6 @@ import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Pow;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
-import org.cirdles.ludwig.squid25.Utilities;
 
 /**
  *
@@ -136,7 +135,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             }
             // determine type of expression
             if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
-                double[][] value = convertObjectArray(expression.eval2Array(spotsForExpression));
+                double[][] value = convertObjectArray(expression.eval(spotsForExpression));
                 taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
             } else {
                 // perform expression on each spot
@@ -154,7 +153,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     } else {
                         List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
                         singleSpot.add(spot);
-                        double[][] value = convertObjectArray(expression.eval2Array(singleSpot));
+                        double[][] value = convertObjectArray(expression.eval(singleSpot));
                         spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
                     }
                 });
@@ -162,40 +161,6 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
         });
 
-    }
-
-    public static  double[] convertObjectArray(Object[] objects) {
-        double[] retVal = new double[objects.length];
-        for (int i = 0; i < objects.length; i++) {
-            retVal[i] = (double) objects[i];
-        }
-
-        return retVal;
-    }
-
-    public static  Object[] convertDoubleArray(double[] doubles) {
-        Object[] retVal = new Object[doubles.length];
-        for (int i = 0; i < doubles.length; i++) {
-            retVal[i] = (Object) doubles[i];
-        }
-
-        return retVal;
-    }
-
-    public static double[][] convertObjectArray(Object[][] objects) {
-        double[][] retVal = new double[objects.length][];
-        for (int i = 0; i < objects.length; i++) {
-            retVal[i] = convertObjectArray(objects[i]);
-        }
-        return retVal;
-    }
-
-    public static Object[][] convertDoubleArray(double[][] doubles) {
-        Object[][] retVal = new Object[doubles.length][];
-        for (int i = 0; i < doubles.length; i++) {
-            retVal[i] = convertDoubleArray(doubles[i]);  
-        }
-        return retVal;
     }
 
     /**
@@ -293,7 +258,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 // documented separately, and approximate the uncertainties:
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
 
-                double eqValTmp = convertObjectArray(expression.eval2Array(singleSpot))[0][0];
+                double eqValTmp = convertObjectArray(expression.eval(singleSpot))[0][0];
 
                 double eqFerr;
 
@@ -313,7 +278,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
-                        double pertVal = convertObjectArray(expression.eval2Array(singleSpot))[0][0];
+                        double pertVal = convertObjectArray(expression.eval(singleSpot))[0][0];
 
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];

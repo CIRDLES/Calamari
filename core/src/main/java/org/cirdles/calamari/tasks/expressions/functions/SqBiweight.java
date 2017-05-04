@@ -17,9 +17,9 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
-import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertDoubleArray;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
 
 /**
  *
@@ -29,8 +29,8 @@ public class SqBiweight extends Function {
 
     /**
      * Provides the functionality of Squid's sqBiweight and biWt by calculating
-     * TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
-     * the labels for each cell of the values array produced by eval2Array.
+ TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
+ the labels for each cell of the values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
@@ -61,8 +61,8 @@ public class SqBiweight extends Function {
 
         Object[][] retVal;
         try {
-            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] tuning = convertObjectArray(childrenET.get(1).eval2Array(shrimpFractions)[0]);
+            double[] variableValues = transposeColumnVector(childrenET.get(0).eval(shrimpFractions), 0);
+            double[] tuning = convertObjectArray(childrenET.get(1).eval(shrimpFractions)[0]);
             double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0]);
             retVal = new Object[][]{convertDoubleArray(tukeysBiweight)};
         } catch (ArithmeticException e) {

@@ -17,8 +17,8 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
 
 /**
  *
@@ -28,8 +28,8 @@ public class AgePb76 extends Function {
 
     /**
      * Provides the functionality of Squid's agePb76 by calling pbPbAge and
-     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
-     * values array produced by eval2Array.
+ returning "Age" and "AgeErr" and encoding the labels for each cell of the
+ values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -60,7 +60,7 @@ public class AgePb76 extends Function {
 
         Object[][] retVal;
         try {
-            double[] pb207_206RatioAndUnct = convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0]);
+            double[] pb207_206RatioAndUnct = convertObjectArray(childrenET.get(0).eval(shrimpFractions)[0]);
             double[] agePb76 = org.cirdles.ludwig.isoplot3.UPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1]);
             retVal = new Object[][]{{agePb76[0], agePb76[1]}};
         } catch (ArithmeticException e) {

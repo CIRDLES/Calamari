@@ -27,8 +27,8 @@ public class RobReg extends Function {
 
     /**
      * Provides the functionality of Squid's robReg by calling robustReg2 and
-     * returning "Slope", "SlopeErr", "Y-Intercept", "Y-IntErr" and encoding the
-     * labels for each cell of the values array produced by eval2Array.
+ returning "Slope", "SlopeErr", "Y-Intercept", "Y-IntErr" and encoding the
+ labels for each cell of the values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
@@ -59,8 +59,8 @@ public class RobReg extends Function {
 
         Object[][] retVal;
         try {
-            double[] xValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] yValues = transposeColumnVector(childrenET.get(1).eval2Array(shrimpFractions), 0);
+            double[] xValues = transposeColumnVector(childrenET.get(0).eval(shrimpFractions), 0);
+            double[] yValues = transposeColumnVector(childrenET.get(1).eval(shrimpFractions), 0);
             double[] robustReg2 = org.cirdles.ludwig.isoplot3.Pub.robustReg2(xValues, yValues);
             double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
             double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;

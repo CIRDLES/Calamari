@@ -29,7 +29,7 @@ public interface ExpressionTreeInterface {
      * @param shrimpFractions the value of shrimpFraction
      * @return the double[][]
      */
-    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions);
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions);
 
     public String getName();
 
@@ -55,5 +55,39 @@ public interface ExpressionTreeInterface {
     public boolean isTypeFunctionOrOperation();
 
     public int argumentCount();
+
+    public static double[] convertObjectArray(Object[] objects) {
+        double[] retVal = new double[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            retVal[i] = (double) objects[i];
+        }
+
+        return retVal;
+    }
+
+    public static Object[] convertDoubleArray(double[] doubles) {
+        Object[] retVal = new Object[doubles.length];
+        for (int i = 0; i < doubles.length; i++) {
+            retVal[i] = (Object) doubles[i];
+        }
+
+        return retVal;
+    }
+
+    public static double[][] convertObjectArray(Object[][] objects) {
+        double[][] retVal = new double[objects.length][];
+        for (int i = 0; i < objects.length; i++) {
+            retVal[i] = convertObjectArray(objects[i]);
+        }
+        return retVal;
+    }
+
+    public static Object[][] convertDoubleArray(double[][] doubles) {
+        Object[][] retVal = new Object[doubles.length][];
+        for (int i = 0; i < doubles.length; i++) {
+            retVal[i] = convertDoubleArray(doubles[i]);
+        }
+        return retVal;
+    }
 
 }

@@ -17,9 +17,9 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
-import static org.cirdles.calamari.tasks.Task.convertObjectArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertDoubleArray;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
 
 /**
  *
@@ -29,8 +29,8 @@ public class ConcordiaTW extends Function {
 
     /**
      * Provides the functionality of Squid's agePb76 by calling pbPbAge and
-     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
-     * values array produced by eval2Array.
+ returning "Age" and "AgeErr" and encoding the labels for each cell of the
+ values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -61,8 +61,8 @@ public class ConcordiaTW extends Function {
 
         Object[][] retVal;
         try {
-            double[] ratioXAndUnct = convertObjectArray(childrenET.get(0).eval2Array(shrimpFractions)[0]);
-            double[] ratioYAndUnct = convertObjectArray(childrenET.get(1).eval2Array(shrimpFractions)[0]);
+            double[] ratioXAndUnct = convertObjectArray(childrenET.get(0).eval(shrimpFractions)[0]);
+            double[] ratioYAndUnct = convertObjectArray(childrenET.get(1).eval(shrimpFractions)[0]);
             double[] concordiaTW
                     = org.cirdles.ludwig.isoplot3.Pub.concordiaTW(1.0 / ratioXAndUnct[0], ratioXAndUnct[1], ratioYAndUnct[0], ratioYAndUnct[1]);
             retVal = new Object[][]{convertDoubleArray( concordiaTW)};

@@ -52,7 +52,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
      * @return the double[][]
      */
     @Override
-    public Object[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions) {
         return new Object[][]{{value}};
     }
 

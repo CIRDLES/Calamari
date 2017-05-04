@@ -17,8 +17,8 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
-import static org.cirdles.calamari.tasks.Task.convertDoubleArray;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertDoubleArray;
 
 /**
  *
@@ -28,9 +28,9 @@ public class SqWtdAv extends Function {
 
     /**
      * Provides the basic functionality of Squid's sqWtdAv by calculating
-     * WeightedAverage and returning intMean, intSigmaMean, MSWD, probability,
-     * intErr68, intMeanErr95 and encoding the labels for each cell of the
-     * values array produced by eval2Array.
+ WeightedAverage and returning intMean, intSigmaMean, MSWD, probability,
+ intErr68, intMeanErr95 and encoding the labels for each cell of the
+ values array produced by eval.
      *
      * @see
      * https://github.com/CIRDLES/LudwigLibrary/blob/master/vbaCode/squid2.5Basic/MathUtils.bas
@@ -62,7 +62,7 @@ public class SqWtdAv extends Function {
 
         Object[][] retVal;
         try {
-            Object[][] valuesAndUncertainties = childrenET.get(0).eval2Array(shrimpFractions);
+            Object[][] valuesAndUncertainties = childrenET.get(0).eval(shrimpFractions);
             double[] variableValues = transposeColumnVector(valuesAndUncertainties, 0);
             double[] uncertaintyValues = transposeColumnVector(valuesAndUncertainties, 1);
             double[] weightedAverage = org.cirdles.ludwig.isoplot3.Means.weightedAverage(variableValues, uncertaintyValues);

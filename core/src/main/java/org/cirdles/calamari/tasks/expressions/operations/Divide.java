@@ -45,8 +45,8 @@ public class Divide extends Operation {
 
         double retVal;
         try {
-            retVal = (double)childrenET.get(0).eval2Array(shrimpFractions)[0][0]
-                    / (double)childrenET.get(1).eval2Array(shrimpFractions)[0][0];
+            retVal = (double)childrenET.get(0).eval(shrimpFractions)[0][0]
+                    / (double)childrenET.get(1).eval(shrimpFractions)[0][0];
         } catch (Exception e) {
             retVal = 0.0;
         }
