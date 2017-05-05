@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 
 /**
  *
@@ -27,9 +28,10 @@ public interface ExpressionTreeInterface {
     /**
      *
      * @param shrimpFractions the value of shrimpFraction
+     * @param task
      * @return the double[][]
      */
-    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions);
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task);
 
     public String getName();
 
@@ -56,36 +58,52 @@ public interface ExpressionTreeInterface {
 
     public int argumentCount();
 
-    public static double[] convertObjectArray(Object[] objects) {
+    /**
+     *
+     * @param objects
+     * @return
+     */
+    public static double[] convertObjectArrayToDoubles(Object[] objects) {
         double[] retVal = new double[objects.length];
         for (int i = 0; i < objects.length; i++) {
-            retVal[i] = (double) objects[i];
+            if (objects[i] instanceof Integer) {
+                retVal[i] =  (double)((Integer)objects[i]);        
+            } else {
+                retVal[i] = (double) objects[i];
+            }
         }
-
         return retVal;
     }
 
-    public static Object[] convertDoubleArray(double[] doubles) {
-        Object[] retVal = new Object[doubles.length];
-        for (int i = 0; i < doubles.length; i++) {
-            retVal[i] = (Object) doubles[i];
-        }
-
-        return retVal;
-    }
-
-    public static double[][] convertObjectArray(Object[][] objects) {
+    public static double[][] convertObjectArrayToDoubles(Object[][] objects) {
         double[][] retVal = new double[objects.length][];
         for (int i = 0; i < objects.length; i++) {
-            retVal[i] = convertObjectArray(objects[i]);
+            retVal[i] = convertObjectArrayToDoubles(objects[i]);
         }
         return retVal;
     }
 
-    public static Object[][] convertDoubleArray(double[][] doubles) {
-        Object[][] retVal = new Object[doubles.length][];
-        for (int i = 0; i < doubles.length; i++) {
-            retVal[i] = convertDoubleArray(doubles[i]);
+    public static Object[] convertArrayToObjects(double[] types) {
+        Object[] retVal = new Object[types.length];
+        for (int i = 0; i < types.length; i++) {
+            retVal[i] = (Object) types[i];
+        }
+
+        return retVal;
+    }
+
+    public static Object[][] convertArrayToObjects(double[][] types) {
+        Object[][] retVal = new Object[types.length][];
+        for (int i = 0; i < types.length; i++) {
+            retVal[i] = convertArrayToObjects(types[i]);
+        }
+        return retVal;
+    }
+
+    public static boolean[] convertObjectArrayToBooleans(Object[] objects) {
+        boolean[] retVal = new boolean[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            retVal[i] = (boolean) objects[i];
         }
         return retVal;
     }

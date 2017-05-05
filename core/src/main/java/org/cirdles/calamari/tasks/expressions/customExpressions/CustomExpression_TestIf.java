@@ -15,34 +15,41 @@
  */
 package org.cirdles.calamari.tasks.expressions.customExpressions;
 
-import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
-import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
-import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForIsotopicRatios;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForSummary;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_RawConcAge {
+public class CustomExpression_TestIf {
 
     /**
-     * Squid Excel format is concordiaTW(["238/206"],[±"238/206"],["207/206"],[±"207/206"],,false,true,1)
+     * Squid Excel format is if(and(Expoc9511>=1.5,Expoc9511<=2.5),Expoc9511,2)
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("RawConcAge");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("TestIf");
 
     static {
+        ExpressionTreeInterface AndExpression = new ExpressionTree("And");
+        ((ExpressionTreeBuilderInterface)AndExpression).addChild(0, new ConstantNode("true", true));
+        ((ExpressionTreeBuilderInterface)AndExpression).addChild(new ConstantNode("true", false));
+        ((ExpressionTreeBuilderInterface)AndExpression).setOperation(Function.and());
+        
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNodeForIsotopicRatios(RawRatioNamesSHRIMP.r206_238w.getName()));
+                .addChild(0, AndExpression);
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(new VariableNodeForIsotopicRatios(RawRatioNamesSHRIMP.r207_206w.getName()));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.concordiaTW());
+                .addChild(new VariableNodeForSummary(CustomExpression_Expo.EXPRESSION.getName()));
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(new ConstantNode("99", 99));
+
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqif());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }

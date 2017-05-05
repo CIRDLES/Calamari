@@ -13,48 +13,70 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.constants;
+package org.cirdles.calamari.tasks.expressions.variables;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.List;
+import java.util.Map;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.SpotSummaryDetails;
 import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
  * @author James F. Bowring
  */
-public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInterface {
+public class VariableNodeForSummary implements ExpressionTreeInterface, XMLSerializerInterface {
 
     private String name;
-    private Object value;
     private ExpressionTreeInterface parentET;
 
-    public ConstantNode() {
-        this("", 0.0);
+    public VariableNodeForSummary() {
+        this(null);
     }
 
-    public ConstantNode(String name, Object value) {
+    public VariableNodeForSummary(String name) {
         this.name = name;
-        this.value = value;
     }
 
     @Override
     public void customizeXstream(XStream xstream) {
-        xstream.registerConverter(new ConstantNodeXMLConverter());
-        xstream.alias("ConstantNode", ConstantNode.class);
+//        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
+//        xstream.alias("ShrimpSpeciesNode", VariableNode.class);
     }
 
     /**
+     * Returns an array of values from a summary expression that has been
+     * evaluated on a set of spots and stored in the task by using the specified
+     * lookup Method getTaskExpressionsEvaluationsPerSpotSet on the Task object
+     * that takes an expression's name as argument = name of variable.
      *
-     * @param shrimpFractions the value of shrimpFraction
-     * @return the double[][]
+     * @param shrimpFractions
+     * @param task
+     * @return
      */
     @Override
     public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
-        return new Object[][]{{value}};
+
+        Map<String, SpotSummaryDetails> detailsMap = task.getTaskExpressionsEvaluationsPerSpotSet();
+        SpotSummaryDetails detail = detailsMap.get(name);
+        double[][] values = detail.getValues();
+        Object[][] retVal = convertArrayToObjects(values);
+
+        return retVal;
+    }
+
+    @Override
+    public String toStringMathML() {
+        String retVal
+                = "<mtext>\n"
+                + name
+                + "</mtext>\n";
+
+        return retVal;
     }
 
     @Override
@@ -67,25 +89,6 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * @return the value
-     */
-    public Object getValue() {
-        return value;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toStringMathML() {
-        return "<mn>" + name + "</mn>\n";
     }
 
     @Override
@@ -120,7 +123,7 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
 
     @Override
     public boolean isTypeFunctionOrOperation() {
-       return false;
+        return false;
     }
 
     @Override

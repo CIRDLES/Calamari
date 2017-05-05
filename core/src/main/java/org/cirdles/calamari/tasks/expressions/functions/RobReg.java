@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 
 /**
@@ -54,13 +55,13 @@ public class RobReg extends Function {
      * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
      */
     @Override
-    public Object[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
         Object[][] retVal;
         try {
-            double[] xValues = transposeColumnVector(childrenET.get(0).eval(shrimpFractions), 0);
-            double[] yValues = transposeColumnVector(childrenET.get(1).eval(shrimpFractions), 0);
+            double[] xValues = transposeColumnVector(childrenET.get(0).eval(shrimpFractions, task), 0);
+            double[] yValues = transposeColumnVector(childrenET.get(1).eval(shrimpFractions, task), 0);
             double[] robustReg2 = org.cirdles.ludwig.isoplot3.Pub.robustReg2(xValues, yValues);
             double slopeErr = Math.abs(robustReg2[2] - robustReg2[1]) / 2.0;
             double yIntErr = Math.abs(robustReg2[6] - robustReg2[5]) / 2.0;

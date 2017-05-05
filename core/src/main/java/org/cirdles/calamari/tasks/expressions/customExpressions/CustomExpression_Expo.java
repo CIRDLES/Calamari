@@ -35,11 +35,9 @@ public class CustomExpression_Expo {
 
     static {
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(CustomExpression_LnUO_U.EXPRESSION.getName(),
-                        "getTaskExpressionsEvaluationsPerSpotByField"));
+                .addChild(0, new VariableNode(CustomExpression_LnUO_U.EXPRESSION.getName()));
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(new VariableNode(CustomExpression_LnPbR_U.EXPRESSION.getName(),
-                        "getTaskExpressionsEvaluationsPerSpotByField"));
+                .addChild(new VariableNode(CustomExpression_LnPbR_U.EXPRESSION.getName()));
         ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
         ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.robReg());

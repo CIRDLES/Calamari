@@ -315,7 +315,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-RobReg-".contains("-" + token + "-")) {
+            } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-RobReg-and-if-".contains("-" + token + "-")) {
                 retVal = FUNCTION;
             } else if (token.matches("\\[\"(.*?)\"\\]")) {
                 retVal = NAMED_EXPRESSION;

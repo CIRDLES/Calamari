@@ -89,7 +89,7 @@ public class ConstantNodeXMLConverter implements Converter {
             writer.endNode();
 
             writer.startNode("value");
-            writer.setValue(Double.toString(constantNode.getValue()));
+           // writer.setValue(Double.toString(constantNode.getValue()));
             writer.endNode();
         writer.endNode();
 

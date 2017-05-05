@@ -34,8 +34,7 @@ public class CustomExpression_Mean7_6 {
 
     static {
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(CustomExpression_RawPb76Age.EXPRESSION.getName(),
-                        "getTaskExpressionsEvaluationsPerSpotByField"));
+                .addChild(0, new VariableNode(CustomExpression_RawPb76Age.EXPRESSION.getName()));
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqWtdAvg());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);

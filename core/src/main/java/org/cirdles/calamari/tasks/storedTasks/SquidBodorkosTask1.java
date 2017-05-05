@@ -27,6 +27,7 @@ import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_Net204cts_sec;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_RawConcAge;
 import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_RawPb76Age;
+import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression_TestIf;
 
 /**
  *
@@ -51,6 +52,8 @@ public class SquidBodorkosTask1 extends Task {
         taskExpressionsOrdered.add(CustomExpression_Net204BiWt.EXPRESSION);
         
         taskExpressionsOrdered.add(CustomExpression_Expo.EXPRESSION);
+        
+        taskExpressionsOrdered.add(CustomExpression_TestIf.EXPRESSION);
         
         taskExpressionsOrdered.add(CustomExpression_RawPb76Age.EXPRESSION);
         

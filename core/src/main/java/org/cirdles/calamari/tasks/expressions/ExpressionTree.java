@@ -24,6 +24,7 @@ import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMPXMLConverter;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNodeXMLConverter;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
@@ -164,11 +165,12 @@ public class ExpressionTree
     /**
      *
      * @param shrimpFractions the value of shrimpFraction
+     * @param task
      * @return the double[][]
      */
     @Override
-    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        return operation == null ? new Object[][]{{0.0, 0.0}} : operation.eval2Array(childrenET, shrimpFractions);
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
+        return operation == null ? new Object[][]{{0.0, 0.0}} : operation.eval(childrenET, shrimpFractions, task);
     }
 
     @Override

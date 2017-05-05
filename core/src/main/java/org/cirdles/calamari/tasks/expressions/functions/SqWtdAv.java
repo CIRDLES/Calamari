@@ -17,8 +17,9 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertDoubleArray;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
@@ -53,20 +54,21 @@ public class SqWtdAv extends Function {
      *
      * @param childrenET list containing child 0 and child 1
      * @param shrimpFractions a list of shrimpFractions
+     * @param task
      * @return the double[1][6] array of intMean, intSigmaMean, MSWD,
      * probability, intErr68, intMeanErr95
      */
     @Override
-    public Object[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
         Object[][] retVal;
         try {
-            Object[][] valuesAndUncertainties = childrenET.get(0).eval(shrimpFractions);
+            Object[][] valuesAndUncertainties = childrenET.get(0).eval(shrimpFractions, task);
             double[] variableValues = transposeColumnVector(valuesAndUncertainties, 0);
             double[] uncertaintyValues = transposeColumnVector(valuesAndUncertainties, 1);
             double[] weightedAverage = org.cirdles.ludwig.isoplot3.Means.weightedAverage(variableValues, uncertaintyValues);
-            retVal = new Object[][]{convertDoubleArray(weightedAverage)};
+            retVal = new Object[][]{convertArrayToObjects(weightedAverage)};
         } catch (ArithmeticException e) {
             retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
         }

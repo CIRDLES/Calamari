@@ -17,6 +17,7 @@ package org.cirdles.calamari.tasks.expressions.operations;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
@@ -37,16 +38,17 @@ public class Divide extends Operation {
      *
      * @param childrenET the value of childrenET
      * @param shrimpFractions the value of shrimpFraction
+     * @param task
      * @return the double[][]
      */
     @Override
-    public Object[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
         double retVal;
         try {
-            retVal = (double)childrenET.get(0).eval(shrimpFractions)[0][0]
-                    / (double)childrenET.get(1).eval(shrimpFractions)[0][0];
+            retVal = (double)childrenET.get(0).eval(shrimpFractions, task)[0][0]
+                    / (double)childrenET.get(1).eval(shrimpFractions, task)[0][0];
         } catch (Exception e) {
             retVal = 0.0;
         }

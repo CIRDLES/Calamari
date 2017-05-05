@@ -78,6 +78,14 @@ public abstract class Function
         return new ConcordiaTW();
     }
 
+    public static OperationOrFunctionInterface and() {
+        return new And();
+    }
+
+    public static OperationOrFunctionInterface sqif() {
+        return new If();
+    }
+
     /**
      *
      * @param operationName

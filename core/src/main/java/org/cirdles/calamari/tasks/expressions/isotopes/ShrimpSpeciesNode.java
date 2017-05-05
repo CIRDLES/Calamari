@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import org.cirdles.calamari.shrimp.IsotopeNames;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 
@@ -59,10 +60,10 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
      * @return the double[][]
      */
     @Override
-    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
         double retVal = 0.0;
         Integer index = shrimpFractions.get(0).getIndexOfSpeciesByName(name);
-        if (index != null) {
+        if (index != -1) {
             double[] isotopeValues = 
                     methodFactory(shrimpFractions.get(0), methodNameForShrimpFraction);
             if (index < isotopeValues.length) {

@@ -103,6 +103,8 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("exp", "exp");
         FUNCTIONS_MAP.put("Exp", "exp");
         FUNCTIONS_MAP.put("RobReg", "robReg");
+        FUNCTIONS_MAP.put("and", "and");
+        FUNCTIONS_MAP.put("if", "sqif");
     }
 
     public final static Map<String, ExpressionTreeInterface> NAMED_EXPRESSIONS_MAP = new HashMap<>();

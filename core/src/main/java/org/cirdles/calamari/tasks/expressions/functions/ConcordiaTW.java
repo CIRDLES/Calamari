@@ -17,9 +17,10 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
-import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertDoubleArray;
-import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArray;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToDoubles;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
@@ -56,16 +57,16 @@ public class ConcordiaTW extends Function {
      * @return the double[1][4]{Raw Conc Age, 1-sigma abs, MSWD Conc, Prob Conc}
      */
     @Override
-    public Object[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
         Object[][] retVal;
         try {
-            double[] ratioXAndUnct = convertObjectArray(childrenET.get(0).eval(shrimpFractions)[0]);
-            double[] ratioYAndUnct = convertObjectArray(childrenET.get(1).eval(shrimpFractions)[0]);
+            double[] ratioXAndUnct = convertObjectArrayToDoubles(childrenET.get(0).eval(shrimpFractions, task)[0]);
+            double[] ratioYAndUnct = convertObjectArrayToDoubles(childrenET.get(1).eval(shrimpFractions, task)[0]);
             double[] concordiaTW
                     = org.cirdles.ludwig.isoplot3.Pub.concordiaTW(1.0 / ratioXAndUnct[0], ratioXAndUnct[1], ratioYAndUnct[0], ratioYAndUnct[1]);
-            retVal = new Object[][]{convertDoubleArray( concordiaTW)};
+            retVal = new Object[][]{convertArrayToObjects( concordiaTW)};
         } catch (ArithmeticException e) {
             retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0}};
         }

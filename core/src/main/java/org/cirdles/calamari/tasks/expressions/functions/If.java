@@ -13,45 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.booleanFunctions;
+package org.cirdles.calamari.tasks.expressions.functions;
 
-import org.cirdles.calamari.tasks.expressions.functions.*;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToBooleans;
 
 /**
  *
  * @author James F. Bowring
  */
-public class And extends BooleanFunction {
+public class If extends Function {
 
-    public And() {
-        name = "and";
-        argumentCount = 2;
+    public If() {
+        name = "if";
+        argumentCount = 3;
         precedence = 4;
         rowCount = 1;
         colCount = 1;
     }
 
     /**
-     *
+     * If expects child 1 as boolean and child 1 and 2 as double
      * @param childrenET the value of childrenET
      * @param shrimpFractions the value of shrimpFraction
-     * @return the double[][]
+     * @param task
+     * @return the Object[][] containing doubles
      */
     @Override
-    public boolean[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
-        boolean retVal;
-        try {          
-            retVal = (boolean)(childrenET.get(0).eval(shrimpFractions)[0][0]) && (boolean)(childrenET.get(1).eval(shrimpFractions)[0][0]);
+        Object[][] retVal;
+        try {     
+            if (convertObjectArrayToBooleans(childrenET.get(0).eval(shrimpFractions, task)[0])[0]){
+                retVal = childrenET.get(1).eval(shrimpFractions, task);
+            } else {
+                 retVal = childrenET.get(2).eval(shrimpFractions, task);
+            }           
         } catch (Exception e) {
-            retVal = false;
+            retVal = new Object[][]{{}};
         }
 
-        return new boolean[][]{{retVal}};
+        return retVal;
     }
 
     /**
@@ -63,7 +69,7 @@ public class And extends BooleanFunction {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>and</mi>"
+                + "<mi>if</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {
