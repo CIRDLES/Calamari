@@ -72,6 +72,7 @@ public class ShuntingYard {
 //        infixList.add("c");
 //        infixList.add("\"");
         infixList.add("w");
+        infixList.add("+");
         infixList.add("w");
         System.out.println("Shunt " + infixToPostfix(infixList));
 
@@ -303,7 +304,7 @@ public class ShuntingYard {
         public static TokenTypes getType(String token) {
             TokenTypes retVal = VARIABLE;
 
-            if ("+-".contains(token)) {
+            if ("|+|-|==|<|<=|>|>=|<>|".contains("|" + token + "|")) {
                 retVal = OPERATOR_A;
             } else if ("*/".contains(token)) {
                 retVal = OPERATOR_M;
@@ -315,7 +316,7 @@ public class ShuntingYard {
                 retVal = RIGHT_PAREN;
             } else if (token.equals(",")) {
                 retVal = COMMA;
-            } else if ("-ln-Ln-sqrt-Sqrt-exp-Exp-RobReg-and-if-".contains("-" + token + "-")) {
+            } else if ("|ln|Ln|sqrt|Sqrt|exp|Exp|RobReg|and|if|".contains("|" + token + "|")) {
                 retVal = FUNCTION;
             } else if (token.matches("\\[\"(.*?)\"\\]")) {
                 retVal = NAMED_EXPRESSION;

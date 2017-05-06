@@ -20,6 +20,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
 import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForSummary;
 
 /**
@@ -34,11 +35,19 @@ public class CustomExpression_TestIf {
     public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("TestIf");
 
     static {
-        ExpressionTreeInterface AndExpression = new ExpressionTree("And");
-        ((ExpressionTreeBuilderInterface)AndExpression).addChild(0, new ConstantNode("true", true));
-        ((ExpressionTreeBuilderInterface)AndExpression).addChild(new ConstantNode("true", false));
-        ((ExpressionTreeBuilderInterface)AndExpression).setOperation(Function.and());
         
+        ExpressionTreeInterface LTExpression = new ExpressionTree("LT");
+        ((ExpressionTreeBuilderInterface) LTExpression)
+                .addChild(0, new VariableNodeForSummary(CustomExpression_Expo.EXPRESSION.getName()));
+        ((ExpressionTreeBuilderInterface) LTExpression).addChild(new ConstantNode("2.5", 1.5));
+        ((ExpressionTreeBuilderInterface) LTExpression).setOperation(Operation.lessThan());
+        
+        
+        ExpressionTreeInterface AndExpression = new ExpressionTree("And");
+        ((ExpressionTreeBuilderInterface) AndExpression).addChild(0, LTExpression);
+        ((ExpressionTreeBuilderInterface) AndExpression).addChild(new ConstantNode("true", true));
+        ((ExpressionTreeBuilderInterface) AndExpression).setOperation(Function.and());
+
         ((ExpressionTreeBuilderInterface) EXPRESSION)
                 .addChild(0, AndExpression);
         ((ExpressionTreeBuilderInterface) EXPRESSION)

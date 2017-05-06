@@ -61,6 +61,7 @@ expr:   FUNCTION '(' exprList? ')'    // func call like f(), f(x), f(1,2)
     |   expr ('+'|'-') expr
     |   expr ('^') expr
     |   expr '==' expr          // equality comparison (lowest priority op)
+    |   expr '<' expr          // less than comparison (lowest priority op)
     |   ARRAY_CALL
     |   NAMED_EXPRESSION
     |   ID                      // variable reference

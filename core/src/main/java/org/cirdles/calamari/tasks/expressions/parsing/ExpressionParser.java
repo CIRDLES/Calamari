@@ -90,6 +90,8 @@ public class ExpressionParser {
         OPERATIONS_MAP.put("/", "divide");
         OPERATIONS_MAP.put("*", "multiply");
         OPERATIONS_MAP.put("^", "pow");
+        OPERATIONS_MAP.put("==", "equal");
+        OPERATIONS_MAP.put("<", "lessThan");
     }
 
     public final static Map<String, String> FUNCTIONS_MAP = new HashMap<>();

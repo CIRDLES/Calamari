@@ -45,7 +45,7 @@ public abstract class Operation
         this.rowCount = 1;
         this.colCount = 1;
     }
-    
+
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new OperationXMLConverter());
@@ -79,6 +79,22 @@ public abstract class Operation
      */
     public static OperationOrFunctionInterface pExp() {
         return new Pexp();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static OperationOrFunctionInterface equal() {
+        return new Equal();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static OperationOrFunctionInterface lessThan() {
+        return new LessThan();
     }
 
     /**
