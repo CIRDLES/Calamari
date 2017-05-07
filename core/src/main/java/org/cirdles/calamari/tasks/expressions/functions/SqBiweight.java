@@ -17,7 +17,10 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToDoubles;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
@@ -27,8 +30,8 @@ public class SqBiweight extends Function {
 
     /**
      * Provides the functionality of Squid's sqBiweight and biWt by calculating
-     * TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
-     * the labels for each cell of the values array produced by eval2Array.
+ TukeysBiweight and returning mean, sigma, and 95% confidence and encoding
+ the labels for each cell of the values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/squid2.5Basic/Resistant.bas
@@ -51,20 +54,21 @@ public class SqBiweight extends Function {
      *
      * @param childrenET list containing child 0 and child 1
      * @param shrimpFractions a list of shrimpFractions
+     * @param task
      * @return the double[1][3] array of mean, sigma, 95% confidence
      */
     @Override
-    public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
-            double[] variableValues = transposeColumnVector(childrenET.get(0).eval2Array(shrimpFractions), 0);
-            double[] tuning = childrenET.get(1).eval2Array(shrimpFractions)[0];
+            double[] variableValues = transposeColumnVector(childrenET.get(0).eval(shrimpFractions, task), 0);
+            double[] tuning = convertObjectArrayToDoubles(childrenET.get(1).eval(shrimpFractions, task)[0]);
             double[] tukeysBiweight = org.cirdles.ludwig.squid25.SquidMathUtils.tukeysBiweight(variableValues, tuning[0]);
-            retVal = new double[][]{tukeysBiweight};
+            retVal = new Object[][]{convertArrayToObjects(tukeysBiweight)};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0}};
         }
 
         return retVal;

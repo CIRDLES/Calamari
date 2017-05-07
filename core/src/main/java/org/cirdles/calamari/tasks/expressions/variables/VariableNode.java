@@ -20,8 +20,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
@@ -30,7 +32,7 @@ import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
 public class VariableNode implements ExpressionTreeInterface, XMLSerializerInterface {
 
     private String name;
-    private String lookupMethodNameForShrimpFraction;
+    private static String lookupMethodNameForShrimpFraction = "getTaskExpressionsEvaluationsPerSpotByField";
     private ExpressionTreeInterface parentET;
 
     public VariableNode() {
@@ -38,12 +40,7 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
     }
 
     public VariableNode(String name) {
-        this(name, null);
-    }
-
-    public VariableNode(String name, String methodNameForShrimpFraction) {
         this.name = name;
-        this.lookupMethodNameForShrimpFraction = methodNameForShrimpFraction;
     }
 
     @Override
@@ -54,30 +51,30 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
 
     /**
      * Returns an array of values from a column (name) of spots
-     * (shrimpFractions) by using the specified lookup Method such as 
-     * getTaskExpressionsEvaluationsPerSpotByField that takes
-     * a field name as argument = name of variable.
+     * (shrimpFractions) by using the specified lookup Method
+     * getTaskExpressionsEvaluationsPerSpotByField that takes an expression's
+     * name as argument = name of variable.
      *
      * @param shrimpFractions
+     * @param task
      * @return
      */
     @Override
-    public double[][] eval2Array(List<ShrimpFractionExpressionInterface> shrimpFractions) {
-        double [][] retVal = new double[shrimpFractions.size()][];
+    public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
+        Object[][] retVal = new Object[shrimpFractions.size()][];
 
-        if (lookupMethodNameForShrimpFraction != null) {
-            try {
-                Method method = ShrimpFractionExpressionInterface.class.getMethod(//
-                        lookupMethodNameForShrimpFraction,
-                        new Class[]{String.class});
-                for (int i = 0; i < shrimpFractions.size(); i ++){
-                    retVal[i] = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0];
-                }
-                
-            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException methodException) {
+        try {
+            Method method = ShrimpFractionExpressionInterface.class.getMethod(//
+                    lookupMethodNameForShrimpFraction,
+                    new Class[]{String.class});
+            for (int i = 0; i < shrimpFractions.size(); i++) {
+                double[] values = ((double[][]) method.invoke(shrimpFractions.get(i), new Object[]{name}))[0];
+                retVal[i] = convertArrayToObjects(values);
             }
+
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException methodException) {
         }
-   
+
         return retVal;
     }
 

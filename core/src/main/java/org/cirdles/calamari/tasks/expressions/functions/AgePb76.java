@@ -17,7 +17,9 @@ package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
+import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToDoubles;
 
 /**
  *
@@ -27,8 +29,8 @@ public class AgePb76 extends Function {
 
     /**
      * Provides the functionality of Squid's agePb76 by calling pbPbAge and
-     * returning "Age" and "AgeErr" and encoding the labels for each cell of the
-     * values array produced by eval2Array.
+ returning "Age" and "AgeErr" and encoding the labels for each cell of the
+ values array produced by eval.
      *
      * @see
      * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
@@ -46,23 +48,25 @@ public class AgePb76 extends Function {
 
     /**
      * Requires that child 0 is a VariableNode that evaluates to a double array
-     * with one column and a row for each member of shrimpFractions.
+     * with one column representing the 207/206 IsotopicRatio and a row for each
+     * member of shrimpFractions.
      *
-     * @param childrenET list containing child 0 through 3
+     * @param childrenET list containing child 0
      * @param shrimpFractions a list of shrimpFractions
+     * @param task
      * @return the double[1][2] array of age, ageErr
      */
     @Override
-    public double[][] eval2Array(
-            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions) {
+    public Object[][] eval(
+            List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
-        double[][] retVal;
+        Object[][] retVal;
         try {
-            double[] pb207_206RatioAndUnct = childrenET.get(0).eval2Array(shrimpFractions)[0];
+            double[] pb207_206RatioAndUnct = convertObjectArrayToDoubles(childrenET.get(0).eval(shrimpFractions, task)[0]);
             double[] agePb76 = org.cirdles.ludwig.isoplot3.UPb.pbPbAge(pb207_206RatioAndUnct[0], pb207_206RatioAndUnct[1]);
-            retVal = new double[][]{{agePb76[0], agePb76[1]}};
+            retVal = new Object[][]{{agePb76[0], agePb76[1]}};
         } catch (ArithmeticException e) {
-            retVal = new double[][]{{0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0}};
         }
 
         return retVal;

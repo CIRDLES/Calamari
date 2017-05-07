@@ -21,6 +21,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForIsotopicRatios;
 
 /**
  *
@@ -35,8 +36,7 @@ public class CustomExpression_RawPb76Age {
 
     static {
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(RawRatioNamesSHRIMP.r207_206w.getName(),
-                        "getIsotopicRatioValuesByStringName"));
+                .addChild(0, new VariableNodeForIsotopicRatios(RawRatioNamesSHRIMP.r207_206w.getName()));
         ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.agePb76());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);

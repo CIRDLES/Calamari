@@ -13,47 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.cirdles.calamari.tasks.expressions.operations;
+package org.cirdles.calamari.tasks.expressions.functions;
 
 import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToBooleans;
 
 /**
  *
  * @author James F. Bowring
  */
-public class Pow extends Operation {
+public class If extends Function {
 
-    public Pow() {
-        name = "pow";
-        argumentCount = 2;
+    public If() {
+        name = "if";
+        argumentCount = 3;
         precedence = 4;
         rowCount = 1;
         colCount = 1;
-
     }
 
     /**
-     *
+     * If expects child 1 as boolean and child 1 and 2 as double
      * @param childrenET the value of childrenET
      * @param shrimpFractions the value of shrimpFraction
      * @param task
-     * @return the double[][]
+     * @return the Object[][] containing doubles
      */
     @Override
     public Object[][] eval(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
-        double retVal;
-        try {
-            retVal = Math.pow((double)childrenET.get(0).eval(shrimpFractions, task)[0][0],
-                    (double)childrenET.get(1).eval(shrimpFractions, task)[0][0]);
+        Object[][] retVal;
+        try {     
+            if (convertObjectArrayToBooleans(childrenET.get(0).eval(shrimpFractions, task)[0])[0]){
+                retVal = childrenET.get(1).eval(shrimpFractions, task);
+            } else {
+                 retVal = childrenET.get(2).eval(shrimpFractions, task);
+            }           
         } catch (Exception e) {
-            retVal = 0.0;
+            retVal = new Object[][]{{}};
         }
-        return new Object[][]{{retVal}};
+
+        return retVal;
     }
 
     /**
@@ -64,16 +68,15 @@ public class Pow extends Operation {
     @Override
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
-                = "<mrow>\n"
-                + "<msup>\n"
-                + "<mfenced>\n"
-                + "<mrow>\n"
-                + toStringAnotherExpression(childrenET.get(0))
-                + "</mrow>\n"
-                + "</mfenced>\n"
-                + childrenET.get(1).toStringMathML()
-                + "</msup>\n"
-                + "</mrow>\n";
+                = "<mrow>"
+                + "<mi>if</mi>"
+                + "<mfenced>";
+
+        for (int i = 0; i < childrenET.size(); i++) {
+            retVal += toStringAnotherExpression(childrenET.get(i)) + "&nbsp;\n";
+        }
+
+        retVal += "</mfenced></mrow>\n";
 
         return retVal;
     }

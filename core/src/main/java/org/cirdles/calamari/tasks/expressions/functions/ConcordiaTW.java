@@ -19,44 +19,42 @@ import java.util.List;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToDoubles;
 import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertArrayToObjects;
 
 /**
  *
  * @author James F. Bowring
  */
-public class SqWtdAv extends Function {
+public class ConcordiaTW extends Function {
 
     /**
-     * Provides the basic functionality of Squid's sqWtdAv by calculating
- WeightedAverage and returning intMean, intSigmaMean, MSWD, probability,
- intErr68, intMeanErr95 and encoding the labels for each cell of the
+     * Provides the functionality of Squid's agePb76 by calling pbPbAge and
+ returning "Age" and "AgeErr" and encoding the labels for each cell of the
  values array produced by eval.
      *
      * @see
-     * https://github.com/CIRDLES/LudwigLibrary/blob/master/vbaCode/squid2.5Basic/MathUtils.bas
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/Pub.bas
      * @see
-     * https://github.com/CIRDLES/LudwigLibrary/blob/master/vbaCode/isoplot3Basic/Means.bas
+     * https://raw.githubusercontent.com/CIRDLES/LudwigLibrary/master/vbaCode/isoplot3Basic/UPb.bas
      */
-    public SqWtdAv() {
-        name = "sqWtdAv";
-        argumentCount = 1;
+    public ConcordiaTW() {
+        name = "concordiaTW";
+        argumentCount = 2;
         precedence = 4;
         rowCount = 1;
-        colCount = 6;
-        labelsForValues = new String[][]{{"intMean", "intSigmaMean", "MSWD", "probability", "intErr68", "intMeanErr95"}};
+        colCount = 4;
+        labelsForValues = new String[][]{{"Raw Conc Age", "1-sigma abs", "MSWD Conc", "Prob Conc"}};
     }
 
     /**
-     * Requires that child 0 is a VariableNode that evaluates to a double array
-     * with one column and a row for each member of shrimpFractions and that
-     * child 1 is a ConstantNode that evaluates to an integer.
+     * Requires that child 0 and 1 each is VariableNode that evaluates to a
+     * double array with one column representing an IsotopicRatio and a row for
+     * each member of shrimpFractions.
      *
-     * @param childrenET list containing child 0 and child 1
+     * @param childrenET list containing child 0 and 1
      * @param shrimpFractions a list of shrimpFractions
-     * @param task
-     * @return the double[1][6] array of intMean, intSigmaMean, MSWD,
-     * probability, intErr68, intMeanErr95
+     * @return the double[1][4]{Raw Conc Age, 1-sigma abs, MSWD Conc, Prob Conc}
      */
     @Override
     public Object[][] eval(
@@ -64,13 +62,13 @@ public class SqWtdAv extends Function {
 
         Object[][] retVal;
         try {
-            Object[][] valuesAndUncertainties = childrenET.get(0).eval(shrimpFractions, task);
-            double[] variableValues = transposeColumnVector(valuesAndUncertainties, 0);
-            double[] uncertaintyValues = transposeColumnVector(valuesAndUncertainties, 1);
-            double[] weightedAverage = org.cirdles.ludwig.isoplot3.Means.weightedAverage(variableValues, uncertaintyValues);
-            retVal = new Object[][]{convertArrayToObjects(weightedAverage)};
+            double[] ratioXAndUnct = convertObjectArrayToDoubles(childrenET.get(0).eval(shrimpFractions, task)[0]);
+            double[] ratioYAndUnct = convertObjectArrayToDoubles(childrenET.get(1).eval(shrimpFractions, task)[0]);
+            double[] concordiaTW
+                    = org.cirdles.ludwig.isoplot3.Pub.concordiaTW(1.0 / ratioXAndUnct[0], ratioXAndUnct[1], ratioYAndUnct[0], ratioYAndUnct[1]);
+            retVal = new Object[][]{convertArrayToObjects( concordiaTW)};
         } catch (ArithmeticException e) {
-            retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}};
+            retVal = new Object[][]{{0.0, 0.0, 0.0, 0.0}};
         }
 
         return retVal;
@@ -85,7 +83,7 @@ public class SqWtdAv extends Function {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>"
-                + "<mi>" + name + "</mi>"
+                + "<mi>AgePb76</mi>"
                 + "<mfenced>";
 
         for (int i = 0; i < childrenET.size(); i++) {

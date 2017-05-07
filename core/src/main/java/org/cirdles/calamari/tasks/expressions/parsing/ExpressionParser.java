@@ -90,6 +90,8 @@ public class ExpressionParser {
         OPERATIONS_MAP.put("/", "divide");
         OPERATIONS_MAP.put("*", "multiply");
         OPERATIONS_MAP.put("^", "pow");
+        OPERATIONS_MAP.put("==", "equal");
+        OPERATIONS_MAP.put("<", "lessThan");
     }
 
     public final static Map<String, String> FUNCTIONS_MAP = new HashMap<>();
@@ -103,6 +105,8 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("exp", "exp");
         FUNCTIONS_MAP.put("Exp", "exp");
         FUNCTIONS_MAP.put("RobReg", "robReg");
+        FUNCTIONS_MAP.put("and", "and");
+        FUNCTIONS_MAP.put("if", "sqif");
     }
 
     public final static Map<String, ExpressionTreeInterface> NAMED_EXPRESSIONS_MAP = new HashMap<>();

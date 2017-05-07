@@ -20,27 +20,42 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.constants.ConstantNode;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
-import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
+import org.cirdles.calamari.tasks.expressions.operations.Operation;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForSummary;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_Expo {
+public class CustomExpression_TestIf {
 
     /**
-     * Squid Excel format is robreg(["LnUOU"],["LnPbRU"],false,true)
+     * Squid Excel format is if(and(Expoc9511>=1.5,Expoc9511<=2.5),Expoc9511,2)
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Expo");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("TestIf");
 
     static {
+        
+        ExpressionTreeInterface LTExpression = new ExpressionTree("LT");
+        ((ExpressionTreeBuilderInterface) LTExpression)
+                .addChild(0, new VariableNodeForSummary(CustomExpression_Expo.EXPRESSION.getName()));
+        ((ExpressionTreeBuilderInterface) LTExpression).addChild(new ConstantNode("2.5", 1.5));
+        ((ExpressionTreeBuilderInterface) LTExpression).setOperation(Operation.lessThan());
+        
+        
+        ExpressionTreeInterface AndExpression = new ExpressionTree("And");
+        ((ExpressionTreeBuilderInterface) AndExpression).addChild(0, LTExpression);
+        ((ExpressionTreeBuilderInterface) AndExpression).addChild(new ConstantNode("true", true));
+        ((ExpressionTreeBuilderInterface) AndExpression).setOperation(Function.and());
+
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(CustomExpression_LnUO_U.EXPRESSION.getName()));
+                .addChild(0, AndExpression);
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(new VariableNode(CustomExpression_LnPbR_U.EXPRESSION.getName()));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).addChild(new ConstantNode("false", 0));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.robReg());
+                .addChild(new VariableNodeForSummary(CustomExpression_Expo.EXPRESSION.getName()));
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(new ConstantNode("99", 99));
+
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqif());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);

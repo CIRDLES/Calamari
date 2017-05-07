@@ -24,15 +24,15 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  *
  * @author James F. Bowring
  */
-public class Pow extends Operation {
+public class LessThan extends Operation {
 
-    public Pow() {
-        name = "pow";
+    public LessThan() {
+        super();
+        name = "lessThan";
         argumentCount = 2;
-        precedence = 4;
+        precedence = 1;
         rowCount = 1;
         colCount = 1;
-
     }
 
     /**
@@ -46,18 +46,19 @@ public class Pow extends Operation {
     public Object[][] eval(
             List<ExpressionTreeInterface> childrenET, List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task) {
 
-        double retVal;
+        boolean retVal;
         try {
-            retVal = Math.pow((double)childrenET.get(0).eval(shrimpFractions, task)[0][0],
-                    (double)childrenET.get(1).eval(shrimpFractions, task)[0][0]);
+            retVal = (double)childrenET.get(0).eval(shrimpFractions, task)[0][0]
+                    < (double)childrenET.get(1).eval(shrimpFractions, task)[0][0];
         } catch (Exception e) {
-            retVal = 0.0;
+            retVal = false;
         }
         return new Object[][]{{retVal}};
     }
 
     /**
      *
+     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */
@@ -65,14 +66,9 @@ public class Pow extends Operation {
     public String toStringMathML(List<ExpressionTreeInterface> childrenET) {
         String retVal
                 = "<mrow>\n"
-                + "<msup>\n"
-                + "<mfenced>\n"
-                + "<mrow>\n"
                 + toStringAnotherExpression(childrenET.get(0))
-                + "</mrow>\n"
-                + "</mfenced>\n"
-                + childrenET.get(1).toStringMathML()
-                + "</msup>\n"
+                + "<mo>&#60;</mo>\n"
+                + toStringAnotherExpression(childrenET.get(1))
                 + "</mrow>\n";
 
         return retVal;

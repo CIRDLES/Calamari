@@ -47,7 +47,7 @@ import org.cirdles.calamari.tasks.expressions.operations.OperationXMLConverter;
 import org.cirdles.calamari.tasks.expressions.operations.Pow;
 import org.cirdles.calamari.tasks.expressions.operations.Subtract;
 import org.cirdles.calamari.utilities.xmlSerialization.XMLSerializerInterface;
-import org.cirdles.ludwig.squid25.Utilities;
+import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.convertObjectArrayToDoubles;
 
 /**
  *
@@ -57,7 +57,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
 
     protected String name;
     protected List<ExpressionTreeInterface> taskExpressionsOrdered;
-    protected Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet;
+    protected Map<String, SpotSummaryDetails> taskExpressionsEvaluationsPerSpotSet;
 
     public Task() {
         this("NoName");
@@ -133,10 +133,11 @@ public class Task implements TaskInterface, XMLSerializerInterface {
             if (!((ExpressionTree) expression).isSquidSwitchSAUnknownCalculation()) {
                 spotsForExpression = referenceMaterialSpots;
             }
+            
             // determine type of expression
             if (((ExpressionTree) expression).isSquidSwitchSCSummaryCalculation()) {
-                double[][] value = expression.eval2Array(spotsForExpression);
-                taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), value);
+                double[][] value = convertObjectArrayToDoubles(expression.eval(spotsForExpression, this));
+                taskExpressionsEvaluationsPerSpotSet.put(expression.getName(), new SpotSummaryDetails(value, spotsForExpression));
             } else {
                 // perform expression on each spot
                 spotsForExpression.forEach((spot) -> {
@@ -153,7 +154,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                     } else {
                         List<ShrimpFractionExpressionInterface> singleSpot = new ArrayList<>();
                         singleSpot.add(spot);
-                        double[][] value = expression.eval2Array(singleSpot);
+                        double[][] value = convertObjectArrayToDoubles(expression.eval(singleSpot, this));
                         spot.getTaskExpressionsEvaluationsPerSpot().put(expression.getName(), value);
                     }
                 });
@@ -257,8 +258,8 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                 // The next step is to evaluate the equation 'FormulaEval', 
                 // documented separately, and approximate the uncertainties:
                 shrimpFraction.setPkInterpScanArray(pkInterp[scanNum]);
-                
-                double eqValTmp = expression.eval2Array(singleSpot)[0][0];
+
+                double eqValTmp = convertObjectArrayToDoubles(expression.eval(singleSpot, this))[0][0];
 
                 double eqFerr;
 
@@ -278,7 +279,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
                         perturbed[unDupPkOrd] *= 1.0001;
                         shrimpFraction.setPkInterpScanArray(perturbed);
 
-                        double pertVal = expression.eval2Array(singleSpot)[0][0];
+                        double pertVal = convertObjectArrayToDoubles(expression.eval(singleSpot, this))[0][0];
 
                         double fDelt = (pertVal - eqValTmp) / eqValTmp; // improvement suggested by Bodorkos
                         double tA = pkInterpFerr[scanNum][unDupPkOrd];
@@ -413,7 +414,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
     /**
      * @return the taskExpressionsEvaluationsPerSpotSet
      */
-    public Map<String, double[][]> getTaskExpressionsEvaluationsPerSpotSet() {
+    public Map<String, SpotSummaryDetails> getTaskExpressionsEvaluationsPerSpotSet() {
         return taskExpressionsEvaluationsPerSpotSet;
     }
 
@@ -421,7 +422,7 @@ public class Task implements TaskInterface, XMLSerializerInterface {
      * @param taskExpressionsEvaluationsPerSpotSet the
      * taskExpressionsEvaluationsPerSpotSet to set
      */
-    public void setTaskExpressionsEvaluationsPerSpotSet(Map<String, double[][]> taskExpressionsEvaluationsPerSpotSet) {
+    public void setTaskExpressionsEvaluationsPerSpotSet(Map<String, SpotSummaryDetails> taskExpressionsEvaluationsPerSpotSet) {
         this.taskExpressionsEvaluationsPerSpotSet = taskExpressionsEvaluationsPerSpotSet;
     }
 }

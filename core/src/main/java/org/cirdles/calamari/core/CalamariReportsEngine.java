@@ -85,7 +85,11 @@ public class CalamariReportsEngine {
                     = "_" + (firstShrimpFraction.isUseSBM() ? "SBM" : "NOSBM")
                     + "_" + (firstShrimpFraction.isUserLinFits() ? "LINREG" : "SPOTAV");
 
-            reportNamePrefix = nameOfPrawnXMLFile.substring(0, DEFAULT_PRAWNFILE_NAME.length()) + "_" + reportParameterValues + "_";
+            if (nameOfPrawnXMLFile.length() >= DEFAULT_PRAWNFILE_NAME.length()) {
+                reportNamePrefix = nameOfPrawnXMLFile.substring(0, DEFAULT_PRAWNFILE_NAME.length()) + "_" + reportParameterValues + "_";
+            } else {
+                reportNamePrefix = nameOfPrawnXMLFile + "_" + reportParameterValues + "_";
+            }
 
             folderToWriteCalamariReportsPath
                     = folderToWriteCalamariReports.getCanonicalPath()
@@ -369,8 +373,8 @@ public class CalamariReportsEngine {
             for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
                 if (nDodNum < taskExpressionEval.getRatEqTime().length) {
                     dataLine.append(", ").append(String.valueOf(taskExpressionEval.getRatEqTime()[nDodNum]));
-                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum],15));
-                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqErr()[nDodNum],15));
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqVal()[nDodNum], 15));
+                    dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatEqErr()[nDodNum], 15));
                 } else {
                     dataLine.append(", ").append("n/a");
                     dataLine.append(", ").append("n/a");
@@ -413,7 +417,7 @@ public class CalamariReportsEngine {
         // Handle any task expressions that we calculated per scan with a summary value per spot = Squid Switch "NU"
         List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsEvaluated = shrimpFraction.getTaskExpressionsForScansEvaluated();
         for (TaskExpressionEvaluatedPerSpotPerScanModelInterface taskExpressionEval : taskExpressionsEvaluated) {
-            dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatioVal(),12));
+            dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatioVal(), 12));
             dataLine.append(", ").append(Utilities.roundedToSize(taskExpressionEval.getRatioFractErr() * 100.0, 12));
         }
 

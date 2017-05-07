@@ -16,24 +16,38 @@
 package org.cirdles.calamari.tasks;
 
 import java.util.List;
-import java.util.Map;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 
 /**
  *
  * @author James F. Bowring
  */
-public interface TaskInterface {
+public class SpotSummaryDetails {
+    private double[][] values;
+    private List<ShrimpFractionExpressionInterface> selectedSpots;
+
+    private SpotSummaryDetails() {
+    }
+
+    public SpotSummaryDetails(double[][] values, List<ShrimpFractionExpressionInterface> selectedSpots) {
+        this.values = values;
+        this.selectedSpots = selectedSpots;
+    }
 
     /**
-     *
-     * @param shrimpFractions
+     * @return the values
      */
-    public void evaluateTaskExpressions(List<ShrimpFractionExpressionInterface> shrimpFractions);
+    public double[][] getValues() {
+        return values;
+    }
+
+    /**
+     * @return the selectedSpots
+     */
+    public List<ShrimpFractionExpressionInterface> getSelectedSpots() {
+        return selectedSpots;
+    }
     
-    /**
-     * @return the taskExpressionsEvaluationsPerSpotSet
-     */
-    public Map<String, SpotSummaryDetails> getTaskExpressionsEvaluationsPerSpotSet();
-
+    
+    
 }

@@ -15,30 +15,34 @@
  */
 package org.cirdles.calamari.tasks.expressions.customExpressions;
 
+import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTree;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeBuilderInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.functions.Function;
 import org.cirdles.calamari.tasks.expressions.variables.VariableNode;
+import org.cirdles.calamari.tasks.expressions.variables.VariableNodeForIsotopicRatios;
 
 /**
  *
  * @author James F. Bowring
  */
-public class CustomExpression_Mean7_6 {
+public class CustomExpression_RawConcAge {
 
     /**
-     * Squid Excel format is sqWtdAv(["Raw7/6Age(Ma)"],["2sig(Ma)"],false,false,false), we use only first argument
+     * Squid Excel format is concordiaTW(["238/206"],[±"238/206"],["207/206"],[±"207/206"],,false,true,1)
      */
-    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("Mean7/6");
+    public final static ExpressionTreeInterface EXPRESSION = new ExpressionTree("RawConcAge");
 
     static {
         ((ExpressionTreeBuilderInterface) EXPRESSION)
-                .addChild(0, new VariableNode(CustomExpression_RawPb76Age.EXPRESSION.getName()));
-        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.sqWtdAvg());
+                .addChild(0, new VariableNodeForIsotopicRatios(RawRatioNamesSHRIMP.r206_238w.getName()));
+        ((ExpressionTreeBuilderInterface) EXPRESSION)
+                .addChild(new VariableNodeForIsotopicRatios(RawRatioNamesSHRIMP.r207_206w.getName()));
+        ((ExpressionTreeBuilderInterface) EXPRESSION).setOperation(Function.concordiaTW());
 
         ((ExpressionTree) EXPRESSION).setRootExpressionTree(true);
-        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(true);
+        ((ExpressionTree) EXPRESSION).setSquidSwitchSCSummaryCalculation(false);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSTReferenceMaterialCalculation(true);
         ((ExpressionTree) EXPRESSION).setSquidSwitchSAUnknownCalculation(false);
     }

@@ -74,6 +74,18 @@ public abstract class Function
         return new SqWtdAv();
     }
 
+    public static OperationOrFunctionInterface concordiaTW() {
+        return new ConcordiaTW();
+    }
+
+    public static OperationOrFunctionInterface and() {
+        return new And();
+    }
+
+    public static OperationOrFunctionInterface sqif() {
+        return new If();
+    }
+
     /**
      *
      * @param operationName
@@ -95,10 +107,10 @@ public abstract class Function
         return retVal;
     }
 
-    protected double[] transposeColumnVector(double[][] columnVector, int colIndex) {
+    protected double[] transposeColumnVector(Object[][] columnVector, int colIndex) {
         double[] rowVector = new double[columnVector.length];
         for (int i = 0; i < rowVector.length; i++) {
-            rowVector[i] = columnVector[i][colIndex];
+            rowVector[i] = (double) columnVector[i][colIndex];
         }
 
         return rowVector;
