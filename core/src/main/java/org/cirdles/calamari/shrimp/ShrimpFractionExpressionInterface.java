@@ -104,4 +104,44 @@ public interface ShrimpFractionExpressionInterface {
      */
     public double[][] getIsotopicRatioValuesByStringName(String name);
 
+    // May 2017 for temp backward comp with ET_Redux
+    /**
+     * @return the nameOfMount
+     */
+    public String getNameOfMount();
+
+    /**
+     * @return the dateTimeMilliseconds
+     */
+    public long getDateTimeMilliseconds();
+
+    /**
+     * @return the totalCounts
+     */
+    public double[][] getTotalCounts();
+
+    /**
+     * @return the totalCountsOneSigmaAbs
+     */
+    public double[][] getTotalCountsOneSigmaAbs();
+
+    /**
+     * @return the namesOfSpecies
+     */
+    public String[] getNamesOfSpecies();
+
+    /**
+     * @return the netPkCps
+     */
+    public double[][] getNetPkCps();
+
+    /**
+     * @return the pkFerr
+     */
+    public double[][] getPkFerr();
+
+    /**
+     * @return the isotopicRatios
+     */
+    public Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> getIsotopicRatios();
 }

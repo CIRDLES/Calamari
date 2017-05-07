@@ -148,6 +148,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the nameOfMount
      */
+    @Override
     public String getNameOfMount() {
         return nameOfMount;
     }
@@ -162,6 +163,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the dateTimeMilliseconds
      */
+    @Override
     public long getDateTimeMilliseconds() {
         return dateTimeMilliseconds;
     }
@@ -218,6 +220,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the namesOfSpecies
      */
+    @Override
     public String[] getNamesOfSpecies() {
         return namesOfSpecies.clone();
     }
@@ -246,6 +249,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the isotopicRatios
      */
+    @Override
     public Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> getIsotopicRatios() {
         return isotopicRatios;
     }
@@ -300,6 +304,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the totalCounts
      */
+    @Override
     public double[][] getTotalCounts() {
         return totalCounts.clone();
     }
@@ -314,6 +319,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the totalCountsOneSigmaAbs
      */
+    @Override
     public double[][] getTotalCountsOneSigmaAbs() {
         return totalCountsOneSigmaAbs.clone();
     }
@@ -387,6 +393,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the netPkCps
      */
+    @Override
     public double[][] getNetPkCps() {
         return netPkCps.clone();
     }
@@ -401,6 +408,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the pkFerr
      */
+    @Override
     public double[][] getPkFerr() {
         return pkFerr.clone();
     }
@@ -415,6 +423,7 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     /**
      * @return the referenceMaterial
      */
+    @Override
     public boolean isReferenceMaterial() {
         return referenceMaterial;
     }
