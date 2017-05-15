@@ -15,10 +15,20 @@
  */
 package org.cirdles.calamari.constants;
 
+/**
+ *
+ * @author bowring
+ */
 public final class CalamariConstants {
 
+    /**
+     *
+     */
     public static final int HARD_WIRED_INDEX_OF_BACKGROUND = 2;
 
+    /**
+     *
+     */
     public static final String XML_HEADER_FOR_PRAWN_FILES
             = "<?xml version=\"1.0\"?>\n"
             + "<!-- SHRIMP SW PRAWN Data File -->\n"
@@ -28,9 +38,15 @@ public final class CalamariConstants {
             + "            xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
             + "                                https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd\">";
     
+    /**
+     *
+     */
     public static final String URL_STRING_FOR_PRAWN_XML_SCHEMA 
             = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd";
     
+    /**
+     *
+     */
     public static final String DEFAULT_PRAWNFILE_NAME = "NO_NAME_";
 
 }

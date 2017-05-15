@@ -55,20 +55,42 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class Task implements TaskInterface, XMLSerializerInterface {
 
+    /**
+     *
+     */
     protected String name;
+
+    /**
+     *
+     */
     protected List<ExpressionTreeInterface> taskExpressionsOrdered;
+
+    /**
+     *
+     */
     protected Map<String, SpotSummaryDetails> taskExpressionsEvaluationsPerSpotSet;
 
+    /**
+     *
+     */
     public Task() {
         this("NoName");
     }
 
+    /**
+     *
+     * @param name
+     */
     public Task(String name) {
         this.name = name;
         this.taskExpressionsOrdered = new ArrayList<>();
         this.taskExpressionsEvaluationsPerSpotSet = new TreeMap<>();
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());

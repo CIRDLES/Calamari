@@ -52,6 +52,7 @@ public class RobReg extends Function {
      *
      * @param childrenET list containing child 0 through 3
      * @param shrimpFractions a list of shrimpFractions
+     * @param task
      * @return the double[1][3] array of slope, slopeErr, y-Intercept, y-IntErr
      */
     @Override

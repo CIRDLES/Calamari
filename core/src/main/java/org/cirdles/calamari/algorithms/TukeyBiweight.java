@@ -31,6 +31,13 @@ import org.cirdles.calamari.shrimp.ValueModel;
  */
 public final class TukeyBiweight {
 
+    /**
+     *
+     * @param name
+     * @param tuningConstant
+     * @param values
+     * @return
+     */
     public static ValueModel calculateTukeyBiweightMean(String name, double tuningConstant, double[] values) {
         // guarantee termination
         BigDecimal epsilon = BigDecimal.ONE.movePointLeft(10);

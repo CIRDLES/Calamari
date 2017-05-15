@@ -59,32 +59,87 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum RunTableEntryParameterNames {
 
+    /**
+     *
+     */
     @XmlEnumValue("label")
     LABEL("label"),
+
+    /**
+     *
+     */
     @XmlEnumValue("amu")
     AMU("amu"),
+
+    /**
+     *
+     */
     @XmlEnumValue("trim_amu")
     TRIM_AMU("trim_amu"),
+
+    /**
+     *
+     */
     @XmlEnumValue("autocenter_offset_amu")
     AUTOCENTER_OFFSET_AMU("autocenter_offset_amu"),
+
+    /**
+     *
+     */
     @XmlEnumValue("count_time_sec")
     COUNT_TIME_SEC("count_time_sec"),
+
+    /**
+     *
+     */
     @XmlEnumValue("delay_sec")
     DELAY_SEC("delay_sec"),
+
+    /**
+     *
+     */
     @XmlEnumValue("collector_focus")
     COLLECTOR_FOCUS("collector_focus"),
+
+    /**
+     *
+     */
     @XmlEnumValue("centering_time_sec")
     CENTERING_TIME_SEC("centering_time_sec"),
+
+    /**
+     *
+     */
     @XmlEnumValue("centering_frequency")
     CENTERING_FREQUENCY("centering_frequency"),
+
+    /**
+     *
+     */
     @XmlEnumValue("detector_selection")
     DETECTOR_SELECTION("detector_selection"),
+
+    /**
+     *
+     */
     @XmlEnumValue("mc_lm_pos")
     MC_LM_POS("mc_lm_pos"),
+
+    /**
+     *
+     */
     @XmlEnumValue("mc_hm_pos")
     MC_HM_POS("mc_hm_pos"),
+
+    /**
+     *
+     */
     @XmlEnumValue("sc_reference")
     SC_REFERENCE("sc_reference"),
+
+    /**
+     *
+     */
     @XmlEnumValue("sc_detector")
     SC_DETECTOR("sc_detector");
     private final String value;
@@ -93,10 +148,19 @@ public enum RunTableEntryParameterNames {
         value = v;
     }
 
+    /**
+     *
+     * @return
+     */
     public String value() {
         return value;
     }
 
+    /**
+     *
+     * @param v
+     * @return
+     */
     public static RunTableEntryParameterNames fromValue(String v) {
         for (RunTableEntryParameterNames c: RunTableEntryParameterNames.values()) {
             if (c.value.equals(v)) {

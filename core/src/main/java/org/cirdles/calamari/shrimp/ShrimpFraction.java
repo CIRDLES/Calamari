@@ -60,6 +60,9 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     private List<TaskExpressionEvaluatedPerSpotPerScanModelInterface> taskExpressionsForScansEvaluated;
     private Map<String, double[][]> taskExpressionsEvaluationsPerSpot;
 
+    /**
+     *
+     */
     public ShrimpFraction() {
         fractionID = "NONE";
         spotNumber = -1;
@@ -93,6 +96,11 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
 
     }
 
+    /**
+     *
+     * @param fractionID
+     * @param isotopicRatios
+     */
     public ShrimpFraction(String fractionID, Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> isotopicRatios) {
         this();
         this.fractionID = fractionID;

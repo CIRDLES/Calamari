@@ -8,6 +8,11 @@ import static org.junit.Assert.*;
  * Created by Griffin Hiers on 1/30/2017.
  */
 public class PoissonLimitsCountLessThanEqual100Test {
+
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void determineIndexOfValueWithLargestResidual() throws Exception {
         //test with randomly-generated values between 0 and 100

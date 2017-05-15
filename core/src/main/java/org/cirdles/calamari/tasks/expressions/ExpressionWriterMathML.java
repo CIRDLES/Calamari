@@ -27,6 +27,11 @@ import java.nio.file.Files;
  */
 public class ExpressionWriterMathML {
 
+    /**
+     *
+     * @param expression
+     * @return
+     */
     public static StringBuilder toStringBuilderMathML(ExpressionTreeInterface expression) {
         StringBuilder fileContents = new StringBuilder();
 
@@ -70,6 +75,11 @@ public class ExpressionWriterMathML {
 
     }
 
+    /**
+     *
+     * @param expression
+     * @throws IOException
+     */
     public static void writeExpressionToFileHTML(ExpressionTreeInterface expression)
             throws IOException {
         File expFile = new File(expression.getName() + ".html");

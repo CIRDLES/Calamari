@@ -27,6 +27,9 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class Exp extends Function {
 
+    /**
+     *
+     */
     public Exp() {
         name = "exp";
         argumentCount = 1;

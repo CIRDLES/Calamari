@@ -32,15 +32,27 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
     private Object value;
     private ExpressionTreeInterface parentET;
 
+    /**
+     *
+     */
     public ConstantNode() {
         this("", 0.0);
     }
 
+    /**
+     *
+     * @param name
+     * @param value
+     */
     public ConstantNode(String name, Object value) {
         this.name = name;
         this.value = value;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new ConstantNodeXMLConverter());
@@ -57,6 +69,10 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
         return new Object[][]{{value}};
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name;
@@ -83,6 +99,10 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         return "<mn>" + name + "</mn>\n";
@@ -118,11 +138,19 @@ public class ConstantNode implements ExpressionTreeInterface, XMLSerializerInter
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
        return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return 0;

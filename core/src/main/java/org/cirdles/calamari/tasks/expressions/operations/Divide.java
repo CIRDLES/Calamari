@@ -28,6 +28,9 @@ import org.cirdles.calamari.tasks.expressions.isotopes.ShrimpSpeciesNode;
  */
 public class Divide extends Operation {
 
+    /**
+     *
+     */
     public Divide() {
         name = "divide";
         argumentCount = 2;

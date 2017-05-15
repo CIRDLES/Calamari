@@ -74,64 +74,183 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum RunParameterNames {
 
+    /**
+     *
+     */
     @XmlEnumValue("title")
     TITLE("title"),
+
+    /**
+     *
+     */
     @XmlEnumValue("sets")
     SETS("sets"),
+
+    /**
+     *
+     */
     @XmlEnumValue("measurements")
     MEASUREMENTS("measurements"),
+
+    /**
+     *
+     */
     @XmlEnumValue("scans")
     SCANS("scans"),
+
+    /**
+     *
+     */
     @XmlEnumValue("dead_time_ns")
     DEAD_TIME_NS("dead_time_ns"),
+
+    /**
+     *
+     */
     @XmlEnumValue("sbm_zero_cps")
     SBM_ZERO_CPS("sbm_zero_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("autocentering")
     AUTOCENTERING("autocentering"),
+
+    /**
+     *
+     */
     @XmlEnumValue("qt1y_mode")
     QT_1_Y_MODE("qt1y_mode"),
+
+    /**
+     *
+     */
     @XmlEnumValue("deflect_beam_between_peaks")
     DEFLECT_BEAM_BETWEEN_PEAKS("deflect_beam_between_peaks"),
+
+    /**
+     *
+     */
     @XmlEnumValue("autocenter_method")
     AUTOCENTER_METHOD("autocenter_method"),
+
+    /**
+     *
+     */
     @XmlEnumValue("stage_x")
     STAGE_X("stage_x"),
+
+    /**
+     *
+     */
     @XmlEnumValue("stage_y")
     STAGE_Y("stage_y"),
+
+    /**
+     *
+     */
     @XmlEnumValue("stage_z")
     STAGE_Z("stage_z"),
+
+    /**
+     *
+     */
     @XmlEnumValue("stage_map_quad_cal")
     STAGE_MAP_QUAD_CAL("stage_map_quad_cal"),
+
+    /**
+     *
+     */
     @XmlEnumValue("stage_map_cal")
     STAGE_MAP_CAL("stage_map_cal"),
+
+    /**
+     *
+     */
     @XmlEnumValue("detector_gains")
     DETECTOR_GAINS("detector_gains"),
+
+    /**
+     *
+     */
     @XmlEnumValue("detector_zero_cps")
     DETECTOR_ZERO_CPS("detector_zero_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_1_cps")
     EISIE_1_CPS("eisie_1_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_2_cps")
     EISIE_2_CPS("eisie_2_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_3_cps")
     EISIE_3_CPS("eisie_3_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_1_date_time")
     EISIE_1_DATE_TIME("eisie_1_date_time"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_2_date_time")
     EISIE_2_DATE_TIME("eisie_2_date_time"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_3_date_time")
     EISIE_3_DATE_TIME("eisie_3_date_time"),
+
+    /**
+     *
+     */
     @XmlEnumValue("primary_names")
     PRIMARY_NAMES("primary_names"),
+
+    /**
+     *
+     */
     @XmlEnumValue("primary_bits")
     PRIMARY_BITS("primary_bits"),
+
+    /**
+     *
+     */
     @XmlEnumValue("primary_volts")
     PRIMARY_VOLTS("primary_volts"),
+
+    /**
+     *
+     */
     @XmlEnumValue("secondary_names_bits")
     SECONDARY_NAMES_BITS("secondary_names_bits"),
+
+    /**
+     *
+     */
     @XmlEnumValue("secondary_bits")
     SECONDARY_BITS("secondary_bits"),
+
+    /**
+     *
+     */
     @XmlEnumValue("secondary_names_volts")
     SECONDARY_NAMES_VOLTS("secondary_names_volts"),
+
+    /**
+     *
+     */
     @XmlEnumValue("secondary_volts")
     SECONDARY_VOLTS("secondary_volts");
     private final String value;
@@ -140,10 +259,19 @@ public enum RunParameterNames {
         value = v;
     }
 
+    /**
+     *
+     * @return
+     */
     public String value() {
         return value;
     }
 
+    /**
+     *
+     * @param v
+     * @return
+     */
     public static RunParameterNames fromValue(String v) {
         for (RunParameterNames c: RunParameterNames.values()) {
             if (c.value.equals(v)) {

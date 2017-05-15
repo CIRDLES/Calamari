@@ -24,6 +24,9 @@ import org.cirdles.calamari.tasks.expressions.customExpressions.CustomExpression
  */
 public class ILC_Zircon_10Pk_expFloat_Task extends Task {
 
+    /**
+     *
+     */
     public ILC_Zircon_10Pk_expFloat_Task() {
         super("ILC Zircon 10Pk exp=Float");
         taskExpressionsOrdered.add(CustomExpression_Net204cts_sec.EXPRESSION);

@@ -26,6 +26,9 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class Subtract extends Operation {
 
+    /**
+     *
+     */
     public Subtract() {
         name = "subtract";
         argumentCount = 2;

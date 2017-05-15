@@ -23,6 +23,7 @@
 
 package org.cirdles.calamari.prawn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -181,21 +182,47 @@ import javax.xml.bind.annotation.XmlValue;
     "run"
 })
 @XmlRootElement(name = "prawn_file")
-public class PrawnFile {
+public class PrawnFile implements Serializable{
 
+    /**
+     *
+     */
     @XmlElement(name = "software_version", required = true)
     protected String softwareVersion;
+
+    /**
+     *
+     */
     @XmlSchemaType(name = "unsignedByte")
     protected short runs;
+
+    /**
+     *
+     */
     @XmlElement(name = "session_quality", required = true)
     protected String sessionQuality;
+
+    /**
+     *
+     */
     @XmlElement(name = "session_comments", required = true)
     protected String sessionComments;
+
+    /**
+     *
+     */
     @XmlElement(required = true)
     protected String mount;
+
+    /**
+     *
+     */
     @XmlElement(required = true)
     protected List<PrawnFile.Run> run;
 
+    /**
+     *
+     */
     public PrawnFile() {
         // flag invalid prawnFile
         runs = 0;
@@ -336,6 +363,7 @@ public class PrawnFile {
      * {@link PrawnFile.Run }
      * 
      * 
+     * @return 
      */
     public List<PrawnFile.Run> getRun() {
         if (run == null) {
@@ -474,10 +502,21 @@ public class PrawnFile {
     })
     public static class Run {
 
+        /**
+         *
+         */
         @XmlElement(required = true)
         protected List<PrawnFile.Run.Par> par;
+
+        /**
+         *
+         */
         @XmlElement(name = "run_table", required = true)
         protected PrawnFile.Run.RunTable runTable;
+
+        /**
+         *
+         */
         @XmlElement(required = true)
         protected PrawnFile.Run.Set set;
 
@@ -582,8 +621,15 @@ public class PrawnFile {
         @XmlType(name = "")
         public static class Par {
 
+            /**
+             *
+             */
             @XmlAttribute(name = "name", required = true)
             protected RunParameterNames name;
+
+            /**
+             *
+             */
             @XmlAttribute(name = "value", required = true)
             protected String value;
 
@@ -685,14 +731,29 @@ public class PrawnFile {
         })
         public static class RunTable {
 
+            /**
+             *
+             */
             @XmlElement(required = true)
             protected List<PrawnFile.Run.RunTable.Entry> entry;
+
+            /**
+             *
+             */
             @XmlAttribute(name = "entries", required = true)
             @XmlSchemaType(name = "unsignedByte")
             protected short entries;
+
+            /**
+             *
+             */
             @XmlAttribute(name = "parameters", required = true)
             @XmlSchemaType(name = "unsignedByte")
             protected short parameters;
+
+            /**
+             *
+             */
             @XmlAttribute(name = "sample_name", required = true)
             protected String sampleName;
 
@@ -821,6 +882,9 @@ public class PrawnFile {
             })
             public static class Entry {
 
+                /**
+                 *
+                 */
                 @XmlElement(required = true)
                 protected List<PrawnFile.Run.RunTable.Entry.Par> par;
 
@@ -877,8 +941,15 @@ public class PrawnFile {
                 @XmlType(name = "")
                 public static class Par {
 
+                    /**
+                     *
+                     */
                     @XmlAttribute(name = "name", required = true)
                     protected RunTableEntryParameterNames name;
+
+                    /**
+                     *
+                     */
                     @XmlAttribute(name = "value", required = true)
                     protected String value;
 
@@ -1012,8 +1083,15 @@ public class PrawnFile {
         })
         public static class Set {
 
+            /**
+             *
+             */
             @XmlElement(required = true)
             protected List<PrawnFile.Run.Set.Par> par;
+
+            /**
+             *
+             */
             @XmlElement(required = true)
             protected List<PrawnFile.Run.Set.Scan> scan;
 
@@ -1100,8 +1178,15 @@ public class PrawnFile {
             @XmlType(name = "")
             public static class Par {
 
+                /**
+                 *
+                 */
                 @XmlAttribute(name = "name", required = true)
                 protected SetParameterNames name;
+
+                /**
+                 *
+                 */
                 @XmlAttribute(name = "value", required = true)
                 protected String value;
 
@@ -1210,8 +1295,15 @@ public class PrawnFile {
             })
             public static class Scan {
 
+                /**
+                 *
+                 */
                 @XmlElement(required = true)
                 protected List<PrawnFile.Run.Set.Scan.Measurement> measurement;
+
+                /**
+                 *
+                 */
                 @XmlAttribute(name = "number", required = true)
                 @XmlSchemaType(name = "unsignedByte")
                 protected short number;
@@ -1309,8 +1401,15 @@ public class PrawnFile {
                 })
                 public static class Measurement {
 
+                    /**
+                     *
+                     */
                     @XmlElement(required = true)
                     protected List<PrawnFile.Run.Set.Scan.Measurement.Par> par;
+
+                    /**
+                     *
+                     */
                     @XmlElement(required = true)
                     protected List<PrawnFile.Run.Set.Scan.Measurement.Data> data;
 
@@ -1398,8 +1497,15 @@ public class PrawnFile {
                     })
                     public static class Data {
 
+                        /**
+                         *
+                         */
                         @XmlValue
                         protected String value;
+
+                        /**
+                         *
+                         */
                         @XmlAttribute(name = "name", required = true)
                         protected String name;
 
@@ -1476,8 +1582,15 @@ public class PrawnFile {
                     @XmlType(name = "")
                     public static class Par {
 
+                        /**
+                         *
+                         */
                         @XmlAttribute(name = "name", required = true)
                         protected String name;
+
+                        /**
+                         *
+                         */
                         @XmlAttribute(name = "value", required = true)
                         protected String value;
 

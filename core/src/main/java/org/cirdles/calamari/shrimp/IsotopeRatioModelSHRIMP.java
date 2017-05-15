@@ -55,10 +55,18 @@ public class IsotopeRatioModelSHRIMP {
         this.active = false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean numeratorAtomicRatioLessThanDenominator() {
         return (numerator.getAtomicMass() < denominator.getAtomicMass());
     }
 
+    /**
+     *
+     * @return
+     */
     public String prettyPrintSimpleName() {
         return Integer.toString(numerator.getAtomicMass()) + "/" + Integer.toString(denominator.getAtomicMass());
     }

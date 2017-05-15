@@ -56,26 +56,69 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum SetParameterNames {
 
+    /**
+     *
+     */
     @XmlEnumValue("date")
     DATE("date"),
+
+    /**
+     *
+     */
     @XmlEnumValue("time")
     TIME("time"),
+
+    /**
+     *
+     */
     @XmlEnumValue("qt1y")
     QT_1_Y("qt1y"),
+
+    /**
+     *
+     */
     @XmlEnumValue("qt1y_volts")
     QT_1_Y_VOLTS("qt1y_volts"),
+
+    /**
+     *
+     */
     @XmlEnumValue("qt1z")
     QT_1_Z("qt1z"),
+
+    /**
+     *
+     */
     @XmlEnumValue("egy")
     EGY("egy"),
+
+    /**
+     *
+     */
     @XmlEnumValue("egz")
     EGZ("egz"),
+
+    /**
+     *
+     */
     @XmlEnumValue("prealphay")
     PREALPHAY("prealphay"),
+
+    /**
+     *
+     */
     @XmlEnumValue("pbm")
     PBM("pbm"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_cps")
     EISIE_CPS("eisie_cps"),
+
+    /**
+     *
+     */
     @XmlEnumValue("eisie_date_time")
     EISIE_DATE_TIME("eisie_date_time");
     private final String value;
@@ -84,10 +127,19 @@ public enum SetParameterNames {
         value = v;
     }
 
+    /**
+     *
+     * @return
+     */
     public String value() {
         return value;
     }
 
+    /**
+     *
+     * @param v
+     * @return
+     */
     public static SetParameterNames fromValue(String v) {
         for (SetParameterNames c: SetParameterNames.values()) {
             if (c.value.equals(v)) {

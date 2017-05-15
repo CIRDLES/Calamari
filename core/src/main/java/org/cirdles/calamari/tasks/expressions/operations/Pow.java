@@ -26,6 +26,9 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class Pow extends Operation {
 
+    /**
+     *
+     */
     public Pow() {
         name = "pow";
         argumentCount = 2;

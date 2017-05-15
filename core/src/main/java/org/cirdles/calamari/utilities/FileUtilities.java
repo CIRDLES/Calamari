@@ -18,6 +18,11 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class FileUtilities {
 
+    /**
+     *
+     * @param directory
+     * @throws IOException
+     */
     public static void recursiveDelete(Path directory) throws IOException {
         Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
             @Override

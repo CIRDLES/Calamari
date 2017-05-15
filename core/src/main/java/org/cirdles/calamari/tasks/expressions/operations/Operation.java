@@ -31,13 +31,35 @@ public abstract class Operation
         OperationOrFunctionInterface,
         XMLSerializerInterface {
 
+    /**
+     *
+     */
     protected String name;
+
+    /**
+     *
+     */
     protected int argumentCount;
+
+    /**
+     *
+     */
     protected int precedence;
     // establish size of array resullting from evaluation
+
+    /**
+     *
+     */
     protected int rowCount;
+
+    /**
+     *
+     */
     protected int colCount;
 
+    /**
+     *
+     */
     public Operation() {
         this.name = "no-op";
         this.argumentCount = 1;
@@ -46,6 +68,10 @@ public abstract class Operation
         this.colCount = 1;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new OperationXMLConverter());
@@ -53,22 +79,42 @@ public abstract class Operation
         xstream.alias("operation", this.getClass());
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface add() {
         return new Add();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface subtract() {
         return new Subtract();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface divide() {
         return new Divide();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface multiply() {
         return new Multiply();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface pow() {
         return new Pow();
     }
@@ -118,6 +164,11 @@ public abstract class Operation
         return retVal;
     }
 
+    /**
+     *
+     * @param expression
+     * @return
+     */
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
 
         String retVal = "<mtext>\nNot a valid expression</mtext>\n";

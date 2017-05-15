@@ -25,6 +25,11 @@ import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInte
  */
 public interface ShrimpFractionExpressionInterface {
 
+    /**
+     *
+     * @param speciesName
+     * @return
+     */
     public int getIndexOfSpeciesByName(IsotopeNames speciesName);
 
     /**
@@ -42,6 +47,10 @@ public interface ShrimpFractionExpressionInterface {
      */
     public double[][] getReducedPkHtFerr();
 
+    /**
+     *
+     * @return
+     */
     public String getFractionID();
 
     /**

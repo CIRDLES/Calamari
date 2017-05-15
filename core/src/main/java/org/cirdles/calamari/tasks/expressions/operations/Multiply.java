@@ -27,6 +27,9 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class Multiply extends Operation {
 
+    /**
+     *
+     */
     public Multiply() {
         name = "multiply";
         argumentCount = 2;

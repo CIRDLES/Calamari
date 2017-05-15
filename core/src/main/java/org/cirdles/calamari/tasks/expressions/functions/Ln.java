@@ -27,6 +27,9 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class Ln extends Function {
 
+    /**
+     *
+     */
     public Ln() {
         name = "ln";
         argumentCount = 1;

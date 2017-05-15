@@ -30,7 +30,15 @@ package org.cirdles.calamari.shrimp;
 public enum IsotopeNames {
 
     // IsotopeNames in atomic number order = acquisition order
+
+    /**
+     *
+     */
     Hf176("Hf176", 176, "Hf", "176Hf"),
+
+    /**
+     *
+     */
     Zr2O196("Zr2O196", 196,  "Zr2O", "196Zr2O"),
     /**
      *
@@ -64,10 +72,30 @@ public enum IsotopeNames {
      *
      */
     U238("U238", 238,  "U", "238U"),
+
+    /**
+     *
+     */
     ThO248("ThO248", 248,  "ThO", "248ThO"),
+
+    /**
+     *
+     */
     UO254("UO254", 254,  "UO", "254UO"),
+
+    /**
+     *
+     */
     UO270("UO270", 270, "UO",  "270UO"),
+
+    /**
+     *
+     */
     BKGND("BKGND", 0, "BKGND",  "BKGND"),
+
+    /**
+     *
+     */
     NONE("NONE", 0, "NONE","NONE");
 
     private String name;

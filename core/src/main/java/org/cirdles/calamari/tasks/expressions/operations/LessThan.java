@@ -26,6 +26,9 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class LessThan extends Operation {
 
+    /**
+     *
+     */
     public LessThan() {
         super();
         name = "lessThan";
@@ -58,7 +61,6 @@ public class LessThan extends Operation {
 
     /**
      *
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */

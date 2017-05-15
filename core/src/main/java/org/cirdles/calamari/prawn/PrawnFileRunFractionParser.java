@@ -71,6 +71,9 @@ public class PrawnFileRunFractionParser {
     private double[][] reducedPkHt;
     private double[][] reducedPkHtFerr;
 
+    /**
+     *
+     */
     public PrawnFileRunFractionParser() {
         dateTimeMilliseconds = 0l;
     }
