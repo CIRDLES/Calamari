@@ -25,6 +25,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.Timeout;
 
+/**
+ *
+ * @author bowring
+ */
 public class PrawnFileHandlerIT {
 
     private static final String PRAWN_FILE_RESOURCE
@@ -33,19 +37,32 @@ public class PrawnFileHandlerIT {
     private static final ResourceExtractor RESOURCE_EXTRACTOR
             = new ResourceExtractor(PrawnFileHandlerIT.class);
 
+    /**
+     *
+     */
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+    /**
+     *
+     */
     @Rule
     public Timeout timeout = Timeout.seconds(120);
 
     private PrawnFileHandler prawnFileHandler;
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         prawnFileHandler = new PrawnFileHandler();
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void writesReportsFromPrawnFile() throws Exception {
         File reportsFolder = temporaryFolder.getRoot();

@@ -27,6 +27,9 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class If extends Function {
 
+    /**
+     *
+     */
     public If() {
         name = "if";
         argumentCount = 3;

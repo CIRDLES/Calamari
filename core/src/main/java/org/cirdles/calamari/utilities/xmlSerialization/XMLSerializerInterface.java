@@ -64,6 +64,12 @@ public interface XMLSerializerInterface {
         }
     }
 
+    /**
+     *
+     * @param filename
+     * @param doValidate
+     * @return
+     */
     public default Object readXMLObject(String filename, boolean doValidate) {
 
         String xmlContents = null;
@@ -81,8 +87,17 @@ public interface XMLSerializerInterface {
         return myModelClassInstance;
     }
 
+    /**
+     *
+     * @param xsteam
+     */
     public void customizeXstream(XStream xsteam);
 
+    /**
+     *
+     * @param xml
+     * @return
+     */
     public default String customizeXML(String xml) {
         return xml;
     }

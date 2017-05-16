@@ -29,6 +29,11 @@ public class SpotSummaryDetails {
     private SpotSummaryDetails() {
     }
 
+    /**
+     *
+     * @param values
+     * @param selectedSpots
+     */
     public SpotSummaryDetails(double[][] values, List<ShrimpFractionExpressionInterface> selectedSpots) {
         this.values = values;
         this.selectedSpots = selectedSpots;

@@ -26,6 +26,9 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
  */
 public class Equal extends Operation {
 
+    /**
+     *
+     */
     public Equal() {
         super();
         name = "equal";
@@ -58,7 +61,6 @@ public class Equal extends Operation {
 
     /**
      *
-     * @param rightET the value of rightET
      * @param childrenET the value of childrenET
      * @return
      */

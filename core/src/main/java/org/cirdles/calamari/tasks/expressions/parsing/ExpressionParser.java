@@ -48,6 +48,11 @@ import org.cirdles.calamari.tasks.expressions.parsing.ShuntingYard.TokenTypes;
  */
 public class ExpressionParser {
 
+    /**
+     *
+     * @param expression
+     * @return
+     */
     public ExpressionTreeInterface parseExpression(String expression) {
         // Get our lexer
         ExpressionsForSquid2Lexer lexer = new ExpressionsForSquid2Lexer(new ANTLRInputStream(expression));
@@ -81,6 +86,9 @@ public class ExpressionParser {
 
     }
 
+    /**
+     *
+     */
     public final static Map<String, String> OPERATIONS_MAP = new HashMap<>();
 
     static {
@@ -94,6 +102,9 @@ public class ExpressionParser {
         OPERATIONS_MAP.put("<", "lessThan");
     }
 
+    /**
+     *
+     */
     public final static Map<String, String> FUNCTIONS_MAP = new HashMap<>();
 
     static {
@@ -109,6 +120,9 @@ public class ExpressionParser {
         FUNCTIONS_MAP.put("if", "sqif");
     }
 
+    /**
+     *
+     */
     public final static Map<String, ExpressionTreeInterface> NAMED_EXPRESSIONS_MAP = new HashMap<>();
 
     static {

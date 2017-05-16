@@ -12,6 +12,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class WeightedMeanCalculatorsTest {
     
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void wtdLinCorr() throws Exception {
         double[] x, y;

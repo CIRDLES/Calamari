@@ -50,16 +50,54 @@ public class ExpressionTree
         ExpressionTreeWithRatiosInterface,
         XMLSerializerInterface {
 
+    /**
+     *
+     */
     protected String name;
+
+    /**
+     *
+     */
     protected List<ExpressionTreeInterface> childrenET;
+
+    /**
+     *
+     */
     protected ExpressionTreeInterface parentET;
+
+    /**
+     *
+     */
     protected OperationOrFunctionInterface operation;
+
+    /**
+     *
+     */
     protected List<RawRatioNamesSHRIMP> ratiosOfInterest;
+
+    /**
+     *
+     */
     protected boolean squidSwitchSCSummaryCalculation;
+
+    /**
+     *
+     */
     protected boolean squidSwitchSTReferenceMaterialCalculation;
+
+    /**
+     *
+     */
     protected boolean squidSwitchSAUnknownCalculation;
+
+    /**
+     *
+     */
     protected boolean rootExpressionTree;
 
+    /**
+     *
+     */
     public ExpressionTree() {
         this("Anonymous");
     }
@@ -72,6 +110,10 @@ public class ExpressionTree
         this(prettyName, null, null, null);
     }
 
+    /**
+     *
+     * @param operation
+     */
     public ExpressionTree(OperationOrFunctionInterface operation) {
         this();
         this.operation = operation;
@@ -114,6 +156,10 @@ public class ExpressionTree
         addChild(rightET);
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
@@ -173,6 +219,10 @@ public class ExpressionTree
         return operation == null ? new Object[][]{{0.0, 0.0}} : operation.eval(childrenET, shrimpFractions, task);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Set extractUniqueSpeciesNumbers() {
         // assume acquisition order is atomic weight order
@@ -184,6 +234,10 @@ public class ExpressionTree
         return eqPkUndupeOrd;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOperationPrecedence() {
         int retVal = 100;
@@ -195,21 +249,37 @@ public class ExpressionTree
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunction() {
         return (operation instanceof Function);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
         return (operation instanceof Function) || (operation instanceof Operation);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return operation.getArgumentCount();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         String retVal = "";
@@ -278,6 +348,10 @@ public class ExpressionTree
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getCountOfChildren() {
         return childrenET.size();// - (int) ((leftET == null) ? 1 : 0);
@@ -295,6 +369,11 @@ public class ExpressionTree
         }
     }
 
+    /**
+     *
+     * @param index
+     * @param childET
+     */
     @Override
     public void addChild(int index, ExpressionTreeInterface childET) {
         if (childET != null) {
@@ -334,6 +413,10 @@ public class ExpressionTree
         this.ratiosOfInterest = ratiosOfInterest;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasRatiosOfInterest() {
         return ratiosOfInterest.size() > 0;
     }

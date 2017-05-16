@@ -33,6 +33,10 @@ public interface ExpressionTreeInterface {
      */
     public Object[][] eval(List<ShrimpFractionExpressionInterface> shrimpFractions, TaskInterface task);
 
+    /**
+     *
+     * @return
+     */
     public String getName();
 
     /**
@@ -50,12 +54,28 @@ public interface ExpressionTreeInterface {
      */
     public boolean isRootExpressionTree();
 
+    /**
+     *
+     * @return
+     */
     public String toStringMathML();
 
+    /**
+     *
+     * @return
+     */
     public boolean isTypeFunction();
 
+    /**
+     *
+     * @return
+     */
     public boolean isTypeFunctionOrOperation();
 
+    /**
+     *
+     * @return
+     */
     public int argumentCount();
 
     /**
@@ -75,6 +95,11 @@ public interface ExpressionTreeInterface {
         return retVal;
     }
 
+    /**
+     *
+     * @param objects
+     * @return
+     */
     public static double[][] convertObjectArrayToDoubles(Object[][] objects) {
         double[][] retVal = new double[objects.length][];
         for (int i = 0; i < objects.length; i++) {
@@ -83,6 +108,11 @@ public interface ExpressionTreeInterface {
         return retVal;
     }
 
+    /**
+     *
+     * @param types
+     * @return
+     */
     public static Object[] convertArrayToObjects(double[] types) {
         Object[] retVal = new Object[types.length];
         for (int i = 0; i < types.length; i++) {
@@ -92,6 +122,11 @@ public interface ExpressionTreeInterface {
         return retVal;
     }
 
+    /**
+     *
+     * @param types
+     * @return
+     */
     public static Object[][] convertArrayToObjects(double[][] types) {
         Object[][] retVal = new Object[types.length][];
         for (int i = 0; i < types.length; i++) {
@@ -100,6 +135,11 @@ public interface ExpressionTreeInterface {
         return retVal;
     }
 
+    /**
+     *
+     * @param objects
+     * @return
+     */
     public static boolean[] convertObjectArrayToBooleans(Object[] objects) {
         boolean[] retVal = new boolean[objects.length];
         for (int i = 0; i < objects.length; i++) {

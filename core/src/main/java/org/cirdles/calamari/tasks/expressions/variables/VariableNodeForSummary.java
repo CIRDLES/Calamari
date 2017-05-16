@@ -34,14 +34,25 @@ public class VariableNodeForSummary implements ExpressionTreeInterface, XMLSeria
     private String name;
     private ExpressionTreeInterface parentET;
 
+    /**
+     *
+     */
     public VariableNodeForSummary() {
         this(null);
     }
 
+    /**
+     *
+     * @param name
+     */
     public VariableNodeForSummary(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
 //        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
@@ -69,6 +80,10 @@ public class VariableNodeForSummary implements ExpressionTreeInterface, XMLSeria
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         String retVal
@@ -79,6 +94,10 @@ public class VariableNodeForSummary implements ExpressionTreeInterface, XMLSeria
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name;
@@ -121,11 +140,19 @@ public class VariableNodeForSummary implements ExpressionTreeInterface, XMLSeria
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return 0;

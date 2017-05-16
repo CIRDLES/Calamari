@@ -31,14 +31,41 @@ public abstract class Function
         OperationOrFunctionInterface,
         XMLSerializerInterface {
 
+    /**
+     *
+     */
     protected String name;
+
+    /**
+     *
+     */
     protected int argumentCount;
+
+    /**
+     *
+     */
     protected int precedence;
     // establish size of array resulting from evaluation
+
+    /**
+     *
+     */
     protected int rowCount;
+
+    /**
+     *
+     */
     protected int colCount;
+
+    /**
+     *
+     */
     protected String[][] labelsForValues;
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
 //        xstream.registerConverter(new OperationXMLConverter());
@@ -46,42 +73,82 @@ public abstract class Function
 //        xstream.alias("operation", this.getClass());
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface ln() {
         return new Ln();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface sqrt() {
         return new Sqrt();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface exp() {
         return new Exp();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface robReg() {
         return new RobReg();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface sqBiweight() {
         return new SqBiweight();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface agePb76() {
         return new AgePb76();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface sqWtdAvg() {
         return new SqWtdAv();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface concordiaTW() {
         return new ConcordiaTW();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface and() {
         return new And();
     }
 
+    /**
+     *
+     * @return
+     */
     public static OperationOrFunctionInterface sqif() {
         return new If();
     }
@@ -107,6 +174,12 @@ public abstract class Function
         return retVal;
     }
 
+    /**
+     *
+     * @param columnVector
+     * @param colIndex
+     * @return
+     */
     protected double[] transposeColumnVector(Object[][] columnVector, int colIndex) {
         double[] rowVector = new double[columnVector.length];
         for (int i = 0; i < rowVector.length; i++) {
@@ -116,6 +189,11 @@ public abstract class Function
         return rowVector;
     }
 
+    /**
+     *
+     * @param expression
+     * @return
+     */
     protected String toStringAnotherExpression(ExpressionTreeInterface expression) {
 
         String retVal = "<mtext>\nNot a valid expression</mtext>\n";

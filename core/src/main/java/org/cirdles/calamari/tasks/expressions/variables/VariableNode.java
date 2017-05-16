@@ -35,14 +35,25 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
     private static String lookupMethodNameForShrimpFraction = "getTaskExpressionsEvaluationsPerSpotByField";
     private ExpressionTreeInterface parentET;
 
+    /**
+     *
+     */
     public VariableNode() {
         this(null);
     }
 
+    /**
+     *
+     * @param name
+     */
     public VariableNode(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
 //        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
@@ -78,6 +89,10 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         String retVal
@@ -88,6 +103,10 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name;
@@ -130,11 +149,19 @@ public class VariableNode implements ExpressionTreeInterface, XMLSerializerInter
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return 0;

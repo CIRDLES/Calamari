@@ -47,10 +47,23 @@ public interface ExpressionTreeBuilderInterface {
      */
     public void addChild(ExpressionTreeInterface childET);
     
+    /**
+     *
+     * @param index
+     * @param childET
+     */
     public void addChild(int index, ExpressionTreeInterface childET);
     
+    /**
+     *
+     * @return
+     */
     public int getCountOfChildren();
 
+    /**
+     *
+     * @return
+     */
     public int getOperationPrecedence();
 
 }

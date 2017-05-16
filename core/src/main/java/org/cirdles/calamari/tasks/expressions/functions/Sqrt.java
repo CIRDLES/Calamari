@@ -29,6 +29,9 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class Sqrt extends Function {
 
+    /**
+     *
+     */
     public Sqrt() {
         name = "sqrt";
         argumentCount = 1;

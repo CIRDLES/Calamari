@@ -32,8 +32,17 @@ public interface ExpressionTreeWithRatiosInterface {
      */
     public List<RawRatioNamesSHRIMP> getRatiosOfInterest();
 
+    /**
+     *
+     * @return
+     */
     public Set extractUniqueSpeciesNumbers();
 
+    /**
+     *
+     * @param ratio
+     * @return
+     */
     public static ExpressionTreeInterface buildRatioExpression(RawRatioNamesSHRIMP ratio) {
         ExpressionTreeInterface ratioExpression
                 = new ExpressionTree(

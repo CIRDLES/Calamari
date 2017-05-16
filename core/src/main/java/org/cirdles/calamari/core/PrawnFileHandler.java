@@ -326,6 +326,7 @@ public class PrawnFileHandler {
     /**
      * Serializes a PrawnFile object to xml and intended for saving edits to original data.
      * @param prawnFile for serialization
+     * @param fileName
      * @throws PropertyException
      * @throws JAXBException 
      */
@@ -337,15 +338,26 @@ public class PrawnFileHandler {
         jaxbMarshaller.marshal(prawnFile, new File(fileName));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean currentPrawnFileLocationIsFile() {
         return new File(currentPrawnFileLocation).isFile();
     }
 
+    /**
+     *
+     */
     public void initReportsEngineWithCurrentPrawnFileName() {
         // strip .xml from file name
         reportsEngine.setNameOfPrawnXMLFile(new File(currentPrawnFileLocation).getName().split("\\.")[0]);
     }
 
+    /**
+     *
+     * @param prawnFileLocation
+     */
     public void initReportsEngineWithCurrentPrawnFileName(String prawnFileLocation) {
         // strip .xml from file name
         reportsEngine.setNameOfPrawnXMLFile(new File(prawnFileLocation).getName().split("\\.")[0]);
@@ -358,6 +370,10 @@ public class PrawnFileHandler {
         return currentPrawnFileLocation;
     }
 
+    /**
+     *
+     * @return
+     */
     public File currentPrawnFileLocationFolder() {
         File retVal = new File(currentPrawnFileLocation);
         if (currentPrawnFileLocationIsFile()) {
@@ -374,10 +390,18 @@ public class PrawnFileHandler {
         currentPrawnFileLocation = aCurrentPrawnFileLocation;
     }
 
+    /**
+     *
+     * @param progressSubscriber
+     */
     public void setProgressSubscriber(Consumer<Integer> progressSubscriber) {
         this.progressSubscriber = progressSubscriber;
     }
 
+    /**
+     *
+     * @return
+     */
     public CalamariReportsEngine getReportsEngine() {
         return reportsEngine;
     }

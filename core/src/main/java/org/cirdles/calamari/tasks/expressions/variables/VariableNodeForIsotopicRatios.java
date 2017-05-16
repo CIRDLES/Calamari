@@ -35,14 +35,25 @@ public class VariableNodeForIsotopicRatios implements ExpressionTreeInterface, X
     private static String lookupMethodNameForShrimpFraction = "getIsotopicRatioValuesByStringName";
     private ExpressionTreeInterface parentET;
 
+    /**
+     *
+     */
     public VariableNodeForIsotopicRatios() {
         this(null);
     }
 
+    /**
+     *
+     * @param name
+     */
     public VariableNodeForIsotopicRatios(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
 //        xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
@@ -77,6 +88,10 @@ public class VariableNodeForIsotopicRatios implements ExpressionTreeInterface, X
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         String retVal
@@ -87,6 +102,10 @@ public class VariableNodeForIsotopicRatios implements ExpressionTreeInterface, X
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name;
@@ -129,11 +148,19 @@ public class VariableNodeForIsotopicRatios implements ExpressionTreeInterface, X
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return 0;

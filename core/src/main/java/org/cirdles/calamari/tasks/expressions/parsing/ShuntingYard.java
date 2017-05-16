@@ -27,6 +27,10 @@ public class ShuntingYard {
 
     private static final Pattern numberPattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
         List<String> infixList = new ArrayList<>();
@@ -286,21 +290,69 @@ public class ShuntingYard {
         return outputQueue;
     }
 
+    /**
+     *
+     */
     public enum TokenTypes {
+
+        /**
+         *
+         */
         OPERATOR_A,
+
+        /**
+         *
+         */
         OPERATOR_M,
+
+        /**
+         *
+         */
         OPERATOR_E,
+
+        /**
+         *
+         */
         LEFT_PAREN,
+
+        /**
+         *
+         */
         RIGHT_PAREN,
+
+        /**
+         *
+         */
         CONSTANT,
+
+        /**
+         *
+         */
         VARIABLE,
+
+        /**
+         *
+         */
         FUNCTION,
+
+        /**
+         *
+         */
         NAMED_EXPRESSION,
+
+        /**
+         *
+         */
         COMMA;
 
         private TokenTypes() {
         }
 
+        /**
+         *
+         * @param token
+         * @return
+         */
         public static TokenTypes getType(String token) {
             TokenTypes retVal = VARIABLE;
 
@@ -329,6 +381,11 @@ public class ShuntingYard {
         }
     }
 
+    /**
+     *
+     * @param string
+     * @return
+     */
     public static boolean isNumber(String string) {
         return string != null && numberPattern.matcher(string).matches();
     }

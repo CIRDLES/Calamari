@@ -35,19 +35,35 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
     private String methodNameForShrimpFraction;
     private ExpressionTreeInterface parentET;
 
+    /**
+     *
+     */
     public ShrimpSpeciesNode() {
         this(null);
     }
 
+    /**
+     *
+     * @param name
+     */
     public ShrimpSpeciesNode(IsotopeNames name) {
         this(name, null);
     }
 
+    /**
+     *
+     * @param name
+     * @param methodNameForShrimpFraction
+     */
     public ShrimpSpeciesNode(IsotopeNames name, String methodNameForShrimpFraction) {
         this.name = name;
         this.methodNameForShrimpFraction = methodNameForShrimpFraction;
     }
 
+    /**
+     *
+     * @param xstream
+     */
     @Override
     public void customizeXstream(XStream xstream) {
         xstream.registerConverter(new ShrimpSpeciesNodeXMLConverter());
@@ -96,6 +112,10 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toStringMathML() {
         String retVal
@@ -115,6 +135,10 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return retVal;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return name.getName();
@@ -157,11 +181,19 @@ public class ShrimpSpeciesNode implements ExpressionTreeInterface, XMLSerializer
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTypeFunctionOrOperation() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int argumentCount() {
         return 0;

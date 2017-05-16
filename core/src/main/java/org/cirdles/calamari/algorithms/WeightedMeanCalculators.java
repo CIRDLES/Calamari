@@ -219,6 +219,9 @@ public final class WeightedMeanCalculators {
         return wtdLinCorrResults;
     }
 
+    /**
+     *
+     */
     public static class WtdLinCorrResults {
 
         private boolean bad;
@@ -232,6 +235,9 @@ public final class WeightedMeanCalculators {
         private double covSlopeInter = 0.0;
         private int minIndex;
 
+        /**
+         *
+         */
         public WtdLinCorrResults() {
             bad = true;
             intercept = 0.0;
@@ -372,6 +378,13 @@ public final class WeightedMeanCalculators {
 
     }
 
+    /**
+     *
+     * @param y
+     * @param x
+     * @param sigmaRhoY
+     * @return
+     */
     public static WeightedLinearCorrResults weightedLinearCorr(double[] y, double[] x, double[][] sigmaRhoY) {
         WeightedLinearCorrResults weightedLinearCorrResults = new WeightedLinearCorrResults();
 
@@ -432,6 +445,9 @@ public final class WeightedMeanCalculators {
         return weightedLinearCorrResults;
     }
 
+    /**
+     *
+     */
     public static class WeightedLinearCorrResults {
 
         private boolean bad;
@@ -443,6 +459,9 @@ public final class WeightedMeanCalculators {
         private double mswd;
         private double prob;
 
+        /**
+         *
+         */
         public WeightedLinearCorrResults() {
             bad = true;
             slope = 0.0;
@@ -568,6 +587,14 @@ public final class WeightedMeanCalculators {
 
     }
 
+    /**
+     *
+     * @param rejPoint
+     * @param y1
+     * @param sigRho1
+     * @param x1
+     * @return
+     */
     public static DeletePointResults deletePoint(int rejPoint, double[] y1, double[][] sigRho1, double[] x1) {
 
         DeletePointResults results = new DeletePointResults();
@@ -620,12 +647,18 @@ public final class WeightedMeanCalculators {
         return results;
     }
 
+    /**
+     *
+     */
     public static class DeletePointResults {
 
         private double[] y2;
         private double[][] sigRho2;
         private double[] x2;
 
+        /**
+         *
+         */
         public DeletePointResults() {
             y2 = new double[0];
             sigRho2 = new double[0][0];
@@ -676,6 +709,12 @@ public final class WeightedMeanCalculators {
 
     }
 
+    /**
+     *
+     * @param values
+     * @param varCov
+     * @return
+     */
     public static WtdAvCorrResults wtdAvCorr(double[] values, double[][] varCov) {
         // assume varCov is variance-covariance matrix (i.e. SigRho = false)
 
@@ -731,6 +770,9 @@ public final class WeightedMeanCalculators {
 
     }
 
+    /**
+     *
+     */
     public static class WtdAvCorrResults {
 
         private boolean bad;
@@ -739,6 +781,9 @@ public final class WeightedMeanCalculators {
         private double mswd;
         private double prob;
 
+        /**
+         *
+         */
         public WtdAvCorrResults() {
             bad = true;
             meanVal = 0.0;
@@ -818,6 +863,11 @@ public final class WeightedMeanCalculators {
         }
     }
 
+    /**
+     *
+     * @param correlations
+     * @return
+     */
     public static double[][] convertCorrelationsToCovariances(double[][] correlations) {
         // precondition: square matrix correlations
         int n = correlations.length;

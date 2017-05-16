@@ -54,6 +54,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile }
      * 
+     * @return 
      */
     public PrawnFile createPrawnFile() {
         return new PrawnFile();
@@ -62,6 +63,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run }
      * 
+     * @return 
      */
     public PrawnFile.Run createPrawnFileRun() {
         return new PrawnFile.Run();
@@ -70,6 +72,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set createPrawnFileRunSet() {
         return new PrawnFile.Run.Set();
@@ -78,6 +81,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set.Scan }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set.Scan createPrawnFileRunSetScan() {
         return new PrawnFile.Run.Set.Scan();
@@ -86,6 +90,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set.Scan.Measurement }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set.Scan.Measurement createPrawnFileRunSetScanMeasurement() {
         return new PrawnFile.Run.Set.Scan.Measurement();
@@ -94,6 +99,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.RunTable }
      * 
+     * @return 
      */
     public PrawnFile.Run.RunTable createPrawnFileRunRunTable() {
         return new PrawnFile.Run.RunTable();
@@ -102,6 +108,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.RunTable.Entry }
      * 
+     * @return 
      */
     public PrawnFile.Run.RunTable.Entry createPrawnFileRunRunTableEntry() {
         return new PrawnFile.Run.RunTable.Entry();
@@ -110,6 +117,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Par }
      * 
+     * @return 
      */
     public PrawnFile.Run.Par createPrawnFileRunPar() {
         return new PrawnFile.Run.Par();
@@ -118,6 +126,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set.Par }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set.Par createPrawnFileRunSetPar() {
         return new PrawnFile.Run.Set.Par();
@@ -126,6 +135,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set.Scan.Measurement.Par }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set.Scan.Measurement.Par createPrawnFileRunSetScanMeasurementPar() {
         return new PrawnFile.Run.Set.Scan.Measurement.Par();
@@ -134,6 +144,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.Set.Scan.Measurement.Data }
      * 
+     * @return 
      */
     public PrawnFile.Run.Set.Scan.Measurement.Data createPrawnFileRunSetScanMeasurementData() {
         return new PrawnFile.Run.Set.Scan.Measurement.Data();
@@ -142,6 +153,7 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link PrawnFile.Run.RunTable.Entry.Par }
      * 
+     * @return 
      */
     public PrawnFile.Run.RunTable.Entry.Par createPrawnFileRunRunTableEntryPar() {
         return new PrawnFile.Run.RunTable.Entry.Par();

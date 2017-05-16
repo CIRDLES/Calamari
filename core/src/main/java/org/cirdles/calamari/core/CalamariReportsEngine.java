@@ -62,6 +62,9 @@ public class CalamariReportsEngine {
     private StringBuilder refMatMeanRatios_PerSpot;
     private StringBuilder unknownMeanRatios_PerSpot;
 
+    /**
+     *
+     */
     public CalamariReportsEngine() {
         folderToWriteCalamariReports = new File(System.getProperty("user.dir"));
         nameOfPrawnXMLFile = "";

@@ -27,6 +27,9 @@ import static org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface.con
  */
 public class And extends Function {
 
+    /**
+     *
+     */
     public And() {
         name = "and";
         argumentCount = 2;
