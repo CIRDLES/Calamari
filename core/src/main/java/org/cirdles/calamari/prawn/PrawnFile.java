@@ -18,9 +18,7 @@
  * See <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
  * Any modifications to this file will be lost upon recompilation of the source schema. 
  * Generated on: 2015.10.25 at 07:31:08 AM EDT 
-*/
-
-
+ */
 package org.cirdles.calamari.prawn;
 
 import java.io.Serializable;
@@ -35,12 +33,14 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-
 /**
- * <p>Java class for anonymous complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
+ * Java class for anonymous complex type.
+ *
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -169,8 +169,8 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -182,7 +182,9 @@ import javax.xml.bind.annotation.XmlValue;
     "run"
 })
 @XmlRootElement(name = "prawn_file")
-public class PrawnFile implements Serializable{
+public class PrawnFile implements Serializable {
+
+    private static final long serialVersionUID = 8704130590199113402L;
 
     /**
      *
@@ -230,11 +232,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the softwareVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getSoftwareVersion() {
         return softwareVersion;
@@ -242,11 +242,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Sets the value of the softwareVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setSoftwareVersion(String value) {
         this.softwareVersion = value;
@@ -254,8 +252,8 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the runs property.
-     * 
-     * @return 
+     *
+     * @return
      */
     public short getRuns() {
         return runs;
@@ -263,7 +261,7 @@ public class PrawnFile implements Serializable{
 
     /**
      * Sets the value of the runs property.
-     * 
+     *
      * @param value
      */
     public void setRuns(short value) {
@@ -272,11 +270,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the sessionQuality property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getSessionQuality() {
         return sessionQuality;
@@ -284,11 +280,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Sets the value of the sessionQuality property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setSessionQuality(String value) {
         this.sessionQuality = value;
@@ -296,11 +290,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the sessionComments property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getSessionComments() {
         return sessionComments;
@@ -308,11 +300,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Sets the value of the sessionComments property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setSessionComments(String value) {
         this.sessionComments = value;
@@ -320,11 +310,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the mount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getMount() {
         return mount;
@@ -332,11 +320,9 @@ public class PrawnFile implements Serializable{
 
     /**
      * Sets the value of the mount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setMount(String value) {
         this.mount = value;
@@ -344,26 +330,26 @@ public class PrawnFile implements Serializable{
 
     /**
      * Gets the value of the run property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the run property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the run property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRun().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link PrawnFile.Run }
-     * 
-     * 
-     * @return 
+     *
+     *
+     * @return
      */
     public List<PrawnFile.Run> getRun() {
         if (run == null) {
@@ -372,12 +358,14 @@ public class PrawnFile implements Serializable{
         return this.run;
     }
 
-
     /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     * <p>
+     * Java class for anonymous complex type.
+     *
+     * <p>
+     * The following schema fragment specifies the expected content contained
+     * within this class.
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -491,8 +479,8 @@ public class PrawnFile implements Serializable{
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
@@ -500,7 +488,7 @@ public class PrawnFile implements Serializable{
         "runTable",
         "set"
     })
-    public static class Run {
+    public static class Run implements Serializable {
 
         /**
          *
@@ -522,26 +510,26 @@ public class PrawnFile implements Serializable{
 
         /**
          * Gets the value of the par property.
-         * 
+         *
          * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the par property.
-         * 
+         * This accessor method returns a reference to the live list, not a
+         * snapshot. Therefore any modification you make to the returned list
+         * will be present inside the JAXB object. This is why there is not a
+         * <CODE>set</CODE> method for the par property.
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getPar().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link PrawnFile.Run.Par }
-         * 
-         * 
-         * @return 
+         *
+         *
+         * @return
          */
         public List<PrawnFile.Run.Par> getPar() {
             if (par == null) {
@@ -552,11 +540,9 @@ public class PrawnFile implements Serializable{
 
         /**
          * Gets the value of the runTable property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link PrawnFile.Run.RunTable }
-         *     
+         *
+         * @return possible object is {@link PrawnFile.Run.RunTable }
+         *
          */
         public PrawnFile.Run.RunTable getRunTable() {
             return runTable;
@@ -564,11 +550,9 @@ public class PrawnFile implements Serializable{
 
         /**
          * Sets the value of the runTable property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link PrawnFile.Run.RunTable }
-         *     
+         *
+         * @param value allowed object is {@link PrawnFile.Run.RunTable }
+         *
          */
         public void setRunTable(PrawnFile.Run.RunTable value) {
             this.runTable = value;
@@ -576,11 +560,9 @@ public class PrawnFile implements Serializable{
 
         /**
          * Gets the value of the set property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link PrawnFile.Run.Set }
-         *     
+         *
+         * @return possible object is {@link PrawnFile.Run.Set }
+         *
          */
         public PrawnFile.Run.Set getSet() {
             return set;
@@ -588,22 +570,22 @@ public class PrawnFile implements Serializable{
 
         /**
          * Sets the value of the set property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link PrawnFile.Run.Set }
-         *     
+         *
+         * @param value allowed object is {@link PrawnFile.Run.Set }
+         *
          */
         public void setSet(PrawnFile.Run.Set value) {
             this.set = value;
         }
 
-
         /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
+         * Java class for anonymous complex type.
+         *
+         * <p>
+         * The following schema fragment specifies the expected content
+         * contained within this class.
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -614,12 +596,12 @@ public class PrawnFile implements Serializable{
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "")
-        public static class Par {
+        public static class Par implements Serializable {
 
             /**
              *
@@ -635,11 +617,9 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the name property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link RunParameterNames }
-             *     
+             *
+             * @return possible object is {@link RunParameterNames }
+             *
              */
             public RunParameterNames getName() {
                 return name;
@@ -647,11 +627,9 @@ public class PrawnFile implements Serializable{
 
             /**
              * Sets the value of the name property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link RunParameterNames }
-             *     
+             *
+             * @param value allowed object is {@link RunParameterNames }
+             *
              */
             public void setName(RunParameterNames value) {
                 this.name = value;
@@ -659,11 +637,9 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
+             *
+             * @return possible object is {@link String }
+             *
              */
             public String getValue() {
                 return value;
@@ -671,11 +647,9 @@ public class PrawnFile implements Serializable{
 
             /**
              * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
+             *
+             * @param value allowed object is {@link String }
+             *
              */
             public void setValue(String value) {
                 this.value = value;
@@ -683,12 +657,14 @@ public class PrawnFile implements Serializable{
 
         }
 
-
         /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
+         * Java class for anonymous complex type.
+         *
+         * <p>
+         * The following schema fragment specifies the expected content
+         * contained within this class.
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -722,14 +698,14 @@ public class PrawnFile implements Serializable{
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "entry"
         })
-        public static class RunTable {
+        public static class RunTable implements Serializable {
 
             /**
              *
@@ -759,26 +735,26 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the entry property.
-             * 
+             *
              * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the entry property.
-             * 
+             * This accessor method returns a reference to the live list, not a
+             * snapshot. Therefore any modification you make to the returned
+             * list will be present inside the JAXB object. This is why there is
+             * not a <CODE>set</CODE> method for the entry property.
+             *
              * <p>
              * For example, to add a new item, do as follows:
              * <pre>
              *    getEntry().add(newItem);
              * </pre>
-             * 
-             * 
+             *
+             *
              * <p>
              * Objects of the following type(s) are allowed in the list
              * {@link PrawnFile.Run.RunTable.Entry }
-             * 
-             * 
-             * @return 
+             *
+             *
+             * @return
              */
             public List<PrawnFile.Run.RunTable.Entry> getEntry() {
                 if (entry == null) {
@@ -789,8 +765,8 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the entries property.
-             * 
-             * @return 
+             *
+             * @return
              */
             public short getEntries() {
                 return entries;
@@ -798,7 +774,7 @@ public class PrawnFile implements Serializable{
 
             /**
              * Sets the value of the entries property.
-             * 
+             *
              * @param value
              */
             public void setEntries(short value) {
@@ -807,8 +783,8 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the parameters property.
-             * 
-             * @return 
+             *
+             * @return
              */
             public short getParameters() {
                 return parameters;
@@ -816,7 +792,7 @@ public class PrawnFile implements Serializable{
 
             /**
              * Sets the value of the parameters property.
-             * 
+             *
              * @param value
              */
             public void setParameters(short value) {
@@ -825,11 +801,9 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the sampleName property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
+             *
+             * @return possible object is {@link String }
+             *
              */
             public String getSampleName() {
                 return sampleName;
@@ -837,22 +811,22 @@ public class PrawnFile implements Serializable{
 
             /**
              * Sets the value of the sampleName property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
+             *
+             * @param value allowed object is {@link String }
+             *
              */
             public void setSampleName(String value) {
                 this.sampleName = value;
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
-             * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
+             * <p>
+             * Java class for anonymous complex type.
+             *
+             * <p>
+             * The following schema fragment specifies the expected content
+             * contained within this class.
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -873,14 +847,14 @@ public class PrawnFile implements Serializable{
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                 "par"
             })
-            public static class Entry {
+            public static class Entry implements Serializable {
 
                 /**
                  *
@@ -890,26 +864,27 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Gets the value of the par property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
-                 * returned list will be present inside the JAXB object.
-                 * This is why there is not a <CODE>set</CODE> method for the par property.
-                 * 
+                 * returned list will be present inside the JAXB object. This is
+                 * why there is not a <CODE>set</CODE> method for the par
+                 * property.
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getPar().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link PrawnFile.Run.RunTable.Entry.Par }
-                 * 
-                 * 
-                 * @return 
+                 *
+                 *
+                 * @return
                  */
                 public List<PrawnFile.Run.RunTable.Entry.Par> getPar() {
                     if (par == null) {
@@ -918,12 +893,14 @@ public class PrawnFile implements Serializable{
                     return this.par;
                 }
 
-
                 /**
-                 * <p>Java class for anonymous complex type.
-                 * 
-                 * <p>The following schema fragment specifies the expected content contained within this class.
-                 * 
+                 * <p>
+                 * Java class for anonymous complex type.
+                 *
+                 * <p>
+                 * The following schema fragment specifies the expected content
+                 * contained within this class.
+                 *
                  * <pre>
                  * &lt;complexType&gt;
                  *   &lt;complexContent&gt;
@@ -934,12 +911,12 @@ public class PrawnFile implements Serializable{
                  *   &lt;/complexContent&gt;
                  * &lt;/complexType&gt;
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "")
-                public static class Par {
+                public static class Par implements Serializable {
 
                     /**
                      *
@@ -955,11 +932,10 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Gets the value of the name property.
-                     * 
-                     * @return
-                     *     possible object is
+                     *
+                     * @return possible object is
                      *     {@link RunTableEntryParameterNames }
-                     *     
+                     *
                      */
                     public RunTableEntryParameterNames getName() {
                         return name;
@@ -967,11 +943,10 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Sets the value of the name property.
-                     * 
-                     * @param value
-                     *     allowed object is
+                     *
+                     * @param value allowed object is
                      *     {@link RunTableEntryParameterNames }
-                     *     
+                     *
                      */
                     public void setName(RunTableEntryParameterNames value) {
                         this.name = value;
@@ -979,11 +954,9 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Gets the value of the value property.
-                     * 
-                     * @return
-                     *     possible object is
-                     *     {@link String }
-                     *     
+                     *
+                     * @return possible object is {@link String }
+                     *
                      */
                     public String getValue() {
                         return value;
@@ -991,11 +964,9 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Sets the value of the value property.
-                     * 
-                     * @param value
-                     *     allowed object is
-                     *     {@link String }
-                     *     
+                     *
+                     * @param value allowed object is {@link String }
+                     *
                      */
                     public void setValue(String value) {
                         this.value = value;
@@ -1007,12 +978,14 @@ public class PrawnFile implements Serializable{
 
         }
 
-
         /**
-         * <p>Java class for anonymous complex type.
-         * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
+         * Java class for anonymous complex type.
+         *
+         * <p>
+         * The following schema fragment specifies the expected content
+         * contained within this class.
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -1073,15 +1046,15 @@ public class PrawnFile implements Serializable{
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
             "par",
             "scan"
         })
-        public static class Set {
+        public static class Set implements Serializable {
 
             /**
              *
@@ -1097,26 +1070,26 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the par property.
-             * 
+             *
              * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the par property.
-             * 
+             * This accessor method returns a reference to the live list, not a
+             * snapshot. Therefore any modification you make to the returned
+             * list will be present inside the JAXB object. This is why there is
+             * not a <CODE>set</CODE> method for the par property.
+             *
              * <p>
              * For example, to add a new item, do as follows:
              * <pre>
              *    getPar().add(newItem);
              * </pre>
-             * 
-             * 
+             *
+             *
              * <p>
              * Objects of the following type(s) are allowed in the list
              * {@link PrawnFile.Run.Set.Par }
-             * 
-             * 
-             * @return 
+             *
+             *
+             * @return
              */
             public List<PrawnFile.Run.Set.Par> getPar() {
                 if (par == null) {
@@ -1127,26 +1100,26 @@ public class PrawnFile implements Serializable{
 
             /**
              * Gets the value of the scan property.
-             * 
+             *
              * <p>
-             * This accessor method returns a reference to the live list,
-             * not a snapshot. Therefore any modification you make to the
-             * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the scan property.
-             * 
+             * This accessor method returns a reference to the live list, not a
+             * snapshot. Therefore any modification you make to the returned
+             * list will be present inside the JAXB object. This is why there is
+             * not a <CODE>set</CODE> method for the scan property.
+             *
              * <p>
              * For example, to add a new item, do as follows:
              * <pre>
              *    getScan().add(newItem);
              * </pre>
-             * 
-             * 
+             *
+             *
              * <p>
              * Objects of the following type(s) are allowed in the list
              * {@link PrawnFile.Run.Set.Scan }
-             * 
-             * 
-             * @return 
+             *
+             *
+             * @return
              */
             public List<PrawnFile.Run.Set.Scan> getScan() {
                 if (scan == null) {
@@ -1155,12 +1128,14 @@ public class PrawnFile implements Serializable{
                 return this.scan;
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
-             * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
+             * <p>
+             * Java class for anonymous complex type.
+             *
+             * <p>
+             * The following schema fragment specifies the expected content
+             * contained within this class.
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -1171,12 +1146,12 @@ public class PrawnFile implements Serializable{
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "")
-            public static class Par {
+            public static class Par implements Serializable {
 
                 /**
                  *
@@ -1192,11 +1167,9 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Gets the value of the name property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link SetParameterNames }
-                 *     
+                 *
+                 * @return possible object is {@link SetParameterNames }
+                 *
                  */
                 public SetParameterNames getName() {
                     return name;
@@ -1204,11 +1177,9 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Sets the value of the name property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link SetParameterNames }
-                 *     
+                 *
+                 * @param value allowed object is {@link SetParameterNames }
+                 *
                  */
                 public void setName(SetParameterNames value) {
                     this.name = value;
@@ -1216,11 +1187,9 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Gets the value of the value property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @return possible object is {@link String }
+                 *
                  */
                 public String getValue() {
                     return value;
@@ -1228,11 +1197,9 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Sets the value of the value property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *
+                 * @param value allowed object is {@link String }
+                 *
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1240,12 +1207,14 @@ public class PrawnFile implements Serializable{
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
-             * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
-             * 
+             * <p>
+             * Java class for anonymous complex type.
+             *
+             * <p>
+             * The following schema fragment specifies the expected content
+             * contained within this class.
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -1286,14 +1255,14 @@ public class PrawnFile implements Serializable{
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                 "measurement"
             })
-            public static class Scan {
+            public static class Scan implements Serializable {
 
                 /**
                  *
@@ -1310,26 +1279,27 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Gets the value of the measurement property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
-                 * returned list will be present inside the JAXB object.
-                 * This is why there is not a <CODE>set</CODE> method for the measurement property.
-                 * 
+                 * returned list will be present inside the JAXB object. This is
+                 * why there is not a <CODE>set</CODE> method for the
+                 * measurement property.
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getMeasurement().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link PrawnFile.Run.Set.Scan.Measurement }
-                 * 
-                 * 
-                 * @return 
+                 *
+                 *
+                 * @return
                  */
                 public List<PrawnFile.Run.Set.Scan.Measurement> getMeasurement() {
                     if (measurement == null) {
@@ -1340,8 +1310,8 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Gets the value of the number property.
-                 * 
-                 * @return 
+                 *
+                 * @return
                  */
                 public short getNumber() {
                     return number;
@@ -1349,19 +1319,21 @@ public class PrawnFile implements Serializable{
 
                 /**
                  * Sets the value of the number property.
-                 * 
+                 *
                  * @param value
                  */
                 public void setNumber(short value) {
                     this.number = value;
                 }
 
-
                 /**
-                 * <p>Java class for anonymous complex type.
-                 * 
-                 * <p>The following schema fragment specifies the expected content contained within this class.
-                 * 
+                 * <p>
+                 * Java class for anonymous complex type.
+                 *
+                 * <p>
+                 * The following schema fragment specifies the expected content
+                 * contained within this class.
+                 *
                  * <pre>
                  * &lt;complexType&gt;
                  *   &lt;complexContent&gt;
@@ -1391,15 +1363,15 @@ public class PrawnFile implements Serializable{
                  *   &lt;/complexContent&gt;
                  * &lt;/complexType&gt;
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
                     "par",
                     "data"
                 })
-                public static class Measurement {
+                public static class Measurement implements Serializable {
 
                     /**
                      *
@@ -1415,26 +1387,27 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Gets the value of the par property.
-                     * 
+                     *
                      * <p>
-                     * This accessor method returns a reference to the live list,
-                     * not a snapshot. Therefore any modification you make to the
-                     * returned list will be present inside the JAXB object.
-                     * This is why there is not a <CODE>set</CODE> method for the par property.
-                     * 
+                     * This accessor method returns a reference to the live
+                     * list, not a snapshot. Therefore any modification you make
+                     * to the returned list will be present inside the JAXB
+                     * object. This is why there is not a <CODE>set</CODE>
+                     * method for the par property.
+                     *
                      * <p>
                      * For example, to add a new item, do as follows:
                      * <pre>
                      *    getPar().add(newItem);
                      * </pre>
-                     * 
-                     * 
+                     *
+                     *
                      * <p>
                      * Objects of the following type(s) are allowed in the list
                      * {@link PrawnFile.Run.Set.Scan.Measurement.Par }
-                     * 
-                     * 
-                     * @return 
+                     *
+                     *
+                     * @return
                      */
                     public List<PrawnFile.Run.Set.Scan.Measurement.Par> getPar() {
                         if (par == null) {
@@ -1445,26 +1418,27 @@ public class PrawnFile implements Serializable{
 
                     /**
                      * Gets the value of the data property.
-                     * 
+                     *
                      * <p>
-                     * This accessor method returns a reference to the live list,
-                     * not a snapshot. Therefore any modification you make to the
-                     * returned list will be present inside the JAXB object.
-                     * This is why there is not a <CODE>set</CODE> method for the data property.
-                     * 
+                     * This accessor method returns a reference to the live
+                     * list, not a snapshot. Therefore any modification you make
+                     * to the returned list will be present inside the JAXB
+                     * object. This is why there is not a <CODE>set</CODE>
+                     * method for the data property.
+                     *
                      * <p>
                      * For example, to add a new item, do as follows:
                      * <pre>
                      *    getData().add(newItem);
                      * </pre>
-                     * 
-                     * 
+                     *
+                     *
                      * <p>
                      * Objects of the following type(s) are allowed in the list
                      * {@link PrawnFile.Run.Set.Scan.Measurement.Data }
-                     * 
-                     * 
-                     * @return 
+                     *
+                     *
+                     * @return
                      */
                     public List<PrawnFile.Run.Set.Scan.Measurement.Data> getData() {
                         if (data == null) {
@@ -1473,12 +1447,14 @@ public class PrawnFile implements Serializable{
                         return this.data;
                     }
 
-
                     /**
-                     * <p>Java class for anonymous complex type.
-                     * 
-                     * <p>The following schema fragment specifies the expected content contained within this class.
-                     * 
+                     * <p>
+                     * Java class for anonymous complex type.
+                     *
+                     * <p>
+                     * The following schema fragment specifies the expected
+                     * content contained within this class.
+                     *
                      * <pre>
                      * &lt;complexType&gt;
                      *   &lt;simpleContent&gt;
@@ -1488,14 +1464,14 @@ public class PrawnFile implements Serializable{
                      *   &lt;/simpleContent&gt;
                      * &lt;/complexType&gt;
                      * </pre>
-                     * 
-                     * 
+                     *
+                     *
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "", propOrder = {
                         "value"
                     })
-                    public static class Data {
+                    public static class Data implements Serializable {
 
                         /**
                          *
@@ -1511,11 +1487,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Gets the value of the value property.
-                         * 
-                         * @return
-                         *     possible object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @return possible object is {@link String }
+                         *
                          */
                         public String getValue() {
                             return value;
@@ -1523,11 +1497,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Sets the value of the value property.
-                         * 
-                         * @param value
-                         *     allowed object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @param value allowed object is {@link String }
+                         *
                          */
                         public void setValue(String value) {
                             this.value = value;
@@ -1535,11 +1507,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Gets the value of the name property.
-                         * 
-                         * @return
-                         *     possible object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @return possible object is {@link String }
+                         *
                          */
                         public String getName() {
                             return name;
@@ -1547,11 +1517,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Sets the value of the name property.
-                         * 
-                         * @param value
-                         *     allowed object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @param value allowed object is {@link String }
+                         *
                          */
                         public void setName(String value) {
                             this.name = value;
@@ -1559,12 +1527,14 @@ public class PrawnFile implements Serializable{
 
                     }
 
-
                     /**
-                     * <p>Java class for anonymous complex type.
-                     * 
-                     * <p>The following schema fragment specifies the expected content contained within this class.
-                     * 
+                     * <p>
+                     * Java class for anonymous complex type.
+                     *
+                     * <p>
+                     * The following schema fragment specifies the expected
+                     * content contained within this class.
+                     *
                      * <pre>
                      * &lt;complexType&gt;
                      *   &lt;complexContent&gt;
@@ -1575,12 +1545,12 @@ public class PrawnFile implements Serializable{
                      *   &lt;/complexContent&gt;
                      * &lt;/complexType&gt;
                      * </pre>
-                     * 
-                     * 
+                     *
+                     *
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "")
-                    public static class Par {
+                    public static class Par implements Serializable {
 
                         /**
                          *
@@ -1596,11 +1566,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Gets the value of the name property.
-                         * 
-                         * @return
-                         *     possible object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @return possible object is {@link String }
+                         *
                          */
                         public String getName() {
                             return name;
@@ -1608,11 +1576,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Sets the value of the name property.
-                         * 
-                         * @param value
-                         *     allowed object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @param value allowed object is {@link String }
+                         *
                          */
                         public void setName(String value) {
                             this.name = value;
@@ -1620,11 +1586,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Gets the value of the value property.
-                         * 
-                         * @return
-                         *     possible object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @return possible object is {@link String }
+                         *
                          */
                         public String getValue() {
                             return value;
@@ -1632,11 +1596,9 @@ public class PrawnFile implements Serializable{
 
                         /**
                          * Sets the value of the value property.
-                         * 
-                         * @param value
-                         *     allowed object is
-                         *     {@link String }
-                         *     
+                         *
+                         * @param value allowed object is {@link String }
+                         *
                          */
                         public void setValue(String value) {
                             this.value = value;
