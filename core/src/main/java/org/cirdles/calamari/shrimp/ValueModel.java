@@ -17,6 +17,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.concurrent.ConcurrentMap;
@@ -34,6 +35,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author James F. Bowring, javaDocs by Stan Gasque
  */
 public class ValueModel implements
+        Serializable,
         Comparable<ValueModel>{
 
     // Instance variables

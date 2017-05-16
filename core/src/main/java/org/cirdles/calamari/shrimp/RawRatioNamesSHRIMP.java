@@ -18,6 +18,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.io.Serializable;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
 
@@ -25,7 +26,7 @@ import org.cirdles.calamari.tasks.expressions.ExpressionTreeWithRatiosInterface;
  *
  * @author James F. Bowring
  */
-public enum RawRatioNamesSHRIMP {
+public enum RawRatioNamesSHRIMP implements Serializable{
 
     // raw ratios
 

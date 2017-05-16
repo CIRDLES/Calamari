@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import static org.cirdles.calamari.constants.SquidConstants.SQUID_UPPER_LIMIT_1_SIGMA_PERCENT;
@@ -23,7 +24,7 @@ import static org.cirdles.calamari.constants.SquidConstants.SQUID_UPPER_LIMIT_1_
  *
  * @author James F. Bowring
  */
-public class IsotopeRatioModelSHRIMP {
+public class IsotopeRatioModelSHRIMP implements Serializable{
 
     private RawRatioNamesSHRIMP rawRatioName;
     private IsotopeNames numerator;

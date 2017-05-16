@@ -22,6 +22,7 @@
 
 package org.cirdles.calamari.prawn;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -72,7 +73,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "RunParameterNames")
 @XmlEnum
-public enum RunParameterNames {
+public enum RunParameterNames implements Serializable{
 
     /**
      *

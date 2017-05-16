@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.cirdles.calamari.tasks.TaskExpressionEvaluatedPerSpotPerScanModelInte
  *
  * @author James F. Bowring
  */
-public class ShrimpFraction implements ShrimpFractionExpressionInterface {
+public class ShrimpFraction implements Serializable, ShrimpFractionExpressionInterface {
 
     private String fractionID;
     private int spotNumber;
@@ -261,16 +262,17 @@ public class ShrimpFraction implements ShrimpFractionExpressionInterface {
     public Map<RawRatioNamesSHRIMP, IsotopeRatioModelSHRIMP> getIsotopicRatios() {
         return isotopicRatios;
     }
-    
+
     /**
      * Used by reflection in expression evaluations by VariableNode, for example
+     *
      * @param name
      * @return double [1][2] containing ratio value and 1-sigma abs uncertainty
      */
     @Override
-    public double[][] getIsotopicRatioValuesByStringName(String name){
+    public double[][] getIsotopicRatioValuesByStringName(String name) {
         IsotopeRatioModelSHRIMP ratio = isotopicRatios.get(RawRatioNamesSHRIMP.valueOf(name));
-        double [][] ratioAndUnct = new double[][]{{ratio.getRatioVal(), ratio.getRatioFractErr()}};
+        double[][] ratioAndUnct = new double[][]{{ratio.getRatioVal(), ratio.getRatioFractErr()}};
         return ratioAndUnct;
     }
 

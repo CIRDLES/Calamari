@@ -18,6 +18,8 @@
  */
 package org.cirdles.calamari.shrimp;
 
+import java.io.Serializable;
+
 /**
  *
  * @author James F. Bowring
@@ -27,7 +29,7 @@ package org.cirdles.calamari.shrimp;
  *
  * Created July 2011 as part of major refactoring to control magic strings
  */
-public enum IsotopeNames {
+public enum IsotopeNames implements Serializable{
 
     // IsotopeNames in atomic number order = acquisition order
 

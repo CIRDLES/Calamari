@@ -23,6 +23,7 @@
 
 package org.cirdles.calamari.prawn;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -57,7 +58,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "RunTableEntryParameterNames")
 @XmlEnum
-public enum RunTableEntryParameterNames {
+public enum RunTableEntryParameterNames implements Serializable{
 
     /**
      *
