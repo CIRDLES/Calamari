@@ -308,7 +308,7 @@ public class PrawnFileHandler {
         myPrawnFile = readRawDataFile(prawnDataFile);
 
         prawnDataFile.delete();
-
+        
         return myPrawnFile;
     }
 
