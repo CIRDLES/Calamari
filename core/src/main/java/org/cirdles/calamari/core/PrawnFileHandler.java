@@ -15,6 +15,7 @@
  */
 package org.cirdles.calamari.core;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,6 +57,7 @@ import org.cirdles.calamari.prawn.PrawnFileRunFractionParser;
 import org.cirdles.calamari.shrimp.ShrimpFraction;
 import org.cirdles.calamari.shrimp.ShrimpFractionExpressionInterface;
 import org.cirdles.calamari.tasks.TaskInterface;
+import org.cirdles.commons.util.ResourceExtractor;
 import org.xml.sax.SAXException;
 
 /**
@@ -71,6 +73,39 @@ public class PrawnFileHandler {
 
     private static final PrawnFileRunFractionParser PRAWN_FILE_RUN_FRACTION_PARSER
             = new PrawnFileRunFractionParser();
+
+    public static final String VERSION;
+    public static final String RELEASE_DATE;
+
+    static {
+        ResourceExtractor calamariResourceExtractor
+                = new ResourceExtractor(PrawnFileHandler.class);
+
+        String version = "version";
+        String releaseDate = "date";
+
+        // get version number and release date written by pom.xml
+        Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
+        Charset charset = Charset.forName("US-ASCII");
+        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
+            String line = reader.readLine();
+            if (line != null) {
+                String[] versionText = line.split("=");
+                version = versionText[1];
+            }
+
+            line = reader.readLine();
+            if (line != null) {
+                String[] versionDate = line.split("=");
+                releaseDate = versionDate[1];
+            }
+        } catch (IOException x) {
+            System.err.format("IOException: %s%n", x);
+        }
+
+        VERSION = version;
+        RELEASE_DATE = releaseDate;
+    }
 
     /**
      * Creates a new {@link PrawnFileHandler} using a new reports engine.
@@ -136,18 +171,18 @@ public class PrawnFileHandler {
         for (int f = 0; f < prawnFile.getRun().size(); f++) {
             PrawnFile.Run runFraction = prawnFile.getRun().get(f);
 //            if ((runFraction.getPar().get(0).getValue().compareToIgnoreCase("T.1.1.1") == 0)) {
-                ShrimpFraction shrimpFraction
-                        = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, null);
-                if (shrimpFraction != null) {
-                    shrimpFraction.setSpotNumber(f + 1);
-                    shrimpFraction.setNameOfMount(nameOfMount);
-                    shrimpFractions.add(shrimpFraction);
-                }
+            ShrimpFraction shrimpFraction
+                    = PRAWN_FILE_RUN_FRACTION_PARSER.processRunFraction(runFraction, useSBM, userLinFits, referenceMaterialLetter, null);
+            if (shrimpFraction != null) {
+                shrimpFraction.setSpotNumber(f + 1);
+                shrimpFraction.setNameOfMount(nameOfMount);
+                shrimpFractions.add(shrimpFraction);
+            }
 
-                if (progressSubscriber != null) {
-                    int progress = (f + 1) * 100 / prawnFile.getRun().size();
-                    progressSubscriber.accept(progress);
-                }
+            if (progressSubscriber != null) {
+                int progress = (f + 1) * 100 / prawnFile.getRun().size();
+                progressSubscriber.accept(progress);
+            }
 //            }
         }
 
@@ -198,25 +233,27 @@ public class PrawnFileHandler {
 
     /**
      * Unmarshalls currentPrawn file xml to object of class PrawnFile.
+     *
      * @return object of class PrawnFile
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
-     * @throws SAXException 
+     * @throws SAXException
      */
     public PrawnFile unmarshallCurrentPrawnFileXML()
             throws IOException, MalformedURLException, JAXBException, SAXException {
         return unmarshallPrawnFileXML(currentPrawnFileLocation);
     }
-    
+
     /**
      * Unmarshalls prawn file xml to object of class PrawnFile.
+     *
      * @param prawnFileLocation String path to prawn file location
      * @return object of class PrawnFile
      * @throws IOException
      * @throws MalformedURLException
      * @throws JAXBException
-     * @throws SAXException 
+     * @throws SAXException
      */
     public PrawnFile unmarshallPrawnFileXML(String prawnFileLocation)
             throws IOException, MalformedURLException, JAXBException, SAXException {
@@ -308,12 +345,13 @@ public class PrawnFileHandler {
         myPrawnFile = readRawDataFile(prawnDataFile);
 
         prawnDataFile.delete();
-        
+
         return myPrawnFile;
     }
 
     /**
      * Deserializes xml file to a PrawnFile object.
+     *
      * @param prawnDataFile the value of prawnDataFile
      * @return the PrawnFile
      * @throws javax.xml.bind.JAXBException
@@ -322,16 +360,18 @@ public class PrawnFileHandler {
         PrawnFile myPrawnFile = (PrawnFile) jaxbUnmarshaller.unmarshal(prawnDataFile);
         return myPrawnFile;
     }
-    
+
     /**
-     * Serializes a PrawnFile object to xml and intended for saving edits to original data.
+     * Serializes a PrawnFile object to xml and intended for saving edits to
+     * original data.
+     *
      * @param prawnFile for serialization
      * @param fileName
      * @throws PropertyException
-     * @throws JAXBException 
+     * @throws JAXBException
      */
     public void writeRawDataFileAsXML(PrawnFile prawnFile, String fileName)
-        throws PropertyException, JAXBException{
+            throws PropertyException, JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(PrawnFile.class);
         jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

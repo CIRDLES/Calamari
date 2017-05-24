@@ -1,12 +1,14 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import org.apache.tools.ant.filters.*
+
 apply plugin: 'antlr'
     
 dependencies {
-    compile "org.apache.commons:commons-math3:3.6.1"
-    
-    compile "com.google.guava:guava:20.0"
-    
+    compile "org.apache.commons:commons-math3:3.6.1"   
+    compile "com.google.guava:guava:20.0"    
     compile "com.github.cirdles:LudwigLibrary:-SNAPSHOT"
-    
+    compile "com.github.cirdles:Commons:-SNAPSHOT"    
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.9'
     
     antlr "org.antlr:antlr4:4.6"
@@ -17,7 +19,7 @@ dependencies {
 
 configurations.all {
     // Check for updates every build
-//    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+       resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 sourceSets {
@@ -37,4 +39,15 @@ task fatJarCore(type: Jar) {
     baseName = 'CalamariCore'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
+
+def timestamp() {
+    new SimpleDateFormat("dd MMMM yyyy").format(new Date())
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+        "pom.version": version,
+        "timestamp": timestamp()
+    ]
 }

@@ -84,7 +84,7 @@ public class CalamariUI extends javax.swing.JFrame {
         this.setLocation(x, y);
 
         this.setTitle("Calamari Raw Data Processing for SHRIMP");
-        calamariInfo.setText("Calamari version " + Calamari.VERSION + "   built on " + Calamari.RELEASE_DATE);
+        calamariInfo.setText("Calamari version " + PrawnFileHandler.VERSION + "   built on " + PrawnFileHandler.RELEASE_DATE);
         updateCurrentPrawnFileLocation();
         updateReportsFolderLocationText();
 

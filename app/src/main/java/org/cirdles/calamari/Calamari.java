@@ -15,10 +15,8 @@
  */
 package org.cirdles.calamari;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,39 +34,6 @@ import org.xml.sax.SAXException;
  * @author James F. Bowring
  */
 public class Calamari {
-
-    public static final String VERSION;
-    public static final String RELEASE_DATE;
-
-    static {
-        ResourceExtractor calamariResourceExtractor
-                = new ResourceExtractor(Calamari.class);
-
-        String version = "version";
-        String releaseDate = "date";
-
-        // get version number and release date written by pom.xml
-        Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
-        Charset charset = Charset.forName("US-ASCII");
-        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
-            String line = reader.readLine();
-            if (line != null) {
-                String[] versionText = line.split("=");
-                version = versionText[1];
-            }
-
-            line = reader.readLine();
-            if (line != null) {
-                String[] versionDate = line.split("=");
-                releaseDate = versionDate[1];
-            }
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
-        }
-
-        VERSION = version;
-        RELEASE_DATE = releaseDate;
-    }
 
     /**
      * @param args the command line arguments
@@ -113,7 +78,7 @@ public class Calamari {
         }
 
         // Set up default folder for reports
-        File defaultCalamariReportsFolder = new File("CalamariReports_v" + VERSION);
+        File defaultCalamariReportsFolder = new File("CalamariReports_v" + PrawnFileHandler.VERSION);
         prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
         if (!defaultCalamariReportsFolder.exists()) {
             if (!defaultCalamariReportsFolder.mkdir()) {

@@ -32,8 +32,7 @@ core/private
 # Resources
 !core/src/main/resources/org/cirdles/calamari/prawn/*.xml
 !core/src/main/resources/org/cirdles/calamari/prawn/*.txt
-!app/src/main/resources/org/cirdles/calamari/version.txt
-!appfx/src/main/resources/org/cirdles/calamari/version.txt
+!core/src/main/resources/org/cirdles/calamari/core/version.txt
 !core/src/test/resources/org/cirdles/calamari/core/*.csv
 !web/src/test/resources/org/cirdles/calamari/core/*.csv
 

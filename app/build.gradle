@@ -1,6 +1,3 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-import org.apache.tools.ant.filters.*
 
 apply plugin: "application"
 
@@ -32,13 +29,3 @@ task fatJar(type: Jar) {
     with jar
 }
 
-def timestamp() {
-    new SimpleDateFormat("dd MMMM yyyy").format(new Date())
-}
-
-processResources {
-    filter ReplaceTokens, tokens: [
-        "pom.version": version,
-        "timestamp": timestamp()
-    ]
-}

@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JDialog;
 import org.cirdles.calamari.Calamari;
+import org.cirdles.calamari.core.PrawnFileHandler;
 
 /**
  *
@@ -43,8 +44,8 @@ public class AboutBox extends javax.swing.JDialog {
 
     private void initInstance() {
         setSizeAndCenter(400, 400);
-        versionLabel.setText(Calamari.VERSION);
-        buildDateLabel.setText(Calamari.RELEASE_DATE);
+        versionLabel.setText(PrawnFileHandler.VERSION);
+        buildDateLabel.setText(PrawnFileHandler.RELEASE_DATE);
     }
 
     public static JDialog getInstance() {
