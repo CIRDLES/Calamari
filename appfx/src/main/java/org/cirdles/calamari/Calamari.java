@@ -44,40 +44,7 @@ import org.cirdles.commons.util.ResourceExtractor;
  */
 public class Calamari extends Application {
 
-    public static final String VERSION;
-    public static final String RELEASE_DATE;
-
     private static PrawnFileHandler prawnFileHandler;
-
-    static {
-        ResourceExtractor calamariResourceExtractor
-                = new ResourceExtractor(Calamari.class);
-
-        String version = "version";
-        String releaseDate = "date";
-
-        // get version number and release date written by pom.xml
-        Path resourcePath = calamariResourceExtractor.extractResourceAsPath("version.txt");
-        Charset charset = Charset.forName("US-ASCII");
-        try (BufferedReader reader = Files.newBufferedReader(resourcePath, charset)) {
-            String line = reader.readLine();
-            if (line != null) {
-                String[] versionText = line.split("=");
-                version = versionText[1];
-            }
-
-            line = reader.readLine();
-            if (line != null) {
-                String[] versionDate = line.split("=");
-                releaseDate = versionDate[1];
-            }
-        } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
-        }
-
-        VERSION = version;
-        RELEASE_DATE = releaseDate;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -85,23 +52,6 @@ public class Calamari extends Application {
         initCalamari();
 
         primaryStage.setTitle("Squid 3.0 Explorations");
-
-//        ResourceExtractor prawnFileResourceExtractor
-//                = new ResourceExtractor(getClass());
-//        Path listOfPrawnFiles = prawnFileResourceExtractor.extractResourceAsPath("./images/SquidLogo.png");
-//        String newFileName = listOfPrawnFiles.getFileName().toString().replace(".tmp", ".png");
-//        Path newReportsZip = listOfPrawnFiles.resolveSibling(newFileName);
-//        Files.move(listOfPrawnFiles, newReportsZip);
-//        Image applicationIcon = new Image(newReportsZip.toString());//    new Image(getClass().getResourceAsStream("./images/SquidLogo.png"));
-//        primaryStage.getIcons().add(applicationIcon);
-////
-//        try {
-//            URL iconURL = getClass().getResource("./images/SquidLogo.png");
-//            java.awt.Image image = new ImageIcon(iconURL).getImage();
-//            com.apple.eawt.Application.getApplication().setDockIconImage(image);
-//        } catch (Exception e) {
-//            // Won't work on Windows or Linux.
-//        }
 
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
 
@@ -162,7 +112,7 @@ public class Calamari extends Application {
             }
         }
 
-        File defaultCalamariReportsFolder = new File("CalamariReports_v" + Calamari.VERSION);
+        File defaultCalamariReportsFolder = new File("CalamariReports_v" + PrawnFileHandler.VERSION);
         prawnFileHandler.getReportsEngine().setFolderToWriteCalamariReports(defaultCalamariReportsFolder);
         if (!defaultCalamariReportsFolder.exists()) {
             if (!defaultCalamariReportsFolder.mkdir()) {

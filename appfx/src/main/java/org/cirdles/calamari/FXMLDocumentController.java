@@ -28,6 +28,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
+import org.cirdles.calamari.core.PrawnFileHandler;
 import org.cirdles.calamari.shrimp.RawRatioNamesSHRIMP;
 import org.cirdles.calamari.tasks.expressions.ExpressionTreeInterface;
 import org.cirdles.calamari.tasks.expressions.ExpressionWriterMathML;
@@ -83,7 +84,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        versionAndDateLabel.setText("Calamari version " + Calamari.VERSION + "   built on " + Calamari.RELEASE_DATE);
+        versionAndDateLabel.setText("Calamari version " + PrawnFileHandler.VERSION + "   built on " + PrawnFileHandler.RELEASE_DATE);
 
         //initialize Calamari tab
         try {
