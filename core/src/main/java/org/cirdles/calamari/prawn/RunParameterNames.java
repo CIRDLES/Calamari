@@ -228,7 +228,32 @@ public enum RunParameterNames implements Serializable {
      *
      */
     @XmlEnumValue("secondary_volts")
-    SECONDARY_VOLTS("secondary_volts");
+    SECONDARY_VOLTS("secondary_volts"),
+    /**
+     *
+     */
+    @XmlEnumValue("faraday_configuration")
+    faraday_configuration("faraday_configuration"),
+    /**
+     *
+     */
+    @XmlEnumValue("left_mount_name")
+    left_mount_name("left_mount_name"),
+    /**
+     *
+     */
+    @XmlEnumValue("left_mount_owner")
+    left_mount_owner("left_mount_owner"),
+    /**
+     *
+     */
+    @XmlEnumValue("right_mount_name")
+    right_mount_name("right_mount_name"),
+    /**
+     *
+     */
+    @XmlEnumValue("right_mount_owner")
+    right_mount_owner("right_mount_owner");
     private final String value;
 
     RunParameterNames(String v) {
