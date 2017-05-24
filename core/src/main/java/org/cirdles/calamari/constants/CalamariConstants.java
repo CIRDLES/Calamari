@@ -36,13 +36,13 @@ public final class CalamariConstants {
             + "            xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n"
             + "            xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
             + "            xsi:schemaLocation=\"https://raw.githubusercontent.com\n"
-            + "                                https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd\">";
+            + "                                https://raw.githubusercontent.com/CIRDLES/ShrimpXSD/master/SHRIMP_PRAWN.xsd\">";
     
     /**
      *
      */
     public static final String URL_STRING_FOR_PRAWN_XML_SCHEMA 
-            = "https://raw.githubusercontent.com/bowring/XSD/master/SHRIMP/SHRIMP_PRAWN.xsd";
+            = "https://raw.githubusercontent.com/CIRDLES/ShrimpXSD/master/SHRIMP_PRAWN.xsd";
     
     /**
      *

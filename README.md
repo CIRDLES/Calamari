@@ -13,7 +13,7 @@ Our goal is to demonstrate the efficacy of our work in engineering a replacement
 **Calamari** demonstrates that it is possible to replicate the earliest stages of the math of SQUID 2.50, for 'mainstream' U-Pb zircon applications.  **Calamari** currently handles  'well-behaved' 9-peak (mass 196-254) and 10-peak (mass 196-270) zircon run-tables, where the background is acquired at the third mass-station (as is often the case). At present, **Calamari** does not contain any of SQUID's data-integrity checks relating to run-table changes mid-session, or SBM data that are sensible relative to the measured SBM-zero value.
 
 **Calamari** reads in a SHRIMP Prawn XML file and reports if the file does not conform to our
-existing [schema](https://github.com/bowring/XSD/blob/master/SHRIMP/SHRIMP_PRAWN.xsd).  If it does conform, then
+existing [schema](https://github.com/CIRDLES/ShrimpXSD/blob/master/SHRIMP_PRAWN.xsd).  If it does conform, then
 **Calamari** will produce a folder of 6 reports as ".csv" files that are explained [here](https://github.com/CIRDLES/ET_Redux/wiki/Calamari-Reports-Documentation).
 
 **Requirements:**  
